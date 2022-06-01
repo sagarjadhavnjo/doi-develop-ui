@@ -1,0 +1,203 @@
+<div class="container">
+    <div class="form-wrapper">
+      <div class="heading-section ng-star-inserted">
+        <div>Surveyor Bill Generation</div>
+        <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/SBG/001</div>
+        <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+        </div>
+      </div>
+  
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item " aria-current="page">DOI</li>
+          <li class="breadcrumb-item active" aria-current="page">Surveyor Bill Generation</li>
+        </ol>
+      </nav>
+  
+      <div class="panel-group">
+        <!-- Entry  Form-->
+  
+        <form [formGroup]="surveyorForm">
+  
+          <!-- Details of Deceased/Disabled -->
+          <div class="box box-primary">
+            <div class="box-header">Surveyor Bill Generation</div>
+            <div class="box-body">
+  
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="transNo" placeholder="Transaction No" required maxlength="5">
+                    <div class="error-wrapper"
+                      *ngIf="surveyorForm.controls.transNo.touched && surveyorForm.controls.transNo.errors">
+                      <mat-error *ngIf="surveyorForm.controls.transNo.errors.required">
+                        {{ errorMessage.NUMBER }}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+  
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="transDate" formControlName="transDate"
+                      placeholder="Transaction date" required>
+                    <mat-datepicker-toggle matSuffix [for]="transDate"></mat-datepicker-toggle>
+                    <mat-datepicker #transDate></mat-datepicker>
+                    <div class="error-wrapper"
+                      *ngIf="surveyorForm.controls.transDate.touched && surveyorForm.controls.transDate.errors">
+                      <mat-error *ngIf="surveyorForm.controls.transDate.errors.required">
+                        {{ errorMessage.DATE }}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+  
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="surName" placeholder="Surveyor Name" required>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="surNameCtrl" [placeholderLabel]="'Find Surveyor Name...'"
+                          [noEntriesFoundLabel]="'No matching Surveyor Name found'">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of surNameList |
+                            filterSelectInput:surNameCtrl.value" [value]="item.value"
+                        matTooltip="{{item.viewValue}}">
+                        {{item.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper"
+                      *ngIf="surveyorForm.controls.surName.touched && surveyorForm.controls.surName.errors">
+                      <mat-error *ngIf="surveyorForm.controls.surName.errors.required">
+                        {{ errorMessage.NAME }}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+                
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="branApp" placeholder="Surveyor Appointment for Branch" required>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="branAppCtrl" [placeholderLabel]="'Find Surveyor Appointment for Branch...'"
+                          [noEntriesFoundLabel]="'No matching Surveyor Appointment for Branch found'">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of branAppList |
+                            filterSelectInput:branAppCtrl.value" [value]="item.value"
+                        matTooltip="{{item.viewValue}}">
+                        {{item.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper"
+                      *ngIf="surveyorForm.controls.branApp.touched && surveyorForm.controls.branApp.errors">
+                      <mat-error *ngIf="surveyorForm.controls.branApp.errors.required">
+                        {{ errorMessage.BRANCH }}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+                
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="clNo" placeholder="Claim No" required>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="clNoCtrl" [placeholderLabel]="'Find Claim No...'"
+                          [noEntriesFoundLabel]="'No matching Claim No found'">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of clNoList |
+                            filterSelectInput:clNoCtrl.value" [value]="item.value"
+                        matTooltip="{{item.viewValue}}">
+                        {{item.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper"
+                      *ngIf="surveyorForm.controls.clNo.touched && surveyorForm.controls.clNo.errors">
+                      <mat-error *ngIf="surveyorForm.controls.clNo.errors.required">
+                        {{ errorMessage.NUMBER }}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+  
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="sBillNo" placeholder="Surveyor Bill No" required>
+                      <div class="error-wrapper"
+                        *ngIf="surveyorForm.controls.sBillNo.touched && surveyorForm.controls.sBillNo.errors">
+                        <mat-error *ngIf="surveyorForm.controls.sBillNo.errors.required">
+                          {{ errorMessage.BILLNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+  
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="billDate" formControlName="billDate"
+                        placeholder="Bill Date" required>
+                      <mat-datepicker-toggle matSuffix [for]="billDate"></mat-datepicker-toggle>
+                      <mat-datepicker #billDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="surveyorForm.controls.billDate.touched && surveyorForm.controls.billDate.errors">
+                        <mat-error *ngIf="surveyorForm.controls.billDate.errors.required">
+                          {{ errorMessage.DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="amt" placeholder="Amount" required decimalLimitTwoOnly>
+                        <div class="error-wrapper"
+                          *ngIf="surveyorForm.controls.amt.touched && surveyorForm.controls.amt.errors">
+                          <mat-error *ngIf="surveyorForm.controls.amt.errors.required">
+                            {{ errorMessage.AMOUNT }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+              </div>
+  
+            </div>
+          </div>
+  
+          <!-- common button -->
+  
+              <div class="form-action-button">
+                <button mat-raised-button type="submit" (click)="directiveObject.workflowDetails()" class="green">
+                  <i class="material-icons">
+                    done
+                  </i> Submit
+                </button>
+  
+                <button type="reset" mat-raised-button color="accent">
+                  <i class="material-icons" aria-hidden="true">
+                    restore
+                  </i>
+                  Reset
+                </button>
+  
+                <button [routerLink]="'../surveyor-bill-generation-listing'" type="button" mat-raised-button color="warn">
+                  <i class="material-icons" aria-hidden="true" title="Listing">
+                    list
+                  </i>
+                  Listing
+                </button>
+  
+                <button type="button" mat-raised-button class="btnClose">
+                  <i class="material-icons" aria-hidden="true" title="close">
+                    close
+                  </i>
+                  Close
+                </button>
+              </div>
+        </form>
+      </div>
+  
+    </div>
+  </div>

@@ -1,0 +1,31 @@
+<div class="col-sm-12">
+    <h3 mat-dialog-title>Vacant Lists</h3>
+    <mat-dialog-content class="mat-vacant-list">
+        <table class="tabel tableSpace table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        <b>Sr. No.</b>
+                    </th>
+                    <th><b>Vacant Post Name</b></th>
+                    <th><b>Last Mapped With</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vacantPostName of data; let i = index">
+                    <td class="action-btn-i">
+                        {{ i + 1 }}
+                    </td>
+                    <td>{{vacantPostName.name}}</td>
+                    <td class="action-btn-i">{{vacantPostName.userName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-dialog-content>
+    <div class="form-action-button">
+        <button type="button" class="btnClose" mat-raised-button (click)="onCancel()">
+            <i class="material-icons" title="Budget dashboard">close</i>
+            Cancel
+        </button>
+    </div>
+</div>

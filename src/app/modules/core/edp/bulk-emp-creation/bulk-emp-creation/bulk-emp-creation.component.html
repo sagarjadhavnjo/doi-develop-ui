@@ -1,0 +1,117 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div class="heading-section ng-star-inserted">
+                <div>Bulk Employee Creation</div>
+            </div>
+        </div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">EDP</a></li>
+                <li class="breadcrumb-item active">Bulk Employee Creation</li>
+            </ol>
+        </nav>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs>
+                <mat-tab label="Bulk Employee Creation">
+                    <!-- Upload AG Accounts File Section Starts-->
+                    <div class="box box-primary">
+                        <div class="box-header">Employee Creation</div>
+                        <div class="box-body">
+                            <!-- Table Section -->
+                            <table mat-table [dataSource]="dataSourceBrowse" id="browseTable">
+                                <!-- File -->
+                                <ng-container matColumnDef="title">
+                                    <th mat-header-cell *matHeaderCellDef scope="row">File</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <label>Upload Excel File</label>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Browse -->
+                                <ng-container matColumnDef="browse">
+                                    <th mat-header-cell *matHeaderCellDef scope="row">
+                                        <div style="display: inline-flex">Browse <span class="star">*</span></div>
+                                    </th>
+                                    <td mat-cell *matCellDef="let i = index" class="centerAlign">
+                                        <button type="button" (click)="browseClick(i)" class="btn-browse">Browse
+                                            Files
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <!-- FileName -->
+                                <ng-container matColumnDef="fileName">
+                                    <th mat-header-cell *matHeaderCellDef scope="row">File Name <span
+                                            class="star">*</span></th>
+                                    <td mat-cell *matCellDef="let item; let i = index">
+                                        <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}</span>
+                                        <span>
+                                            <i *ngIf="item.uploadedFileName && !item.documentId"
+                                                class="material-icons closesmall"
+                                                (click)="removeUploadUserFile(item, i)" title="Delete File"
+                                                aria-hidden="true">close</i>
+                                        </span>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Action -->
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef scope="row">Action</th>
+                                    <td mat-cell *matCellDef="let item" class="centerAlign">
+                                        <button mat-raised-button color="primary" class="upload-btn"
+                                            (click)="uploadClick()" [disabled]="isUploadDisabled">
+                                            <i class="material-icons" aria-hidden="true" title="Upload">
+                                                cloud_upload
+                                            </i> Upload
+                                        </button>
+                                        <button mat-raised-button color="warn"
+                                            *ngIf="item && item.attachmentId && item.uploadedFileName"
+                                            class="upload-btn ml-2" (click)="downLoadUploadedAttachment(item)">
+                                            <i class="material-icons" aria-hidden="true" title="Download">
+                                                vertical_align_bottom
+                                            </i> Download
+                                        </button>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Header Section Of table -->
+                                <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+                                <!-- Data Fetch From .TS File to table -->
+                                <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+                            </table>
+                            <input type="file" #attachment id="fileBrowse" style="visibility: hidden;"
+                                (change)="onFileSelection($event)" accept=".xlsx, .xls"/>
+                            <div class="legend">
+                                1. Total File size should be under 10MB<br> 2. File type supported are: 'xls', 'xlsx'.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Upload AG Accounts File Section Ends-->
+
+                    <div class="row displayBlock form-action-button">
+                        <div class="col-sm-12">
+                            <!-- Action Buttons -->
+                            <div class="form-action-button">
+                                <button mat-raised-button type="submit" (click)="submitClick()" class="green">
+                                    <i class="material-icons" aria-hidden="true" title="submit">
+                                        done
+                                    </i>
+                                    Submit
+                                </button>
+                                <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                                    <i class="material-icons" title="EDP dashboard" aria-hidden="true">
+                                        close
+                                    </i>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

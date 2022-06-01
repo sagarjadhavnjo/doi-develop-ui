@@ -1,0 +1,20 @@
+<div class="col-sm-12">
+    <form class="example-form">
+
+        <div [innerHTML]="message" class="mat-typography" style="margin-top:10px"></div>
+        <div mat-dialog-actions class="form-action-button">
+            <button type="button" mat-raised-button (click)="onOkBtnClick()" class="btnClose" *ngIf="isOkButtonVisible">
+                <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                    ok
+                </i>
+                {{data?.okButtonMsg ? data?.okButtonMsg : 'Ok'}}
+            </button>
+            <button type="button" mat-raised-button (click)="onCancel()" class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                    close
+                </i>
+                {{data?.closeBtnMsg ? data?.closeBtnMsg : 'Close'}}
+            </button>
+        </div>
+    </form>
+</div>

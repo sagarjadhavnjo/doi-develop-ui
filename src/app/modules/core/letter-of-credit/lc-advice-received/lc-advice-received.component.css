@@ -1,0 +1,16 @@
+tr.expanded-row {
+    height: 0px !important;
+  }
+  .highlight{
+    border-color: red;
+    border-width: 0 px;
+    border-style:solid ;
+    }
+        
+
+@media screen and (-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+    ::ng-deep .lc-advice-received table.mat-table .mat-form-field-infix{
+        width: 100%!important;
+    }
+}

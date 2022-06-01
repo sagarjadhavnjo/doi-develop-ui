@@ -1,0 +1,38 @@
+<h2 class="heading-section">View Vendor Details</h2>
+<hr>
+<!--<div *ngFor="let item of data;let i=index;">
+  <span *ngFor = 'let obj of item | keyvalue'>
+   <b>{{i}}{{obj.key}}</b> : <b>{{obj.value}}</b></span>
+</div> -->
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+
+  
+
+<table class="table table-striped" style="height: 80px;"> 
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of data;let i=index;">
+     
+      <th scope="row" *ngFor = 'let obj of item | keyvalue' >{{i}}</th>
+      <td *ngFor = 'let obj of item | keyvalue'>{{obj.key}}</td>
+      <td *ngFor = 'let obj of item | keyvalue'>{{obj.value}}</td>
+    
+    </tr>
+
+  </tbody>
+</table>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Close</button>
+  
+</div>

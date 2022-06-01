@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="form-wrapper ddo-table">
+    <div class="table-responsive">
+
+      <div class="p-2" style="margin-left: 700px;"><strong>Directorate of Insurance<br>Govt.Insurance
+          Fund,<br>Vimla&LekhaBhavan,<br>3rd Floor,Bl.no.-17,<br>Old Sachivalaya,</strong></div>
+
+      <table>
+        <tr>
+          <td class="p-2">Gandhinagar-382010 <br><strong>Date :{{date | date:'dd-MMM-yyyy'}}</strong></td>
+        </tr>
+      </table>
+    </div>
+    <h5 class="centerAlign mt-3"><strong><u>MEMORANDUM</u></strong></h5>
+    <div class="table-responsive">
+      <!-- Report Starts -->
+      <table>
+        <tr>
+          <td class="p-2">
+            In exercise of the power delegated vide Government Resolution Finance Department No. VNM - 1003-0-107-Z
+            dated 4th April, 2003 undersigned sanction the payment of refund of Rs.602288/- <strong>(Six Lac Two
+              Thousand Two Hundred Eighty-eighty only)</strong> being refund of premium as detailed below <strong>TO NEW
+              INDIA ASSURANCE COMPANY LIMITED</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2">
+            <!-- Report Table -->
+            <table class="table-bordered">
+              <tr *ngFor="let item of reportDetails">
+                <td class="leftAlign p-1"><strong>{{item.policyNo}}</strong></td>
+                <td class="leftAlign p-1"><strong>{{item.insured}}</strong></td>
+                <td class="leftAlign p-1"><strong>{{item.refundAmount}}</strong></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2">
+            The Payment of Refund of premium is to be debited to Major Head -8235 General & Other Reserve Fund, 105
+            General Insurance Funds,not bearing interest.
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 rightAlign">
+            <br><br><br>
+            <strong>Director of Insurance</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class="doi-report pt-3 p-2">
+            To,
+            <ol>
+              <li>Treasury Officer officer,Gandhinagar.<strong>(In Duplicate)</strong></li>
+              <li>THE NEW INDIA ASSURANCE COMPANY LIMITED<br>DO-IV, SURAJ PLAZA,SAYAJIGUNJ,VADODARA-390 005</li>
+              <li>Account General. Office Of The Accountant General,Nr. IshwarBhavan,<br>Navarangpura,Ahmedabad </li>
+              <li>Copy of Bill Clerk</li>
+              <li>M/F</li>
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 rightAlign">
+            <br><br><br>
+            <strong>Director of Insurance</strong>
+          </td>
+        </tr>
+      </table>
+      <!-- Report Starts -->
+    </div>
+  </div>
+</div>

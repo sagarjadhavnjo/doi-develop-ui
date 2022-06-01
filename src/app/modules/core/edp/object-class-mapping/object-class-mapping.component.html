@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Bill Type wise Object Class Mapping</div>
+        </div>
+
+        <div>
+            <div #parentGrids class="half-checkbox">
+                <form [formGroup]="objectClassMappingForm" (ngSubmit)="searchDetail()" autocomplete="off">
+                    <div class="col-sm-4">
+                        <mat-form-field class="full-width">
+                            <mat-select formControlName="billTypeId" placeholder="Bill Type" required (selectionChange)="loadObjectClass()">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="billTypeCtrl" [placeholderLabel]="'Find Bill Type...'" [noEntriesFoundLabel]="'no matching Bill Type found'">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let bill of billList | filterSelectInput : billTypeCtrl.value : 'name'" [value]="bill.id">
+                                    {{bill.name}}
+                                </mat-option>
+                            </mat-select>
+                            <div class="error-wrapper" *ngIf="objectClassMappingForm.controls.billTypeId.touched && objectClassMappingForm.controls.billTypeId.errors">
+                                <mat-error *ngIf="objectClassMappingForm.controls.billTypeId.errors.required">
+                                    {{errorMessage.BILL_TYPE}}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="box box-primary">
+                        <div class="box-header">Object Class :</div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div *ngFor="let object of objectClassList; let i = index">
+                                        <mat-checkbox (change)="onObjectChange($event)" [checked]="object.checked" [value]="object.id">
+                                            {{object.name}}
+                                        </mat-checkbox>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-action-button">
+                        <button type="submit" mat-raised-button color="primary">
+                            <i class="material-icons" title="Save">
+                                save
+                            </i>
+                            Save
+                        </button>
+                        <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                            <i class="material-icons" title="Worklist dashboard">
+                                close
+                            </i>
+                            Close
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>

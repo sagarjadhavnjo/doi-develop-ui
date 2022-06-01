@@ -1,0 +1,148 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>DMO</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/IPS/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Intimation for Purchase/Sale</li>
+      </ol>
+    </nav>
+
+
+    <form [formGroup]="detailsForm">
+      <!-- Intimation for Purchase/Sale -->
+
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header">Intimation for Purchase/Sale</div>
+          <div class="box-body">
+
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="transType" placeholder="Type of Transaction">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="transTypeCtrl"
+                        [placeholderLabel]="'Find Type of Transaction ...'"
+                        [noEntriesFoundLabel]="'no Type of Transaction  found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let va of transType_List | filterSelectInput:transTypeCtrl.value"
+                      [value]="va.id">
+                      {{va.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.transType.touched && (detailsForm.controls.transType.errors)">
+                    <mat-error *ngIf="detailsForm.controls.transType.errors.required">
+                      {{errorMessages.TRANS_TYPE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="intiNo" placeholder="Intimation No." (blur)="onIntimationBlur()" required>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.intiNo.touched && (detailsForm.controls.intiNo.errors)">
+                    <mat-error *ngIf="detailsForm.controls.intiNo.errors.required">
+                      {{errorMessages.NUMBER_ENTER}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="intiDate" [matDatepicker]="intiDate" placeholder="Intimation Date"
+                    required>
+                  <mat-datepicker-toggle matSuffix [for]="intiDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #intiDate></mat-datepicker>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.intiDate.touched && (detailsForm.controls.intiDate.errors)">
+                    <mat-error *ngIf="detailsForm.controls.intiDate.errors.required">
+                      {{errorMessages.DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="princiContribu"
+                    placeholder="Progressive Principal Contribution Till Date(Rs.)">
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="amtInti" placeholder="Amount Intimated (Rs.)"
+                    required>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.amtInti.touched && (detailsForm.controls.amtInti.errors)">
+                    <mat-error *ngIf="detailsForm.controls.amtInti.errors.required">
+                      {{errorMessages.AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="princiContribuAfter"
+                    placeholder="Progressive Principal Contribution after this transaction(Rs.)">
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="trensDate" [matDatepicker]="trensDate"
+                    placeholder="Date Of Transaction">
+                  <mat-datepicker-toggle matSuffix [for]="trensDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #trensDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Action Button -->
+    <div class="form-action-button">
+      <button type="button" mat-raised-button (click)="saveDetails()" color="primary">
+        <i class="material-icons" aria-hidden="true" title="save">
+          save
+        </i>
+        Save
+      </button>
+      <button type="button" mat-raised-button color="primary" (click)="saveDetails()" >
+        <i class="material-icons" aria-hidden="true" title="save">
+          check
+        </i>
+        Update
+      </button>
+      <button type="button" title="Cancel" mat-raised-button class="btnClose">
+        <i class="material-icons " title="cancel">
+          close
+        </i>
+        Cancel
+      </button>
+    </div>
+
+
+  </div>
+</div>

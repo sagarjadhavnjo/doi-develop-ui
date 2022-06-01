@@ -1,0 +1,107 @@
+export const APIConst = {
+    WORKFLOW_HISTORY: 'common/wf/history/301',
+    WORKFLOW_ACTION: 'loc/wf/v2.0/wfnextactions/201',
+    WORKFLOW_USER: 'loc/wf/v2.0/user/action/config/201',
+    GRANT_WORKFLOW_USER: 'common/wf/grant/user/action/config/201',
+    WORKFLOW_BRANCH: 'edp/msbranch/getbranchbytypeid/301',
+    WORKFLOW_OFFICE: 'edp/msoffice/byofficetypeid/301',
+    GET_DEPARTMENT: 'edp/msoffice/departmentswithhod/201',
+    GET_WORKFLOW_ROLE: 'common/wf/grant/wfrl/dco/co/101',
+    GET_HOD: 'edp/msoffice/gethodoffice/department/301',
+    GET_CO: 'edp/msoffice/getcobyhodoffid/301',
+    GET_AD_OFFICE: 'edp/msoffice/alladoffices/301',
+    GET_PARENT_OFFICE: 'edp/msoffice/getparent/301',
+    WORKFLOW_SUBMIT: 'loc/wf/v2.0/trn/submit/101',
+    WORKFLOW_GET_ATTACH: 'common/attachment/601',
+    WORKFLOW_GET_UPLOADED_ATTACH: 'common/attachment/201',
+    WORKFLOW_ATTACH_UPLOAD: 'common/attachment/101',
+    WORKFLOW_ATTACH_DELETE: 'common/attachment/501',
+    WORKFLOW_ATTACH_VIEW: 'common/attachment/filenet/imagedownload/901',
+    WORKFLOW_ATTACH_DOWNLOAD: 'common/attachment/filenet/download/901',
+    GET_MINISTER: 'edp/msuser/getministerincharge/201',
+    GET_FD_OFFICE: 'edp/msoffice/getfdoffice/201',
+    GET_FD_GROUP: 'budget/nw/getfdgroupid/201',
+    GET_CHILD_OFFICE: 'common/wf/trn/getchildoffice/101',
+    // As Discussed with Shailesh Dobariya i am added Aliyas API into this file.
+    GET_TOPAO_OFFICE_NAME: 'edp/alias/officeForAlias/201',
+    WORKFLOW_RETURN: 'budget/revRecEstCon/rre/return/office/101',
+    RESET_CONSOLIDATION: 'budget/revRecEstCon/rre/reset/consolidation/101',
+    GET_CO_OFFICE_BY_OFFICE_ID: 'edp/msoffice/getcobyhodoffid/301',
+    GET_CO_OFFICE_BY_DEPARTMENT_ID: 'edp/msoffice/getcooffice/department/301',
+    GET_OFFICE_BY_TYPE_AND_SUB_TYPE: 'edp/msoffice/getOffices/officeType/subType/301',
+    GET_TO_OFFICE_BY_DISTRICT_ID: 'edp/msoffice/getOffices/treasury/district/301',
+    WORKFLOW_SUBMIT_V3: 'loc/wf/v3.0/trn/submit/101',
+    WORKFLOW_USER_V3: 'loc/wf/v3.0/user/action/config/201',    
+    WORKFLOW_ACTION_V3: 'loc/wf/v3.0/wfnextactions/201',
+    WORKFLOW_GEN_REQUEST_V3: 'loc/wf/v3.0/wf/req/gen/101',
+
+
+};
+
+export const CommonWfMsg = {
+    ACTION: 'Please Select Action',
+    SUBMIT_CONF_MSG: 'Do you want to proceed ?',
+    USER: 'Please Select User',
+    BRANCH: 'Please Select Branch',
+    OFFICE: 'Please Select Office',
+    DEPARTMENT: 'Please Select Department',
+    WORKFLOW_ROLE: 'Please Select Workflow Role',
+    HOD: 'Please Select HOD',
+    CO: 'Please Select CO',
+    REMARKS: 'Please Enter Comment',
+    REMARKS_MAX: 'Remarks should not be greater than the 500 character',
+    WF_USER_LIST_EMPTY: 'Workflow user not mapped!',
+    WF_BRANCH_LIST_EMPTY: 'Branch not mapped!',
+    WF_OFFICE_LIST_EMPTY: 'Office not mapped!',
+    WF_DEPARTMENT_LIST_EMPTY: 'Department not available',
+    WF_WORKFLOW_ROLE_LIST_EMPTY: 'Workflow Role not available',
+    WF_HOD_LIST_EMPTY: 'HOD not available',
+    WF_CO_LIST_EMPTY: 'CO not available',
+    WF_ATTACHMENT_PENDING_MSG: 'Your attachment is pending to upload.',
+    CONF_WITHOUT_LOCATIONTYPE: 'Configuration without LocationType is not allowed. Contact Administrator!'
+};
+
+export const DataConstant = {
+    MAX_ATTACHMENT: 5,
+    SEND_BACK_ACTION_CODE: '1011',
+    REJECT_ACTION_CODE: '1016',
+    APPROVER_ACTION_CODE: '1007',
+    CANCEL_ACTION_CODE: '1003',
+    CUSTOM_LOCATION_TYPE: 'CUSTOM',
+    HOD_SELECTION: 'HOD_SELECTION',
+    CO_SELECTION: 'CO_SELECTION',
+    GRANT_CO_SELECTION: 'CO_SELECTION',
+    GRANT_SELECT_SPECIFIC_APPROVER: 'SELECT_SPECIFIC_APPROVER',
+    CATEGORY_NAME: 'WORKFLOW',
+    CHILD_OFFICE: 'CHILD_OFFICE',
+    PARENT_OFFICE: 'PARENT_OFFICE',
+    SAME_OFFICE: 'SAME_OFFICE',
+    FDGROUP: 'FDGROUP',
+    FDOFFICE: 'FDOFFICE',
+    SAME_OFFICE_SAME_BRANCH: 'SAME_OFFICE_SAME_BRANCH',
+    SAME_OFFICE_OTHER_BRANCH_TYPE: 'SAME_OFFICE_OTHER_BRANCH_TYPE',
+    PARENT_OFFICE_SAME_BRANCH: 'PARENT_OFFICE_SAME_BRANCH',
+    PARENT_OFFICE_OTHER_BRANCH_TYPE: 'PARENT_OFFICE_OTHER_BRANCH_TYPE',
+    MINISTER_CONDITION: 'MIN_RECOMMENDED',
+    TO_OFFICE_NAME: 'TO_PAO_ALIAS',
+    DAT_OFFICE_NAME: 'DAT_ALIAS',
+    DEPARTMENT_OFFICE: 'DEPARTMENT_OFFICE',
+    DEPT_APPROVER_WF_ROLE_CODE: '1039',
+    CO_APPROVER_WF_ROLE_CODE: '1042',
+    OTHER_OFFICE:'OTHER_OFFICE',
+    TO_SELECTION: 'TREASURY_OFFICE',
+};
+
+export const ModuleNames = {
+    BUDGET: 'budget',
+    EDP: 'edp',
+    PVU: 'pvu',
+    GRANT: 'grant',
+    CONTRACT:'contract',
+    GPF:'gpf',
+    LOC:'loc'
+};
+
+export const viewableExtension = ['pdf', 'jpg', 'jpeg', 'png'];
+export const previewExtension = ['jpg', 'jpeg', 'png']; // 'pdf' extension removed from preview
+export const supportedUploadExtension = ['doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'xls', 'xlsx'];

@@ -1,0 +1,249 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Increment List</div>
+        </div>
+        <mat-accordion class="search-accordian">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <div class="heading-section">
+                        Search Criteria
+                    </div>
+                </mat-expansion-panel-header>
+                <div class=" form-datatable-list">
+                    <form class="col-sm-12" [formGroup]="incrementSearchForm">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="DDO No" formControlName="ddoCode" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Cardex No" formControlName="cardexNo" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Office Name" formControlName="officeName" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="District" formControlName="district" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [matDatepicker]="createdFromDate" placeholder="Created From Date" [max]="fromMaxDate" formControlName="fromDate" (dateChange)="resetToDate()" resetToDate readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="createdFromDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #createdFromDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [matDatepicker]="createdToDate" placeholder="Created to Date" formControlName="toDate" [min]="toMinDate" [max]="toMaxDate" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="createdToDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #createdToDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="incrementFor" placeholder="Pay Commission">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="incrementForCtrl" [placeholderLabel]="'Find Pay Commission...'" [noEntriesFoundLabel]="'No Pay Commission found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let PR of incrementForList | filterSelectInput: incrementForCtrl.value : 'lookupInfoName'" [value]="PR.lookupInfoId">
+                                            {{PR.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" minlength="0" maxlength="24" alphaNumericWithSlashHyphenOnly placeholder="Reference Number" formControlName="transNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput [matDatepicker]="referenceDate" placeholder="Reference Date" formControlName="referenceDate" [min]="toMinDate" [max]="toMaxDate" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="referenceDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #referenceDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Calendar Year</mat-label>
+                                    <mat-select formControlName="financialYear">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="finYearCtrl"
+                                                [placeholderLabel]="'Find Calendar Year...'"
+                                                [noEntriesFoundLabel]="'No Matching Calendar Year found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option id="{{FY.fyStart}}"
+                                            *ngFor="let FY of financialYearList | filterSelectInput : finYearCtrl.value : 'fySecond'"
+                                            [value]="FY.financialYearId">
+                                            {{FY.fyStart}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="payTypeId" placeholder="Employee Pay Type">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empPayTypeCtrl" 
+                                                [placeholderLabel]="'Find Employee Pay Type...'" 
+                                                [noEntriesFoundLabel]="'No Employee Pay Type found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let empPayType of empPayTypeList | filterSelectInput: empPayTypeCtrl.value : 'lookupInfoName'" [value]="empPayType.lookupInfoId">
+                                            {{empPayType.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="wfStatus" placeholder="Workflow Status">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="workflowStatusCtrl" [placeholderLabel]="'Find Workflow Status...'" [noEntriesFoundLabel]="'no matching Workflow Status found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let workflowStatus of workflowStatusList | filterSelectInput: workflowStatusCtrl.value : 'name'" [value]="workflowStatus.name">
+                                            {{workflowStatus.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="statusId" placeholder="Transaction Status">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="transStatusCtrl" [placeholderLabel]="'Find Workflow Status...'" [noEntriesFoundLabel]="'no matching Workflow Status found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let transStatus of transStatusList | filterSelectInput: transStatusCtrl.value : 'lookupInfoName'" [value]="transStatus.lookupInfoId">
+                                            {{transStatus.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row displayBlock form-action-button">
+                    <div class="centerAlign">
+                        <button type="submit" mat-raised-button color="primary" (click)="onSubmitSearch()">
+                        <i class="material-icons">search</i>
+                        Search
+                      </button>
+                        <button type="reset" mat-raised-button color="accent" (click)="clearForm();">
+                        <i class="material-icons">
+                          restore
+                        </i>
+                        Reset
+                      </button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="mat-elevation-z8 mt-2">
+            <table mat-table [dataSource]="incrementListDataSource" width="100%" matSort>
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Sr. No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+                        {{ i + 1 + pageIndex * pageSize }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="15" class="centerAlign">
+                        <span *ngIf="incrementListDataSource && incrementListDataSource.data && incrementListDataSource.data.length == 0">
+                            No Records Found!
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="refNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference Number</th>
+                    <td mat-cell *matCellDef="let element"> {{element.tranNo ? element.tranNo : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="refDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference Date</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ (element.referenceDate ? (element.referenceDate | date: 'dd/MM/yyyy') : '-')}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ddoCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>DDO No</th>
+                    <td mat-cell *matCellDef="let element"> {{element.ddoNo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="cardexNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Cardex No</th>
+                    <td mat-cell *matCellDef="let element"> {{element.cardex}} </td>
+                </ng-container>
+                <ng-container matColumnDef="officeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Office Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="financialYear">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Calander Year</th>
+                    <td mat-cell *matCellDef="let element"> {{element.financialYear}} </td>
+                </ng-container>
+                <ng-container matColumnDef="incrementFor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Increment For</th>
+                    <td mat-cell *matCellDef="let element"> {{element.incrementFor}} </td>
+                </ng-container>
+                <ng-container matColumnDef="empPayType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Pay Type</th>
+                    <td mat-cell *matCellDef="let element"> {{element.empPayType}} </td>
+                </ng-container>
+                <ng-container matColumnDef="totalCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Count</th>
+                    <td mat-cell *matCellDef="let element"> {{element.totalCount}} </td>
+                </ng-container>
+                <ng-container matColumnDef="successCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Success Count</th>
+                    <td mat-cell *matCellDef="let element"> {{element.successCount}} </td>
+                </ng-container>
+                <ng-container matColumnDef="failureCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Failure Count</th>
+                    <td mat-cell *matCellDef="let element"> {{element.failureCount}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tranStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.tranStatus ? element.tranStatus : '-'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="wfStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Workflow Status</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.wfStatus ? element.wfStatus : '-'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="action-btn-i centerAlign icontab">
+                        <!-- {{element.eventId}} -->
+                        <a (click)="onEdit(element.eventId)" *ngIf="element.isEditable === 1"><i class="material-icons plus edit-icon" title="Edit"> edit </i></a>
+                        <a (click)="onView(element.eventId)"><i class="material-icons plus view-icon" title="View">remove_red_eye</i></a>
+                        <a (click)="showConfirmationPopup(element)" *ngIf="element.deleteFlag === 1">
+                            <i class="material-icons plus delete" title="Delete" aria-hidden="true">delete_forever</i>
+                        </a>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="noData">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="incrementDisplayedColumns.length" class="centerAlign">No Data Available </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="incrementDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index;columns: variableClm.value;">
+                </tr>
+                <tr mat-footer-row [class.hide-table-footer]="incrementListDataSource && incrementListDataSource.data && incrementListDataSource.data.length != 0" *matFooterRowDef="displayedColumnsFooter">
+                </tr>
+            </table>
+            <mat-paginator #paginator [pageSize]="'25'" (page)="pageEvent = $event; onPaginateChange($event)" [length]="totalRecords" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+</div>

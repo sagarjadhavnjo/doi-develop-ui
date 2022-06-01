@@ -1,0 +1,64 @@
+.increment-table-responsive {
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.highlight {
+    border-bottom: 2px solid #FF0000;
+}
+
+/* .mat-dialog-container {
+    background: #efefef;
+}
+
+::ng-deep .mat-dialog-container {
+    background: #f4f8ff;
+} */
+
+::ng-deep .dialogContainer {
+    border: 1px solid #dce6ef;
+    display: table;
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    width: 100%;
+}
+
+/* .mat-dialog-actions {
+    margin-bottom: unset;
+    margin-top: unset;
+}
+
+::ng-deep .mat-dialog-actions {
+    margin-bottom: 0!important;
+} */
+
+.popupForm {
+    padding: 20px;
+    border: 1px dotted #a4b3bf;
+}
+
+.msg {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.empInfo {
+    text-align: left;
+    line-height: 22px;
+    margin-bottom: unset;
+}
+
+::ng-deep .disable-icon {
+    pointer-events: none;
+    color: #333 !important;
+    opacity: 0.65;
+    text-decoration: none !important;
+}
+
+.mat-table th.mat-header-cell,
+table.mat-table th,
+.mat-table .mat-header-cell {
+    max-width: inherit !important;
+}

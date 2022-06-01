@@ -1,0 +1,298 @@
+<div class="container">
+    <div class="form-wrapper">
+
+        <div class="heading-section ng-star-inserted">
+            <div>Employee Master
+            </div>
+        </div>
+        <mat-accordion class="search-accordian">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <div class="heading-section">
+                        Search Employee
+                    </div>
+                </mat-expansion-panel-header>
+                <div class=" form-datatable-list">
+                    <form class="col-sm-12" [formGroup]="searchListForm" autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                  <mat-form-field>
+                                    <input matInput formControlName="startDate" [matDatepicker]="stdate" placeholder="Created From Date" readonly [max]="dateNow" (dateChange)="setMinStartDate($event)">
+                                    <mat-datepicker-toggle matSuffix [for]="stdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #stdate></mat-datepicker>
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="endDate" [matDatepicker]="eddate" placeholder="Created To Date" readonly [max]="dateNow" [min]="minStartDate">
+                                    <mat-datepicker-toggle matSuffix [for]="eddate"></mat-datepicker-toggle>
+                                    <mat-datepicker #eddate></mat-datepicker>
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Employee Number" numbersOnly maxlength="10" formControlName="empNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Employee Name" formControlName="empName" maxlength="50" alphabetInBtwSpaceOnly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="designationId" placeholder="Designation">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empDesignationCtrl"
+                                                [placeholderLabel]="'Find Designation...'"
+                                                [noEntriesFoundLabel]="'no matching Designation found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let empDesignation of empDesignationList | filterSelectInput: empDesignationCtrl.value : 'designationName'"
+                                            [value]="empDesignation.designationId">
+                                            {{empDesignation.designationName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" maxlength="14" numbersOnly placeholder="Case Number" autocomplete="off" formControlName="caseNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" maxlength="15" numbersWithSpecialCharactersOnly placeholder="GPF Number" autocomplete="off" formControlName="gpfNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" maxlength="16" numbersOnly placeholder="CPF Number" autocomplete="off" formControlName="cpfNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="PAN Number" formControlName="pPan" maxlength="10">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="classId" placeholder="Class">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empClassCtrl"
+                                                [placeholderLabel]="'Find Class...'"
+                                                [noEntriesFoundLabel]="'no matching Class found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let empClass of empClassList | filterSelectInput: empClassCtrl.value : 'lookupInfoName'"
+                                            [value]="empClass.lookupInfoId">
+                                            {{empClass.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="empType" placeholder="Employee Type">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empTypeCtrl"
+                                                [placeholderLabel]="'Find Employee Type...'"
+                                                [noEntriesFoundLabel]="'no matching Employee Type found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let empType of empTypeList | filterSelectInput: empTypeCtrl.value : 'lookupInfoName'"
+                                            [value]="empType.lookupInfoId">
+                                            {{empType.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="officeId" placeholder="Office Name">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="officeNameCtrl"
+                                                [placeholderLabel]="'Find Office Name...'"
+                                                [noEntriesFoundLabel]="'no matching Office Name found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let officeName of officeNameList | filterSelectInput: officeNameCtrl.value:'value'"
+                                            [value]="officeName.key">
+                                            {{officeName.value}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="officeType" placeholder="Office Type">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="officeTypeCtrl"
+                                                [placeholderLabel]="'Find Office Type...'"
+                                                [noEntriesFoundLabel]="'no matching Office Type found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let officeType of officeTypeList | filterSelectInput: officeTypeCtrl.value:'officeTypeName'"
+                                            [value]="officeType.officeTypeId">
+                                            {{officeType.officeTypeName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput readonly formControlName="retirementDate" [matDatepicker]="dateRetire"
+                                        placeholder="Retirement Date">
+                                    <mat-datepicker-toggle matSuffix [for]="dateRetire">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #dateRetire></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="employeePayType" placeholder="Employee Pay Type ">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empPayTypeCtrl"
+                                                [placeholderLabel]="'Find Employee Pay Type ...'"
+                                                [noEntriesFoundLabel]="'no matching Employee Pay Type  found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let empPayType of empPayTypeList | filterSelectInput: empPayTypeCtrl.value : 'lookupInfoName'"
+                                            [value]="empPayType.lookupInfoId">
+                                            {{empPayType.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="wfStatus" placeholder="Workflow Status"
+                                        #singleSelect1>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="workflowStatusCtrl"
+                                                [placeholderLabel]="'Find Workflow Status...'"
+                                                [noEntriesFoundLabel]="'no matching Workflow Status found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let workflowStatus of workflowStatus_list | filterSelectInput: officeNameCtrl.value : 'name'"
+                                            [value]="workflowStatus.name">
+                                            {{workflowStatus.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row displayBlock form-action-button">
+                    <div class="centerAlign">
+                        <button type="submit" mat-raised-button color="primary" (click)="onSubmitSearch()">
+                            <i class="material-icons">search</i>
+                            Search
+                        </button>
+                        <button type="reset" mat-raised-button color="accent" (click)="clearForm();">
+                            <i class="material-icons">
+                                restore
+                            </i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="mat-elevation-z8 mt-2">
+            <table mat-table [dataSource]="dataSource" width="100%" matSort>
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Sr. No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+                        <!-- {{ i + 1 }} -->
+                        {{(pageIndex * pageSize) + (i + 1) }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="employeeNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee No.</th>
+                    <td mat-cell *matCellDef="let element"> {{(element.employeeNo && element.employeeNo !== '0' && element.employeeNo !== 'null') ? element.employeeNo : '' }} </td>
+                    <td mat-cell *matCellDef="let element"> <span *ngIf="element.employeeNo != 0">{{element.employeeNo}}</span><span *ngIf="element.employeeNo == 0"> - </span> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="empName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.empName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="caseNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Case No.</th>
+                    <td mat-cell *matCellDef="let element"> {{(element.caseNo && element.caseNo !== '0' && element.caseNo !== 'null') ? element.caseNo : ''}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="designation">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Designation</th>
+                    <td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="classLevel">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Class</th>
+                    <td mat-cell *matCellDef="let element"> {{element.classLevel}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="dob">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>DOB</th>
+                    <td mat-cell *matCellDef="let element"> {{element.dob | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="doj">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>DOJ (GoG)</th>
+                    <td mat-cell *matCellDef="let element"> {{element.doj | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="pan">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>PAN</th>
+                    <td mat-cell *matCellDef="let element"> {{element.pan}} </td>
+                </ng-container>
+                <ng-container matColumnDef="officeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Office Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                </ng-container>
+                <ng-container matColumnDef="wfTrnStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Workflow Status</th>
+                    <td mat-cell *matCellDef="let element"> {{element.wfTrnStatus}} </td>
+                </ng-container>
+                <ng-container matColumnDef="noData">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">No Data Available </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action  </th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="action-btn-i centerAlign">
+                        <a (click)="navigateToEdit(element.employeeId)" *ngIf="element.isEditable === '1'">
+                            <i class="material-icons plus edit-icon" title="Edit">edit</i>
+                        </a>
+                        <a (click)="navigateToView(element.employeeId)">
+                            <i class="material-icons plus view-icon" title="View">remove_red_eye</i>
+                        </a>
+                        <a (click)="showConfirmationPopup(element)" *ngIf="element.status === 'Saved as Draft'">
+                            <i class="material-icons plus delete" title="Delete" aria-hidden="true">delete_forever</i>
+                        </a>
+                        <a (click)="viewWorkflowHistory(element)" *ngIf="element.status !== 'Saved as Draft'">
+                            <i class="material-icons plus history" title="View Comments" aria-hidden="true">history</i>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index;columns: variableClm.value;"></tr>
+            </table>
+            <mat-paginator #paginator [pageSize]="'25'" [pageSizeOptions]="[5, 10, 25]" (page)="pageEvent = $event; onPaginateChange($event)" [length]="totalRecords" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+</div>

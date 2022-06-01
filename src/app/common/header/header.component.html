@@ -1,0 +1,47 @@
+<div class="header-wrapper">
+    <div class="mr-auto logo">
+        <a routerLink="budget">
+            <img src="assets/images/w-satyamevjayatey.png" alt="ifms-logo">
+            Finance Department (નાણા વિભાગ)
+        </a>
+    </div>
+    <div class="user-container ml-auto">
+        <div class="user-details">Welcome, Mr. Pankaj Gupta<br>
+        (Account Officer)
+        </div>
+        <div class="user-icon" [matMenuTriggerFor]="menu">
+            <i class="material-icons">
+                person
+            </i>
+        </div>
+        <mat-menu #menu="matMenu">
+            <div class="user-detail">
+                <div class="setting-icon">
+                    <i class="material-icons">
+                        settings_applications
+                    </i>
+                </div>
+                <div class="user-pic">
+                    <i class="material-icons">
+                        person
+                    </i>
+                </div>
+                <div class="user-name">
+                    <strong>Pankaj Kumar Gupta</strong><br />
+                    Role : Account Officer
+                </div>
+                <div class="user-action">
+                    <div class="profile-btn">
+                        <button>Profile</button>
+                    </div>
+                    <div class="switchRole-btn">
+                        <button (click)="switchRoleModel()">Switch Role</button>
+                    </div>
+                </div>
+                <div class="logout">
+                    <button (click)="logout()">Logout</button>
+                </div>
+            </div>
+        </mat-menu>
+    </div>
+</div>

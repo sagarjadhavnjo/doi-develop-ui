@@ -1,0 +1,132 @@
+<table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable">
+    <ng-container matColumnDef="attachmentTypeName">
+        <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+        <td mat-cell *matCellDef="let item;let i = index;">
+            {{item.attachmentTypeName}}
+            <span *ngIf="item.isMandatory === 'YES'" class="starSign">*</span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="fileName">
+        <th mat-header-cell *matHeaderCellDef>File Description</th>
+        <td mat-cell *matCellDef="let item">
+            <mat-form-field floatLabel="never" *ngIf="!item.id">
+                <textarea matInput rows="2" maxlength="200" [(ngModel)]="item.fileName" (change)="onFileNameChange()"
+                    [readonly]="isView" *ngIf="item.isMandatory === 'YES'" [required]="item.isMandatory === 'YES'" name="filename"></textarea>
+                <textarea matInput rows="2" maxlength="200" [(ngModel)]="item.fileName" (change)="onFileNameChange()"
+                    [readonly]="isView" *ngIf="item.isMandatory !== 'YES'" [required]="item.file" name="filename"></textarea>
+            </mat-form-field>
+            <span *ngIf="item.id">{{item.fileName}}</span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="browse">
+        <th mat-header-cell *matHeaderCellDef>
+            <div style="display: flex; align-items: center; justify-content: center">
+                <div style="display: inline-flex">Browse</div>
+                <div class="info-container">
+                    <i class="material-icons info-tooltip">
+                        info
+                    </i>
+                    <span class="info-tooltip-content">
+                        - File size should be under 2MB<br>
+                        - File type supported are: 'jpg', 'jpeg', 'png', 'pdf', 'JPG',
+                        'JPEG', 'PNG','PDF',
+                    </span>
+                </div>
+            </div>
+        </th>
+        <td mat-cell *matCellDef="let item;let i = index" class="centerAlign">
+            <button type="button" [disabled]="isView || item.id!==0" (click)="openFileSelector(i)"
+                class="btn-browse">Browse
+                Files</button>
+            <input type="file" onclick="this.value = null;" accept="image/png,application/pdf,image/jpeg,image/jpg"
+                id="fileBrowse" class="fileBrowse" (change)="onFileSelection($event, i)" />
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="uploadFileName">
+        <th mat-header-cell *matHeaderCellDef>Uploaded file name</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+            {{item.uploadFileName}}
+            <span>
+                <i *ngIf="item.uploadFileName && !isView" class="material-icons closesmall"
+                    (click)="removeFile(item, i)" title="Delete File" aria-hidden="true">close</i>
+            </span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="uploadedBy">
+        <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+        <td mat-cell *matCellDef="let item">{{item.uploadedBy}}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+            <div class="iconTable">
+                <div class="iconAttAction"
+                    *ngIf="dataSourceBrowse && dataSourceBrowse.data && dataSourceBrowse.data.length > 1 && (!(item.isMandatory === 'YES')) && item.delete && !isView"
+                    (click)="deleteBrowse(i,item)">
+                    <i class="material-icons plus delete" title="Delete">
+                        delete
+                    </i>
+                </div>
+                <div class="iconAttAction">
+                    <i class="material-icons plus view-icon" title="Download" (click)="downloadAttachFile(item)"
+                        [class.disable-delete-btn]="!item.documentId">vertical_align_bottom
+                    </i>
+                </div>
+                <div class="iconAttAction">
+                    <i class="material-icons plus view-icon" title="View" (click)="viewAttachment(item)"
+                        [class.disable-delete-btn]="!item.documentId">remove_red_eye</i>
+                </div>
+                <div class="iconAttAction"
+                    *ngIf="(dataSourceBrowse && dataSourceBrowse.data && (i == dataSourceBrowse.data.length - 1) && !isView )">
+                    <i class="material-icons plus" (click)="addBrowse()">
+                        add
+                    </i>
+                </div>
+            </div>
+            <!-- <table class="iconTable">
+                <tbody>
+                    <tr>
+                        <td width="30" class="centerAlign" *ngIf="dataSourceBrowse && dataSourceBrowse.data && dataSourceBrowse.data.length > 1 && (!(item.isMandatory === 'YES')) && item.delete && !isView" (click)="deleteBrowse(i,item)">
+                            <i class="material-icons plus delete" title="Delete">
+                                delete
+                            </i>
+                        </td>
+                        <td width="25">
+                            <i class="material-icons plus view-icon" title="Download" (click)="downloadAttachFile(item)" [class.disable-delete-btn]="!item.documentId">vertical_align_bottom
+                            </i>
+                        </td>
+                        <td width="25">
+                            <i class="material-icons plus view-icon" title="View" (click)="viewAttachment(item)" [class.disable-delete-btn]="!item.documentId">remove_red_eye</i>
+                        </td>
+                        <td width="25" *ngIf="(dataSourceBrowse && dataSourceBrowse.data && (i == dataSourceBrowse.data.length - 1) && !isView )">
+                            <i class="material-icons plus" (click)="addBrowse()">
+                                add
+                            </i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+</table>
+<div class="legend noteSpaces">
+    1. File size should be under 2MB<br> 2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', 'JPG','JPEG', 'PNG',
+    'PDF'
+    <br>
+</div>
+<div class="form-action-button">
+    <button mat-raised-button [disabled]="isView || disableUpload" (click)="saveAttachmentTab()" type="submit"
+        class="green" *ngIf="!dialogOpen">
+        <i class="material-icons">done</i> Upload</button>
+    <button mat-raised-button type="submit" class="green" (click)="onSubmit()" *ngIf="showSubmit && !dialogOpen">
+        <i class="material-icons"> done</i> Submit</button>
+    <button type="button" mat-raised-button color="warn" (click)="OnListClick()" *ngIf="!dialogOpen">
+        <i class="material-icons" title="Listing">list</i>Listing
+    </button>
+    <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+        <i class="material-icons" title="PVU dashboard"> close</i>Close
+    </button>
+</div>

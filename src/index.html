@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Ifms</title>
+    <base href="./">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#356a94">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" type="image/x-icon" href="./assets/images/ifms2_logo.png">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <script type="text/javascript" src="assets/js/pramukh/pramukhime.js"></script>
+    <script type="text/javascript" src="assets/js/pramukh/pramukhindic.js"></script>
+    <script type="text/javascript" src="assets/js/pramukh/languageChange.js"></script>
+    <script>
+        document.oncontextmenu = new Function("return false;");
+        document.onkeydown = function(e) {
+            e = e || window.event; //Get event
+            if (e.ctrlKey) {
+                var c = e.which || e.keyCode; //Get key code
+                switch (c) {
+                    case 83: // Block Ctrl+S
+                        e.preventDefault();
+                        e.stopPropagation();
+                        break;
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <app-root></app-root>
+</body>
+
+</html>

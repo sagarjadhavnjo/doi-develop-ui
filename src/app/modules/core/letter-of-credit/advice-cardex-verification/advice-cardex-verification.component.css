@@ -1,0 +1,21 @@
+.signaure {
+    position: relative;
+}
+.signature-box{
+    display: none;
+    z-index: 999;
+}
+.signaure:hover .signature-box{
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+@media(max-width:1200px){
+    .lc-adivce .mat-table td.mat-cell{
+        max-width: 140px;
+    }
+    
+}

@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="form-wrapper ddo-table">
+      <h5 class="centerAlign"><strong><u>MEMORANDUM</u></strong></h5>
+      <div class="table-responsive">
+        <!-- Report Starts -->
+        <table>
+          <tr>
+            <td class="p-2">NO. DI/GGIF/Registered Farmer/Claim No. FARMER/2020-21/000260/</td>
+          </tr>
+          <tr>
+            <td class="p-2"><strong>Generate Date :</strong>{{generatedDate}}</td>
+          </tr>
+          <tr>
+            <td class="p-2">
+              In Exercise of the Power delegated to him vide Govt. Resolution of Finance Department No. TSM/20/2019/4056(296788)/GH, 
+              Dated 9th October 2019, the undersigned admits the misc. Group J.P.A. Claim occurred on <strong>08-12-2019</strong> 
+              in respect of <strong>Registered Farmer - <u>{{personName}}</u></strong> under Gujarat Group Janta  Personal 
+              Accident Insurance Policy No: <strong>{{policyNumber}}</strong> in full and final settlement of the Claim No. 
+              <strong>{{claimNumber}}</strong> for <strong>₹ {{claimAmount}}</strong> in favour of as per below 
+              given bank details.
+            </td>
+          </tr>
+          <tr>
+            <td class="p-2">
+              <!-- Report Table -->
+              <table class="table-bordered">
+                <tr *ngFor="let item of reportDetails">
+                  <td class="leftAlign p-1">{{item.entry}}</td>
+                  <td class="leftAlign p-1">{{item.value}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="p-2">
+              The Expenditure on this accounts should be debited to the head 3475 Other General 
+              Economics Services 800-Other Expenditure (2) Payment of insurance claims and met from 
+              the Sanctioned grant there under.
+            </td>
+          </tr>
+          <tr>
+            <td class="p-2 rightAlign">
+              <br><br><br>
+              Asst. / DY./ Director of Insurance
+            </td>
+          </tr>
+          <tr>
+            <td class="p-2">
+              Copy FWR To:
+            </td>
+          </tr>
+          <tr>
+            <td class="doi-report pt-3 p-2">
+              <ol>
+                <li>The Pay and Accounts Officer, Gandhinagar</li>
+                <li>Copy to Bill Clerk</li>
+                <li>PRAJAPATI GITABEN CHANDUBHAI 
+                    <br>ADDRESS: PRAJAPATI VAS 
+                    <br>MEU,MAHESANA,MAHESANA,382730.</li>
+                <li>DISTRICT AGRICULTURE OFFICER, AGRICULTURE BRANCH, DITRICT PANCHAYAT, MEHSANA - 384001</li>
+                <li>O/C</li>
+              </ol>
+            </td>
+          </tr>
+          <tr>
+            <td class="p-2 rightAlign">
+              <br><br><br>
+              Asst. / DY./ Director of Insurance
+            </td>
+          </tr>
+        </table>
+        <!-- Report Starts -->
+      </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<h3 mat-dialog-title>Important</h3>
+<br/>
+<div mat-dialog-content>
+    <p class="imp-msg">{{ dialogData.signInMsgInfo?.signInMsg }}</p> <br/>
+    <p class="imp-msg">{{ dialogData.signInMsgInfo?.signInMsgGuj }}</p>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button type="button" (click)="onCancel()" cdkFocusInitial>
+        Close
+    </button>
+</div>

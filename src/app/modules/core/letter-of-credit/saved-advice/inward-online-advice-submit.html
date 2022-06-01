@@ -1,0 +1,271 @@
+<div class="container common-workflow-section">
+	<div class="row">
+		<div class="heading-section ng-star-inserted">
+			<div>{{data.headingName}}</div>
+		</div>
+		<form class="col-sm-12" [formGroup]="workflowForm" autocomplete="off">
+			<div *ngIf="showWorkFlowAction">
+				<div class="col-sm-12">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="workflowAction" placeholder="Action"
+								(selectionChange)="onActionChange()" required>
+								<mat-option>
+									<ngx-mat-select-search [formControl]="actionCtrl"
+										[placeholderLabel]="'Find Action...'"
+										[noEntriesFoundLabel]="'no matching Action found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let action of actionList | filterSelectInput : actionCtrl.value : 'wfActionName'"
+									[value]="action.workflowActionId">
+									{{action.wfActionName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.workflowAction.touched || (workflowForm.controls.workflowAction.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.workflowAction.errors && workflowForm.controls.workflowAction.errors.required">
+									{{errorMessages.ACTION}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isBranchVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="branch" placeholder="Branch" required
+								[disabled]="selectedAction?.isToBranchSelReq === -1">
+								<mat-option>
+									<ngx-mat-select-search [formControl]="branchCodeCtrl"
+										[placeholderLabel]="'Find Branch...'"
+										[noEntriesFoundLabel]="'no matching Branch found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let branch of branchList | filterSelectInput : branchCodeCtrl.value : 'branchName'"
+									[value]="branch.branchId">
+									{{branch.branchName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.branch.touched || (workflowForm.controls.branch.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.branch.errors && workflowForm.controls.branch.errors.required">
+									{{errorMessages.BRANCH}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isOfficeVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="office" placeholder="Office" required
+								[disabled]="selectedAction?.isToOfficeSelReq === -1"
+								(selectionChange)="officeSelectionChange()">
+								<mat-option>
+									<ngx-mat-select-search [formControl]="officeCodeCtrl"
+										[placeholderLabel]="'Find Office...'"
+										[noEntriesFoundLabel]="'no matching Office found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let office of officeList | filterSelectInput : officeCodeCtrl.value : 'officeName'"
+									[value]="office.officeId">
+									{{office.officeName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.office.touched || (workflowForm.controls.office.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.office.errors && workflowForm.controls.office.errors.required">
+									{{errorMessages.OFFICE}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isDepartmentVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="department" placeholder="Department"
+								(selectionChange)="onDepartmentChange()" required>
+								<mat-option>
+									<ngx-mat-select-search [formControl]="departmentCodeCtrl"
+										[placeholderLabel]="'Find Department...'"
+										[noEntriesFoundLabel]="'no matching Department found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let department of departmentList | filterSelectInput : departmentCodeCtrl.value : 'deptName'"
+									[value]="department.departmentId">
+									{{department.deptName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.department.touched || (workflowForm.controls.department.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.department.errors && workflowForm.controls.department.errors.required">
+									{{errorMessages.DEPATMENT}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isWorkflowRoleVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="workflowRole" placeholder="Send To"
+								(selectionChange)="onWorkflowRoleChange()" required>
+								<mat-option>
+									<ngx-mat-select-search [formControl]="workflowRoleCodeCtrl"
+										[placeholderLabel]="'Find Send To...'"
+										[noEntriesFoundLabel]="'no matching Send To found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let workflowRole of workflowRoleList | filterSelectInput : workflowRoleCodeCtrl.value : 'wfRoleName'"
+									[value]="workflowRole.wfRoleId">
+									{{workflowRole.wfRoleName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.workflowRole.touched || (workflowForm.controls.workflowRole.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.workflowRole.errors && workflowForm.controls.workflowRole.errors.required">
+									{{errorMessages.WORKFLOW_ROLE}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isHodVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="hod" placeholder="HOD" (selectionChange)="onHodChange()"
+								[required]="!isWorkflowRoleVisible">
+								<mat-option>
+									<ngx-mat-select-search [formControl]="hodCodeCtrl"
+										[placeholderLabel]="'Find HOD...'"
+										[noEntriesFoundLabel]="'no matching HOD found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let hod of hodList | filterSelectInput : hodCodeCtrl.value : 'officeName'"
+									[value]="hod.officeId">
+									{{hod.officeName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.hod.touched || (workflowForm.controls.hod.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.hod.errors && workflowForm.controls.hod.errors.required">
+									{{errorMessages.HOD}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isCoVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="co" placeholder="CO" (selectionChange)="onCoChange()"
+								[required]="!isWorkflowRoleVisible">
+								<mat-option>
+									<ngx-mat-select-search [formControl]="coCodeCtrl" [placeholderLabel]="'Find CO...'"
+										[noEntriesFoundLabel]="'no matching CO found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let co of coList | filterSelectInput : coCodeCtrl.value : 'officeName'"
+									[value]="co.officeId">
+									{{co.officeName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.co.touched || (workflowForm.controls.co.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.co.errors && workflowForm.controls.co.errors.required">
+									{{errorMessages.CO}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12" *ngIf="isUserVisible">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<mat-select formControlName="user" placeholder="User" required
+								[disabled]="selectedAction.isToUserSelReq === -1">
+								<mat-option>
+									<ngx-mat-select-search [formControl]="userCodeCtrl"
+										[placeholderLabel]="'Find User...'"
+										[noEntriesFoundLabel]="'no matching User found'">
+									</ngx-mat-select-search>
+								</mat-option>
+								<mat-option
+									*ngFor="let user of userList | filterSelectInput : userCodeCtrl.value : 'userName'"
+									[value]="user.userId">
+									{{user.userName}}
+								</mat-option>
+							</mat-select>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.user.touched || (workflowForm.controls.user.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.user.errors && workflowForm.controls.user.errors.required">
+									{{errorMessages.USER}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="row">
+						<mat-form-field class="full-width">
+							<textarea  matInput class="textarea wf-remarks" autocomplete="off" name="remarks"
+								formControlName="remarks" appHandleGujaratiLangChange [name]="currentLang"
+								placeholder="Comment (ગુજરાતી)" noSpaceOnly required
+								 maxlength="500"></textarea>
+							<div class="error-wrapper"
+								*ngIf="workflowForm.controls.remarks.touched || (workflowForm.controls.remarks.errors && isSubmitted)">
+								<mat-error
+									*ngIf="workflowForm.controls.remarks.errors && workflowForm.controls.remarks.errors.required">
+									{{errorMessages.REMARKS}}
+								</mat-error>
+							</div>
+						</mat-form-field>
+					</div>
+					<div class="text-right row rightAlign">
+						<!-- <button mat-raised-button type="button" class="lang-btn" (click)="toggleLanguage()">
+							{{currentLang.value == 'Eng' ? 'Guj' : 'Eng' }}
+						</button> -->
+						<button mat-raised-button type="button" class="lang-btn" (click)="toggleLanguage()">
+							{{currentLang === 'Eng' ? 'Guj' : 'Eng' }}
+						  </button>
+		  
+					</div>
+				</div>
+
+				<div *ngIf="apiErrorMessageList && apiErrorMessageList.length > 0" class="pt-3">
+					<li *ngFor="let messageobj of apiErrorMessageList" class="text-danger">
+						{{messageobj.message}}
+					</li>
+				</div>
+
+				<div class="form-action-button">
+					<button type="button" title="Save" [disabled]="isSubmitted || apiErrorMessageList.length != 0 "
+						mat-raised-button class="green" cdkFocusInitial (click)="reqNumGen()">
+						<i class="material-icons" title="Save">save</i>
+						Submit
+					</button>
+					<button type="button" title="Cancel" mat-raised-button (click)="closeDialog()" class="btnClose">
+						<i class="material-icons " title="Cancel dashboard">close</i>
+						Cancel
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

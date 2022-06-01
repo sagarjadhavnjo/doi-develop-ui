@@ -1,0 +1,6 @@
+@media(max-width:1200px){
+    .lc-adivce .mat-table td.mat-cell{
+        max-width: 140px;
+    }
+    
+}

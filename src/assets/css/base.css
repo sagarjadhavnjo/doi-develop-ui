@@ -1,0 +1,258 @@
+.action-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.action-btn button {
+    margin: 0px 10px
+}
+
+::ng-deep .mat-radio-button {
+    display: inline-block;
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+    width: auto !important;
+    flex: 0.5 !important;
+    max-width: 100%;
+    padding-left: 0px !important;
+    position: relative;
+    top: 3px;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #356a94;
+}
+
+
+/* .mat-form-field {
+    display: block !important;
+    width: 100%;
+} */
+
+.form-group label {
+    color: gray;
+}
+
+::ng-deep .form-wrapper .mat-form-field-infix {
+    display: block;
+    width: 100%;
+}
+
+.matCardTable {
+    width: 100%
+}
+
+.box-shadow-none {
+    box-shadow: none;
+}
+
+.bg-none {
+    background: none;
+}
+
+.mat-sort-header-container {
+    font-size: 12px;
+    color: #FFF;
+    font-weight: 600;
+    justify-content: center;
+}
+
+.no-record-found {
+    border-top: 1px solid #e2e2e2;
+    border-bottom: 1px solid #e2e2e2;
+    padding: 10px 0px;
+    width: 100%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px #e2e2e2;
+}
+
+.copyright {
+    margin-top: 1em;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.list-action-button {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    align-items: center;
+}
+
+.list-action-button button {
+    margin: 5px 0px 5px 5px;
+    min-width: 100px;
+}
+
+.list-action-button i {
+    font-size: 16px;
+    margin-right: 2px;
+}
+
+
+/* Search Accordian */
+
+.main-contain {
+    margin-top: 2em;
+    transition: 0.3s ease-in-out;
+    transition-timing-function: linear;
+    width: 100%;
+    max-width: 100%;
+}
+
+.add-icon i {
+    color: black;
+    font-size: 16px;
+}
+
+.delete-icon i {
+    color: red;
+    font-size: 16px;
+}
+
+.view-icon i {
+    color: #3f51b5;
+    font-size: 16px;
+}
+
+.edit-icon i {
+    color: orange;
+    font-size: 16px;
+}
+
+.add-button-right {
+    float: right;
+}
+
+.mat-paginator-page-size-label {
+    white-space: nowrap
+}
+
+.error-msg .mat-error {
+    color: #6a7de2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.list-head-wrapper {
+    /* margin-top: 1em; */
+    font-size: 13px;
+}
+
+.search-list-box {
+    min-width: 60%;
+    max-width: 500px;
+}
+
+.list-heading {
+    margin-top: 1em;
+    width: 100%;
+    max-width: 100%;
+}
+
+table.mat-table.tblRecovery th {
+    display: none !important;
+}
+
+table.mat-table th {
+    font-size: 12px;
+    font-weight: 600;
+    color: black;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr.mat-footer-row,
+tr.mat-row {
+    height: 35px;
+    line-height: 1;
+}
+
+table .mat-checkbox-layout {
+    margin-bottom: 0px;
+}
+
+.hide-table-footer {
+    display: none;
+}
+
+.langButton button {
+    background-color: #6e738c;
+    color: #fff;
+    margin: 0 5px;
+    min-width: 50px !important;
+    height: 35px;
+}
+
+.activeButton {
+    background-color: #3f51b5 !important;
+}
+
+.toggle-bar .sidebar-wrapper {
+    width: 0px !important;
+    transition: 0.3s ease-in-out;
+    transition-timing-function: linear;
+}
+
+.toggle-bar .inner-container {
+    width: calc(100% - 0px) !important;
+    transition: 0.3s ease-in-out;
+    transition-timing-function: linear;
+}
+
+@media (min-width: 1200px) {
+    .toggle-bar .container {
+        max-width: 100% !important;
+        transition: 0.3s ease-in-out;
+        transition-timing-function: linear;
+    }
+}
+
+.nomenclature-gujarati {
+    display: flex;
+}
+
+.nomenclature-gujarati .col-sm-8 {
+    padding: 0;
+}
+
+.nomenclature-gujarati .lang-button {
+    display: contents;
+}
+
+.nomenclature-gujarati .lang-button button {
+    background-color: #6e738c;
+    color: #fff;
+    margin: 0 5px;
+    padding: 0;
+    min-width: 50px !important;
+    height: 35px;
+}
+
+.form-wrapper {
+    overflow: auto;
+}
+
+.mat-elevation-z8 {
+    box-shadow: unset;
+}
+
+table {
+    width: 100%;
+    /* border: 1px solid rgba(102, 102, 102, .2); */
+}
+
+.mat-table td.mat-cell.reference-no {
+    max-width: 160px;
+}
+
+.color-white {
+    color: #FFF;
+}

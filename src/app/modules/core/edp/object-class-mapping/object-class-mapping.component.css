@@ -1,0 +1,10 @@
+.half-checkbox .mat-checkbox{
+    display: block;
+    padding:5px 10px;
+}
+
+.half-checkbox .mat-checkbox:nth-child(odd){
+    display: block;
+    background: #f9f9f9;
+
+}

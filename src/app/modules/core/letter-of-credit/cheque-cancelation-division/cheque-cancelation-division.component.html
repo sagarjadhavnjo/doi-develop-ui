@@ -1,0 +1,627 @@
+<div class="container">
+  <div class="form-wrapper">
+
+    <!-- Screen Name, Reference No and Reference Date Header -->
+    <div class="heading-section ng-star-inserted">
+      <div>LC Cheque Cancellation</div>
+      <div class="font-heading"><strong>Reference No:</strong> {{refNo}}</div>
+      <div class="font-heading"><strong>Reference Date:</strong>
+        {{(refDate ? (refDate | date: 'dd-MMM-yyyy hh:mm:ss a') :refDate)}}</div>
+    </div>
+
+    
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="javascript:void(0)">LC</a></li>
+        <li class="breadcrumb-item active" aria-current="page">LC Cheque Cancellation</li>
+      </ol>
+    </nav>
+    <mat-tab-group mat-stretch-tabs [(selectedIndex)]="selectedTab" (selectedTabChange)="getTabIndex($event)">
+      <!-- Mat Tab for LC Advice Details Starts -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          LC Cheque Cancelation
+        </ng-template>
+        <!-- Form Starts -->
+        <form [formGroup]="chequeCancellationForm" (ngSubmit)="chequeCancellationFormData()">
+          <div class="box box-primary">
+            <div class="box-header">Search</div>
+            <div class="box-body">
+              <div class="row">
+
+                <!-- Note section -->
+                <div class="col-sm-12" *ngIf="(this.mode !== 'view') && (this.mode !== 'edit')">
+                  <h6 class="error">Note: </h6>
+                  <p>
+                    A) LC cheque cancellation is divided in two steps<br>
+                    Step 1 : Division User needs to submit head wise cancel expenditure request. <br>
+                    Step 2 : Treasury Officer will review detail submitted by division user and cancel particular
+                    cheque. In
+                    case of current financial year cheque cancellation, same time over all division balance and headwise
+                    balance will increase. In case of last financial year cheque cancellation, there is no any effect on
+                    division balance. <br>
+                    <br>
+                    B) In case of current financial year time barred cheques division user can directly cancel cheque by
+                    his/her login. Same time over all division balance and headwise balance will increase. <br>
+                  </p>
+                </div>
+
+                <!-- Input Field for Cheque Number -->
+                <div class="col-sm-3">
+                  <div *ngIf="!isTreasuryFlag">
+                  <mat-form-field>
+                    <input matInput placeholder="Cheque No." formControlName="chequeNumber" required>
+                    <mat-icon matSuffix class="searchIcon" (click)="searchChequeNumber()">search</mat-icon>
+                    <div class="error-wrapper"
+                      *ngIf="chequeCancellationForm.controls.chequeNumber.touched && chequeCancellationForm.controls.chequeNumber.errors">
+                      <mat-error *ngIf="chequeCancellationForm.controls.chequeNumber.errors.required">
+                        {{errorMessage.CHEQUE_NUMBER}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                  </div>
+                  <div *ngIf="isTreasuryFlag">
+
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Cheque No." formControlName="chequeNumber" readonly>
+                  </mat-form-field>
+                </div>
+                </div>
+
+   
+
+                <!-- Input Field for Division Code -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Division Code" formControlName="divisionCode" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Cheque Amount -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Cheque Amount (in Rs.)" formControlName="chequeAmount" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Cheque Date -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Cheque Date" formControlName="chequeDate" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for In favour of -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="In Favour Of" formControlName="inFavourOf" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Advice Number -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Advice No." formControlName="adviceNo" readonly>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="col-sm-3">
+                  <div *ngIf="!isTreasuryFlag">
+                  <mat-form-field>
+                    <textarea matInput  formControlName="reason"  appHandleGujaratiLangChange
+                    cdkTextareaAutosize cdkAutosizeMinRows="4" [name]="currentLang" placeholder="Reason"
+                      required></textarea>
+                    <div class="error-wrapper"
+                      *ngIf="chequeCancellationForm.controls.reason.touched && chequeCancellationForm.controls.reason.errors">
+                      <mat-error *ngIf="chequeCancellationForm.controls.reason.errors.required">
+                        {{errorMessage.REASON}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                  </div>
+                  <div *ngIf="isTreasuryFlag">
+
+                  <mat-form-field class="disabled">
+                    <textarea matInput placeholder="Reason" formControlName="reason" readonly></textarea>
+                  </mat-form-field>
+                </div>
+                </div>
+
+                <!-- Guj Eng Button -->
+                <div class="col-sm-3"  *ngIf="!isTreasuryFlag">
+                  <button mat-raised-button type="button" class="lang-btn" (click)="toggleLanguage()">
+                    {{currentLang === 'Eng' ? 'Guj' : 'Eng' }}
+                  </button>
+                </div>
+
+                
+                <!-- Buttons for Search and Reset Starts -->
+                <div class="col-sm-12" *ngIf="!isTreasuryFlag">
+                  <div class="form-action-button">
+                    <!-- <button type="submit" mat-raised-button color="primary" title="Save As Draft" (click)="search()">
+                  <i class="material-icons" aria-hidden="true">search</i> Search
+                </button> -->
+                    <button type="reset" mat-raised-button color="accent">
+                      <i class="material-icons" aria-hidden="true">
+                        restore
+                      </i>
+                      Reset
+                    </button>
+                  </div>
+                </div>
+                <!-- Buttons for Search and Reset Ends -->
+
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-scroll">
+            <div class="mat-elevation-z8">
+
+              <!-- Cheque Cancellation Details Table Starts -->
+              <table mat-table [dataSource]="ChequeCancellationDataSource" class="mat-elevation-z8 "
+                area-describedby="cheque-cancelation">
+
+                <!-- Main Header -->
+                <ng-container matColumnDef="parant1">
+                  <th mat-header-cell *matHeaderCellDef [attr.colspan]="16" scope="row">
+                    Cheque Cancellation Details
+                  </th>
+                </ng-container>
+
+                <!-- Serial Number Column -->
+                <ng-container matColumnDef="srno">
+                  <th mat-header-cell *matHeaderCellDef scope="row">
+                    Sr. No.
+                  </th>
+                  <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+                    {{i+1}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef>Total</td>
+                </ng-container>
+
+                <!-- Fund Column -->
+                <ng-container matColumnDef="fund">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Fund</th>
+                  <!-- <td mat-cell *matCellDef="let element"> -->
+                  <td mat-cell *matCellDef="let element">
+                    {{element.fundType}}
+                  </td>
+
+                  <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="fund" value="{{element.fundType}}" readonly>
+                </mat-form-field>
+              </td> -->
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Class of Expenditure Column -->
+                <ng-container matColumnDef="classOfExpenditure">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Class of Expenditure</th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- <mat-form-field class="disabled">
+                  <input matInput [(ngModel)]="element.chargedVoted"  [value]="element.chargedVoted" readonly>
+                </mat-form-field> -->
+                    {{element.chargedVoted}}
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Budget Type Column -->
+                <ng-container matColumnDef="budgetType">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Budget Type</th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- <mat-form-field class="disabled">
+                  <input matInput [(ngModel)]="element.budgetType"  [value]="element.budgetType" readonly>
+                </mat-form-field> -->
+                    {{element.budgetType}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Demand Number Column -->
+                <ng-container matColumnDef="demandNo">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Demand</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.demandCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="demandNo" value="{{element.demandCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.demandCode}}
+                    </span>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Major Head Column -->
+                <ng-container matColumnDef="majorHead">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Major Head</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.majoreheadCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="majorHead" value="{{element.majoreheadCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.majoreheadCode}}
+                    </span>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Sub Major Head Column -->
+                <ng-container matColumnDef="subMajorHead">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Sub Major Head</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.submajorheadCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="subMajorHead" value="{{element.submajorheadCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.submajorheadCode}}
+                    </span>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Minor Head Column -->
+                <ng-container matColumnDef="minorHead">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Minor Head</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.minorheadCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="minorHead" value="{{element.minorheadCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.minorheadCode}}
+                    </span>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Sub Head Column -->
+                <ng-container matColumnDef="subHead">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Sub Head</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.subheadCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="subHead" value="{{element.subheadCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.subheadCode}}
+                    </span>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Detailed Head Column -->
+                <ng-container matColumnDef="detailHead">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Detailed Head</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.detailheadCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="detailHead" value="{{element.detailheadCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.detailheadCode}}
+                    </span>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Type of Estimate Column -->
+                <ng-container matColumnDef="typeOfEstimate">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Type of Estimate</th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="typeOfEstimate" value="{{element.estimateType}}" readonly>
+                </mat-form-field> -->
+                    {{element.estimateType}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Item Name Column -->
+                <ng-container matColumnDef="itemName">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Item Name / Work Name</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.itemName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="itemName" value="{{element.itemCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.itemCode}}
+                    </span>
+
+                  </td>
+
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Object Head Column -->
+                <ng-container matColumnDef="objectHead">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Object Class</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span matTooltip="{{element.objectclassCodeName}}">
+
+                      <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="objectHead" value="{{element.objectclassCode}}" readonly>
+                </mat-form-field> -->
+                      {{element.objectclassCode}}
+                    </span>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Scheme Number Column -->
+                <ng-container matColumnDef="schemeNo">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Scheme No.</th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- <mat-form-field class="disabled">
+                  <input matInput formControlName="schemeNo" value="{{element.schemeNo}}" readonly>
+                </mat-form-field> -->
+                    {{element.schemeNo}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Expenditure Amount Column -->
+                <ng-container matColumnDef="expenditureAmount">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Expenditure Amount (in Rs.)</th>
+                  <td mat-cell *matCellDef="let element">
+                    <!-- <mat-form-field class="text-right disabled">
+                  <input matInput formControlName="expenditureAmount"
+                    value="{{element.expensitureAmt | number : '1.2-2' }}" readonly>
+                </mat-form-field> -->
+                    {{element.expensitureAmt | number : '1.2-2'}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Headwise Cancel Cheque Amount Column -->
+                <ng-container matColumnDef="headwiseCancelChequeAmount">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Headwise Cancel Cheque Amount</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="!isTreasuryFlag">
+                    <mat-form-field class="text-right">
+                      <input matInput class="text-right" [(ngModel)]="element.hdCnclChqAmt"
+                        value="{{element.hdCnclChqAmt}}" (keypress)="directiveObject.decimalKeyPress($event)"
+                        (blur)="directiveObject.decimalPoint(element,'hdCnclChqAmt')"
+                        [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="isTreasuryFlag">
+                    {{element.hdCnclChqAmt | number : '1.2-2'}}
+
+                  </div>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef class="text-right">
+                    {{ totalHeadWiseAmount() | number : '1.2-2' }}
+                  </td>
+                </ng-container>
+
+                <!-- Header and Footer Row Definition -->
+                <tr mat-header-row *matHeaderRowDef="['parant1']"></tr>
+                <tr mat-header-row *matHeaderRowDef="ChequeCancellationDataColumn"></tr>
+                <tr mat-row *matRowDef="let row; columns: ChequeCancellationDataColumn;"></tr>
+                <tr mat-footer-row *matFooterRowDef="ChequeCancellationDataColumn"></tr>
+              </table>
+              <!-- Cheque Cancellation Details Table Starts -->
+            </div>
+          </div>
+
+          <br>
+          <h6 class="error">Note: </h6>
+          <p>Cancel cheque can not be paid (Reconciled) and reused in any new advice.</p>
+
+          <!-- Action Buttons Starts -->
+          <div class="form-action-button">
+            <button type="button" mat-raised-button color="primary" title="Save As Draft"
+            [disabled]=" !chequeCancellationForm.valid "
+              (click)="saveChequeCancellation()">
+              <i class="material-icons" title="Save As Draft" aria-hidden="true">
+                save
+              </i>
+              Save as Draft
+            </button>
+            <button type="button" mat-raised-button class="green" title="Submit"
+            [disabled]=" !chequeCancellationForm.valid "
+            (click)="submit()">
+              <i class="material-icons" title="Save As Draft" aria-hidden="true">
+                done
+              </i>
+              Submit
+            </button>
+            <button type="listing" mat-raised-button color="warn" title="Listing"
+              (click)="directiveObject.goToScreen('/lc/lc-cheque-cancelation-division-listing')">
+              <i class="material-icons" title="Listing" aria-hidden="true">
+                list
+              </i>
+              Listing
+
+            </button>
+            <button type="button" mat-raised-button class="btnClose" title="Close"
+              (click)="directiveObject.goToDashboard()">
+              <i class="material-icons" title="Close" aria-hidden="true">
+                close
+              </i>
+              Close
+            </button>
+            <button type="button" mat-raised-button class="print-btn" title="Print">
+              <i class="material-icons" title="Print" aria-hidden="true">
+                print
+              </i>
+              Print
+            </button>
+          </div>
+          <!-- Action Buttons Ends -->
+
+
+        </form>
+      </mat-tab>
+      <!-- Mat Tab for Attachments Starts -->
+      <mat-tab [disabled]="this.hdrId == undefined || this.hdrId == null || this.hdrId == 'NaN' ? true : false">
+        <ng-template mat-tab-label>
+          Attachment
+        </ng-template>
+        <table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+            <td mat-cell *matCellDef="let item; let i = index" class="centerAlign">
+              {{ i + 1 }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="attachmentTypeId">
+            <th mat-header-cell *matHeaderCellDef>Attachment Type <span class="star">*</span></th>
+            <td mat-cell *matCellDef="let item;let i= index;">
+              <mat-select [disabled]="item.documentId || this.mode === 'view'" placeholder="Attachment Type" required
+                [(ngModel)]="item.attachmentTypeId" (selectionChange)="onAttachmentTypeChange(item,i)">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="attachmentTypeCodeCtrl"
+                    [placeholderLabel]="'Find Attachment Type...'"
+                    [noEntriesFoundLabel]="'no matching Attachment Type found'">
+                  </ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option
+                  *ngFor="let AT of attachmentTypeList | filterSelectInput : attachmentTypeCodeCtrl.value : 'name'"
+                  [value]="AT.id">
+                  {{AT.name}}
+                </mat-option>
+              </mat-select>
+              <!-- {{item.attachmentTypeName}} -->
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="fileName">
+            <th mat-header-cell *matHeaderCellDef>File name <span class="star">*</span></th>
+            <td mat-cell *matCellDef="let item">
+              <mat-form-field floatLabel="never">
+                <input [disabled]="item.documentId || this.mode === 'view'" matInput [value]="item.fileName"
+                  maxlength="50" [(ngModel)]="item.fileName">
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="browse">
+            <th mat-header-cell *matHeaderCellDef>Browse File <span class="star">*</span></th>
+            <td mat-cell *matCellDef="let item;let i= index" class="centerAlign">
+              <button [disabled]="item.documentId || this.mode === 'view' " type="button" (click)="openFileSelector(i)"
+                class="btn-browse">
+                Browse Files
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="uploadedFileName">
+            <th mat-header-cell *matHeaderCellDef>Uploaded file name <span class="star">*</span></th>
+            <td mat-cell *matCellDef="let item;let i = index">
+              <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}</span>
+              <span>
+                <i *ngIf="item.uploadedFileName && !item.documentId" class="material-icons closesmall"
+                  (click)="removeUploadUserFile(item, i)" title="Delete File" aria-hidden="true">close</i>
+              </span>
+
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+            <td mat-cell *matCellDef="let item">
+              <mat-label>{{item.userName}}</mat-label>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="width: 10%;">Action</th>
+            <td mat-cell *matCellDef="let item; let i= index">
+              <table class="iconTable">
+                <tbody>
+                  <tr>
+
+                    <td width="auto">
+                      <i class="material-icons plus delete"
+                        *ngIf="dataSourceBrowse && dataSourceBrowse.data && (dataSourceBrowse.data.length > 1 || item.documentId) && this.mode !=='view'"
+                        (click)="deleteUploadedAttachment(item, i)">
+                        delete
+                      </i>
+                    </td>
+                    <td width="auto">
+                      <i class="material-icons plus view-icon" title="Download" *ngIf="item &&
+                          item.documentId" (click)="downLoadUploadedAttachment(item)">vertical_align_bottom
+                      </i>
+                    </td>
+                    <td width="auto">
+                      <i class="material-icons plus view-icon" title="View" *ngIf="item &&
+                          item.documentId && item.isView"
+                        (click)="viewUploadedAttachment(item,$event)">remove_red_eye</i>
+                    </td>
+
+
+                    <td width="auto">
+                      <i class="material-icons plus add" *ngIf="dataSourceBrowse &&
+                                                  dataSourceBrowse.data && 
+                                                  (i == dataSourceBrowse.data.length - 1) && 
+                                                  dataSourceBrowse.data.length < maxAttachment && this.mode !=='view'"
+                        (click)="addNewFileRow()">
+                        add
+                      </i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns:
+                          displayedBrowseColumns;"></tr>
+        </table>
+        <input type="file" #attachment id="fileBrowse" style="visibility: hidden;" (change)="onFileSelection($event)" />
+
+        <div class="legend">
+
+          1. Total File size should be under 2MB<br> 2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf',
+
+          JPG’, ‘JPEG’, ‘PNG’, ‘PDF’.
+
+        </div>
+        <!-- Action Buttons Starts -->
+        <div class="form-action-button">
+          <button type="button" mat-raised-button color="primary" *ngIf="this.mode !=='view'"
+            (click)="saveAttachmentTab()">
+            <i class="material-icons" aria-hidden="true" title="Save">
+              save
+            </i>
+            Upload
+          </button>
+
+          <button type="button" mat-raised-button color="warn" (click)="gotoListing()">
+            <i class="material-icons" aria-hidden="true" title="Listing">
+              list
+            </i>
+            Listing
+          </button>
+          <button type="button" mat-raised-button class="btnClose" title="Close"
+            (click)="directiveObject.goToDashboard()">
+            <i class="material-icons" title="Dashboard">
+              close
+            </i>
+            Close
+          </button>
+        </div>
+        <!-- Action Buttons Ends -->
+      </mat-tab>
+      <!-- Mat Tab for Attachments Ends -->
+    </mat-tab-group>
+
+
+    <!-- Form Ends -->
+
+
+  </div>
+</div>

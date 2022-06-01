@@ -1,0 +1,353 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Co-Insurance Claim Listing </div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/CICL/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI </li>
+        <li class="breadcrumb-item active" aria-current="page">Co-Insurance Claim Listing</li>
+      </ol>
+    </nav>
+    <div class="panel-group">
+      <!-- Co-Insurance Claim Listing  Form-->
+      <form [formGroup]="coInsuranceClaimForm">
+        <!-- Details of Deceased/Disabled -->
+        <div class="box box-primary">
+          <div class="box-header">Search</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <!-- District -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="district" placeholder="District">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="districtCtrl" [placeholderLabel]="'Find District...'"
+                        [noEntriesFoundLabel]="'No matching District found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let item of districtList |
+                          filterSelectInput:districtCtrl.value" [value]="item.value" matTooltip="{{item.viewValue}}">
+                      {{item.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="schemeType" placeholder="  Scheme">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="schemeTypeCtrl" [placeholderLabel]="'Find Scheme ...'"
+                        [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let schemeType of schemeType_list | filterSelectInput: schemeTypeCtrl.value"
+                      [value]="schemeType.value" [matTooltip]="schemeType.viewValue">
+                      {{schemeType.viewValue}}
+                    </mat-option>
+                  </mat-select>
+
+                </mat-form-field>
+              </div>
+
+
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Month" formControlName="month">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="typeMonthCtrl" [placeholderLabel]="'Find Month...'"
+                        [noEntriesFoundLabel]="'no matching Class found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="
+                    let year of month_list| filterSelectInput : typeMonthCtrl.value : 'name'"
+                      [value]="year.name">
+                      {{ year.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select placeholder="Year" formControlName="year">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="typeOfYearCtrl" [placeholderLabel]="'Find Year...'"
+                        [noEntriesFoundLabel]="'no matching Class found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="
+                    let year of year_list| filterSelectInput : typeOfYearCtrl.value : 'viewValue'"
+                      [value]="year.value">
+                      {{ year.viewValue }}
+                    </mat-option>
+                  </mat-select>
+
+                </mat-form-field>
+              </div>
+
+              <!-- Date Of Birth -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="fromDate" formControlName="fromDate" placeholder="From Date ">
+                  <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                  <mat-datepicker #fromDate></mat-datepicker>
+                </mat-form-field>
+
+              </div>
+
+              <!-- Date of Accident   -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="endDate" formControlName="endDate" placeholder="End Date ">
+                  <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                  <mat-datepicker #endDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- common button -->
+              <div class="form-action-button">
+                <button type="submit" mat-raised-button color="primary" (click)="searchDisplay()">
+                  <i class="material-icons" aria-hidden="true">search</i>
+                  Search
+                </button>
+
+                <button type="reset" mat-raised-button color="accent">
+                  <i class="material-icons" aria-hidden="true">
+                    restore
+                  </i>
+                  Reset
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </form>
+
+
+      <div class="mat-elevation-z8 row">
+        <!-- Top schedule Entry Table -->
+        <div class="col-sm-12 table-responsive overflow-x-auto">
+          <div class="mat-elevation-z8 table-responsive mt-2">
+
+            <table mat-table [dataSource]="dataSource" width="100%" matSort aria-describedby="listinginwardscreen">
+
+              <ng-container matColumnDef="selectHeader">
+                <th mat-header-cell *matHeaderCellDef scope="row" rowspan="2">
+                  <mat-checkbox (change)="$event ? directiveObject.masterToggle(dataSource) : null"
+                    [checked]="directiveObject.selection.hasValue() && directiveObject.isAllSelected(dataSource)"
+                    [indeterminate]="directiveObject.selection.hasValue() && !directiveObject.isAllSelected(dataSource)"
+                    [aria-label]="directiveObject.checkboxLabel(dataSource)">
+                  </mat-checkbox>
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="srnoHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" rowspan="2">
+                  Sr No.
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="claimIdHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" rowspan="2">
+                  Claim ID
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="policyNoHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" rowspan="2">
+                  Policy No.
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="leaderNameHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" rowspan="2">
+                  Leader Name
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="insuredNameHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" rowspan="2">
+                  Insured Name
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="claimAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" colspan="2">
+                  Claim Amount
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="createModeONHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header rowspan="2" scope="row">
+                  Created on Date
+                </th>
+
+              </ng-container>
+              <ng-container matColumnDef="modifyModeONHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header rowspan="2" scope="row">
+                  Modified On Date
+
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="statusHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" rowspan="2">
+                  Status
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="actionHeader">
+                <th mat-header-cell *matHeaderCellDef scope="row" rowspan="2">Action</th>
+              </ng-container>
+
+              <ng-container matColumnDef="claimAmountLeaderHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                  Insured Name
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="claimAmountGifHeader">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                  Insured Name
+                </th>
+              </ng-container>
+
+              <ng-container matColumnDef="select">
+                <td mat-cell *matCellDef="let row" class="text-center">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? directiveObject.selection.toggle(row) : null"
+                    [checked]="directiveObject.selection.isSelected(row) "
+                    [aria-label]="directiveObject.checkboxLabel(dataSource, row)">
+                  </mat-checkbox>
+                </td>
+
+              </ng-container>
+
+              <ng-container matColumnDef="srno">
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{ pageIndex*pageSize + i+1 }}
+                </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="claimId">
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{ element.claimId }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="policyNo">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.policyNo }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="leaderName">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.leaderName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="insuredName">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.insuredName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="claimAmountLeader">
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{ element.claimAmountLeader }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="claimAmountGif">
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{ element.claimAmountGif }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="createModeON">
+
+                <td mat-cell *matCellDef="let element">
+                  {{ element.createModeON }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="modifyModeON">
+
+                <td mat-cell *matCellDef="let element">
+                  {{ element.modifyModeON }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <td mat-cell *matCellDef="let element">
+                  {{ element.status }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <td mat-cell *matCellDef="let element; let i = index" class="action-btn-i centerAlign">
+                  <a (click)="navigate()"><i class="material-icons plus view-icon" title="View"
+                      aria-hidden="true">remove_red_eye</i></a>
+                  <a [routerLink]="['../jpa/claim-note']"><i class="material-icons plus" aria-hidden="true"
+                      title="Claim note">receipt</i></a>
+                  <a [routerLink]="['../co-insurance-memorandum']"><i class="material-icons plus" aria-hidden="true"
+                      title="Memorandum Letter">notes</i></a>
+                </td>
+              </ng-container>
+
+              <!-- Header Section Of table -->
+              <tr mat-header-row *matHeaderRowDef="header1"></tr>
+              <!-- Header Section Of table -->
+              <tr mat-header-row *matHeaderRowDef="header2"></tr>
+              <!-- Data Fetch From .TS File to table -->
+              <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
+            </table>
+
+            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+			<mat-paginator #paginator [pageSizeOptions]="[3,5,10,25]" [pageSize]="pageSize" (page)="onPaginateChange($event)"
+        [length]="totalRecords" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+        <!-- End Top schedule Entry Table -->
+        <!-- common button -->
+        <div class="form-action-button">
+
+          <button mat-raised-button type="submit" class="green"><i class="material-icons">
+              done
+            </i> Submit
+          </button>
+
+          <button type="reset" mat-raised-button color="accent">
+            <i class="material-icons" aria-hidden="true">
+              restore
+            </i>
+            Reset
+          </button>
+
+
+          <button type="button" mat-raised-button class="btnClose">
+            <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+              close
+            </i>
+            Close
+          </button>
+        </div>
+        <!-- End common button -->
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="container right-mapping-container-model">
+    <div class="container right-mapping-container-model">
+        <div class="form-wrappe userroleview">
+            <div class="heading-section">
+                <div>User Rights Mapping View</div>
+            </div>
+            <div class="row pb-1 pt-1">
+                <div class="col-sm-3 font-weight-bold">Employee Name : {{empName}}</div>
+                <div class="col-sm-3 font-weight-bold">Employee Number : {{empNo}}</div>
+                <div class="col-sm-3 font-weight-bold">Post : {{postName}}</div>
+            </div>
+            <table mat-table [dataSource]="assignedRights" id="browseTable">
+                <ng-container matColumnDef="module">
+                    <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Module</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" [attr.rowspan]="element.module.rowspan" [hidden]="!element.module.rowspan">
+                        <mat-label>{{element.module.name}}</mat-label>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="subModule">
+                    <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Sub Module</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" [attr.rowspan]="element.subModule.rowspan" [hidden]="!element.subModule.rowspan">
+                        <mat-label>{{element.subModule.name}}</mat-label>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="menus">
+                    <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Menu</th>
+                    <td mat-cell *matCellDef="let element;let i = index;">
+                        <mat-label>{{element.menuName}}</mat-label>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="create">
+                    <th mat-header-cell *matHeaderCellDef>Create</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.create"></mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="view">
+                    <th mat-header-cell *matHeaderCellDef>View</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.view"></mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="edit">
+                    <th mat-header-cell *matHeaderCellDef>Edit</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.edit"></mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef>Delete</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.delete"></mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="creator">
+                    <th mat-header-cell *matHeaderCellDef>Creator</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.creator"></mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="verifier">
+                    <th mat-header-cell *matHeaderCellDef>Verfier</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.verifier"></mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="approver">
+                    <th mat-header-cell *matHeaderCellDef>Approver</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                        <mat-checkbox disabled [checked]="element.approver"></mat-checkbox>
+                    </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="module1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Module</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="subModule1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sub-Module</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="menu1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Menu</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="permission1">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">Permissions</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="workFlow1">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">WorkFlow</th>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="[
+                                        'module1', 'subModule1', 'menu1', 'permission1', 'workFlow1'
+                                    ]"></tr>
+    
+                <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+            </table>
+            <div mat-dialog-actions class="form-action-button">
+                <button type="button" mat-raised-button (click)="onNoClick()"><i class="material-icons"
+                        title="EDP dashboard">close</i>Close</button>
+            </div>
+        </div>
+    </div>

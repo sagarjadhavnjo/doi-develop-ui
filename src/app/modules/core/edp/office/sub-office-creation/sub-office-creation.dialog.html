@@ -1,0 +1,184 @@
+<h2 mat-dialog-title>Create Sub Office</h2>
+<hr>
+<mat-dialog-content class="mat-typography">
+    <form class="subOfficeDialog" [formGroup]="ddoSubOffice" autocomplete="off">
+        <div class="box box-primary">
+            <div class="box-header">Office Detail</div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <mat-form-field class="full-width">
+                            <input autocomplete="off" noSpaceOnly placeholder="Sub Office Name"
+                                formControlName="subOfficeName" matInput maxlength="200"
+                                [title]="ddoSubOffice.controls.subOfficeName.value" required>
+                            <div class="error-wrapper"
+                                *ngIf="ddoSubOffice.controls.subOfficeName.touched && ddoSubOffice.controls.subOfficeName.errors">
+                                <mat-error *ngIf="ddoSubOffice.controls.subOfficeName.errors.required">
+                                    {{errorMessages.SUB_OFFICE_NAME}}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field class="full-width">
+                            <input autocomplete="off" placeholder="Sub Office Code" formControlName="subOfficeCode"
+                                [readonly]="isUpdate === 0" matInput maxlength="200">
+                            <!-- <div class="error-wrapper" *ngIf="ddoSubOffice.controls.subOfficeCode.touched && ddoSubOffice.controls.subOfficeCode.errors">
+                                <mat-error *ngIf="ddoSubOffice.controls.subOfficeCode.errors.required">
+                                    {{errorMessages.SUB_OFFICE_NAME}}
+                                </mat-error>
+                            </div> -->
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field *ngIf="isDepartmentVisible">
+                            <input matInput name="departmentName" formControlName="departmentName"
+                                [readonly]="isUpdate === 0" placeholder="Department"
+                                [title]="ddoSubOffice.controls.departmentName.value">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3" *ngIf="isDepartmentVisible && isHodVisible">
+                        <mat-form-field>
+                            <input matInput name="hodId" formControlName="hodId" placeholder="HOD"
+                                [readonly]="isUpdate === 0" [title]="ddoSubOffice.controls.hodId.value">
+                        </mat-form-field>
+                        <!-- <mat-form-field>
+                            <mat-select formControlName="hodId" name="hodId" placeholder="HOD">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="hodCtrl" [placeholderLabel]="'Search HOD Name...'" [noEntriesFoundLabel]="'no matching HOD Name found'">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let hodName of hodList | filterSelectInput : hodCtrl.value : 'name'" [value]="hodName.id">
+                                    {{hodName.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-primary">
+            <div class="box-header">Office Address Detail</div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <textarea matInput noSpaceOnly formControlName="address"
+                                placeholder="Address" autocomplete="no" maxlength="200" required></textarea>
+                            <div class="error-wrapper textarea-error"
+                                *ngIf="ddoSubOffice.controls.address.touched && ddoSubOffice.controls.address.errors">
+                                <mat-error *ngIf="ddoSubOffice.controls.address.errors.required">
+                                    {{errorMessages.ADDRESS}}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input autocomplete="off" formControlName="districtName" name="districtName"
+                                [readonly]="isUpdate === 0" placeholder="District" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <mat-select formControlName="talukaId" name="talukaId" placeholder="Taluka">
+                                <mat-option>
+                                    <ngx-mat-select-search [formControl]="talukaCtrl"
+                                        [placeholderLabel]="'Search Taluka Name...'"
+                                        [noEntriesFoundLabel]="'no matching Taluka Name found'">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option>
+                                    {{matInputSelectNull}}
+                                </mat-option>
+                                <mat-option
+                                    *ngFor="let talukaName of talukaList | filterSelectInput : talukaCtrl.value : 'name'"
+                                    [value]="talukaName.id">
+                                    {{talukaName.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input autocomplete="no" noSpaceOnly formControlName="station"
+                                placeholder="station" maxlength="100" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field class="full-width">
+                            <input autocomplete="" numbersOnly formControlName="pincode" placeholder="Pin Code"
+                                matInput maxlength="6">
+                            <div class="error-wrapper"
+                                *ngIf="ddoSubOffice.controls.pincode.value && ddoSubOffice.controls.pincode.touched && ddoSubOffice.controls.pincode.errors">
+                                <mat-error
+                                    *ngIf="ddoSubOffice.controls.pincode.errors.minlength || ddoSubOffice.controls.pincode.errors.maxlength">
+                                    {{errorMessages.PIN_CODE}}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3 phoneNo">
+                        <div class="col-sm-4 phoneNoPaddingZero">
+                            <mat-form-field>
+                                <input matInput numbersOnly name="stdCode" formControlName="stdCode"
+                                    [readonly]="isUpdate === 0" placeholder="STD Code" maxlength="5">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-8 phoneNoPaddingZero">
+                            <mat-form-field>
+                                <input matInput numbersOnly name="phoneNo" formControlName="phoneNo"
+                                    placeholder="Phone No." maxlength="8">
+                                <div class="error-wrapper"
+                                    *ngIf="ddoSubOffice.controls.phoneNo.value &&  ddoSubOffice.controls.phoneNo.touched && ddoSubOffice.controls.phoneNo.errors">
+                                    <mat-error
+                                        *ngIf="ddoSubOffice.controls.phoneNo.errors.minlength || ddoSubOffice.controls.phoneNo.errors.maxlength">
+                                        {{errorMessages.PHONE_NO}}
+                                    </mat-error>
+                                </div>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput autocomplete="off" formControlName="officeEmailId"
+                                placeholder="Office Email ID" minlength="6">
+                            <div class="error-wrapper"
+                                *ngIf="ddoSubOffice.controls.officeEmailId.value && ddoSubOffice.controls.officeEmailId.touched && ddoSubOffice.controls.officeEmailId.errors">
+                                <mat-error
+                                    *ngIf="ddoSubOffice.controls.officeEmailId.errors.pattern && ddoSubOffice.controls.officeEmailId.errors.pattern.requiredPattern">
+                                    {{errorMessages.EMAIL_ID}}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input numbersOnly matInput autocomplete="no" formControlName="faxNo" placeholder="Fax No."
+                                maxlength="10">
+                            <div class="error-wrapper"
+                                *ngIf="ddoSubOffice.controls.faxNo.value && ddoSubOffice.controls.faxNo.touched && ddoSubOffice.controls.faxNo.errors">
+                                <mat-error
+                                    *ngIf="ddoSubOffice.controls.faxNo.errors.minlength || ddoSubOffice.controls.faxNo.errors.maxlength">
+                                    {{errorMessages.FAX_NO}}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <div class="form-action-button">
+        <button type="submit" mat-raised-button [disabled]="disableSubmit" color="primary" (click)="saveSubOffice()" *ngIf="action !== 'view'">
+            <i class="material-icons" aria-hidden="true" title="Save">save</i>
+            Save
+        </button>
+        <button type="button" mat-raised-button mat-dialog-close class="btnClose">
+            <i class="material-icons" aria-hidden="true" title="Close">close</i>
+            Cancel
+        </button>
+    </div>
+</mat-dialog-actions>

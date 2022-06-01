@@ -1,0 +1,633 @@
+<div id="print-section">
+  <table>
+    <tr>
+      <td>
+        <table class="sub-table">
+          <tr style="border: none;">
+            <td style="border: none; text-align: center;"><span>{{this.data.personalData.pvuEmployeDto.officeName ? this.data.personalData.pvuEmployeDto.officeName : ''}}</span></td>
+          </tr>
+          <tr style="border: none;">
+            <td style="border: none; text-align: center;">{{this.data.department.officeAddNum ? this.data.department.officeAddNum : ''}}</td>
+          </tr>
+          <tr>
+            <td>Employee Name : {{(this.data.personalData.pvuEmployeDto.salutationName ? this.data.personalData.pvuEmployeDto.salutationName : '') + ' ' + (this.data.personalData.pvuEmployeDto.employeeName ? this.data.personalData.pvuEmployeDto.employeeName : '') + ' ' + (this.data.personalData.pvuEmployeDto.employeeMiddleName ? this.data.personalData.pvuEmployeDto.employeeMiddleName : '' ) + ' ' + (this.data.personalData.pvuEmployeDto.employeeSurname ? this.data.personalData.pvuEmployeDto.employeeSurname : '')}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr >
+      <td class="top-row">
+        <table>
+          <tr>
+            <td ><strong class="heading">Personal Details</strong></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td>Office Name : {{this.data.personalData.pvuEmployeDto.officeName ? this.data.personalData.pvuEmployeDto.officeName : ''}}</td>
+                  <td>Employee No. : {{this.data.personalData.pvuEmployeDto.employeeCode ? this.data.personalData.pvuEmployeDto.employeeCode : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Case No. : {{this.data.personalData.pvuEmployeDto.caseNo && this.data.personalData.pvuEmployeDto.caseNo != 0 ? this.data.personalData.pvuEmployeDto.caseNo : ''}}</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Gender : {{this.data.personalData.pvuEmployeDto.genderName ? this.data.personalData.pvuEmployeDto.genderName : ''}}</td>
+                  <td>Nationality : {{this.data.personalData.pvuEmployeDto.nationalityName ? this.data.personalData.pvuEmployeDto.nationalityName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Date of Birth : {{(this.data.personalData.pvuEmployeDto.dateOfBirth ? this.data.personalData.pvuEmployeDto.dateOfBirth : '') | date : 'dd/MM/yyyy'}}</td>
+                  <td>Category : {{this.data.personalData.pvuEmployeDto.categoryName ? this.data.personalData.pvuEmployeDto.categoryName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Mobile : {{this.data.personalData.pvuEmployeDto.mobileNo ? this.data.personalData.pvuEmployeDto.mobileNo : ''}}</td>
+                  <td>Email : {{this.data.personalData.pvuEmployeDto.emailID && this.data.personalData.pvuEmployeDto.emailID != 0 ? this.data.personalData.pvuEmployeDto.emailID : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Father's Name : {{this.data.personalData.pvuEmployeDto.fatherName ? this.data.personalData.pvuEmployeDto.fatherName : ''}}</td>
+                  <td>Mother's Name : {{this.data.personalData.pvuEmployeDto.motherName ? this.data.personalData.pvuEmployeDto.motherName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Maritial Status : {{this.data.personalData.pvuEmployeDto.maritalStatusName ? this.data.personalData.pvuEmployeDto.maritalStatusName : ''}}</td>
+                  <td>Religion : {{this.data.personalData.pvuEmployeDto.religion ? this.data.personalData.pvuEmployeDto.religion : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Caste : {{this.data.personalData.pvuEmployeDto.caste ? this.data.personalData.pvuEmployeDto.caste : ''}}</td>
+                  <td>Blood Group : {{this.data.personalData.pvuEmployeDto.bloodGroupName ? this.data.personalData.pvuEmployeDto.bloodGroupName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Divyang : {{this.data.personalData.pvuEmployeDto.phStatusName ? this.data.personalData.pvuEmployeDto.phStatusName : ''}}</td>
+                  <td>Medical Fitness : {{(this.data.personalData.pvuEmployeDto.dateOfMedFitnessCert ? this.data.personalData.pvuEmployeDto.dateOfMedFitnessCert : '') | date : 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td>Identification Mark : {{this.data.personalData.pvuEmployeDto.identificationMark ? this.data.personalData.pvuEmployeDto.identificationMark : ''}}</td>
+                  <td>Height : {{this.data.personalData.pvuEmployeDto.height ? this.data.personalData.pvuEmployeDto.height + ' cm' : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Election Card No. : {{this.data.personalData.pvuEmployeDto.electionCardNo && this.data.personalData.pvuEmployeDto.electionCardNo != 0 ? this.data.personalData.pvuEmployeDto.electionCardNo : ''}}</td>
+                  <td>Adhaar No. : {{this.data.personalData.pvuEmployeDto.aadhaarNo ? this.data.personalData.pvuEmployeDto.aadhaarNo : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Pan No. : {{this.data.personalData.pvuEmployeDto.panNo ? this.data.personalData.pvuEmployeDto.panNo : ''}}</td>
+                  <td>Passport No. : {{this.data.personalData.pvuEmployeDto.passportNo && this.data.personalData.pvuEmployeDto.passportNo != 0 ? this.data.personalData.pvuEmployeDto.passportNo : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Passport Expiry : {{(this.data.personalData.pvuEmployeDto.passportExpiryDate ? this.data.personalData.pvuEmployeDto.passportExpiryDate : '')  | date : 'dd/MM/yyyy'}}</td>
+                  <td>Buckle No. : {{this.data.personalData.pvuEmployeDto.buckleNo && this.data.personalData.pvuEmployeDto.buckleNo != 0 ? this.data.personalData.pvuEmployeDto.buckleNo : ''}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="sub-heading"><span >Native address :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td colspan = '2' >Address Line 1 : {{this.data.personalData.pvuEmployeAddressDto.natAddress1 ? this.data.personalData.pvuEmployeAddressDto.natAddress1 : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan = '2' >Address Line 2 : {{this.data.personalData.pvuEmployeAddressDto.natAddress2 ? this.data.personalData.pvuEmployeAddressDto.natAddress2 : ''}}</td>
+                </tr>
+                <tr>
+                  <td>State/UT : {{this.data.personalData.pvuEmployeAddressDto.natStateName ? this.data.personalData.pvuEmployeAddressDto.natStateName : ''}}</td>
+                  <td>District : {{this.data.personalData.pvuEmployeAddressDto.natDistrictName ? this.data.personalData.pvuEmployeAddressDto.natDistrictName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Taluka : {{this.data.personalData.pvuEmployeAddressDto.natTalukaName ? this.data.personalData.pvuEmployeAddressDto.natTalukaName : ''}}</td>
+                  <td>City/Village : {{this.data.personalData.pvuEmployeAddressDto.natCity ? this.data.personalData.pvuEmployeAddressDto.natCity : ''}}</td> 
+                </tr>
+                <tr>
+                  <td>Pincode : {{this.data.personalData.pvuEmployeAddressDto.natPinCode ? this.data.personalData.pvuEmployeAddressDto.natPinCode : ''}}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="sub-heading"><span>Current/ Correspondance Address :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td colspan = '2'>Address Line 1 : {{this.data.personalData.pvuEmployeAddressDto.curAddress1 ? this.data.personalData.pvuEmployeAddressDto.curAddress1 : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan = '2'>Address Line 2 : {{this.data.personalData.pvuEmployeAddressDto.curAddress2 ? this.data.personalData.pvuEmployeAddressDto.curAddress2 : ''}}</td>
+                </tr>
+                <tr>
+                  <td>State/UT : {{this.data.personalData.pvuEmployeAddressDto.curStateName ? this.data.personalData.pvuEmployeAddressDto.curStateName : ''}}</td>
+                  <td>District : {{this.data.personalData.pvuEmployeAddressDto.curDistrictName ? this.data.personalData.pvuEmployeAddressDto.curDistrictName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Taluka : {{this.data.personalData.pvuEmployeAddressDto.curTalukaName ? this.data.personalData.pvuEmployeAddressDto.curTalukaName : ''}}</td>
+                  <td>City/Village : {{this.data.personalData.pvuEmployeAddressDto.curCity ? this.data.personalData.pvuEmployeAddressDto.curCity : ''}}</td> 
+                </tr>
+                <tr>
+                  <td>Pincode : {{this.data.personalData.pvuEmployeAddressDto.curPinCode ? this.data.personalData.pvuEmployeAddressDto.curPinCode : ''}}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="sub-heading"><span >Permanent Address :</span></td>
+          </tr>
+          <tr>
+            <td >
+              <table class="sub-table">
+                <tr>
+                  <td colspan = '2'>Address Line 1 : {{this.data.personalData.pvuEmployeAddressDto.perAddress1 ? this.data.personalData.pvuEmployeAddressDto.perAddress1 : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan = '2'>Address Line 2 : {{this.data.personalData.pvuEmployeAddressDto.perAddress2 ? this.data.personalData.pvuEmployeAddressDto.perAddress2 : ''}}</td>
+                </tr>
+                <tr>
+                  <td>State/UT : {{this.data.personalData.pvuEmployeAddressDto.perStateName ? this.data.personalData.pvuEmployeAddressDto.perStateName : ''}}</td>
+                  <td>District : {{this.data.personalData.pvuEmployeAddressDto.perDistrictName ? this.data.personalData.pvuEmployeAddressDto.perDistrictName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Taluka : {{this.data.personalData.pvuEmployeAddressDto.perTalukaName ? this.data.personalData.pvuEmployeAddressDto.perTalukaName : ''}}</td>
+                  <td>City/Village : {{this.data.personalData.pvuEmployeAddressDto.perCity ? this.data.personalData.pvuEmployeAddressDto.perCity : ''}}</td> 
+                </tr>
+                <tr>
+                  <td>Pincode : {{this.data.personalData.pvuEmployeAddressDto.perPinCode ? this.data.personalData.pvuEmployeAddressDto.perPinCode : ''}}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+  
+        </table>
+      </td>
+    </tr>
+    <tr >
+      <td class="top-row">
+        <table>
+          <tr>
+            <td><strong class="heading">Departmental Detail</strong></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td>Date of Joining : {{(this.data.department.dateOfJoiningGOG ? this.data.department.dateOfJoiningGOG : '' ) | date: 'dd/MM/yyyy'}}</td>
+                  <td>Applicable Pay Commision :
+                    <ng-container *ngIf='this.data.department.payCommissionJoiningTime == 150'>
+                      5
+                    </ng-container>
+                    <ng-container *ngIf='this.data.department.payCommissionJoiningTime == 151'>
+                      6
+                    </ng-container>
+                    <ng-container *ngIf='this.data.department.payCommissionJoiningTime == 152'>
+                      7
+                    </ng-container>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fix / Probational Pay Joining Date: {{this.data.department.fixPayDate ? this.data.department.fixPayDate : ''}}</td>
+                  <td>Is employee on Deputation? : {{this.data.department.deputation === 2 ? 'YES' : 'NO'}}</td>
+                </tr>
+                <tr>
+                  <td>Deputation Start Date: {{(this.data.department.deputationStartDate ? this.data.department.deputationStartDate : '') | date: 'dd/MM/yyyy'}}</td>
+                  <td>Deputation End Date: {{(this.data.department.deputationEndDate ? this.data.department.deputationEndDate : '') | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td>Deputated District: {{this.data.department.deputDistrictName ? this.data.department.deputDistrictName : ''}}</td>
+                  <td>Deputated Office DDO No.: {{this.data.department.deputDdoCode ? this.data.department.deputDdoCode : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Deputated Office Cardex No.: {{this.data.department.deputCardexNo ? this.data.department.deputCardexNo : ''}}</td>
+                  <td>Deputated Office Name : {{this.data.department.deputOfficeName ? this.data.department.deputOfficeName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Employee Status : {{this.data.department.empStatusName ? this.data.department.empStatusName : ''}}</td>
+                  <td>Is Suspended :  {{this.data.department.suspended ? 'YES' : 'NO'}}</td>
+                </tr>
+                <tr>
+                  <td>Employee Pay Type : {{this.data.department.empPayTypeName ? this.data.department.empPayTypeName : ''}}</td>
+                  <td>District : {{this.data.department.districtName ? this.data.department.districtName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Cardex No. : {{this.data.department.cardexNo ? this.data.department.cardexNo : ''}}</td>
+                  <td>Name of present office : {{this.data.department.presentOfficeName ? this.data.department.presentOfficeName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Name of Sub office : {{this.data.department.subOfficeName ? this.data.department.subOfficeName : ''}}</td>
+                  <td>DDO No. : {{this.data.department.ddoCode && this.data.department.ddoCode != 0 ? this.data.department.ddoCode : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Office Address & Contact No. : {{this.data.department.officeAddNum ? this.data.department.officeAddNum : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Station : {{this.data.department.station ? this.data.department.station : ''}}</td>
+                  <td>Taluka : {{this.data.department.talukaName ? this.data.department.talukaName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Parent Administrative Department :  {{this.data.department.parentHeadDeptName ? this.data.department.parentHeadDeptName : ''}}</td>
+                  <td>Head of Department :   {{this.data.department.hodName ? this.data.department.hodName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Class :  {{this.data.department.empClassName ? this.data.department.empClassName : ''}}</td>
+                  <td>Employee Type :  {{this.data.department.empTypeName ? this.data.department.empTypeName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Employee Designation :  {{this.data.department.designationName ? this.data.department.designationName : ''}}</td>
+                  <td>Departmental Category :  {{this.data.department.departmentalCategoryName ? this.data.department.departmentalCategoryName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>GPF No. : {{this.data.department.gpfNo ? this.data.department.gpfNo : ''}}</td>
+                  <td>PPO No. : {{this.data.department.ppoNo ? this.data.department.ppoNo : ''}}</td>
+                </tr>
+                <tr>
+                  <td>PPAN No. : {{this.data.department.ppanNo ? this.data.department.ppanNo : ''}}</td>
+                  <td>Retirement Date : {{(this.data.department.dateOfRetirement ? this.data.department.dateOfRetirement : '') | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td>Date of Death/ Termination :{{(this.data.department.deathTerminationDate ? this.data.department.deathTerminationDate : '')  | date: 'dd/MM/yyyy'}}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr >
+      <td class="top-row">
+        <table>
+          <tr>
+            <td><strong class = 'heading'>Exam & Qualification Details</strong></td>
+          </tr>
+          <tr>
+            <td class = 'sub-heading'><span >Qualification :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr class="data-table-7">
+                  <th>School/ Degree</th>
+                  <th>Course Name</th>
+                  <th>Year of passing</th>
+                  <th>School/ College</th>
+                  <th>University/ Board</th>
+                  <th>Percentage/ CGPA</th>
+                  <th>Remarks</th>
+                </tr>
+                <ng-container *ngFor = 'let qualification of (this.data.exam.pvuEmployeQualificationDto ? this.data.exam.pvuEmployeQualificationDto : this.dummyArray)'>
+                  <tr class="data-table-7">
+                    <td>{{qualification.degreeName}}</td>
+                    <td>{{qualification.courseIdName}}</td>
+                    <td>{{qualification.passingYearName}}</td>
+                    <td>{{qualification.schoolCollege}}</td>
+                    <td>{{qualification.universityBoard}}</td>
+                    <td>{{qualification.percentageCGPA}}</td>
+                    <td>{{qualification.remarks}}</td>
+                  </tr>
+                </ng-container>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td  class = 'sub-heading'><span>Departmental Exams Details :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr class="data-table-7">
+                  <th>Departmental Exam Name </th>
+                  <th>Examination Body </th>
+                  <th>Department/ HOD Name </th>
+                  <th>Date of Passing </th>
+                  <th>Status </th>
+                  <th>No. Of Attempts </th>
+                  <th>Remarks </th>
+                </tr>
+                <ng-container *ngFor = 'let department of (this.data.exam.exemptedDeptExam ? this.data.exam.exemptedDeptExam : (this.data.exam.pvuEmployeDeptExamDetailsDto ? this.data.exam.pvuEmployeDeptExamDetailsDto : this.dummyArray))'>
+                  <tr class="data-table-7">
+                    <td>{{department.deptExamName}}</td>
+                    <td>{{department.examBodyName}}</td>
+                    <td>{{department.departmentHodName ? department.departmentHodName : ''}}</td>
+                    <td>{{department.dateOfPassing | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{department.examStatusName}}</td>
+                    <td>{{department.examAttempts}}</td>
+                    <td>{{department.remarks}}</td>
+                  </tr>
+                </ng-container>              
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class = 'sub-heading'><span >CCC/CCC+ Exam Details :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr class="data-table-7">
+                  <th>Exam Name </th>
+                  <th>Examination Body </th>
+                  <th>Date of exam </th>
+                  <th>Date of passing </th>
+                  <th>Status </th>
+                  <th>Notification/ Certificate No. </th>
+                  <th>Remarks </th>
+                </tr>
+                <ng-container *ngFor = 'let special of (this.data.exam.exemptedCccExam ? this.data.exam.exemptedCccExam : (this.data.exam.pvuEmployeCCCExamDetailDto ? this.data.exam.pvuEmployeCCCExamDetailDto : this.dummyArray))'>
+                  <tr class="data-table-7">
+                    <td>{{special.cccExamIdName}}</td>
+                    <td>{{special.examBodyName}}</td>
+                    <td>{{special.dateOfExam | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{special.dateOfPassing | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{special.examStatusName}}</td>
+                    <td>{{special.certificateNo}}</td>
+                    <td>{{special.remarks}}</td>
+                  </tr>
+                </ng-container>               
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class = 'sub-heading'><span >Language Exam :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr class="data-table-7">
+                  <th>Language </th>
+                  <th>Examination Body </th>
+                  <th>Exam Type </th>
+                  <th>Date Of Passing </th>
+                  <th>Seat No. </th>
+                  <th>Status </th>
+                  <th>Remarks </th>
+                </tr>
+                <ng-container *ngFor = 'let lang of (this.data.exam.pvuEmployeLangExamDto ? this.data.exam.pvuEmployeLangExamDto : this.dummyArray)'>
+                  <tr class="data-table-7">
+                    <td>{{lang.langIdName}}</td>
+                    <td>{{lang.examBody}}</td>
+                    <td>{{lang.examTypeName}}</td>
+                    <td>{{lang.dateOfPassing | date: 'dd/MM/yyyy'}}</td>
+                    <td>{{lang.seatNo}}</td>
+                    <td>{{lang.examStatusName}}</td>
+                    <td>{{lang.remarks}}</td>
+                  </tr>
+                </ng-container>
+               
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr >
+      <td >
+        <table>
+          <tr>
+            <td class="sub-heading"><span>Bank Details :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td>Account Type : {{this.data.payDetail.pvuEmpBankDetailDto.accountTypeName ? this.data.payDetail.pvuEmpBankDetailDto.accountTypeName : ''}}</td>
+                  <td>IFSC : {{this.data.payDetail.pvuEmpBankDetailDto.ifscCodeName ? this.data.payDetail.pvuEmpBankDetailDto.ifscCodeName : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Bank Name : {{this.data.payDetail.pvuEmpBankDetailDto.bankName ? this.data.payDetail.pvuEmpBankDetailDto.bankName : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Bank Branch Address : {{this.data.payDetail.pvuEmpBankDetailDto.bankAddress ? this.data.payDetail.pvuEmpBankDetailDto.bankAddress : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Account No. : {{this.data.payDetail.pvuEmpBankDetailDto.accountNo ? this.data.payDetail.pvuEmpBankDetailDto.accountNo : ''}}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class='top-row'><strong class="heading">Pay Details</strong></td>
+          </tr>
+          <tr>
+            <td class="sub-heading"><span>Joining Pay Details :</span></td>
+          </tr>
+          <tr>
+            <td>Pay Commision : {{this.data.payDetail.pvuEmployeeJoiningPayDto.joinPayCommName ? this.data.payDetail.pvuEmployeeJoiningPayDto.joinPayCommName : ''}} &nbsp;({{errorMessages.JOINING_LABEL}})</td>
+          </tr>
+          <ng-container *ngIf = 'this.data.isJoiningFixPay'>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Fix Pay Value : {{this.data.payDetail.pvuEmployeeJoiningPayDto.joinPayScaleName ? this.data.payDetail.pvuEmployeeJoiningPayDto.joinPayScaleName : ''}}</td>
+                    <td></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf = 'this.data.isJoining1stPay || this.data.isJoining2ndPay'>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Scale : {{this.data.payDetail.pvuEmployeeJoiningPayDto.payScale ? this.data.payDetail.pvuEmployeeJoiningPayDto.payScale : ''}}</td>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay ? this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay : ''}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf = 'this.data.isJoining3rdPay || this.data.isJoining4thPay || this.data.isJoining5thPay'>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Scale : {{this.data.payDetail.pvuEmployeeJoiningPayDto.joinPayScaleName ? this.data.payDetail.pvuEmployeeJoiningPayDto.joinPayScaleName : ''}}</td>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay ? this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay : ''}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+          <!-- <ng-container *ngIf = 'this.data.isJoining5thPay'>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Scale:</td>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay ? this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay : ''}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container> -->
+          <ng-container *ngIf = 'this.data.isJoining6thPay'>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Band: {{this.data.payDetail.pvuEmployeeJoiningPayDto.payBandName ? this.data.payDetail.pvuEmployeeJoiningPayDto.payBandName : ''}}</td>
+                    <td>Pay Band Value: {{this.data.payDetail.pvuEmployeeJoiningPayDto.payBandValue ? this.data.payDetail.pvuEmployeeJoiningPayDto.payBandValue : ''}}</td>
+                  </tr>
+                  <tr>
+                    <td>Grade Pay : {{this.data.payDetail.pvuEmployeeJoiningPayDto.gradePayName ? this.data.payDetail.pvuEmployeeJoiningPayDto.gradePayName : ''}}</td>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay ? this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay : ''}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf = 'this.data.isJoining7thPay'>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Level :  {{this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay ? this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay : ''}}</td>
+                    <td>Cell Id : </td>
+                  </tr>
+                  <tr>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay ? this.data.payDetail.pvuEmployeeJoiningPayDto.basicPay : ''}}</td>
+                    <td></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+          <tr>
+            <td class="sub-heading"><span>Fix Pay Details  &nbsp;({{errorMessages.CURRENT_LABEL}}):</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td>Fix Pay Value : {{this.data.payDetail.pvuEmployeFixPayDetailsDto.fixPayValueName}}</td>
+                  <td>Effective Date : {{(this.data.payDetail.pvuEmployeFixPayDetailsDto.effDate ? this.data.payDetail.pvuEmployeFixPayDetailsDto.effDate : '') | date : 'dd/MM/yyyy'}} </td>
+                </tr>
+              </table>
+            </td>
+          </tr>     
+          <ng-container *ngIf = 'this.data.hide4thPayCommission'>
+            <tr>
+              <td class="sub-heading"><span>4th Pay Details &nbsp;({{errorMessages.CURRENT_LABEL}}) :</span></td>
+            </tr>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Scale : {{this.data.payDetail.pvuEmployefourthPayDetailDto.payScaleName ? this.data.payDetail.pvuEmployefourthPayDetailDto.payScaleName : ''}}</td>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployefourthPayDetailDto.basicPay ? this.data.payDetail.pvuEmployefourthPayDetailDto.basicPay : ''}}</td>
+                  </tr>
+                  <tr>
+                    <td>Effective Date : {{(this.data.payDetail.pvuEmployefourthPayDetailDto.effectiveDate ? this.data.payDetail.pvuEmployefourthPayDetailDto.effectiveDate : '') | date : 'dd/MM/yyyy'}}</td>
+                    <td></td>
+                  </tr>
+                </table>
+              </td>
+            </tr> 
+          </ng-container>                       
+          <ng-container *ngIf = 'this.data.hide5thPayCommission'>
+            <tr>
+              <td class="sub-heading"><span>5th Pay Details &nbsp;({{errorMessages.CURRENT_LABEL}}) :</span></td>
+            </tr>
+            <tr>
+              <td>
+                <table class="sub-table">
+                  <tr>
+                    <td>Pay Scale : {{this.data.payDetail.pvuEmployefivePayDetailDto.payScaleName ? this.data.payDetail.pvuEmployefivePayDetailDto.payScaleName : ''}}</td>
+                    <td>Basic Pay : {{this.data.payDetail.pvuEmployefivePayDetailDto.basicPay ? this.data.payDetail.pvuEmployefivePayDetailDto.basicPay : ''}}</td>
+                  </tr>
+                  <tr>
+                    <td>Effective Date : {{(this.data.payDetail.pvuEmployefivePayDetailDto.effectiveDate ? this.data.payDetail.pvuEmployefivePayDetailDto.effectiveDate : '') | date : 'dd/MM/yyyy'}}</td>
+                    <td>Next Increment Date : {{(this.data.payDetail.pvuEmployefivePayDetailDto.dateOfNextIncrement ? this.data.payDetail.pvuEmployefivePayDetailDto.dateOfNextIncrement : '') | date : 'dd/MM/yyyy'}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr> 
+          </ng-container>                       
+          <tr>
+            <td class="sub-heading"><span>6th Pay Details &nbsp;({{errorMessages.CURRENT_LABEL}}) :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td>Designation as on 1/1/2006 : {{this.data.payDetail.pvuEmployeSixPayDetailDto.empDesignationAsOnName ? this.data.payDetail.pvuEmployeSixPayDetailDto.empDesignationAsOnName : ''}}</td>
+                  <td>If other Designation : {{this.data.payDetail.pvuEmployeSixPayDetailDto.empOtherDesignation ? this.data.payDetail.pvuEmployeSixPayDetailDto.empOtherDesignation : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Pre-revised Pay Scale as on 1/1/2006 : {{this.data.payDetail.pvuEmployeSixPayDetailDto.preRevisedPayScaleName ? this.data.payDetail.pvuEmployeSixPayDetailDto.preRevisedPayScaleName : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Pre-revised Pay as on 1/1/2006 : {{this.data.payDetail.pvuEmployeSixPayDetailDto.preRevisedBasicPay ? this.data.payDetail.pvuEmployeSixPayDetailDto.preRevisedBasicPay : ''}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Revised Pay Band(6th Pay comm) : {{this.data.payDetail.pvuEmployeSixPayDetailDto.revisedPayBandName ? this.data.payDetail.pvuEmployeSixPayDetailDto.revisedPayBandName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Pay band value : {{this.data.payDetail.pvuEmployeSixPayDetailDto.payBandValue ? this.data.payDetail.pvuEmployeSixPayDetailDto.payBandValue : ''}} </td>
+                  <td>Grade Pay : {{this.data.payDetail.pvuEmployeSixPayDetailDto.gradePayName ? this.data.payDetail.pvuEmployeSixPayDetailDto.gradePayName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Basic Pay : {{this.data.payDetail.pvuEmployeSixPayDetailDto.basicPay ? this.data.payDetail.pvuEmployeSixPayDetailDto.basicPay : ''}}</td>
+                  <td>Date of Next Increment : {{(this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfNextIncrement ? this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfNextIncrement : '') | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Date of next Increament in Pre-revised Scale : {{(this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfPreRevisedNextIncrement ? this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfPreRevisedNextIncrement : '') | date : 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td>Option Date : {{(this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfOption ? this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfOption : '') | date : 'dd/MM/yyyy'}}</td>
+                  <td>Stagnation Date : {{(this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfStagnational ? this.data.payDetail.pvuEmployeSixPayDetailDto.dateOfStagnational : '') | date :'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td>Increment Amount : {{this.data.payDetail.pvuEmployeSixPayDetailDto.incrementAmount ? this.data.payDetail.pvuEmployeSixPayDetailDto.incrementAmount : ''}}</td>
+                  <td>Effective Date : {{(this.data.payDetail.pvuEmployeSixPayDetailDto.effDate ? this.data.payDetail.pvuEmployeSixPayDetailDto.effDate : '') | date : 'dd/MM/yyyy'}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="sub-heading"><span >7th Pay Details &nbsp;({{errorMessages.CURRENT_LABEL}}) :</span></td>
+          </tr>
+          <tr>
+            <td>
+              <table class="sub-table">
+                <tr>
+                  <td>Pay Level : {{this.data.payDetail.pvuEmployeSevenPayDetailDto.payLevelName ? this.data.payDetail.pvuEmployeSevenPayDetailDto.payLevelName : ''}}</td>
+                  <td>Cell Id : {{this.data.payDetail.pvuEmployeSevenPayDetailDto.cellIdName ? this.data.payDetail.pvuEmployeSevenPayDetailDto.cellIdName : ''}}</td>
+                </tr>
+                <tr>
+                  <td>Basic Pay : {{this.data.payDetail.pvuEmployeSevenPayDetailDto.basicPay ? this.data.payDetail.pvuEmployeSevenPayDetailDto.basicPay : ''}}</td>
+                  <td>Benefit Effective Date : {{(this.data.payDetail.pvuEmployeSevenPayDetailDto.dateOfBenefitEffective ? this.data.payDetail.pvuEmployeSevenPayDetailDto.dateOfBenefitEffective : '') | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Next Increment Date : {{(this.data.payDetail.pvuEmployeSevenPayDetailDto.dateOfNextIncrement ? this.data.payDetail.pvuEmployeSevenPayDetailDto.dateOfNextIncrement : '') | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr >
+      <td class='top-row'>
+        <table class="sub-table" style="border: none;">
+          <tr style="border: none;">
+            <td style="border: none;"></td>
+            <!-- Approver name -->
+            <td style="border: none; text-align: center;">Approver name : {{this.data?.approverData?.APPROVER_NAME}}</td>
+          </tr>
+          <tr style="border: none;">
+            <td style="border: none;">Date: {{date | date: 'dd/MM/yyyy'}}</td>
+            <!-- Approver Designation -->
+            <td style="border: none; text-align: center;">Approver Designation : {{this.data?.approverData?.APPROVER_DESIGNATION}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+

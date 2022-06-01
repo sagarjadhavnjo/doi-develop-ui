@@ -1,0 +1,693 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Rights Mapping</div>
+            <div class="font-heading" *ngIf="transactionId"><b>Reference Number :</b> {{transactionNo}}</div>
+            <div class="font-heading" *ngIf="transactionId"><b>Reference Date :</b>
+                <!-- {{transactionDate | date: 'dd-MMM-yyyy HH:mm:ss'}}</div> -->
+                {{transactionDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div #parentGrids>
+            <form [formGroup]="userMappingForm">
+                <div class="form-datatable-list">
+                    <div class="box box-primary">
+                        <div class="box-header">Office Details</div>
+                        <div class="box-body">
+                            <div class="row" *ngIf="isDATUser">
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width">
+                                        <mat-select name="district" formControlName="district" placeholder="District"
+                                            (selectionChange)="officeData()" required>
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="districtCtrl"
+                                                    [placeholderLabel]="'Search District...'"
+                                                    [noEntriesFoundLabel]="'no matching District found'">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option>
+                                                {{ matSelectNullValue }}
+                                            </mat-option>
+                                            <mat-option
+                                                *ngFor="let list of districtNameList | filterSelectInput : districtCtrl.value : 'name'"
+                                                [value]="list.id">
+                                                {{list.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="userMappingForm.controls.district.errors && userMappingForm.controls.district.errors.required">
+                                            {{errorMessages.DDO_OFFICE.DISTRICT}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width">
+                                        <input matInput numbersOnly formControlName="ddoNo" placeholder="DDO No"
+                                            maxlength="4" (blur)="onChangeNumber()" autocomplete="off" required>
+                                        <mat-error
+                                            *ngIf="userMappingForm.controls.ddoNo.errors && userMappingForm.controls.ddoNo.errors.required">
+                                            {{errorMessages.DDO_OFFICE.DDO_NO}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width">
+                                        <input matInput numbersOnly formControlName="cardexNo" placeholder="Cardex No"
+                                            maxlength="4" (blur)="onChangeNumber()" autocomplete="off" required>
+                                        <mat-error
+                                            *ngIf="userMappingForm.controls.cardexNo.errors && userMappingForm.controls.cardexNo.errors.required">
+                                            {{errorMessages.DDO_OFFICE.CARDEX_NO}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width" [matTooltip]="getDdoOfficeValue()">
+                                        <input matInput formControlName="ddoOffice" placeholder="Office" readonly>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="!isDATUser">
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width">
+                                        <input matInput formControlName="district" placeholder="District" readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width">
+                                        <input matInput numbersOnly formControlName="ddoNo" placeholder="DDO No"
+                                            maxlength="4" readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width">
+                                        <input matInput numbersOnly formControlName="cardexNo" placeholder="Cardex No"
+                                            maxlength="4" readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field class="full-width" [matTooltip]="getDdoOfficeValue()">
+                                        <input matInput formControlName="ddoOffice" placeholder="Office" readonly>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="isOfficeDetailSearch">
+                                <div class="col-sm-3">
+                                    <label>
+                                        Search Office Details
+                                        <i (click)="searchOfficeDetails()" class="material-icons plus view-icon" title="View" >find_in_page</i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [selectedIndex]="selectedIndex">
+
+                        <mat-tab label="Mapping">
+
+                            <div class="form-datatable-list">
+                                <!-- <div class="box box-primary" *ngIf="!transactionId"> -->
+                                    <div class="box box-primary">
+                                    <div class="box-header">Search Employee</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <mat-form-field>
+                                                    <mat-select required placeholder="Employee Number" [formControl]="userSearch"
+                                                        (selectionChange)="searchUser(userSearch.value)"
+                                                        placeholder="Employee Number" #singleSelect1>
+                                                            <mat-option>
+                                                            <ngx-mat-select-search [formControl]="userSearchCtrl"
+                                                                [placeholderLabel]="'Find Employee...'"
+                                                                [noEntriesFoundLabel]="'no matching  Employee found'">
+                                                            </ngx-mat-select-search>
+                                                            </mat-option>
+                                                            <mat-option>
+                                                                {{ matSelectNullValue }}
+                                                            </mat-option>
+                                                            <mat-option *ngFor="let emp of empList  | filterMultiSelectInput : userSearchCtrl.value : 'empNo'" [value]="emp.empNo">
+                                                                {{emp.empNo}} : {{emp.empName}}
+                                                            </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="userSearch.touched && userSearch.errors">
+                                                        <mat-error
+                                                            *ngIf="userSearch.errors.required">
+                                                            {{errorMessages.RIGHTS_MAPPING.TRANSACTION.EMP_NO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-datatable-list searchmappinglist mgt10"
+                                    [class.selected-user-post]="transactionId" *ngIf="isSearch">
+                                    <table mat-table [dataSource]="userPostList" class="mat-elevation-z8 tablepointer">
+                                        <!-- Position Column -->
+                                        <ng-container matColumnDef="position">
+                                            <th mat-header-cell *matHeaderCellDef class="srnowidth"> Sr No. </th>
+                                            <td mat-cell *matCellDef="let element;let i = index"> {{i+1}} </td>
+                                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="7"
+                                                class="centerAlign">
+                                                <span *ngIf="!userPostList || userPostList.length == 0">
+                                                    No Records Found!
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!--  Employee Number Column -->
+                                        <ng-container matColumnDef="empNo" >
+                                            <th mat-header-cell *matHeaderCellDef> Employee Number </th>
+                                            <td mat-cell *matCellDef="let element;let i=index" >
+                                                <span *ngIf="!disableApprovedLink"><a (click)="onEmployeeNumberClick(i, element)" >{{element.empNo}}</a></span>
+                                                <span *ngIf="disableApprovedLink">{{element.empNo}}</span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Employee Name  Column -->
+                                        <ng-container matColumnDef="empName">
+                                            <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.empName}} </td>
+                                        </ng-container>
+
+                                        <!--Post Name Column -->
+                                        <ng-container matColumnDef="postName">
+                                            <th mat-header-cell *matHeaderCellDef> Post Name</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.postName}} </td>
+                                        </ng-container>
+
+                                        <!--Post Name Column -->
+                                        <ng-container matColumnDef="postType">
+                                            <th mat-header-cell *matHeaderCellDef> Post Type</th>
+                                            <td mat-cell *matCellDef="let element"> <span *ngIf="(element.postType === 'YES' || element.postType === 'Primary')">Primary</span>
+                                                <span *ngIf="!(element.postType === 'YES' || element.postType === 'Primary')">Secondary</span></td>
+                                        </ng-container>
+                                        <!--Post Name Column -->
+
+                                        <!--User Rights View-->
+                                        <ng-container matColumnDef="userRights">
+                                            <th mat-header-cell *matHeaderCellDef> Status </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <span *ngIf="!element.statusId"> N/A</span>
+                                                <span *ngIf="element.statusId"> {{element.statusId}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="userRights1" >
+                                            <th mat-header-cell *matHeaderCellDef> User Rights View </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                <span><a class="cursor-pointer" (click)="showConfirmationPopup(element);"> User Rights View </a></span>
+                                                <span *ngIf="element.statusId =='NO'"> N/A</span>
+                                            </td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="employeeListColumns"></tr>
+                                        <tr mat-row [class.selected-user-post]="i == selectedPostIndex"
+                                            *matRowDef="let row; let i = index;columns: employeeListColumns;"
+                                            id="tr{{i}}"></tr>
+                                        <tr mat-footer-row
+                                            [class.hide-table-footer]="userPostList && userPostList.length != 0"
+                                            *matFooterRowDef="displayedColumnsFooter"></tr>
+                                    </table>
+                                </div>
+
+                                <div class="custom-list" *ngIf="showModuleSelection">
+                                    <div class="rolemappingbox Moduleidth">
+                                        <cdk-virtual-scroll-viewport itemSize="50" class="select-list selectedvalue">
+                                            <h3 class="sticky"> Module List</h3>
+                                            <mat-list *ngFor="let item of moduleList" [matTooltip]="item.module">
+                                                <mat-list-item [class.disabled]="isItemDisabled"
+                                                    (click)="loadSubModuleListByModuleId(item)"
+                                                    [ngClass]="(item.moduleId == moduleID) ? 'selectedModule' : '' ">
+                                                    {{item.module}}</mat-list-item>
+                                            </mat-list>
+                                        </cdk-virtual-scroll-viewport>
+                                    </div>
+                                    <div class="rolemappingbox submenuwidth">
+                                        <cdk-virtual-scroll-viewport itemSize="50" class="select-list selectedvalue">
+                                            <h3 class="sticky"> Sub Module</h3>
+                                            <mat-list *ngFor="let item of subModuleList" [matTooltip]="item.subModule">
+                                                <mat-list-item [class.disabled]="isItemDisabled"
+                                                    (click)="loadMenuListBySubModuleId(item)"
+                                                    [ngClass]="(item.subModuleId == subModuleId) ? 'selectedModule' : '' ">
+                                                    {{item.subModule}} </mat-list-item>
+                                            </mat-list>
+                                        </cdk-virtual-scroll-viewport>
+                                    </div>
+                                    <div class="rolemappingbox menulist  menu_box">
+                                        <cdk-virtual-scroll-viewport itemSize="50" class="select-list">
+                                            <h3 class="sticky"> Menu</h3>
+                                            <mat-list *ngFor="let item of menuList" [matTooltip]="item.menu">
+                                                <mat-list-item [class.disabled]="isItemDisabled"
+                                                    (click)="getPermissonList(item)"
+                                                    [ngClass]="(item.menuId == menuId) ? 'selectedModule' : '' ">
+                                                    {{item.menu}}
+                                                </mat-list-item>
+                                            </mat-list>
+                                        </cdk-virtual-scroll-viewport>
+                                    </div>
+                                    <div class="rolemappingbox">
+                                        <cdk-virtual-scroll-viewport itemSize="50" class="select-list selectedvalue">
+                                            <div class="wrkflowbrd">
+                                                <h3 class="sticky nobrd disin"> Workflow</h3>
+                                                <div class="rediobtnboxrole floatRight" >
+                                                    <mat-radio-group aria-label="Select an option"
+                                                    [disabled]="workFlowInfo.objection.required || action === 'view'"  (change)="workFlowChange($event)" > 
+                                                        <mat-radio-button [checked]="isWorkFlow === 'yes'"
+                                                            [value]="'yes'">
+                                                            Yes
+                                                        </mat-radio-button>
+                                                        <mat-radio-button [checked]="isWorkFlow==='no'" [value]="'no'">
+                                                            No
+                                                        </mat-radio-button>
+                                                    </mat-radio-group>
+                                                </div>
+                                            </div>
+                                            <mat-list>
+                                                <div class="allpercheckboxlist">
+                                                    <ng-container *ngIf="isWorkFlow === 'yes'">
+                                                        <mat-checkbox [disabled]="workFlowInfo.objection.required || action === 'view'"
+                                                            [style.color]="checkWorkFlowNonDatColor(wf)"
+                                                            (change)="assignRemoveMenuWorkFlow($event, wf)"
+                                                            [checked]="isAssignedWorkFlowNonDat(wf)"
+                                                            *ngFor="let wf of workflowList">
+                                                            {{wf.wfName}}
+                                                        </mat-checkbox>
+                                                    </ng-container>
+                                                </div>
+                                            </mat-list>
+                                        </cdk-virtual-scroll-viewport>
+                                    </div>
+                                    <div class="rolemappingbox lastbox">
+                                        <cdk-virtual-scroll-viewport itemSize="50" class="select-list">
+                                            <h3 class="sticky"> Permission</h3>
+                                            <div class="allpercheckboxlist">
+                                                <ng-container>
+                                                    <mat-checkbox [disabled]="workFlowInfo.objection.required || action === 'view'"
+                                                        [style.color]="checkPermissionNonDatColor(permission)"
+                                                        (change)="assignRemoveMenuRights($event, permission)"
+                                                        [checked]="isAssignedPermissionNonDat(permission)"
+                                                        *ngFor="let permission of permissionList">
+                                                        {{permission.roleName}}</mat-checkbox>
+                                                </ng-container>
+                                            </div>
+                                        </cdk-virtual-scroll-viewport>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-action-button" *ngIf="showModuleSelection && !submitted">
+                                        <button type="submit" mat-raised-button color="primary"
+                                            (click)="assignRights('save')" [disabled]="!selectedMenuUserRights || selectedMenuUserRights.length === 0">
+                                            <i class="material-icons" title="Save">
+                                                save
+                                            </i>
+                                            Save as Draft
+                                        </button>
+
+                                      
+
+                                        <button [disabled]="!enableCancelBtn" type="button" mat-raised-button class="btnClose"
+                                            [hidden]="action=='edit'" (click)="oncancel()">
+                                            <i class="material-icons" aria-hidden="true"
+                                                title="Budget dashboard">close</i>Cancel</button>
+                                    </div>
+                                </div>
+
+                                <div class="mat-elevation-z8 table-responsive mt-2"
+                                *ngIf="(userRightsGiven && userRightsGiven.data.length) || (userRightMapRemove && userRightMapRemove.data.length)">
+                                    <div class=" postlisttitle"> Employee Information </div>
+                                    <table mat-table [dataSource]="userPostList" class="mat-elevation-z8 tablepointer">
+                                        <!-- Position Column -->
+                                        <ng-container matColumnDef="position">
+                                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="4"
+                                                class="centerAlign">
+                                                <span *ngIf="!userPostList || userPostList.length == 0">
+                                                    No Records Found!
+                                                </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!--  Employee Number Column -->
+                                        <ng-container matColumnDef="empNo" >
+                                            <th mat-header-cell *matHeaderCellDef> Employee Number </th>
+                                            <td mat-cell *matCellDef="let element;let i=index" >
+                                                <span *ngIf="!disableApprovedLink">{{element.empNo}}</span>
+                                                <span *ngIf="disableApprovedLink">{{element.empNo}}</span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Employee Name  Column -->
+                                        <ng-container matColumnDef="empName">
+                                            <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.empName}} </td>
+                                        </ng-container>
+
+                                        <!--Post Name Column -->
+                                        <ng-container matColumnDef="postName">
+                                            <th mat-header-cell *matHeaderCellDef> Post Name</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.postName}} </td>
+                                        </ng-container>
+
+                                        <!--Post Name Column -->
+                                        <ng-container matColumnDef="postType">
+                                            <th mat-header-cell *matHeaderCellDef> Post Type</th>
+                                            <td mat-cell *matCellDef="let element"> <span *ngIf="(element.postType === 'YES' || element.postType === 'Primary')">Primary</span>
+                                                <span *ngIf="!(element.postType === 'YES' || element.postType === 'Primary')">Secondary</span></td>
+                                        </ng-container>
+                                        <!--Post Name Column -->
+
+                                       
+
+                                        <tr mat-header-row *matHeaderRowDef="employeeListCommonColumns"></tr>
+                                        <tr mat-row [class.selected-user-post]="i == selectedPostIndex"
+                                            *matRowDef="let row; let i = index;columns: employeeListCommonColumns;"
+                                            id="tr{{i}}"></tr>
+                                        <tr mat-footer-row
+                                            [class.hide-table-footer]="userPostList && userPostList.length != 0"
+                                            *matFooterRowDef="displayedColumnsFooter"></tr>
+                                    </table>
+                                </div>
+
+                                <div class="mat-elevation-z8 table-responsive mt-2"
+                                *ngIf="userRightsGiven && userRightsGiven.data.length > 0">
+                                <div class=" postlisttitle"> Rights to be Added </div>
+                                    <table mat-table [dataSource]="userRightsGiven" class="mat-elevation-z8">
+
+                                        <ng-container matColumnDef="position">
+                                            <th mat-header-cell *matHeaderCellDef [ngStyle]="{'width':'4%'}"> Sr No.
+                                            </th>
+                                            <td mat-cell *matCellDef="let element;let i= index;"> {{i+1}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="moduleName">
+                                            <th mat-header-cell *matHeaderCellDef> Module List</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.module}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="subModuleName">
+                                            <th mat-header-cell *matHeaderCellDef> Sub Module</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.subModule}} </td>
+                                        </ng-container>
+
+
+                                        <ng-container matColumnDef="menuName">
+                                            <th mat-header-cell *matHeaderCellDef> Menu</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.menu}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="rolePrmName">
+                                            <th mat-header-cell *matHeaderCellDef> Permission</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.addedOrRemovedRights}} </td>
+                                        </ng-container>
+
+
+                                        <ng-container matColumnDef="workFlow">
+                                            <th mat-header-cell *matHeaderCellDef> Workflow</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.wfRole}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="action">
+                                            <th mat-header-cell *matHeaderCellDef [ngClass]="{'actionwidthtwo': workFlowInfo.objection.required || action === 'view' }" class="actionwidth">Action</th>
+                                            <td mat-cell *matCellDef="let item; let i = index">
+                                                <table class="action-btn-i centerAlign tableOfAttachment">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><i class="material-icons plus edit-icon" 
+                                                                    (click)="onEditRights(item, i)" title="Edit" 
+                                                                    *ngIf="showEditDelete">
+                                                                    edit </i>
+                                                            </td>
+                                                            <td>
+                                                                <i class="material-icons plus view-icon"
+                                                                    (click)="onViewApprovedRights(item)"
+                                                                    title="View">
+                                                                    visibility
+                                                                </i>
+                                                            </td>
+                                                            <td *ngIf="!workFlowInfo.objection.required && action !== 'view'">
+                                                                <i  class="material-icons plus delete" 
+                                                                    (click)="onDeleteRights(item, i, 'add')" title="Delete" 
+                                                                    >
+                                                                    delete
+                                                                </i>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedRoleMapremoveColumn"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedRoleMapremoveColumn;"></tr>
+                                    </table>
+                                </div>
+                                <div class="form-datatable-list mgt10 table-responsive"
+                                    *ngIf="userRightMapRemove && userRightMapRemove.data.length > 0">
+                                    <div class=" postlisttitle">Rights to be Remove </div>
+                                    <table mat-table [dataSource]="userRightMapRemove" class="mat-elevation-z8">
+
+                                        <ng-container matColumnDef="position">
+                                            <th mat-header-cell *matHeaderCellDef class="srnowidth"> Sr No. </th>
+                                            <td mat-cell *matCellDef="let element;let i= index;"> {{i+1}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="moduleName">
+                                            <th mat-header-cell *matHeaderCellDef> Module List</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.module}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="subModuleName">
+                                            <th mat-header-cell *matHeaderCellDef> Sub Module</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.subModule}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="menuName">
+                                            <th mat-header-cell *matHeaderCellDef> Menu</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.menu}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="rolePrmName">
+                                            <th mat-header-cell *matHeaderCellDef> Permission</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.addedOrRemovedRights}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="branchName">
+                                            <th mat-header-cell *matHeaderCellDef> Branch</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.branchName}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="workFlow">
+                                            <th mat-header-cell *matHeaderCellDef> Workflow</th>
+                                            <td mat-cell *matCellDef="let element"> {{element.wfRole}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="action">
+                                            <th mat-header-cell *matHeaderCellDef class="actionwidthtwo" >Action</th>
+                                            <td mat-cell *matCellDef="let item; let i = index">
+                                                <table class="action-btn-i centerAlign tableOfAttachment">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <i class="material-icons plus edit-icon"
+                                                                    (click)="onEditRights(item, i)" *ngIf="showEditDelete" title="Edit">
+                                                                    edit </i>
+                                                            </td>
+                                                            <td>
+                                                                <i class="material-icons plus view-icon"
+                                                                    (click)="onViewApprovedRights(item)"
+                                                                    title="View">
+                                                                    visibility
+                                                                </i>
+                                                            </td>
+                                                            <td *ngIf="!workFlowInfo.objection.required && action !== 'view'">
+                                                                <i class="material-icons plus delete"
+                                                                    (click)="onDeleteRights(item, i, 'remove')"  title="Delete">
+                                                                    delete
+                                                                </i>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedRoleMapremoveColumn"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedRoleMapremoveColumn;"></tr>
+                                    </table>
+                                    <div class="text-center" *ngIf="userRightMapRemove.data.length === 0">
+                                        No Data Found
+                                    </div>
+                                </div>
+                                <div class="mt-4 box box-primary" *ngIf="workFlowInfo.objection.required">
+                                    <div class="box-header">Objection Detail</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-checkbox  [(ngModel)]="workFlowInfo.objection.status" formControlName="objStatus" (change)="objectionRemarks()">
+                                                    Objection
+                                                </mat-checkbox>
+                                            </div>
+                                            <div class="col-sm-12" *ngIf="workFlowInfo.objection.status">
+                                                <mat-form-field>
+                                                    <textarea   matInput name="objRemark" formControlName="objRemark" placeholder="Objection Remarks" maxlength="2000" required></textarea>
+                                                    <div class="error-wrapper textarea-error" *ngIf="userMappingForm.controls.objRemark.touched && userMappingForm.controls.objRemark.errors">
+                                                        <mat-error *ngIf="userMappingForm.controls.objRemark.errors.required">
+                                                            {{errorMessages.RIGHTS_MAPPING.TRANSACTION.OBJECTION_REMARKS}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-action-button">
+                                        <button  *ngIf="!workFlowInfo.isWfStatusDraft && action === 'view'" type="button"  mat-raised-button color="accent" (click)="viewComments()">
+                                            <i class="material-icons " title="View">remove_red_eye</i>
+                                            View Comments
+                                        </button>
+                                        <button mat-raised-button type="button" (click)="assignRights('submit')" class="green" [disabled]="!(selectedMenuUserRights && selectedMenuUserRights.length)" *ngIf="action !== 'view'"><i class="material-icons">
+                                               done
+                                            </i> Submit</button>
+                                        <button type="button" mat-raised-button
+                                            color="warn" (click)="goToListing()">
+                                            <i class="material-icons" title="Listing">
+                                                list
+                                            </i>
+                                            Listing
+                                        </button>
+                                        <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()"
+                                             skipLocationChange>
+                                            <i class="material-icons" title="EDP dashboard">
+                                                close
+                                            </i>
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <p>officeId 1 {{officeId}}</p>
+                        <mat-tab label="Attachment" [disabled]="!transactionId">
+                            <table mat-table [dataSource]="dataSourceAttachment" id="browseTable">
+                                <ng-container matColumnDef="sr_no">
+                                    <th class="tabelSrNo" mat-header-cell *matHeaderCellDef>Sr. No.</th>
+                                    <td mat-cell *matCellDef="let item; let i = index" class="rightAllign">
+                                        {{ i + 1 }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="attachmentType">
+                                    <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+                                    <td mat-cell *matCellDef="let item;let i = index;">
+                                        {{item.attachmentName}}
+                                        <span *ngIf="item.mandatoryFlag && ((isDATUser && workFlowInfo.isCheckWorkFlow) || !isDATUser)" class="star">*</span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="fileName">
+                                    <th mat-header-cell *matHeaderCellDef>File Name</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <mat-form-field floatLabel="never">
+                                            <input matInput [value]="item.fileName" [(ngModel)]="item.fileName"
+                                                [ngModelOptions]="{standalone: true}" [readonly]="workFlowInfo.objection.required || action === 'view'" autocomplete="off">
+                                        </mat-form-field>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="browse">
+                                    <th mat-header-cell *matHeaderCellDef>Browse File</th>
+                                    <td mat-cell *matCellDef="let item; let i = index">
+                                        <button type="button" (click)="openFileSelector(i)" id="fileBrowse{{i}}"
+                                            class="btn-browse" [disabled]="workFlowInfo.objection.required || action === 'view' || item.userRgMpAttrId" >
+                                            Browse Files
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="uploadedFileName">
+                                    <th mat-header-cell *matHeaderCellDef>Uploaded File Name</th>
+                                    <td mat-cell *matCellDef="let item; let i = index" class="breakFileNameAttach">
+                                        <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}
+                                            <i  *ngIf="!workFlowInfo.objection.required && action !== 'view'" class="material-icons closesmall"
+                                                (click)="removeFile(item, i)" title="Delete File">close</i>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="uploadedBy">
+                                    <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+                                    <td mat-cell *matCellDef="let item">
+                                        <mat-label>{{item.uploadedByName}}</mat-label>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                                    <td mat-cell *matCellDef="let item; let i = index">
+                                        <table class="iconTable tableOfAttachment">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="action-btn-i centerAlign">
+                                                        <a  *ngIf="!workFlowInfo.objection.required && action !== 'view'">
+                                                            <i class="material-icons plus add"
+                                                                *ngIf="dataSourceAttachment && dataSourceAttachment.data && (i == dataSourceAttachment.data.length - 1)"
+                                                                (click)="addBrowse()">add
+                                                            </i>
+                                                        </a>
+                                                        <a>
+                                                            <i class="material-icons plus view-icon" title="View"
+                                                                (click)="viewAttachment(item)"
+                                                                [class.disable-delete-btn]="!item.userRgMpAttrId">remove_red_eye
+                                                            </i>
+                                                        </a>
+                                                        <a>
+                                                            <i class="material-icons plus view-icon" title="Download"
+                                                                (click)="downloadAttachFile(item)"
+                                                                [class.disable-delete-btn]="!item.userRgMpAttrId">vertical_align_bottom</i>
+                                                        </a>
+                                                        <a  *ngIf="!workFlowInfo.objection.required && action !== 'view'">
+                                                            <i class="material-icons plus delete"
+                                                                *ngIf="dataSourceAttachment && dataSourceAttachment.data && ((i >= noOfAttachment-1) && (dataSourceAttachment.data.length-1 > noOfAttachment-1))"
+                                                                (click)="deleteBrowse(i)">delete
+                                                            </i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+                            </table>
+                            <input #rightMappingAttachment type="file" id="fileBrowse" class="fileBrowse"
+                                (change)="onFileSelection($event)" />
+                            <div class="legend">
+                                1. Total File size should be under 2MB<br>
+                                2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', 'JPG','JPEG', 'PNG', 'PDF'<br>
+                            </div>
+                            <div class="form-action-button">
+                                <button type="submit" mat-raised-button color="primary" (click)="uploadFiles()"
+                                *ngIf="!workFlowInfo.objection.required && action !== 'view'">
+                                    <i class="material-icons" title="Save">cloud_upload</i>
+                                    Upload
+                                </button>
+                                <button mat-raised-button class="green" (click)="assignRights('submit')"
+                                    *ngIf="action !== 'view'">
+                                    <i class="material-icons">done</i>
+                                    Submit
+                                </button>
+                                <button type="button" mat-raised-button color="accent" (click)="resetAttachment()"
+                                    *ngIf="!workFlowInfo.objection.required && action !== 'view'">
+                                    <i class="material-icons">restore</i>
+                                    Reset
+                                </button>
+                                <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                                    <i class="material-icons" title="Listing">list</i>
+                                    Listing
+                                </button>
+                                <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                                    <i class="material-icons" title="Budget dashboard">close</i>
+                                    Close
+                                </button>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

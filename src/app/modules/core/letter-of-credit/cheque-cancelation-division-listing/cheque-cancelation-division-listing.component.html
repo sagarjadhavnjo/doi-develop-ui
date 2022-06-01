@@ -1,0 +1,441 @@
+<div class="container">
+  <div class="form-wrapper">
+    <!-- Screen Name, Reference No and Reference Date Header -->
+    <div class="heading-section ng-star-inserted">
+      <div>Cheque Cancellation Division Listing</div>
+
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="javascript:void(0)">LC</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cheque Cancellation Division Listing</li>
+      </ol>
+    </nav>
+
+
+    <!-- Form Starts -->
+    <form [formGroup]="lcChequeCancelationListingForm">
+
+      <!-- Search Accordian Starts -->
+      <mat-accordion class="colapsedata">
+        <mat-expansion-panel [expanded]="true" class="nopadding">
+          <mat-expansion-panel-header>
+            <div class="heading-section">Search</div>
+          </mat-expansion-panel-header>
+
+          <div class="box-body">
+            <div class="row">
+
+              <!-- Input Field for Reference Number -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Reference No." formControlName="referenceNo">
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Cheque Number -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Cheque No." formControlName="chequeNo">
+                </mat-form-field>
+              </div>
+              <!-- Input Field for Cardex Number -->
+              <div class="col-sm-3" *ngIf="this.isTreasuryHideFlag">
+                <mat-form-field>
+                  <input matInput placeholder="Cardex No." formControlName="cardexNo" maxlength="4" numbersOnly>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for DDO Number -->
+              <div class="col-sm-3" *ngIf="this.isTreasuryHideFlag">
+                <mat-form-field>
+                  <input matInput placeholder="DDO No." formControlName="ddoNo" maxlength="4" numbersOnly>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Division Code -->
+              <div class="col-sm-3" *ngIf="isTreasuryHideFlag">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="divisionCode" placeholder="Division Code">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="DivisionCodeCtrl"
+                        [placeholderLabel]="'Find Division Code...'"
+                        [noEntriesFoundLabel]="'No matching Division Code found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option
+                      *ngFor="let divisionCodeName  of DivisionCodeList | filterSelectInput:DivisionCodeCtrl.value:'divCode'"
+                      [value]="divisionCodeName.divId">
+                      {{divisionCodeName.divCode}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Division Name -->
+              <div class="col-sm-3" *ngIf="isTreasuryHideFlag">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="divisionName" placeholder="Division Name">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="DivisionNameCtrl"
+                        [placeholderLabel]="'Find Division Name...'"
+                        [noEntriesFoundLabel]="'No matching Division Name found'"
+                        (keypress)="directiveObject.onlyAlphabetsAndSpace($event)">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option
+                      *ngFor="let divisionName  of DivisionNameList | filterSelectInput:DivisionNameCtrl.value:'divName'"
+                      [value]="divisionName.divId" matTooltip="{{divisionName.divName}}">
+                      {{divisionName.divName}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Reference From Date -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="referenceFromDate" [matDatepicker]="referenceFromDate"
+                    placeholder="Reference From Date" [max]="config.dates.to.max" (dateChange)="resetToDate()" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="referenceFromDate"></mat-datepicker-toggle>
+                  <mat-datepicker #referenceFromDate [disabled]="false"></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Reference To Date -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="referenceToDate" [matDatepicker]="referenceToDate"
+                    placeholder="Reference To Date" [min]="config.dates.to.min" [max]="config.dates.to.max" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="referenceToDate"></mat-datepicker-toggle>
+                  <mat-datepicker #referenceToDate [disabled]="false"></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for LC Amount  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Cheque From Amount" formControlName="chequeFromAmt"
+                    (keypress)="directiveObject.decimalKeyPress($event)">
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for LC Amount  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Cheque To Amount" formControlName="chequeToAmt"
+                    (keypress)="directiveObject.decimalKeyPress($event)">
+                </mat-form-field>
+              </div>
+
+
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="receivedFromDate" [matDatepicker]="receivedFromDate"
+                    placeholder="Received From Date" [max]="config.dates.to.max" (dateChange)="resetReceiveToDate()">
+                  <mat-datepicker-toggle matSuffix [for]="receivedFromDate"></mat-datepicker-toggle>
+                  <mat-datepicker #receivedFromDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="receivedToDate" [matDatepicker]="receivedToDate"
+                    placeholder="Received To Date" [min]="config.dates.to.min" [max]="config.dates.to.max">
+                  <mat-datepicker-toggle matSuffix [for]="receivedToDate"></mat-datepicker-toggle>
+                  <mat-datepicker #receivedToDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="sentFromDate" [matDatepicker]="sentFromDate"
+                    placeholder="Sent From Date" [max]="config.dates.to.max" (dateChange)="resetSentToDate()">
+                  <mat-datepicker-toggle matSuffix [for]="sentFromDate"></mat-datepicker-toggle>
+                  <mat-datepicker #sentFromDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="sentToDate" [matDatepicker]="sentToDate" placeholder="Sent To Date"
+                    [min]="config.dates.to.min" [max]="config.dates.to.max">
+                  <mat-datepicker-toggle matSuffix [for]="sentToDate"></mat-datepicker-toggle>
+                  <mat-datepicker #sentToDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Status -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="status" placeholder="Status">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="statusCtrl" [placeholderLabel]="'Find Status...'"
+                        [noEntriesFoundLabel]="'No matching Status found'"
+                        (keypress)="directiveObject.onlyAlphabetsAndSpace($event)">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let status  of statusList | filterSelectInput:statusCtrl.value:'statusName'"
+                      [value]="status.statusName">
+                      {{status.statusName}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for workFlow With -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="workflowStatus" placeholder="Workflow Status">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="workflowStatusstatusCtrl"
+                        [placeholderLabel]="'Find Workflow Status...'"
+                        [noEntriesFoundLabel]="'No matching Workflow Status found'"
+                        (keypress)="directiveObject.onlyAlphabetsAndSpace($event)">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                      *ngFor="let workflowStatus  of wfStatusList | filterSelectInput:workflowStatusstatusCtrl.value:'wfStatus'"
+                      [value]="workflowStatus.wfStatus">
+                      {{workflowStatus.wfStatus}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+
+              <!-- Input Field for Lying With -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Lying With" formControlName="lyingWith"
+                    (keypress)="directiveObject.onlyAlphabetSpaceDot($event)" maxlength="30">
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="col-sm-12">
+              <!-- Buttons for Search and Reset Starts -->
+              <div class="form-action-button">
+                <button type="submit" mat-raised-button color="primary" title="Search" (click)="search()">
+                  <i class="material-icons" aria-hidden="true">search</i> Search
+                </button>
+                <button type="reset" mat-raised-button color="accent" (click)="reset()">
+                  <i class="material-icons" aria-hidden="true">
+                    restore
+                  </i>
+                  Reset
+                </button>
+              </div>
+              <!-- Buttons for Search and Reset Ends -->
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <!-- Search Accordian Ends -->
+    </form>
+    <!-- Form Ends -->
+
+    <br>
+
+    <div class="mat-elevation-z8 mt-2">
+      <!-- LC Cheque Cancelation Table Starts -->
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 " area-describedby="Distribution">
+
+        <!-- Header Column -->
+        <ng-container matColumnDef="parent1">
+          <div *ngIf="isTreasuryHideFlag">
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="17" scope="row">Cheque Cancellation Details</th>
+          </div>
+          <div *ngIf="!isTreasuryHideFlag">
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="14" scope="row">Cheque Cancellation Details</th>
+          </div>
+
+        </ng-container>
+
+        <!-- Serial Number Column -->
+        <ng-container matColumnDef="srno">
+          <th mat-header-cell *matHeaderCellDef scope="row" style="width: 5%;">
+            Serial No.
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+            {{ i + 1 + (pageIndex * pageSize)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="lcChequeCancelationDataColumn.length"
+            class="centerAlign">
+            <div *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+              No Records Found!
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Reference Number Column -->
+        <ng-container matColumnDef="referenceNo">
+          <th mat-header-cell *matHeaderCellDef scope="row">Reference No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.refNo}}
+          </td>
+        </ng-container>
+
+        <!-- Reference Date Column -->
+        <ng-container matColumnDef="referenceDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Reference Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{(element.refDate ? (element.refDate | date: 'dd-MMM-yyyy hh:mm:ss a'):element.refDate)}}
+          </td>
+        </ng-container>
+
+        <!-- Cheque Number Column -->
+        <ng-container matColumnDef="chequeNo">
+          <th mat-header-cell *matHeaderCellDef scope="row">Cheque No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.chequeNo}}
+          </td>
+        </ng-container>
+        <!-- Division Code Column -->
+        <ng-container matColumnDef="divisionCode">
+          <th mat-header-cell *matHeaderCellDef scope="row">Division Code</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.divisionCode}}
+          </td>
+        </ng-container>
+
+        <!-- Division Name Column -->
+        <ng-container matColumnDef="divisionName">
+          <th mat-header-cell *matHeaderCellDef scope="row">Division Name</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.divisionName}}
+          </td>
+        </ng-container>
+
+        <!-- Cardex Number Column -->
+        <ng-container matColumnDef="cardexNo">
+          <th mat-header-cell *matHeaderCellDef scope="row">Cardex No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.cardexNo}}
+          </td>
+        </ng-container>
+
+        <!-- Cheque Date Column -->
+        <ng-container matColumnDef="chequeDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Cheque Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{(element.chequeDate ? (element.chequeDate | date: 'dd-MMM-yyyy hh:mm:ss a') : element.chequeDate)}}
+          </td>
+        </ng-container>
+
+        <!-- Cheque Amount Column -->
+        <ng-container matColumnDef="chequeAmount">
+          <th mat-header-cell *matHeaderCellDef scope="row">Cheque Amount ( in Rs.)</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.chequeAmt}}
+          </td>
+        </ng-container>
+
+        <!-- Received From Column -->
+        <ng-container matColumnDef="receivedFrom">
+          <th mat-header-cell *matHeaderCellDef scope="row">Received From</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.recievedFrom}}
+          </td>
+        </ng-container>
+
+        <!-- Receive Date Column -->
+        <ng-container matColumnDef="receivedDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Received Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{(element.recievedDate ? (element.recievedDate | date: 'dd-MMM-yyyy hh:mm:ss a'): element.recievedDate)}}
+          </td>
+        </ng-container>
+
+        <!-- Sent To Column -->
+        <ng-container matColumnDef="sentTo">
+          <th mat-header-cell *matHeaderCellDef scope="row">Sent To</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.sendTo}}
+          </td>
+        </ng-container>
+
+        <!-- Sent Date Column -->
+        <ng-container matColumnDef="sentDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Sent Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{( element.sendOnDate ?(element.sendOnDate | date: 'dd-MMM-yyyy hh:mm:ss a'): element.sendOnDate)}}
+          </td>
+        </ng-container>
+
+        <!-- Lying With Column -->
+        <ng-container matColumnDef="lyingWith">
+          <th mat-header-cell *matHeaderCellDef scope="row">Lying With</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.lyingWith}}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef scope="row">Status</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.status}}
+          </td>
+        </ng-container>
+
+
+        <!-- Workflow Status Column -->
+        <ng-container matColumnDef="workflowStatus">
+          <th mat-header-cell *matHeaderCellDef scope="row">Workflow Status</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.wfStatus}}
+          </td>
+        </ng-container>
+
+        <!-- Action View/Edit/Delete Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef scope="row" scope="row">Action</th>
+          <td mat-cell *matCellDef="let element" style="text-align: center;" class="action-btn-i centerAlign">
+
+            <a
+            *ngIf="(element.isEditable == 1 && element.status != 'Approved' && element.status != 'Cancelled' && element.status != 'Rejected')">
+            <i class="material-icons plus view-icon" aria-hidden="true" title="Edit" (click)="edit(element)">edit
+              </i>
+            </a>
+
+            <a>
+              <i class="material-icons plus view-icon" aria-hidden="true" title="View"
+                (click)="view(element)">remove_red_eye
+              </i>
+            </a>
+
+            <a class="delete-icon" *ngIf="element.isEditable == 1 && element.status == 'Draft'">
+              <i class="material-icons plus delete" title="Delete" aria-hidden="true"
+                (click)="deleteSDDetails(element)">
+                delete
+              </i>
+            </a>
+            <a>
+              <i class="material-icons plus" (click)="viewComments(element)" aria-hidden="true"
+                title="History Detail">receipt</i>
+            </a>
+          </td>
+        </ng-container>
+
+        <!-- Header and Footer Row Definition -->
+        <tr mat-header-row *matHeaderRowDef="['parent1']"></tr>
+        <tr mat-header-row *matHeaderRowDef="lcChequeCancelationDataColumn"></tr>
+        <tr mat-row *matRowDef="let row; columns: lcChequeCancelationDataColumn;"></tr>
+        <tr mat-footer-row [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+          *matFooterRowDef="['srno']">
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+    <mat-paginator #paginator [pageSize]="'25'" [pageSizeOptions]="[10,5,25]" (page)="onPaginateChange($event)"
+      [length]="totalRecords" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+
+  
+</div>

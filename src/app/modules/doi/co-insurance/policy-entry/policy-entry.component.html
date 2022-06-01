@@ -1,0 +1,1546 @@
+<div class="container">
+  <div class="form-wrapper">
+
+    <!-- heading section -->
+    <div class="heading-section ng-star-inserted">
+      <div> Policy Entry</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/CI/PE/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <!-- navigation start -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI</li>
+        <li class="breadcrumb-item " aria-current="page">Co Insurance </li>
+        <li class="breadcrumb-item active" aria-current="page"> Policy Entry</li>
+      </ol>
+    </nav>
+    <!-- navigation ends -->
+
+
+
+    <div class="panel-group">
+      <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex"
+      (selectedIndexChange)="getTabIndex($event)">
+
+        <mat-tab label=" Policy Entry">
+
+          <!--  Policy Entry  Form-->
+          <form [formGroup]="policyEntryForm">
+
+            <div class="box box-primary">
+              <div class="box-header">Policy Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <!-- policy no -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="policyNo" placeholder="GIF Reference No.">
+                    </mat-form-field>
+                  </div>
+
+                  <!-- policy type -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="policyType" (selectionChange)="ontoken($event)"
+                        placeholder="Policy Type" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="policyTypeCtrl"
+                            [placeholderLabel]="'Find Policy Type...'"
+                            [noEntriesFoundLabel]="'No matching Policy Type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of policyTypeList | filterSelectInput:policyTypeCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.policyType.touched && policyEntryForm.controls.policyType.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.policyType.errors.required">
+                          {{ errorMessage.POLICY_TYPE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3" *ngIf="isTokentable">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="subtype" placeholder="Sub type" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="subtypeCtrl" [placeholderLabel]="'Find Sub type...'"
+                            [noEntriesFoundLabel]="'No matching Sub type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of policyTypeList | filterSelectInput:subtypeCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="box box-primary">
+              <div class="box-header">Leader Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <!-- leader name -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="leaderName" placeholder="Leader Name" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="leaderNameCtrl"
+                            [placeholderLabel]="'Find Leader Name...'"
+                            [noEntriesFoundLabel]="'No matching Leader Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of leaderNameList | filterSelectInput:leaderNameCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.leaderName.touched && policyEntryForm.controls.leaderName.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.leaderName.errors.required">
+                          {{ errorMessage.LEADER_NAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- leader address -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="leaderAddres" placeholder="Leader Address" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="leaderAddressCtrl"
+                            [placeholderLabel]="'Find Leader Address...'"
+                            [noEntriesFoundLabel]="'No matching Leader Address found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of leaderAddressList | filterSelectInput:leaderAddressCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.leaderAddres.touched && policyEntryForm.controls.leaderAddres.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.leaderAddres.errors.required">
+                          {{ errorMessage.LEADER_ADDRESS }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Leader Policy No -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <!-- <mat-select formControlName="leaderPolicyNo" placeholder="Leader Policy No" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="leaderPolicyNoCtrl"
+                            [placeholderLabel]="'Find Leader Policy No...'"
+                            [noEntriesFoundLabel]="'No matching Leader Policy No found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of leaderPolicyNoList | filterSelectInput:leaderPolicyNoCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select> -->
+                      <input matInput formControlName="leaderPolicyNo" placeholder="Leader Policy No"
+                      matTooltip="Eg. OC-19-2201-4090-00000001" required>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.leaderPolicyNo.touched && policyEntryForm.controls.leaderPolicyNo.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.leaderPolicyNo.errors.required">
+                          {{ errorMessage.LEADER_POLICY_NO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- policy issue date -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="policyIssueDate" formControlName="policyIssueDate"
+                        placeholder="Policy Issue Date" required>
+                      <mat-datepicker-toggle matSuffix [for]="policyIssueDate"></mat-datepicker-toggle>
+                      <mat-datepicker #policyIssueDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.policyIssueDate.touched && policyEntryForm.controls.policyIssueDate.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.policyIssueDate.errors.required">
+                          {{ errorMessage.DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- policy start date -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="policyStartDate" formControlName="policyStartDate"
+                        placeholder="Policy Start Date" required>
+                      <mat-datepicker-toggle matSuffix [for]="policyStartDate"></mat-datepicker-toggle>
+                      <mat-datepicker #policyStartDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.policyStartDate.touched && policyEntryForm.controls.policyStartDate.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.policyStartDate.errors.required">
+                          {{ errorMessage.DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- policy end date  -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="policyEndDate" formControlName="policyEndDate"
+                        placeholder="Policy End Date" required>
+                      <mat-datepicker-toggle matSuffix [for]="policyEndDate"></mat-datepicker-toggle>
+                      <mat-datepicker #policyEndDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.policyEndDate.touched && policyEntryForm.controls.policyEndDate.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.policyEndDate.errors.required">
+                          {{ errorMessage.DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+
+
+                </div>
+
+              </div>
+            </div>
+
+            <!-- <div class="box box-primary">
+              <div class="box-header">Challan Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="challanNo" placeholder="Challan No" required>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.challanNo.touched && policyEntryForm.controls.challanNo.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.challanNo.errors.required">
+                          {{ errorMessage.CHALLAN_NO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="challanAmount" placeholder=" Challan amount"  (keyup)="setFieldVal()"
+                       decimalLimitTwoOnly>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="challanDate" formControlName="challanDate"
+                        placeholder="Challan Date" required>
+                      <mat-datepicker-toggle matSuffix [for]="challanDate"></mat-datepicker-toggle>
+                      <mat-datepicker #challanDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.challanDate.touched && policyEntryForm.controls.challanDate.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.challanDate.errors.required">
+                          {{ errorMessage.DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+            </div> -->
+
+            
+
+            <div class="box box-primary">
+              <div class="box-header">Insurerd Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <!-- insured name -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="insuredName" placeholder="Insured Name" required>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.insuredName.touched && policyEntryForm.controls.insuredName.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.insuredName.errors.required">
+                          {{ errorMessage.INSURED_NAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- insured address -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="insuredAddress" placeholder="Insured Address" required>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.insuredAddress.touched && policyEntryForm.controls.insuredAddress.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.insuredAddress.errors.required">
+                          {{ errorMessage.INSURED_ADDRESS }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- District -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="district" placeholder="District" (selectionChange)="selectDistrict()"
+                        required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="districtCtrl" [placeholderLabel]="'Find District...'"
+                            [noEntriesFoundLabel]="'No matching District found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of districtList |
+                      filterSelectInput:districtCtrl.value" [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.district.touched && policyEntryForm.controls.district.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.district.errors.required">
+                          {{ errorMessage.DISTRICT }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Taluka -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select name='taluka' formControlName='taluka' placeholder='Taluka' required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]='talukaCtrl' [placeholderLabel]="'Select Taluka ...'"
+                            [noEntriesFoundLabel]="'no matching Taluka found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let item of talukaNameList | filterSelectInput : talukaCtrl.value : 'viewValue'"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.taluka.touched && policyEntryForm.controls.taluka.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.taluka.errors.required">
+                          {{ errorMessage.TALUKA }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- city -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="city" placeholder="City" required>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.city.touched && policyEntryForm.controls.city.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.city.errors.required">
+                          {{ errorMessage.CITY }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- pincode -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="pincode" placeholder="Pincode" required maxlength="6">
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.pincode.touched && policyEntryForm.controls.pincode.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.pincode.errors.required">
+                          {{ errorMessage.PINCODE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- fac/treaty -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="facTreaty" placeholder="FAC/Treaty">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="facTreatyCtrl" [placeholderLabel]="'Find FAC/Treaty...'"
+                            [noEntriesFoundLabel]="'No matching FAC/Treaty found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of facTreatyList | filterSelectInput:facTreatyCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            </form>
+
+
+
+            <div class="box box-primary">
+              <div class="box-header">Risk Details</div>
+              <div class="box-body">
+                <!-- table start -->
+                <table mat-table [dataSource]="dataSourceRisk" width="100%" aria-describedby="riDetails">
+
+                  <!-- ri name -->
+                  <ng-container matColumnDef="riskType">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Risk Type</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="riskType">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="riskDetals">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Risk Location</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.riskDetals">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="remarks">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Remarks</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.remarks">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="basicSumInsured">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Basic Sum Insured</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.basicSumInsured">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="regSumInsured">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Regular Sum Insured</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.regSumInsured" (keyup)="setValuesTable(element);setFieldVal()"
+                         decimalLimitTwoOnly>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="treSumInsured">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Terrorism Sum Insured</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.treSumInsured" (keyup)="setValuesTable(element);setFieldVal()"
+                         decimalLimitTwoOnly>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="terrorisumPool">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Terrorisum Pool</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.terrorisumPool">
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="regPremium">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Regular Premium </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.regPremium" (keyup)="setValuesTable(element);setFieldVal()"
+                         decimalLimitTwoOnly>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="trePremium">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Terrorism Premium</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <input matInput [(ngModel)]="element.trePremium" (keyup)="setValuesTable(element);setFieldVal()"
+                         decimalLimitTwoOnly>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="totalSi">
+                    <th mat-header-cell *matHeaderCellDef scope="row">100% Total SI</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <!-- <input matInput formControlName="totalSi" numbersOnly required [value]="calculateTotalSi()"> -->
+                        <input matInput  [(ngModel)]="element.totalSi" readonly>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="premium">
+                    <th mat-header-cell *matHeaderCellDef scope="row">100% Premium</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-form-field class="example-full-width">
+                        <!-- <input matInput [(ngModel)]="premium" [ngModelOptions]="{standalone: true}"> -->
+                        <input matInput  [(ngModel)]="element.premium" readonly>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+
+                  <!-- action -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'4%'}">
+                      Action</th>
+                    <td mat-cell *matCellDef="let  element; let i=index">
+                      <table class="iconTable" aria-describedby="actionBtn">
+                        <tbody>
+                          <tr>
+                            <td width="30">
+                              <i class="material-icons  plus add" aria-hidden="true"
+                                *ngIf="(i  ==  dataSourceRisk.data.length -  1)" (click)="addColumnRisk();">
+                                add
+                              </i>
+                            </td>
+                            <td width="30">
+                              <i class="material-icons plus delete" aria-hidden="true"
+                                *ngIf="(dataSourceRisk.data.length>  1)" (click)="deleteColumnRisk(i)">
+                                delete
+                              </i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </ng-container>
+
+                  <!-- Header Section Of table -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <!-- Data Fetch From .TS File to table -->
+                  <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns;"></tr>
+
+                </table>
+              </div>
+            </div>
+
+            <form [formGroup]="policyEntryForm">
+            <!-- Share details -->
+            <div class="box box-primary">
+              <div class="box-header">Share Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ourShare" placeholder="GIF Share %" (keyup)="setFieldVal()"
+                       required percentageOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.ourShare.touched && policyEntryForm.controls.ourShare.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.ourShare.errors.required">
+                          {{ errorMessage.SHARE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ourShareSi" placeholder="GIF Share Regular SI" required 
+                      readonly numbersOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.ourShareSi.touched && policyEntryForm.controls.ourShareSi.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.ourShareSi.errors.required">
+                          {{ errorMessage.SHARE_SI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ourShareTerrorSi" placeholder="GIF Share Terrorism SI" required 
+                      readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.ourShareTerrorSi.touched && policyEntryForm.controls.ourShareTerrorSi.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.ourShareTerrorSi.errors.required">
+                          {{ errorMessage.SHARE_SI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ourSharePremium" placeholder="GIF Share Regular Premium" required readonly
+                       decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.ourSharePremium.touched && policyEntryForm.controls.ourSharePremium.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.ourSharePremium.errors.required">
+                          {{ errorMessage.SHARE_PREMIUM }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ourShareTerrorPremium" placeholder="GIF Share Terrorism Premium" required
+                      readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.ourShareTerrorPremium.touched && policyEntryForm.controls.ourShareTerrorPremium.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.ourShareTerrorPremium.errors.required">
+                          {{ errorMessage.SHARE_PREMIUM }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-9"></div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="gicShare" placeholder="GIC Share %" (keyup)="setFieldVal()"
+                       required percentageOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.gicShare.touched && policyEntryForm.controls.gicShare.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.gicShare.errors.required">
+                          {{ errorMessage.SHARE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="gicShareSi" placeholder="GIC Share Regular SI" required 
+                      readonly numbersOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.gicShareSi.touched && policyEntryForm.controls.gicShareSi.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.gicShareSi.errors.required">
+                          {{ errorMessage.SHARE_SI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="gicShareTerrorSi" placeholder="GIC Share Terrorism SI" required 
+                      readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.gicShareTerrorSi.touched && policyEntryForm.controls.gicShareTerrorSi.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.gicShareTerrorSi.errors.required">
+                          {{ errorMessage.SHARE_SI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="gicSharePremium" placeholder="GIC Share Regular Premium" required
+                      readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.gicSharePremium.touched && policyEntryForm.controls.gicSharePremium.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.gicSharePremium.errors.required">
+                          {{ errorMessage.SHARE_PREMIUM }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="gicShareTerrorPremium" placeholder="GIC Share Terrorism Premium" required
+                       decimalLimitTwoOnly readonly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.gicShareTerrorPremium.touched && policyEntryForm.controls.gicShareTerrorPremium.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.gicShareTerrorPremium.errors.required">
+                          {{ errorMessage.SHARE_PREMIUM }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-9"></div>
+                  
+                  <!-- Other -->
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <input matInput formControlName="other" placeholder="Other">
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="policyEntryForm.controls.other.value != ''">
+                    <mat-form-field>
+                      <input matInput formControlName="otherShare" placeholder="Other Share %" (keyup)="setFieldVal()"
+                       required percentageOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.otherShare.touched && policyEntryForm.controls.otherShare.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.otherShare.errors.required">
+                          {{ errorMessage.SHARE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="policyEntryForm.controls.other.value != ''">
+                    <mat-form-field>
+                      <input matInput formControlName="otherShareSi" placeholder="Other Share Regular SI" required
+                      readonly numbersOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.otherShareSi.touched && policyEntryForm.controls.otherShareSi.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.otherShareSi.errors.required">
+                          {{ errorMessage.SHARE_SI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="policyEntryForm.controls.other.value != ''">
+                    <mat-form-field>
+                      <input matInput formControlName="otherShareTerrorSi" placeholder="Other Share Terrorism SI" required
+                      readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.otherShareTerrorSi.touched && policyEntryForm.controls.otherShareTerrorSi.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.otherShareTerrorSi.errors.required">
+                          {{ errorMessage.SHARE_SI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="policyEntryForm.controls.other.value != ''">
+                    <mat-form-field>
+                      <input matInput formControlName="otherSharePremium" placeholder="Other Share Regular Premium" required
+                       readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.otherSharePremium.touched && policyEntryForm.controls.otherSharePremium.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.otherSharePremium.errors.required">
+                          {{ errorMessage.SHARE_PREMIUM }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="policyEntryForm.controls.other.value != ''">
+                    <mat-form-field>
+                      <input matInput formControlName="otherShareTerrorPremium" placeholder="Other Share Terrorism Premium" required
+                      readonly decimalLimitTwoOnly>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.otherShareTerrorPremium.touched && policyEntryForm.controls.otherShareTerrorPremium.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.otherShareTerrorPremium.errors.required">
+                          {{ errorMessage.SHARE_PREMIUM }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-6" *ngIf="policyEntryForm.controls.other.value != ''"></div>
+                  
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="totAmount" placeholder=" Total Premium" readonly numbersOnly>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="diffAmount" placeholder=" Difference amount" readonly numbersOnly>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="remarksDiff" placeholder="Remarks for Difference">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="remarksDiffCtrl"
+                            [placeholderLabel]="'Find Remarks for Difference...'"
+                            [noEntriesFoundLabel]="'No matching Remarks for Difference found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>--None--</mat-option>
+                        <mat-option *ngFor="let item of remarksDiffList | filterSelectInput:remarksDiffCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+
+                  <!-- agent commission -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="agentCommission" placeholder="Agent Commission" numbersOnly>
+                    </mat-form-field>
+                  </div>
+                  <!-- challan date -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="policyDate" formControlName="policyDate"
+                        placeholder="Policy Issue Date" required>
+                      <mat-datepicker-toggle matSuffix [for]="policyDate"></mat-datepicker-toggle>
+                      <mat-datepicker #policyDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.policyDate.touched && policyEntryForm.controls.policyDate.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.policyDate.errors.required">
+                          {{ errorMessage.DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- ri details -->
+            <div class="box box-primary">
+              <div class="box-header">RI Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <!-- <div class="col-sm-12" *ngIf="riRequiredValue.value == '1'"> -->
+                  <div class="col-sm-12">
+
+                    <!-- table start -->
+                    <table mat-table [dataSource]="dataSource" width="100%" aria-describedby="riDetails">
+
+                      <!-- ri name -->
+                      <ng-container matColumnDef="riName">
+                        <th mat-header-cell *matHeaderCellDef scope="row">RI Company Name </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="element.riName" [ngModelOptions]="{standalone: true}"
+                              (keydown.enter)="onRiNameEnter(element)">
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+
+                      <!-- riAddress -->
+                      <ng-container matColumnDef="riAddress">
+                        <th mat-header-cell *matHeaderCellDef scope="row">RI Address </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="element.riAddress" [ngModelOptions]="{standalone: true}">
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- ri share% -->
+                      <ng-container matColumnDef="riShare">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">RI Share% </th>
+                        <td mat-cell *matCellDef="let element">
+                          <span *ngIf="element.riName =='GIC'">{{riShare}}</span>
+                          <mat-form-field class="example-full-width" *ngIf="element.riName !='GIC'">
+                            <input matInput [(ngModel)]="element.riShare" [ngModelOptions]="{standalone: true}"
+                              numbersOnly>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- RI Premium Amount -->
+                      <ng-container matColumnDef="premiumAmount">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">RI Premium Amount
+                        </th>
+                        <td mat-cell *matCellDef="let element; let i= index;" class="rightAlign">
+                          <!-- {{calculateRiPremiumAmount(element,i)}} -->
+                          <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="element.premiumAmount" [ngModelOptions]="{standalone: true}"
+                              numbersOnly>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- payment received through -->
+                      <ng-container matColumnDef="paymentMode">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Payment Mode 
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="full-width">
+                            <mat-select [(ngModel)]="element.paymentReceivedThrough"
+                              [ngModelOptions]="{standalone: true}">
+                              <mat-option
+                                *ngFor="let item of paymentModeList"
+                                [value]="item.value" matTooltip="{{item.viewValue}}">
+                                {{item.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="cheUtr">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Cheque/UTR No</th>
+                        <td mat-cell *matCellDef="let element; let i= index;" class="rightAlign">
+
+                          <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="element.cheUtr" [ngModelOptions]="{standalone: true}"
+                              numbersOnly>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+                      <ng-container matColumnDef="resPayment">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Respect To Payment
+                          Made
+                        </th>
+                        <td mat-cell *matCellDef="let element; let i= index;" class="rightAlign">
+
+                          <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="element.resPayment" [ngModelOptions]="{standalone: true}"
+                              numbersOnly>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- payment received on -->
+                      <ng-container matColumnDef="paymentReceivedOn">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Payment Date
+                          
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field>
+                            <input matInput [matDatepicker]="paymentReceivedOn" [(ngModel)]="element.paymentReceivedOn"
+                              [ngModelOptions]="{standalone: true}">
+                            <mat-datepicker-toggle matSuffix [for]="paymentReceivedOn"></mat-datepicker-toggle>
+                            <mat-datepicker #paymentReceivedOn></mat-datepicker>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- payment received through -->
+                      <ng-container matColumnDef="paymentReceivedThrough">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Payment Received
+                          Through 
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="full-width">
+                            <mat-select [(ngModel)]="element.paymentReceivedThrough"
+                              [ngModelOptions]="{standalone: true}">
+                              <mat-option>
+                                <ngx-mat-select-search [formControl]="paymentReceivedThroughCtrl"
+                                  [placeholderLabel]="'Find Payment Received Through...'"
+                                  [noEntriesFoundLabel]="'No matching Payment Received Through found'">
+                                </ngx-mat-select-search>
+                              </mat-option>
+                              <mat-option
+                                *ngFor="let item of paymentReceivedThroughList | filterSelectInput:paymentReceivedThroughCtrl.value"
+                                [value]="item.value" matTooltip="{{item.viewValue}}">
+                                {{item.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- challan no -->
+                      <ng-container matColumnDef="challanNo">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Challan No</th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="element.challanNo" [ngModelOptions]="{standalone: true}">
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- challan date -->
+                      <ng-container matColumnDef="challanDate">
+                        <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Challan Date
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-form-field>
+                            <input matInput [matDatepicker]="challanDate" [(ngModel)]="element.challanDate"
+                              [ngModelOptions]="{standalone: true}">
+                            <mat-datepicker-toggle matSuffix [for]="challanDate"></mat-datepicker-toggle>
+                            <mat-datepicker #challanDate></mat-datepicker>
+                          </mat-form-field>
+                        </td>
+                      </ng-container>
+
+                      <!-- action -->
+                      <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'4%'}">
+                          Action</th>
+                        <td mat-cell *matCellDef="let  element; let i=index">
+                          <table class="iconTable" aria-describedby="actionBtn">
+                            <tbody>
+                              <tr>
+                                <td width="30">
+                                  <i class="material-icons  plus add" aria-hidden="true"
+                                    *ngIf="(i  ==  dataSource.data.length -  1)" (click)="addColumn();">
+                                    add
+                                  </i>
+                                </td>
+                                <td width="30">
+                                  <i class="material-icons plus delete" aria-hidden="true"
+                                    *ngIf="(dataSource.data.length>  1)" (click)="deleteColumn(i)">
+                                    delete
+                                  </i>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </ng-container>
+
+
+                      <!-- Header Section Of table -->
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                      <!-- Data Fetch From .TS File to table -->
+                      <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns1;"></tr>
+
+                    </table>
+                    <!-- table end -->
+                  </div>
+
+
+
+                </div>
+
+              </div>
+            </div>
+            <div class="box box-primary">
+              <div class="box-header">Payment Detail</div>
+              <div class="box-body">
+                <div class="row">
+                  <!-- Payment Mode -->
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-select name="paymentMode" (selectionChange)="ontoken1($event)" formControlName="paymentMode"
+                        required placeholder="Payment Mode">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="paymentModetrl"
+                            [placeholderLabel]="'Select Payment Mode ...'"
+                            [noEntriesFoundLabel]="'no matching Tange type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let PM of paymentMode_list | filterSelectInput : paymentModetrl.value : 'viewValue'"
+                          [value]="PM.value" [matTooltip]="PM.viewValue">
+                          {{PM.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.paymentMode.touched && policyEntryForm.controls.paymentMode.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.paymentMode.errors.required">
+                          {{ errorMessage.PAYMENTMODE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3" *ngIf="isTokentable">
+                    <mat-form-field>
+                      <mat-select formControlName="treasuryName" placeholder="Treasury Name">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="treasuryNameCtrl"
+                            [placeholderLabel]="'Select Treasury Name ...'"
+                            [noEntriesFoundLabel]="'no matching Treasury Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option
+                          *ngFor="let item of treasuryName_list | filterSelectInput : treasuryNameCtrl.value : 'viewValue'"
+                          [value]="item.value" [matTooltip]="item.viewValue">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+  
+                  <!-- Date of DD/cheque -->
+                  <div class="col-sm-3" *ngIf="!isTokentable">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="dateCheque" formControlName="dateCheque"
+                        placeholder="Date of DD/cheque " required>
+                      <mat-datepicker-toggle matSuffix [for]="dateCheque"></mat-datepicker-toggle>
+                      <mat-datepicker #dateCheque></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.dateCheque.touched && policyEntryForm.controls.dateCheque.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.dateCheque.errors.required">
+                          {{ errorMessage.DATECHEQUE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Challan Number -->
+                  <div class="col-sm-3" *ngIf="!isTokentable">
+                    <mat-form-field>
+                      <input matInput type="text" placeholder="DD/Cheque No." maxlength="10" formControlName="ddZNo"
+                        required>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.dateCheque.touched && policyEntryForm.controls.dateCheque.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.dateCheque.errors.required">
+                          {{ errorMessage.DATECHEQUENO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Bank Name   -->
+                  <div class="col-sm-3" *ngIf="!isTokentable">
+                    <mat-form-field>
+                      <mat-select formControlName="banName" placeholder="Bank Name" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="bankCtrl" [placeholderLabel]="'Select  Bank Name...'"
+                            [noEntriesFoundLabel]="'no matching Bank Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let bl of bank_list | filterSelectInput : bankCtrl.value : 'viewValue'"
+                          [value]="bl.value" [matTooltip]="bl.viewValue">
+                          {{bl.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.banName.touched && policyEntryForm.controls.banName.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.banName.errors.required">
+                          {{ errorMessage.BANKNAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Bank Branch   -->
+                  <div class="col-sm-3" *ngIf="!isTokentable">
+  
+                    <mat-form-field>
+                      <mat-select formControlName="bankBranch" placeholder="Bank Branch" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="bankbranchCtrl"
+                            [placeholderLabel]="'Select  Bank Branch...'"
+                            [noEntriesFoundLabel]="'no matching Bank Branch found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let bl of bankbranch_list | filterSelectInput : bankbranchCtrl.value : 'viewValue'"
+                          [value]="bl.value" [matTooltip]="bl.viewValue">
+                          {{bl.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="policyEntryForm.controls.bankBranch.touched && policyEntryForm.controls.bankBranch.errors">
+                        <mat-error *ngIf="policyEntryForm.controls.bankBranch.errors.required">
+                          {{ errorMessage.BANKBRANCH }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Challan Number -->
+                  <div class="col-sm-3" *ngIf="isTokentableOPEN">
+                    <mat-form-field>
+                      <input matInput type="text" placeholder="Receipt No.(BTR-5)" formControlName="receiptNo" readonly>
+                    </mat-form-field>
+                  </div>
+                  <!-- Challan Date -->
+                  <div class="col-sm-3" *ngIf="isTokentableOPEN">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="receiptDate" formControlName="receiptDate"
+                        placeholder=" Receipt Date (BTR-5) " readonly>
+                      <mat-datepicker-toggle matSuffix [for]="receiptDate"></mat-datepicker-toggle>
+                      <mat-datepicker #receiptDate></mat-datepicker>
+  
+                    </mat-form-field>
+                  </div>
+  
+                  <!-- challan no -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput formControlName="challanNo" numbersOnly placeholder="Challan No." readonly>
+                    </mat-form-field>
+                  </div>
+  
+                  <!-- challan date  -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="challanDate" formControlName="challanDate"
+                        placeholder="Challan Date" [max]="todayDate" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="challanDate"></mat-datepicker-toggle>
+                      <mat-datepicker #challanDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+  
+                  <!-- Challan amount -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="challanAmount" placeholder="Challan Amount" (keyup)="setFieldVal()"
+                      decimalLimitTwoOnly>
+                    </mat-form-field>
+                  </div>
+  
+  
+                  <!-- payment date -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="paymentDate" formControlName="paymentDate"
+                        placeholder="Payment Date" [max]="todayDate">
+                      <mat-datepicker-toggle matSuffix [for]="paymentDate"></mat-datepicker-toggle>
+                      <mat-datepicker #paymentDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+  
+                </div>
+  
+              </div>
+            </div>
+
+            <!-- common action button -->
+            <div class="form-action-button">
+  
+              <button type="button" mat-raised-button color="primary" title="Add" (click)="goToNextTab()">
+                <i class="material-icons" title="Add" aria-hidden="true">
+                  add
+                </i>
+                Add
+              </button>
+
+              <button type="submit" mat-raised-button color="primary" (click)="uploadClick()">
+                <i class="material-icons" aria-hidden="true" title="Upload">
+                  publish
+                </i>
+                Upload
+              </button>
+  
+            </div>
+            <!-- common action button end -->
+          </form>
+
+        </mat-tab>
+
+       
+
+        <mat-tab label=" Policy Details List">
+          <div class="customresponsive">
+            <!-- table start -->
+            <table mat-table [dataSource]="dataSourceList" width="100%" aria-describedby="riDetails">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+                <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+                  {{i+1}}
+                </td>
+              </ng-container>
+  
+              <!-- RISK Details Columns -->
+              <ng-container matColumnDef="riskType">
+                <th mat-header-cell *matHeaderCellDef scope="row">Risk Type</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.riskType}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="riskDetals">
+                <th mat-header-cell *matHeaderCellDef scope="row">Risk Location</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.riskDetals}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="regSumInsured">
+                <th mat-header-cell *matHeaderCellDef scope="row">Regular Sum Insured</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.regSumInsured}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="treSumInsured">
+                <th mat-header-cell *matHeaderCellDef scope="row">Terrorism Sum Insured</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.treSumInsured}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="regPremium">
+                <th mat-header-cell *matHeaderCellDef scope="row">Regular Premium </th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.regPremium}}
+                </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="trePremium">
+                <th mat-header-cell *matHeaderCellDef scope="row">Terrorism Premium</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.trePremium}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="totalSi">
+                <th mat-header-cell *matHeaderCellDef scope="row">100% Total SI</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.totalSi}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="premium">
+                <th mat-header-cell *matHeaderCellDef scope="row">100% Premium</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.premium}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="remarks">
+                <th mat-header-cell *matHeaderCellDef scope="row">Remarks</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.remarks}}
+                </td>
+              </ng-container>
+
+              <!-- Insured Details Columns-->
+              <ng-container matColumnDef="insName">
+                <th mat-header-cell *matHeaderCellDef scope="row">Insured Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.insName}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="insAdd">
+                <th mat-header-cell *matHeaderCellDef scope="row">Insured Address</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.insAdd}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="district">
+                <th mat-header-cell *matHeaderCellDef scope="row">District</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.district}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="taluka">
+                <th mat-header-cell *matHeaderCellDef scope="row">Taluka</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.taluka}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="city">
+                <th mat-header-cell *matHeaderCellDef scope="row">City</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.city}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="pincode">
+                <th mat-header-cell *matHeaderCellDef scope="row">Pincode</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.pincode}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fac">
+                <th mat-header-cell *matHeaderCellDef scope="row">FAC/Treaty</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.fac}}
+                </td>
+              </ng-container>
+
+              <!-- Share DEtails Columns -->
+              <ng-container matColumnDef="gifPerc">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIF Share %</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.gifPerc}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gifRegSI">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIF Share Regular SI</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gifRegSI}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gifTerrorSI">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIF Share Terrorism SI</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gifTerrorSI}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gifRegPrem">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIF Share Regular Premium</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gifRegPrem}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gifTerrorPrem">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIF Share Terrorism Premium</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gifTerrorPrem}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gicPerc">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIC Share %</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.gicPerc}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gicRegSI">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIC Share Regular SI</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gicRegSI}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gicTerrorSI">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIC Share Terrorism SI</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gicTerrorSI}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gicRegPrem">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIC Share Regular Premium</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gicRegPrem}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="gicTerrorPrem">
+                <th mat-header-cell *matHeaderCellDef scope="row">GIC Share Terrorism Premium</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.gicTerrorPrem}}
+                </td>
+              </ng-container>
+
+              <!-- RI Details Columns -->
+              <ng-container matColumnDef="riCompName">
+                <th mat-header-cell *matHeaderCellDef scope="row">RI Company Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.riCompName}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="riAdd">
+                <th mat-header-cell *matHeaderCellDef scope="row">RI Address</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.riAdd}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="riPerc">
+                <th mat-header-cell *matHeaderCellDef scope="row">RI Share%</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.riPerc}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="riPremAcc">
+                <th mat-header-cell *matHeaderCellDef scope="row">RI Premium Amount</th>
+                <td mat-cell *matCellDef="let element" class="rightAlign">
+                  {{element.riPremAcc}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="payMode">
+                <th mat-header-cell *matHeaderCellDef scope="row">Payment Mode </th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.payMode}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="cheNo">
+                <th mat-header-cell *matHeaderCellDef scope="row">Cheque/UTR No</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.cheNo}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="payDate">
+                <th mat-header-cell *matHeaderCellDef scope="row">Payment Date</th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.payDate}}
+                </td>
+              </ng-container>
+  
+              <!-- Header Section Of table -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsList"></tr>
+              <!-- Data Fetch From .TS File to table -->
+              <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumnsList;"></tr>
+  
+            </table>
+          </div>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+          <!-- common action button -->
+          <div class="form-action-button">
+
+            <button type="submit" mat-raised-button color="primary" title="Save As Draft">
+              <i class="material-icons" title="Save As Draft" aria-hidden="true">
+                save
+              </i>
+              Save as Draft
+            </button>
+
+            <button mat-raised-button type="submit" class="green" title="Submit" (click)="onSubmit()">
+              <i class="material-icons">
+                done
+              </i>
+              Submit
+            </button>
+
+            <button type="button" mat-raised-button color="accent" title="Reset" (click)="onReset()">
+              <i class="material-icons" aria-hidden="true">
+                restore
+              </i>
+              Reset
+            </button>
+
+            <button type="button" mat-raised-button (click)="goToListing()" color="warn" title="Listing">
+              <i class="material-icons" aria-hidden="true" title="Listing">
+                list
+              </i>
+              Listing
+            </button>
+
+            <button type="button" mat-raised-button class="btnClose" title="Close">
+              <i class="material-icons" aria-hidden="true" title="Close">
+                close
+              </i>
+              Close
+            </button>
+
+            <button type="submit" mat-raised-button color="primary" class="btn-print">
+              <i class="material-icons" aria-hidden="true">
+                print
+              </i> Print
+            </button>
+
+            <button type="submit" mat-raised-button color="warn">
+              Generate Policy
+            </button>
+
+          </div>
+          <!-- common action button end -->
+        </mat-tab>
+
+        <!-- attachment tab -->
+        <mat-tab label="Attachments">
+          <app-common-attachment [attachemntValue]="attachmentTypeCode"></app-common-attachment>
+
+          <!-- action button -->
+          <div class="form-action-button">
+
+            <button type="submit" mat-raised-button color="primary">
+              <i class="material-icons" aria-hidden="true" title="Upload">
+                publish
+              </i>
+              Upload
+            </button>
+
+            <button type="button" mat-raised-button budget-list (click)="goToListing()" color="warn" title="Listing">
+              <i class="material-icons" aria-hidden="true" title="Listing">
+                list
+              </i>
+              Listing
+            </button>
+
+            <button type="button" mat-raised-button (click)="onClose()" class="btnClose" title="Close">
+              <i class="material-icons" aria-hidden="true" title="Close">
+                close
+              </i>
+              Close
+            </button>
+
+          </div>
+          <!-- action button end -->
+
+        </mat-tab>
+        <!-- attachment tab end -->
+
+
+      </mat-tab-group>
+    </div>
+
+  </div>
+</div>

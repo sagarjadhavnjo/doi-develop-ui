@@ -1,0 +1,498 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Document Master</div>
+      <div class="font-heading"><strong>Reference Number:</strong> {{ referenceNumber }}</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI / JPA</li>
+        <li class="breadcrumb-item active" aria-current="page">Document Master</li>
+      </ol>
+    </nav>
+    <form [formGroup]="documentMasterForm">
+      <div class="panel-group">
+        <mat-tab-group mat-stretch-tabs class="standing-est-tabing" (selectedTabChange)="onTabChange($event)">
+          <mat-tab label="Common Document">
+
+            <!-- JPA Claim Listing  Form-->
+
+            <!-- Details of Deceased/Disabled -->
+            <div class="box box-primary">
+              <div class="box-header">Search</div>
+              <div class="box-body">
+                <div class="row">
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <input matInput type="text" maxlength="50" placeholder="Document" formControlName="document"
+                        required>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.document.touched || (documentMasterForm.controls.document.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.document.errors?.required">
+                          {{errorMessages.DOCUMENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="requirement" placeholder="Requirement" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="requirementCtrl" [placeholderLabel]="'Find Requirement...'"
+                            [noEntriesFoundLabel]="'No matching Requirement found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of requirementList |
+                          filterSelectInput:requirementCtrl.value : 'viewValue'" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.requirement.touched || (documentMasterForm.controls.requirement.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.requirement.errors?.required">
+                          {{errorMessages.REQUIREMENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+
+                </div>
+                <!-- common button -->
+                <div class="form-action-button">
+
+                  <button type="add" mat-raised-button color="primary" (click)="onSaveCommonDocument();">
+                    <i class="material-icons" aria-hidden="true" title="add">add_circle_outline</i>{{addButtnTextCommonDocument}}
+                  </button>
+                  <!-- <button type="submit" mat-raised-button color="primary">
+    <i class="material-icons" aria-hidden="true">search</i>
+    Search
+  </button> -->
+
+                  <button type="reset" mat-raised-button color="accent" (click)="reset('commonDocuent');">
+                    <i class="material-icons" aria-hidden="true">
+                      restore
+                    </i>
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mat-elevation-z8 row">
+              <!--  Entry Table -->
+              <div class="col-sm-12 table-responsive overflow-x-auto">
+                <div class="mat-elevation-z8 table-responsive mt-2">
+                  <table mat-table [dataSource]="dataSourceCommon" width="100%" matSort
+                    aria-describedby="listinginwardscreen">
+                    <ng-container matColumnDef="srno">
+                      <th mat-header-cell *matHeaderCellDef scope="row">Sr No.</th>
+                      <td mat-cell *matCellDef="let element;let i=index" class="centerAlign"> {{i+1}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="document">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Document</th>
+                      <td mat-cell *matCellDef="let element">{{ element.document }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="requirement">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Requirement</th>
+                      <td mat-cell *matCellDef="let element">{{ getRequiredText(element.requirement) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row"> Action</th>
+                      <td mat-cell *matCellDef="let element ;let i=index">
+                        <table class="iconTable" aria-describedby="actionBtn">
+                          <tbody>
+                            <tr>
+                              <td width="30">
+                                <i class="material-icons plus edit-icon" aria-hidden="true" title="Edit" (click)="editCommonDocument(i)"> edit </i>
+                              </td>
+
+                              <td width="30">
+                                <i class="material-icons plus delete" aria-hidden="true" (click)="deleteCommonDocument(i)">
+                                  delete
+                                </i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </ng-container>
+                    <!-- Header Section Of table -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCommon"></tr>
+                    <!-- Data Fetch From .TS File to table -->
+
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumnsCommon"></tr>
+                  </table>
+
+                  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+                </div>
+              </div>
+              <!-- End  Table -->
+            </div>
+
+
+          </mat-tab>
+
+          <mat-tab label="Scheme Document">
+            <div class="box box-primary">
+              <div class="box-header">Search</div>
+              <div class="box-body">
+                <div class="row">
+
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="scheme" placeholder="Scheme" (selectionChange)="onSchemeChange($event)" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="schemeCtrl" [placeholderLabel]="'Find Scheme...'"
+                            [noEntriesFoundLabel]="'No matching Scheme found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of schemeList |
+                        filterSelectInput:schemeCtrl.value : 'schemeShortName'" [value]="item.schemeId" matTooltip="{{item.schemeShortName}}">
+                          {{item.schemeShortName}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.scheme.touched || (documentMasterForm.controls.scheme.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.scheme.errors?.required">
+                          {{errorMessages.SCHEME_TYPE}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="!isPolicyDropdown">
+                    <mat-form-field class="full-width">
+                      <input matInput type="text" placeholder="Policy No." formControlName="policy" required>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.policy.touched || (documentMasterForm.controls.policy.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.policy.errors?.required">
+                          {{errorMessages.POLICY}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3" *ngIf="isPolicyDropdown">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="policy" placeholder="Policy No."  required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="policyCtrl" [placeholderLabel]="'Find Policy...'"
+                            [noEntriesFoundLabel]="'No matching Policy found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of policyList |
+                        filterSelectInput:policyCtrl.policyNum:'policyNum'" [value]="item.policyNum" matTooltip="{{item.policyNum}}">
+                          {{item.policyNum}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.scheme.touched || (documentMasterForm.controls.scheme.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.scheme.errors?.required">
+                          {{errorMessages.SCHEME_TYPE}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <input matInput type="text" maxlength="50" placeholder="Document" formControlName="schemeDocument"
+                        required>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.schemeDocument.touched || (documentMasterForm.controls.schemeDocument.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.schemeDocument.errors?.required">
+                          {{errorMessages.DOCUMENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="documentRequirement" placeholder="Requirement" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="documentRequirementCtrl"
+                            [placeholderLabel]="'Find District...'"
+                            [noEntriesFoundLabel]="'No matching District found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of documentRequirementList |
+                        filterSelectInput:documentRequirementCtrl.value:'viewValue'" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.documentRequirement.touched || (documentMasterForm.controls.documentRequirement.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.documentRequirement.errors?.required">
+                          {{errorMessages.REQUIREMENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+                </div>
+                <!-- common button -->
+                <div class="form-action-button">
+
+                  <button type="add" mat-raised-button color="primary" (click)="onSaveSchemeDocument();">
+                    <i class="material-icons" aria-hidden="true" title="add">add_circle_outline</i> {{addButtnTextSchemeDocument}}
+                  </button>
+
+                  <button type="reset" mat-raised-button color="accent" (click)="reset('schemeDocument');">
+                    <i class="material-icons" aria-hidden="true">
+                      restore
+                    </i>
+                    Reset
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="mat-elevation-z8 row">
+              <!--  Entry Table -->
+              <div class="col-sm-12 table-responsive overflow-x-auto">
+                <div class="mat-elevation-z8 table-responsive mt-2">
+                  <table mat-table [dataSource]="dataSourceDocument" width="100%" matSort
+                    aria-describedby="listinginwardscreen">
+                    <ng-container matColumnDef="srno">
+                      <th mat-header-cell *matHeaderCellDef scope="row">Sr No.</th>
+                      <td mat-cell *matCellDef="let element;let i=index" class="centerAlign"> {{i+1}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="scheme">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Scheme</th>
+                      <td mat-cell *matCellDef="let element">{{ element.schemeName }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="policy">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Policy</th>
+                      <td mat-cell *matCellDef="let element">{{ element.policy }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="document">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Document</th>
+                      <td mat-cell *matCellDef="let element">{{ element.schemeDocument }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="requirement">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Requirement</th>
+                      <td mat-cell *matCellDef="let element">{{ getRequiredText(element.documentRequirement) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row"> Action</th>
+                      <td mat-cell *matCellDef="let element ;let i=index">
+                        <table class="iconTable" aria-describedby="actionBtn">
+                          <tbody>
+                            <tr>
+                              <td width="30">
+                                <i class="material-icons plus edit-icon" aria-hidden="true" title="Edit" (click)="editSchemeDocument(i)"> edit </i>
+                              </td>
+
+                              <td width="30">
+                                <i class="material-icons plus delete" aria-hidden="true" (click)="deleteDocument(i)">
+                                  delete
+                                </i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </ng-container>
+                    <!-- Header Section Of table -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsDocument"></tr>
+                    <!-- Data Fetch From .TS File to table -->
+
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumnsDocument"></tr>
+                  </table>
+
+                  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+                </div>
+              </div>
+              <!-- End  Table -->
+            </div>
+
+          </mat-tab>
+          <!-- Search Section -->
+          <mat-tab label="Cause of Loss Document">
+
+            <div class="box box-primary">
+              <div class="box-header">Search</div>
+              <div class="box-body">
+                <div class="row">
+
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="causeOfLoss" placeholder="Cause of Loss" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="causeOfLossCtrl"
+                            [placeholderLabel]="'Find Cause of Loss...'"
+                            [noEntriesFoundLabel]="'No matching Cause of Loss found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of causeOfLossList |
+                        filterSelectInput:causeOfLossCtrl.value : 'viewValue'" [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.causeOfLoss.touched || (documentMasterForm.controls.causeOfLoss.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.causeOfLoss.errors?.required">
+                          {{errorMessages.CAUSE_OF_LOSS}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <input matInput type="text" maxlength="50" placeholder="Document" formControlName="causeDocument"
+                        required>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.causeDocument.touched || (documentMasterForm.controls.schemeDocument.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.causeDocument.errors?.required">
+                          {{errorMessages.DOCUMENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="causeRequirement" placeholder="Requirement" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="causeRequirementCtrl"
+                            [placeholderLabel]="'Find District...'"
+                            [noEntriesFoundLabel]="'No matching District found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of causeRequirementList |
+                        filterSelectInput:causeRequirementCtrl.value : 'viewValue'" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="documentMasterForm.controls.causeRequirement.touched || (documentMasterForm.controls.causeRequirement.errors && isSubmitted)">
+                        <mat-error *ngIf="documentMasterForm.controls.causeRequirement.errors?.required">
+                          {{errorMessages.REQUIREMENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+                </div>
+                <!-- common button -->
+                <div class="form-action-button">
+
+                  <button type="add" mat-raised-button color="primary" (click)="onSaveCauseOfLoss();">
+                    <i class="material-icons" aria-hidden="true" title="add">add_circle_outline</i>{{addButtnTextCauseOfLossDocument}}
+                  </button>
+
+                  <button type="reset" mat-raised-button color="accent" (click)="reset('causeOfLoss');">
+                    <i class="material-icons" aria-hidden="true">
+                      restore
+                    </i>
+                    Reset
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="mat-elevation-z8 row">
+              <!--  Entry Table -->
+              <div class="col-sm-12 table-responsive overflow-x-auto">
+                <div class="mat-elevation-z8 table-responsive mt-2">
+                  <table mat-table [dataSource]="dataSourceCause" width="100%" matSort
+                    aria-describedby="listinginwardscreen">
+                    <ng-container matColumnDef="srno">
+                      <th mat-header-cell *matHeaderCellDef scope="row">Sr No.</th>
+                      <td mat-cell *matCellDef="let element;let i=index" class="centerAlign"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="causeName">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Cause Name</th>
+                      <td mat-cell *matCellDef="let element">{{ element.causeTypeName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="document">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Document</th>
+                      <td mat-cell *matCellDef="let element">{{ element.causeDocument }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="requirement">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Requirement</th>
+                      <td mat-cell *matCellDef="let element">{{ getRequiredText(element.causeRequirement) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row"> Action</th>
+                      <td mat-cell *matCellDef="let element ;let i=index">
+                        <table class="iconTable" aria-describedby="actionBtn">
+                          <tbody>
+                            <tr>
+                              <td width="30">
+                                <i class="material-icons plus edit-icon" aria-hidden="true" title="Edit" (click)="editLostDocment(i)"> edit </i>
+                              </td>
+
+                              <td width="30">
+                                <i class="material-icons plus delete" aria-hidden="true" (click)="deleteCause(i)">
+                                  delete
+                                </i>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </ng-container>
+                    <!-- Header Section Of table -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCause"></tr>
+                    <!-- Data Fetch From .TS File to table -->
+
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumnsCause"></tr>
+                  </table>
+
+                  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+                </div>
+              </div>
+              <!-- End  Table -->
+            </div>
+
+          </mat-tab>
+          <!-- End Search Section -->
+        </mat-tab-group>
+        <!-- common button -->
+        <div class="form-action-button">
+          <button type="button" mat-raised-button class="btnClose">
+            <i aria-hidden="true" class="material-icons" title="Close">close</i>
+            Close
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

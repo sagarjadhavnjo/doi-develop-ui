@@ -1,0 +1,746 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Create New Office</div>
+            <div class="font-heading" *ngIf="transactionNo"><strong>Reference Number:</strong> 
+                {{transactionNo}}
+            </div>
+            <div class="font-heading" *ngIf="transactionDate"><strong>Reference Date:</strong>
+                {{ transactionDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div #parentGrids>
+            <mat-tab-group mat-stretch-tabs class="standing-est-tabing" (selectedTabChange)="tabChage($event)"
+            #headerTabGroup [selectedIndex]="selectedIndex">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        New Office
+                    </ng-template>
+                    <form [formGroup]="ddoForm" #ddoForms="ngForm" autocomplete="off">
+                        <div class="box box-primary">
+                            <div class="box-header">Office Detail</div>
+                            <div class="box-body">
+                                <div class="row">
+                                       <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput noSpaceOnly name="officeName" formControlName="officeName"
+                                                placeholder="Office Name" maxlength="200" required (change)="displayOfficeName(); checkDuplTreasuryOffName();" [readonly]=" !isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser)">
+                                                <div class="error-wrapper"
+                                                    *ngIf="ddoForm.controls.officeName.touched && ddoForm.controls.officeName.errors">
+                                                    <mat-error *ngIf="ddoForm.controls.officeName.errors.required">
+                                                        {{errorMessages.DDO_OFFICE_NAME}}
+                                                    </mat-error>
+                                                </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput noSpaceOnly name="grNo" formControlName="grNo"
+                                                placeholder="GR No(Declaration of DDO)" required maxlength="100" [readonly]=" !isSuperAdmin &&
+                                                 (isToPaoUser || isEdpUser || isDatUser)" (keyup)="onGRNoChange()">
+                                            <div class="error-wrapper"
+                                                *ngIf="ddoForm.controls.grNo.touched && ddoForm.controls.grNo.errors">
+                                                <mat-error *ngIf="ddoForm.controls.grNo.errors.required">
+                                                    {{errorMessages.GR_NUMBER}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="wfStatus === 'Approved'">
+                                        <mat-form-field class="full-width">
+                                            <input readonly placeholder="Unique ID" formControlName="uniqueId" matInput>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field >
+                                            <!-- <mat-select name="districtId" formControlName="districtId" placeholder="District" required (selectionChange)="oficeDetailDistrictChange();displayOfficeName();" [disabled]="isToPaoUser || isEdpUser"> -->
+                                            <mat-select name="districtId" formControlName="districtId" placeholder="District"  required (selectionChange)="oficeDetailDistrictChange('change');displayOfficeName();checkDuplTreasuryOffName();">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="districtCtrl"
+                                                        [placeholderLabel]="'Search District...'"
+                                                        [noEntriesFoundLabel]="'no matching District found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let list of districtList | filterSelectInput : districtCtrl.value : 'name'"
+                                                    [value]="list.id">
+                                                    {{list.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="ddoForm.controls.districtId.touched && ddoForm.controls.districtId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.districtId.errors.required">
+                                                    {{errorMessages.DISTRICT}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select formControlName="officeTypeId" name="officeTypeId"
+                                                placeholder="Office Type" required (selectionChange)="hodDisbaled()"
+                                                [disabled]="isToPaoUser || isEdpUser"> -->
+                                                <mat-select formControlName="officeTypeId" name="officeTypeId"
+                                                placeholder="Office Type" required (selectionChange)="hodDisbaled()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="officeTypeCtrl"
+                                                        [placeholderLabel]="'Search Office Type ...'"
+                                                        [noEntriesFoundLabel]="'no matching office type found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let officeTypeName of officeTypeList | filterSelectInput : officeTypeCtrl.value : 'name'"
+                                                    [value]="officeTypeName.id">
+                                                    {{officeTypeName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"  
+                                                *ngIf="ddoForm.controls.officeTypeId.touched && ddoForm.controls.officeTypeId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.officeTypeId.errors.required">
+                                                    {{errorMessages.OFFICE_TYPE}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select formControlName="levelId" name="levelId" placeholder="Level" required (selectionChange)="requiredField()" [disabled]="isToPaoUser || isEdpUser"> -->
+                                                <mat-select formControlName="levelId" name="levelId" placeholder="Level" required (selectionChange)="requiredField()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="levelCtrl"
+                                                        [placeholderLabel]="'Search Level ...'"
+                                                        [noEntriesFoundLabel]="'no matching level found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let LevelName of levelList | filterSelectInput : levelCtrl.value : 'name'"
+                                                    [value]="LevelName.id">
+                                                    {{LevelName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="ddoForm.controls.levelId.touched && ddoForm.controls.levelId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.levelId.errors.required">
+                                                    {{errorMessages.LEVEL}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                 
+                                    <div class="col-sm-3" *ngIf="!isHod" >
+
+                                        <!-- <div class="col-sm-3" *ngIf="isToPaoUser || isEdpUser"> -->
+                                            <mat-form-field>
+                                                <input matInput numbersOnly name="cardexno" formControlName="cardexno"placeholder="Cardex No" maxlength="4" required [readonly]="!isSuperAdmin 
+                                                && (isToPaoUser || isEdpUser || isOfficeDivision || isDatUser)">
+                                                <!-- <input matInput numbersOnly name="cardexno" formControlName="cardexno"placeholder="Cardex No" maxlength="4" required readonly> -->
+                                            </mat-form-field>
+                                        </div>
+                                        <!-- <div class="col-sm-3" *ngIf="isEdpUser"> -->
+                                    <!-- <div class="col-sm-3" *ngIf="!isEdpUser"> -->
+                                        <div class="col-sm-3" *ngIf="userType==='edp_user' || (userType==='edp_user' && hasWorkFlow)">
+                                            <mat-form-field>
+                                                <input matInput numbersOnly name="ddoNo" formControlName="ddoNo" placeholder="DDO No" maxlength="4" (change)="checkDuplicateDDO()" required  >
+                                                <div class="error-wrapper" *ngIf="ddoForm.controls.ddoNo.touched && ddoForm.controls.ddoNo.errors">
+                                                    <mat-error *ngIf="ddoForm.controls.ddoNo.errors.required">
+                                                        {{errorMessages.DDO_NO}}
+                                                    </mat-error>
+                                                </div>
+                                            </mat-form-field>
+                                        </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select placeholder="DDO Type" [required]="isHodUser" formControlName="ddoType" name="ddoType" (selectionChange)="listOfNonDDO()" [disabled]="isToPaoUser || isEdpUser"> -->
+                                            <mat-select placeholder="DDO Type" [required]="true" formControlName="ddoType" name="ddoType" (selectionChange)="listOfNonDDO()">
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let ddoName of ddoTypeList" [value]="ddoName.id">
+                                                    {{ddoName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.ddoType.touched && ddoForm.controls.ddoType.errors">
+                                                <mat-error *ngIf="ddoForm.controls.ddoType.errors.required">
+                                                    {{errorMessages.DDO_TYPE}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="isSuperAdmin || isNonDDO">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Non DDO" formControlName="nonDdo" name="nonDdo" [required]="isNonDDO" >
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let nonDDO of nonDDOTypeList" [value]="nonDDO.id">
+                                                    {{nonDDO.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.nonDdo.touched && ddoForm.controls.nonDdo.errors">
+                                                <mat-error *ngIf="ddoForm.controls.nonDdo.errors.required">
+                                                    {{errorMessages.NON_DDO_TYPE}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select placeholder="Pay Verification Unit" formControlName="pvuId" name="pvuId" required [disabled]="isToPaoUser || isEdpUser"> -->
+                                            <mat-select placeholder="Pay Verification Unit" formControlName="pvuId" name="pvuId" required>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let pvu of pvuList" [value]="pvu.id">
+                                                    {{pvu.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.pvuId.touched && ddoForm.controls.pvuId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.pvuId.errors.required">
+                                                    {{errorMessages.PVU}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select formControlName="desgDdoId" name="desgDdoId" placeholder="Designation of DDO" required [disabled]="isToPaoUser || isEdpUser"> -->
+                                            <mat-select formControlName="desgDdoId" [title]="getTitleName(designationList, 'desgDdoId', 'id', 'name')" name="desgDdoId" placeholder="Designation of DDO" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="designationCtrl"
+                                                        [placeholderLabel]="'Search Designation Name...'"
+                                                        [noEntriesFoundLabel]="'no matching Designation Name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option [title]="designationName.name" *ngFor="let designationName of designationList | filterSelectInput : designationCtrl.value : 'name'" [value]="designationName.id">
+                                                    {{designationName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.desgDdoId.touched && ddoForm.controls.desgDdoId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.desgDdoId.errors.required">
+                                                    {{errorMessages.DESG_DDO_NAME}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select formControlName="requestTo" name="requestTo"  placeholder="Request To" required (selectionChange)="loadTreasuryType()" [disabled]="isToPaoUser || isEdpUser"> -->
+                                            <mat-select formControlName="requestTo" name="requestTo"  placeholder="Request To" required (selectionChange)="loadTreasuryType()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="requestCtrl"
+                                                        [placeholderLabel]="'Search Request To ...'"
+                                                        [noEntriesFoundLabel]="'no matching request to found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let requestName of requestToList | filterSelectInput : requestCtrl.value : 'name'" [value]="requestName.id">
+                                                    {{requestName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.requestTo.touched && ddoForm.controls.requestTo.errors">
+                                                <mat-error *ngIf="ddoForm.controls.requestTo.errors.required">
+                                                    {{errorMessages.REQUEST_TO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="isDatUser || isTreasuryType || datAsHOD || userType==='edp_user'">
+                                        <mat-form-field>
+                                            <!-- <mat-select formControlName="treasuryType" placeholder="Treasury Type" [disabled]="(isToPaoUser || isEdpUser)"> -->
+                                                <mat-select formControlName="treasuryType" placeholder="Treasury Type" (selectionChange) = "checkDuplTreasuryOffName()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="treasuryCtrl"
+                                                        [placeholderLabel]="'Search Treasury Type Name...'"
+                                                        [noEntriesFoundLabel]="'no matching treasury type name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let treasuryName of treasuryTypeList | filterSelectInput : treasuryCtrl.value : 'name'" [value]="treasuryName.id">
+                                                    {{treasuryName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="isCntrlOfficer">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Is This Controlling Office" formControlName="isCo" name="isCo">
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let isCoOffice of isCoOfficeList" [value]="isCoOffice.id">
+                                                    {{isCoOffice.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput numbersOnly name="employeeNo" formControlName="employeeNo" placeholder="Employee Number" required maxlength="10" (blur)="loadEmployeeName()" [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser  || isDatUser)">
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.employeeNo.touched && ddoForm.controls.employeeNo.errors">
+                                                <mat-error
+                                                    *ngIf="ddoForm.controls.employeeNo.errors.required || ddoForm.controls.employeeNo.errors.minlength">
+                                                    {{errorMessages.EMPLOYEE_NO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput name="employeeName" formControlName="employeeName"
+                                                placeholder="Employee Name" readonly required>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Office Address Detail</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <mat-form-field>
+                                            <textarea matInput name="addrLine1" noSpaceOnly formControlName="addrLine1"
+                                                placeholder="Address Line 1" maxlength="200" required autocomplete="no"
+                                                [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser)">
+                                            </textarea>
+                                            <div class="error-wrapper textarea-error"
+                                                *ngIf="ddoForm.controls.addrLine1.touched && ddoForm.controls.addrLine1.errors">
+                                                <mat-error *ngIf="ddoForm.controls.addrLine1.errors.required">
+                                                    {{errorMessages.ADDRESS}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <mat-form-field>
+                                            <textarea matInput noSpaceOnly name="addrLine2" formControlName="addrLine2"
+                                                placeholder="Address Line 2" maxlength="200" autocomplete="no"
+                                                [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser )"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput name="addDistrict" formControlName="addDistrict"
+                                                placeholder="District" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <mat-select formControlName="talukaId" name="talukaId" placeholder="Taluka"
+                                                (selectionChange)="displayOfficeName()" [required]="isTalukaRequired">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="talukaCtrl"
+                                                        [placeholderLabel]="'Search Taluka Name...'"
+                                                        [noEntriesFoundLabel]="'no matching Taluka Name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>{{matInputSelectNull}}</mat-option>
+                                                <mat-option
+                                                    *ngFor="let talukaName of talukaList | filterSelectInput : talukaCtrl.value : 'name'"
+                                                    [value]="talukaName.id">
+                                                    {{talukaName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.talukaId.touched && ddoForm.controls.talukaId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.talukaId.errors.required">
+                                                    {{errorMessages.TALUKA}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput alphabetWithSpaceOnly formControlName="station" placeholder="Station" (change)="displayOfficeName()" maxlength="100" [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser)">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput numbersOnly autocomplete="no" formControlName="pincode" placeholder="Pin code" maxlength="6" [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser)">
+                                                <div class="error-wrapper"
+                                                    *ngIf="ddoForm.controls.pincode.value && ddoForm.controls.pincode.touched && ddoForm.controls.pincode.errors">
+                                                    <mat-error
+                                                        *ngIf="ddoForm.controls.pincode.errors.minlength || ddoForm.controls.pincode.errors.maxlength">
+                                                        {{errorMessages.PIN_CODE}}
+                                                    </mat-error>
+                                                </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3 phoneNo">
+                                        <div class="col-sm-4 phoneNoPaddingZero">
+                                            <mat-form-field>
+                                                <input matInput numbersOnly name="stdCode" formControlName="stdCode" placeholder="STD Code" maxlength="5" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-8 phoneNoPaddingZero">
+                                            <mat-form-field>
+                                                <input matInput numbersOnly name="phoneNo" formControlName="phoneNo" placeholder="Phone No." maxlength="8" [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser)">
+                                                    <div class="error-wrapper" *ngIf="ddoForm.controls.phoneNo.value &&  ddoForm.controls.phoneNo.touched && ddoForm.controls.phoneNo.errors">
+                                                        <mat-error *ngIf="ddoForm.controls.phoneNo.errors.minlength || ddoForm.controls.phoneNo.errors.maxlength">
+                                                            {{errorMessages.PHONE_NO}}
+                                                        </mat-error>
+                                                    </div>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput numbersOnly name="mobileNo" formControlName="mobileNo" placeholder="Mobile No." maxlength="10" [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser
+                                            || isDatUser )">
+                                                <div class="error-wrapper" *ngIf="ddoForm.controls.mobileNo.value &&  ddoForm.controls.mobileNo.touched && ddoForm.controls.mobileNo.errors">
+                                                    <mat-error *ngIf="ddoForm.controls.mobileNo.errors.minlength || ddoForm.controls.mobileNo.errors.maxlength || ddoForm.controls.mobileNo.errors.pattern && ddoForm.controls.mobileNo.errors.pattern.requiredPattern">
+                                                        {{errorMessages.MOB_NO}}
+                                                    </mat-error>
+                                                </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput numbersOnly name="faxNo" formControlName="faxNo" placeholder="Fax No." maxlength="10" [readonly]="!isSuperAdmin && (isToPaoUser || isEdpUser || isDatUser)">
+                                                <div class="error-wrapper" *ngIf="ddoForm.controls.faxNo.value && ddoForm.controls.faxNo.touched && ddoForm.controls.faxNo.errors">
+                                                    <mat-error *ngIf="ddoForm.controls.faxNo.errors.minlength || ddoForm.controls.faxNo.errors.maxlength">
+                                                        {{errorMessages.FAX_NO}}
+                                                    </mat-error>
+                                                </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput name="emailId" formControlName="emailId" placeholder="Office Email Id" minlength="6" [readOnly]= "!isSuperAdmin &&isDatUser">
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.emailId.value && ddoForm.controls.emailId.touched && ddoForm.controls.emailId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.emailId.errors.pattern && ddoForm.controls.emailId.errors.pattern.requiredPattern">
+                                                    {{errorMessages.EMAIL_ID}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <mat-form-field hintLabel="DDO Office Name, Station, Taluka, District">
+                                            <input matInput name="officeNameDisp" formControlName="officeNameDisp" [title]="ddoForm.get('officeNameDisp').value" placeholder="Office Name For Display" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Office Mapping</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3" *ngIf="isDepartmentVisible">
+                                        <div *ngIf="!isOfficeDivision">
+                                        <mat-form-field>
+                                            <input matInput name="departmentId" formControlName="departmentId" placeholder="Department" readonly>
+                                        </mat-form-field>
+                                        </div>
+                                        <!-- <div class="col-sm-3"> -->
+                                        <div *ngIf="isOfficeDivision">
+                                            <mat-form-field>
+                                                <mat-select name="departmentId" [title]="getTitleName(departmentList, 'departmentId', 'id', 'name')" formControlName="departmentId" placeholder="Department" (selectionChange)="departmentSelected($event)" required>
+                                                    <mat-option>
+                                                        <ngx-mat-select-search [formControl]="departmentCtrl"
+                                                            [placeholderLabel]="'Search Department'"
+                                                            [noEntriesFoundLabel]="'no matching Department found'">
+                                                        </ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option>
+                                                        {{matInputSelectNull}}
+                                                    </mat-option>
+                                                    <mat-option [title]="list.name"
+                                                        *ngFor="let list of departmentList | filterSelectInput : departmentCtrl.value : 'name'"
+                                                        [value]="list.id">
+                                                        {{list.name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <div class="error-wrapper"
+                                                    *ngIf="ddoForm.controls.departmentId.touched && ddoForm.controls.departmentId.errors">
+                                                    <mat-error *ngIf="ddoForm.controls.departmentId.errors.required">
+                                                        {{errorMessages.OFFICE_DEPART}}
+                                                    </mat-error>
+                                                </div>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="isDepartmentVisible && !isHOD ">
+                                        <div *ngIf="!isOfficeDivision && !showHodDropDown">
+                                            <mat-form-field>
+                                                <input matInput name="hodId" formControlName="hodId" placeholder="HOD" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div *ngIf="isOfficeDivision || showHodDropDown">
+                                            <mat-form-field>
+                                                <mat-select formControlName="hodId" name="hodId" [title]="getTitleName(hodList, 'hodId', 'id', 'name')" placeholder="HOD" [required]="isHODRequired">
+                                                    <mat-option>
+                                                        <ngx-mat-select-search [formControl]="hodCtrl"
+                                                            [placeholderLabel]="'Search HOD...'"
+                                                            [noEntriesFoundLabel]="'no matching HOD found'">
+                                                        </ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option>
+                                                        {{matInputSelectNull}}
+                                                    </mat-option>
+                                                    <mat-option [title]="hodName.name"
+                                                        *ngFor="let hodName of hodList | filterSelectInput : hodCtrl.value : 'name'"
+                                                        [value]="hodName.id">
+                                                        {{hodName.name}}
+                                                    </mat-option>
+                                                </mat-select> 
+                                                <div class="error-wrapper" *ngIf="ddoForm.controls.hodId.touched && ddoForm.controls.hodId.errors">
+                                                    <mat-error *ngIf="ddoForm.controls.hodId.errors.required">
+                                                        {{errorMessages.HOD}}
+                                                    </mat-error>
+                                                </div>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <mat-select placeholder="CO Designation" formControlName="coId" [title]="getTitleName(coDesignationList, 'coId', 'id', 'name')" [required]="isCoDesignationRequired">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="coNameCtrl"
+                                                        [placeholderLabel]="'Search CO Name...'"
+                                                        [noEntriesFoundLabel]="'no matching CO Name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option [title]="coName.name" *ngFor="let coName of coDesignationList | filterSelectInput : coNameCtrl.value : 'name'" [value]="coName.id">
+                                                    {{coName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.coId.touched && ddoForm.controls.coId.errors">
+                                                <mat-error *ngIf="ddoForm.controls.coId.errors.required">
+                                                    {{errorMessages.CO_DESG_NAME}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <mat-select placeholder="CO Office Name" formControlName="coOfficeName" [title]="getTitleName(coOfficeList, 'coOfficeName', 'id', 'name')" name="coOfficeName" [required]="isCoOfficeNameRequired" >
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="coOfficeNameCtrl"
+                                                        [placeholderLabel]="'Search CO Office Name...'"
+                                                        [noEntriesFoundLabel]="'no matching CO Office Name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option [title]="officeName.name" *ngFor="let officeName of coOfficeList | filterSelectInput : coOfficeNameCtrl.value : 'name'" [value]="officeName.id">
+                                                    {{officeName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.coOfficeName.touched && ddoForm.controls.coOfficeName.errors">
+                                                <mat-error *ngIf="ddoForm.controls.coOfficeName.errors.required">
+                                                    {{errorMessages.CO_OFFICE_NAME}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                        <div *ngIf=" (!isHod || isSuperAdmin
+                         ||  (isToPaoUser || isEdpUser || isOfficeDivision))">
+                            <div class="box-header">Office Bill Mapping</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select formControlName="billSubmittedTo" name="billSubmittedTo" placeholder="Bill Submited To" [required]="isToPaoUser" [disabled]="isEdpUser || billSubmitDisabled"> -->
+                                            <mat-select formControlName="billSubmittedTo" name="billSubmittedTo" placeholder="Bill Submitted To" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="billSubmittedToCtrl"
+                                                        [placeholderLabel]="'Search Treasury/Sub Treasury Name...'"
+                                                        [noEntriesFoundLabel]="'no matching Treasury/Sub Treasury Name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let billSubmittedTo of billSubmittedToList | filterSelectInput : billSubmittedToCtrl.value : 'officeNameDisp'"
+                                                    matTooltip="{{billSubmittedTo.officeNameDisp}}"
+                                                    matTooltipPosition="after"
+                                                    matTooltipClass="custom-tooltip-blue"
+                                                    [value]="billSubmittedTo.officeId">
+                                                    {{billSubmittedTo.officeNameDisp}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.billSubmittedTo.touched && ddoForm.controls.billSubmittedTo.errors">
+                                                <mat-error *ngIf="ddoForm.controls.billSubmittedTo.errors.required">
+                                                    {{errorMessages.BILL_SUBMITTED_TO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <!-- <mat-select placeholder="Bill Type" formControlName="billType" name="billType" [required]="isToPaoUser" (selectionChange)="selectBill()" [disabled]="isEdpUser"> -->
+                                            <mat-select placeholder="Bill Type" formControlName="billType" name="billType" (selectionChange)="selectBill()" required>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option *ngFor="let billName of billTypeList" [value]="billName.id">
+                                                    {{billName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.billType.touched && ddoForm.controls.billType.errors">
+                                                <mat-error *ngIf="ddoForm.controls.billType.errors.required">
+                                                    {{errorMessages.BILL_TYPE}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- <div class="col-sm-3" *ngIf="isSelected"> -->
+                                    <div class="col-sm-3" *ngIf="isSelected">
+                                        <mat-form-field>
+                                            <mat-select formControlName="selectedBills" name="selectedBills" placeholder="List of Bills" multiple required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="listOfBillCtrl"
+                                                        [placeholderLabel]="'Search Bill Name...'"
+                                                        [noEntriesFoundLabel]="'no matching bill name found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option *ngFor="let listOfBillName of billList | filterSelectInput : listOfBillCtrl.value : 'codeName'"
+                                                    [value]="listOfBillName.id">
+                                                    {{listOfBillName.codeName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="ddoForm.controls.selectedBills.touched && ddoForm.controls.selectedBills.errors">
+                                                <mat-error *ngIf="ddoForm.controls.selectedBills.errors.required">
+                                                    {{errorMessages.LIST_OF_BILL}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <i *ngIf="isSelected && ddoForm.get('selectedBills').value && ddoForm.get('selectedBills').value.length > 0" (click)="loadSelectedList()" class="material-icons plus view-icon" title="View" >remove_red_eye</i>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- <div class="box box-primary" *ngIf="isShown">
+                            <div class="box-header">Comment</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <mat-form-field>
+                                            <textarea matInput name="comment" formControlName="comment" placeholder="Comment" maxlength="1000" required></textarea>
+                                            <div class="error-wrapper textarea-error" *ngIf="ddoForm.controls.comment.touched && ddoForm.controls.comment.errors">
+                                                <mat-error *ngIf="ddoForm.controls.comment.errors.required">
+                                                    {{errorMessages.COMMENT}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="box box-primary" *ngIf="(userType ==='to_user') || (userType ==='edp_user' && hasWorkFlow)">
+                            <!-- <div class="box box-primary"> -->
+                            <div class="box-header">Objection Detail</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-checkbox [(ngModel)]="objStatus" formControlName="objStatus" (change)="ObjectionRemarks()">
+                                            Objection
+                                        </mat-checkbox>
+                                    </div>
+                                    <div class="col-sm-12" *ngIf="objStatus">
+                                        <mat-form-field>
+                                            <textarea alphabetNumberWithSpaceOnly matInput name="objRemark" formControlName="objRemark" autocomplete="no" placeholder="Objection Remarks" maxlength="2000" [required]="ddoForm.controls.objStatus.value"></textarea>
+                                            <div class="error-wrapper textarea-error" *ngIf="ddoForm.controls.objRemark.touched && ddoForm.controls.objRemark.errors">
+                                                <mat-error *ngIf="ddoForm.controls.objRemark.errors.required">
+                                                    {{errorMessages.OBJECTION_REMARKS}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-action-button">
+                            <button mat-raised-button type="button"color="primary" (click)="saveDDO('save')" *ngIf="action !== 'view'" [disabled]="!saveDraftEnable">
+                                <i class="material-icons" title="Save" aria-hidden="true">save</i>
+                                Save as Draft
+                            </button>
+                            <button mat-raised-button type="button" class="green" (click)="saveDDO('submit')" [disabled]="isSubmitDisable"
+                                *ngIf="action !== 'view'">
+                                <i class="material-icons" aria-hidden="true">done</i>
+                                Submit
+                            </button>
+                            <!-- <button mat-raised-button class="green" (click)="submitRequestWithWf()" [disabled]="isSubmitDisable" *ngIf="action !== 'view'">
+                                <i class="material-icons" aria-hidden="true">done</i>
+                                Submit
+                            </button> -->
+                            <button  *ngIf="wfStatus!=='Draft' && action === 'view'" type="button"  mat-raised-button color="accent" (click)="viewComments()">
+                                <i class="material-icons " title="View">remove_red_eye</i>
+                                View Comments
+                            </button>
+                            <button type="button" mat-raised-button color="accent" (click)="resetForm(ddoForms)" *ngIf="action !== 'view'">
+                                <i class="material-icons" aria-hidden="true">restore</i>
+                                Reset
+                            </button>
+                            <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                                <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                                Listing
+                            </button>
+                            <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                                <i class="material-icons" aria-hidden="true" title="dashboard">close</i>
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Sub Offices" [disabled]="!officeId">
+                    <div class="row">
+                        <div class="col-sm-12 officeNameData">
+                            <span class="officeNameBreak"><strong>{{ddoOfficeName}}</strong></span>
+                            <button type="submit" mat-raised-button color="primary" class="subOffice" (click)="createSubChild();$event.stopPropagation();" [disabled]="isSubOfficeEnable || action==='view' || (userType==='to_user') || (userType==='edp_user' && hasWorkFlow)">
+                                <i class="material-icons" title="Save">add</i>
+                                Create Sub Office
+                            </button>
+                        </div>
+                    </div>
+                    <app-sub-office-list [departmentList]="departmentList" [hodList]="hodList" [districtList]="districtList" [isSubOfficeEditDisable] = "(isSubOfficeEnable || action==='view' || (userType==='to_user') || (userType==='edp_user' && hasWorkFlow))" 
+                        [officeId]="officeId" [userType]="userType" [action]="action" [isDepartmentVisible]="isDepartmentVisible" [isHOD]="isHOD" [subOfficeUpdateFlag]="subOfficeUpdateFlag" [subOfficeFlag]="subOfficeFlag" *ngIf="officeId">
+                    </app-sub-office-list>
+                    <div class="form-action-button">
+                        <!-- <button mat-raised-button type="submit" class="green"  *ngIf="action !== 'view'" [disabled]="isSubmitDisable">
+                            <i class="material-icons" aria-hidden="true">done</i>
+                            Submit
+                        </button> -->
+                        <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                            <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                            Listing
+                        </button>
+                        <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                            <i class="material-icons" aria-hidden="true" title="dashboard">close</i>
+                            Close
+                        </button>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Attachment" [disabled]="!officeId">
+                    <app-office-attachment #attachmentView [officeId]="officeId" [userType]="userType" [action]="action" [isUpdate]="'office'" [isRequestTC]="isRequestTC" [passResult]="passResult" [isEditAttachment]="isEditAttachment" [hasWorkFlow] = "hasWorkFlow" 
+                            (fillMandatoryFields)="showFormErrors();" (submitOfficeEvent)="saveDDO('submit')" (goToListing)="goToListing()"  *ngIf="officeId">
+                    </app-office-attachment>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

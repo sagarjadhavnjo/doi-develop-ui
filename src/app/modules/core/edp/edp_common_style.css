@@ -1,0 +1,250 @@
+.mat-input-element:disabled, input:read-only {
+    color: rgba(0, 0, 0, .38);
+}
+
+/* Mapping diloague css */
+
+.histy-box {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.txt-heading {
+    /* width: auto; */
+    display: flex;
+    color: black;
+    font-weight: bold;
+}
+
+.comment-text {
+    text-overflow: ellipsis;
+    height: auto;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.comment-text p {
+    margin-bottom: 0px;
+}
+
+.history-common-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.action-common-section {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.forward-module-container {
+    width: 100%;
+    margin-top: 15px;
+    ;
+}
+
+.heading-section {
+    padding: 10px;
+}
+
+.full-width {
+    margin-top: 15px;
+}
+
+.htry-hding-name {
+    margin: 10px 0px;
+}
+
+.column-box {
+    width: 100%;
+    border-bottom: 1px solid #333333;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+    position: fixed;
+    z-index: 2;
+}
+
+h1.example-app-name {
+    margin-left: 8px;
+}
+
+.example-sidenav-container {
+    flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+    flex: 1 0 auto;
+}
+
+#parent {
+    display: flex;
+    min-height: 20px;
+    width: 100%;
+}
+
+#block1 {
+    flex-grow: 1;
+    flex-direction: row;
+    resize: both;
+    overflow: auto;
+    cursor: nw-resize;
+}
+
+#block2 {
+    flex-grow: 1;
+    flex-direction: row-reverse;
+    max-width: 100% !important;
+    background: #f9f9f9;
+    margin-left: 5px;
+    box-sizing: border-box;
+}
+
+.category-deprt {
+    background: #ececec;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.justifycontent.ng-star-inserted {
+    text-align: justify !important
+}
+
+.flexicon {
+    display: flex;
+    margin-bottom: 0px;
+}
+
+.attachmentType {
+    min-width: 92px !important;
+    padding: 5px;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    align-items: center;
+}
+
+.column-box[_ngcontent-c19] {
+    padding-bottom: 0px;
+}
+
+.mat-checkbox label.mat-checkbox-layout {
+    margin-bottom: 0px;
+}
+
+.cover-box {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    border-bottom: 1px solid #333333;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+    white-space: nowrap;
+}
+
+.check-box-contain-list .heading-txt {
+    font-weight: bold;
+}
+
+.check-box-contain-list {
+    width: 100%;
+}
+
+.check-box-list-btn {
+    margin-right: 10px;
+}
+
+.e-heading-txt {
+    justify-content: space-between;
+}
+
+label.txt-heading {
+    margin-bottom: 0px;
+}
+
+.forward-module-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.forward-dialog-left {
+    display: flex;
+    width: 50%;
+    border-right: 1px solid black;
+}
+
+.material-icons.iconset {
+    font-size: 18px !important;
+    line-height: 18px !important;
+}
+
+.mat-list .mat-list-item, .mat-list .mat-list-option, .mat-nav-list .mat-list-item, .mat-nav-list .mat-list-option, .mat-selection-list .mat-list-item, .mat-selection-list .mat-list-option {
+    height: auto !important;
+}
+
+::ng-deep .mat-card {
+    background: #f9f9f9;
+}
+
+/* 
+  ::ng-deep .mat-dialog-container{
+    padding: 0px;
+    }
+     */
+
+::ng-deep .mat-icon {
+    float: right;
+}
+
+mat-icon:hover {
+    color: #0433e0;
+}
+
+::ng-deep .mat-icon {
+    float: right;
+}
+
+::ng-deep .mat-expansion-panel-header-description {
+    display: block !important;
+}
+
+::ng-deep .pdfViewer .canvasWrapper {
+    display: block;
+}
+
+::ng-deep .page, ::ng-deep .canvasWrapper, ::ng-deep #page2, ::ng-deep .textLayer {
+    min-width: 400px !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+    max-width: 95% !important;
+}
+
+.tableSpace{
+    border-collapse: unset;
+}
+.scroll {
+    height: 400px;
+    overflow: auto;
+}

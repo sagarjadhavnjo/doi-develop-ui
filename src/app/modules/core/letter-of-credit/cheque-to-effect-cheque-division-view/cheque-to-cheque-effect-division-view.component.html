@@ -1,0 +1,354 @@
+<div class="container">
+  <div class="form-wrapper">
+    <!-- Screen Name, Reference No and Reference Date Header -->
+    <div class="heading-section ng-star-inserted">
+      <div>LC Cheque Cancellation</div>
+      <div class="font-heading"><strong>Reference No:</strong> {{refNo}}</div>
+      <div class="font-heading"><strong>Reference Date:</strong>{{ refDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="javascript:void(0)">LC</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cheque to Cheque Effect</li>
+      </ol>
+    </nav>
+
+    <mat-tab-group mat-stretch-tabs>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Cheque to Cheque Effect
+        </ng-template>
+
+        <!-- Form Starts -->
+        <form [formGroup]="chequeToChequeEffectForm" (ngSubmit)="chequeToChequeEffectFormData()">
+          <div class="box box-primary">
+            <div class="box-header">Search</div>
+            <div class="box-body">
+              <div class="row">
+
+                <!-- Input Field for Cheque No. -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Missing Cheque Number" formControlName="missingChequeNumber" readonly>
+                    <div class="error-wrapper"
+                      *ngIf="chequeToChequeEffectForm.controls.missingChequeNumber.touched && chequeToChequeEffectForm.controls.missingChequeNumber.errors">
+                      <mat-error *ngIf="chequeToChequeEffectForm.controls.missingChequeNumber.errors.required">
+                        {{errorMessage.MISSING_CHEQUE_NUMBER}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Division Code -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Division Code" formControlName="divisionCode" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Cheque Amount -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Cheque Amount (in Rs.)" formControlName="chequeAmount" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Cheque Date -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Cheque Date" formControlName="chequeDate" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for In Favor of -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="In Favour Of" formControlName="partyName" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Advice No. -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <input matInput placeholder="Advice No." formControlName="adviceNo" readonly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Reason -->
+                <div class="col-sm-3">
+                  <mat-form-field class="disabled">
+                    <textarea matInput placeholder="Reason" formControlName="reason" readonly></textarea>
+                    <div class="error-wrapper"
+                      *ngIf="chequeToChequeEffectForm.controls.reason.touched && chequeToChequeEffectForm.controls.reason.errors">
+                      <mat-error *ngIf="chequeToChequeEffectForm.controls.reason.errors.required">
+                        {{errorMessage.REASON}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="overflow-x-scroll">
+            <div class="mat-elevation-z8 mt-2">
+              <!-- Cheque Cancellation Table Starts -->
+              <table mat-table [dataSource]="ChequeToChequeEffectDataSource" class="mat-elevation-z8 "
+                area-describedby="cheque-to-cheque-effect">
+
+
+                <!-- Cheque Date Column -->
+                <ng-container matColumnDef="chequeDt">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Cheque Date</th>
+                  <td mat-cell *matCellDef="let element">
+
+                    {{element.chequeDate}}
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1 [disabled]="true"></mat-datepicker>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef>Total</td>
+                </ng-container>
+
+                <!-- Cheque Number Column -->
+                <ng-container matColumnDef="chequeNumber">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Cheque Number</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.chequeNo}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <!-- Cheque Amount Column -->
+                <ng-container matColumnDef="chequeAmnt">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Cheque Amount</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.chequeAmnt}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef class="text-right">
+                    {{ totalChequeAmount() | number:'1.2-2'}}</td>
+                </ng-container>
+
+                <!-- Cheque Number Column -->
+                <ng-container matColumnDef="partyNamee">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Party Name</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.partyName}}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+
+
+                <!-- Header and Footer Row Definition -->
+                <tr mat-header-row *matHeaderRowDef="ChequeToChequeEffectDataColumn"></tr>
+                <tr mat-row *matRowDef="let row; columns: ChequeToChequeEffectDataColumn;"></tr>
+                <tr mat-footer-row *matFooterRowDef="ChequeToChequeEffectDataColumn"></tr>
+              </table>
+              <!-- Cheque Cancellation Table Ends -->
+            </div>
+          </div>
+          <!-- Action Buttons Starts -->
+          <div class="form-action-button">
+            <button type="listing" mat-raised-button color="warn" title="Listing"
+              (click)="directiveObject.goToScreen('/lc/lc-cheque-to-cheque-effect-listing')">
+              <i class="material-icons" title="Listing" aria-hidden="true">
+                list
+              </i>
+              Listing
+            </button>
+            <button type="button" mat-raised-button class="btnClose" title="Close">
+              <i class="material-icons" title="Close" aria-hidden="true">
+                close
+              </i>
+              Close
+            </button>
+            <button type="button" mat-raised-button class="print-btn" title="Print">
+              <i class="material-icons" title="Print" aria-hidden="true">
+                print
+              </i>
+              Print Advice
+            </button>
+          </div>
+          <!-- Action Buttons Ends -->
+
+
+        </form>
+        <!-- Form Ends -->
+      </mat-tab>
+
+      <!-- Mat Tab for Attachments Starts -->
+      <mat-tab [disabled]="this.hdrId == undefined || this.hdrId == null || this.hdrId == 'NaN' ? true : false">
+        <ng-template mat-tab-label>
+          Attachment
+        </ng-template>
+        <div class="box box-primary">
+          <div class="box-header">Attachment</div>
+
+          <div class="box-body">
+            <!-- Attachment Table Starts -->
+            <table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+                <td mat-cell *matCellDef="let item; let i = index" class="centerAlign">
+                  {{ i + 1 }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="attachmentTypeId">
+                <th mat-header-cell *matHeaderCellDef>
+                  Attachment Type <span class="star">*</span>
+                </th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                  <mat-select [disabled]="item.documentId || this.mode === 'view'" placeholder="Attachment Type"
+                    required [(ngModel)]="item.attachmentTypeId" (selectionChange)="onAttachmentTypeChange(item, i)">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="attachmentTypeCodeCtrl"
+                        [placeholderLabel]="'Find Attachment Type...'"
+                        [noEntriesFoundLabel]="'no matching Attachment Type found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+
+                    <mat-option *ngFor="let AT of attachmentTypeList" [value]="AT.id">
+                      {{ AT.name }}
+                    </mat-option>
+                  </mat-select>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fileName">
+                <th mat-header-cell *matHeaderCellDef>File name <span class="star">*</span></th>
+                <td mat-cell *matCellDef="let item">
+                  <mat-form-field floatLabel="never">
+                    <input [disabled]="item.documentId || this.mode === 'view'" matInput [value]="item.fileName"
+                      [(ngModel)]="item.fileName" maxlength="50" />
+                  </mat-form-field>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="browse">
+                <th mat-header-cell *matHeaderCellDef>Browse File <span class="star">*</span></th>
+                <td mat-cell *matCellDef="let item; let i = index" class="centerAlign">
+                  <button [disabled]="item.documentId || this.mode === 'view'" type="button"
+                    (click)="openFileSelector(i)" class="btn-browse">
+                    Browse Files
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="uploadedFileName">
+                <th mat-header-cell *matHeaderCellDef>
+                  Uploaded file name <span class="star">*</span>
+                </th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                  <span *ngIf="item.uploadedFileName">{{ item.uploadedFileName }}</span>
+                  <span>
+                    <i *ngIf="item.uploadedFileName && !item.documentId" class="material-icons closesmall"
+                      (click)="removeUploadUserFile(item, i)" title="Delete File" aria-hidden="true">close</i>
+                  </span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="userName">
+                <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+                <td mat-cell *matCellDef="let item">
+                  <mat-label>{{ item.userName }}</mat-label>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef style="width: 10%;">Action</th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                  <table class="iconTable">
+                    <tbody>
+                      <tr>
+                        <td width="auto">
+                          <i class="material-icons plus delete" *ngIf="
+                                                                    dataSourceBrowse &&
+                                                                    dataSourceBrowse.data &&
+                                                                    (dataSourceBrowse.data.length > 1 || item.documentId) &&
+                                                                    this.mode !== 'view'"
+                            (click)="deleteUploadedAttachment(item, i)">
+                            delete
+                          </i>
+                        </td>
+                        <td width="auto">
+                          <i class="material-icons plus view-icon" title="Download" *ngIf="item && item.documentId"
+                            (click)="downLoadUploadedAttachment(item)">vertical_align_bottom
+                          </i>
+                        </td>
+                        <td width="auto">
+                          <i class="material-icons plus view-icon" title="View"
+                            *ngIf="item && item.documentId && item.isView "
+                            (click)="viewUploadedAttachment(item, $event)">remove_red_eye</i>
+                        </td>
+
+                        <td width="auto">
+                          <i class="material-icons plus add"
+                            *ngIf="
+                                                                    dataSourceBrowse &&
+                                                                    dataSourceBrowse.data &&
+                                                                    i == dataSourceBrowse.data.length - 1 &&
+                                                                    dataSourceBrowse.data.length < maxAttachment  && this.mode !== 'view'"
+                            (click)="addNewFileRow()">
+                            add
+                          </i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns"></tr>
+            </table>
+
+            <!-- Attachment Table Ends -->
+
+            <input type="file" #attachment id="fileBrowse" style="visibility: hidden;"
+              (change)="onFileSelection($event)" />
+
+            <div class="legend">
+              1. Total File size should be under 2MB<br />
+              2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', JPG’, ‘JPEG’, ‘PNG’, ‘PDF’.
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons Starts -->
+
+        <div class="form-action-button">
+          <button type="submit" mat-raised-button color="primary" *ngIf="this.mode !== 'view'"
+            (click)="saveAttachmentTab()">
+            <i class="material-icons" title="Save">save</i>
+
+            Upload
+          </button>
+
+          <button type="button" mat-raised-button color="warn" title="Listing"
+            (click)="directiveObject.goToScreen('/lc/create-lc-account-listing-division')">
+            <i class="material-icons" title="Listing" aria-hidden="true">
+              list
+            </i>
+
+            Listing
+          </button>
+
+          
+          <button type="button" mat-raised-button class="btnClose" title="Close"
+            (click)="directiveObject.goToDashboard()">
+            <i class="material-icons" title="Close" aria-hidden="true">
+              close
+            </i>
+
+            Close
+          </button>
+        </div>
+
+        <!-- Action Buttons Ends -->
+      </mat-tab>
+
+      <!-- Mat Tab for Attachments Ends -->
+
+
+    </mat-tab-group>
+  </div>
+
+</div>

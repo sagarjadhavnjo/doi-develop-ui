@@ -1,0 +1,264 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>{{'PVU.EmpTypeChange.lblScreenName' | l10n}}</div>
+            <div class="font-heading" *ngIf="transactionNo">
+                <b>Reference No:</b> {{transactionNo}}
+            </div>
+            <div class="font-heading" *ngIf="referenceDate">
+                <b>Reference Date:</b> <span>{{ referenceDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</span>
+            </div>
+        </div>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [(selectedIndex)]="selectedIndex"
+            (selectedIndexChange)="onTabChange($event)">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        {{'PVU.EmpTypeChange.lblScreenName' | l10n}}
+                    </ng-template>
+                    <form [formGroup]="empTypeChangeForm">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="row">
+                                  
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.lblOfficeName' | l10n}}"
+                                                formControlName="officeName" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" appAlphaNumericWithSpecialCharatecersInGujaratiAndEnglish
+                                                placeholder="{{'PVU.EmpTypeChange.eventOrderNo' | l10n}}" formControlName="eventOrderNo"
+                                                maxlength="100" required>
+                                            <div class="error-wrapper"
+                                                *ngIf="empTypeChangeForm.controls.eventOrderNo.touched && empTypeChangeForm.controls.eventOrderNo.errors">
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventOrderNo.errors.required">
+                                                    {{errorMessages.ORDER_NO}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventOrderNo.errors.maxLength">
+                                                    No. of characters should not exceed 100!
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventOrderDatePicker"
+                                                [min]="empTypeChangeForm.controls.eventEffectiveDate.value"
+                                                [max]="todayDate" placeholder="{{'PVU.EmpTypeChange.eventOrderDate' | l10n}}"
+                                                formControlName="eventOrderDate" required readonly>
+                                            <mat-datepicker-toggle matSuffix [for]="eventOrderDatePicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventOrderDatePicker></mat-datepicker>
+                                            <div class="error-wrapper"
+                                                *ngIf="empTypeChangeForm.controls.eventOrderDate.touched && empTypeChangeForm.controls.eventOrderDate.errors">
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventOrderDate.errors.required">
+                                                    {{errorMessages.ORDER_DATE}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventOrderDate.errors.matDatepickerMin">
+                                                    {{errorMessages.DATE_MIN}} &nbsp;
+                                                    {{empTypeChangeForm.controls.eventEffectiveDate.value | date :
+                                                    'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventOrderDate.errors.matDatepickerMax">
+                                                    {{errorMessages.DATE_MAX }}
+                                                    &nbsp;{{todayDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventEffectiveDatePicker"
+                                                [min]="eventMinDate" [max]="todayDate"
+                                                (dateChange) = "onEffectiveDateChange()"
+                                                placeholder="{{'PVU.EmpTypeChange.eventEffectiveDate' | l10n}}" formControlName="eventEffectiveDate"
+                                                required readonly>
+                                            <mat-datepicker-toggle matSuffix [for]="eventEffectiveDatePicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventEffectiveDatePicker></mat-datepicker>
+                                            <div class="error-wrapper"
+                                                *ngIf="empTypeChangeForm.controls.eventEffectiveDate.touched && empTypeChangeForm.controls.eventEffectiveDate.errors">
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventEffectiveDate.errors.required">
+                                                    {{errorMessages.EVENT_EFFECTIVE_DATE}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventEffectiveDate.errors.matDatepickerMin">
+                                                    Please
+                                                    enter date greater than {{eventMinDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="empTypeChangeForm.controls.eventEffectiveDate.errors.matDatepickerMax">
+                                                    Employee retirement date is {{todayDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="accordionSection">
+                                    <div class="box-header">{{'PVU.EmpTypeChange.lblBoxHeader2' | l10n}}</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-form-field>
+                                                    <mat-label>{{'PVU.EmpTypeChange.lblEmpPayType' | l10n}}</mat-label>
+                                                    <mat-select formControlName="empPayType" required 
+                                                    (selectionChange)= 'empPayTypeChange($event)'>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="empTypeCtrl"
+                                                                [placeholderLabel]="'Find Employee Pay Type'"
+                                                                [noEntriesFoundLabel]="'No Matching Employee Pay Type found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let EPT of empPayTypeList | filterSelectInput : empTypeCtrl.value : 'viewValue'"
+                                                            [value]="EPT.id">
+                                                            {{EPT.viewValue}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <error-messages
+                                                        [errorMessages]="{'required': 'This Field is required'}"
+                                                        [control]="empTypeChangeForm.get('empPayType')">
+                                                    </error-messages>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3" *ngIf = "empTypeChangeForm.get('empPayType').value === 161">
+                                                <mat-form-field>
+                                                    <mat-label>{{'PVU.EmpTypeChange.lblCondition' | l10n}}</mat-label>
+                                                    <mat-select formControlName="yesNo" [required] = "empTypeChangeForm.get('empPayType').value === 161">
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="yesNoCtrl"
+                                                                [placeholderLabel]="'Find Conditional Type'"
+                                                                [noEntriesFoundLabel]="'No Matching Condition found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let con of conditionList | filterSelectInput : yesNoCtrl.value : 'lookupInfoName'"
+                                                            [value]="con.lookupInfoId">
+                                                            {{con.lookupInfoName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <error-messages
+                                                        [errorMessages]="{'required': errorMessages.CONDITION_SELECT}"
+                                                        [control]="empTypeChangeForm.get('yesNo')">
+                                                    </error-messages>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordionSection">
+                                    <div class="box-header">{{'PVU.EmpTypeChange.employeeDetails' | l10n}}</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                        <input matInput numbersOnly name="employeeNo"
+                                                        formControlName="employeeNo" maxlength="10" 
+                                                        [disabled] = "!empTypeChangeForm.get('eventEffectiveDate').value"
+                                                        placeholder="{{'PVU.EmpTypeChange.employeeNo' | l10n}}"
+                                                         #empNo
+                                                        (keydown.Enter)="getEmpData(empNo.value)" required
+                                                        (keydown.Tab)="getEmpData(empNo.value)">
+                                                    <mat-icon *ngIf="!viewMode" matSuffix
+                                                        (click)="openDialogEmployeeNumber()" >
+                                                        search</mat-icon>
+                                                    <error-messages [errorMessages]="{'required': errorMessages.EMP_NO}"
+                                                        [control]="empTypeChangeForm.get('employeeNo')">
+                                                    </error-messages>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.employeeName' | l10n}}"
+                                                        formControlName="empName" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.class' | l10n}}"
+                                                        formControlName="class" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.designation' | l10n}}"
+                                                        formControlName="designation" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.lblOfficeName' | l10n}}"
+                                                        formControlName="officeNameEmp" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.empType' | l10n}}"
+                                                        formControlName="empType" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="{{'PVU.EmpTypeChange.doj' | l10n}}"
+                                                        formControlName="doj" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-action-button">
+                                    <!-- <button type="button" mat-raised-button color="accent" (click)="viewComments()">
+                                            <i class="material-icons " title="View">remove_red_eye</i>
+                                            {{'PVU.Common.comments' | l10n}}
+                                        </button> -->
+                                    <button type="button" mat-raised-button color="primary" (click)="onSubmitDetails('Draft')" *ngIf="!viewMode">
+                                        <i class="material-icons" title="Save" >save </i>
+                                        {{'PVU.Common.saveAsDraft' | l10n}}
+                                    </button>
+                                    <button mat-raised-button type="button" class="green"
+                                    [disabled] = 'isSubmitted'
+                                     (click)="onSubmitDetails('Approved')"
+                                        *ngIf="!viewMode">
+                                        <i class="material-icons">
+                                            done </i> {{'PVU.Common.approve' | l10n}}
+                                    </button>
+                                    <!-- <button type="reset" mat-raised-button color="accent" (click)="reset()" *ngIf="!viewMode">
+                                            <i class="material-icons">
+                                            restore
+                                            </i>
+                                            {{'PVU.Common.reset' | l10n}}
+                                        </button> -->
+                                    <button type="button" mat-raised-button color="warn" *ngIf = '!dialogOpen' (click)="goToListing()">
+                                        <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                                        {{'PVU.Common.listing' | l10n}}
+                                    </button>
+                                    <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                                        <i class="material-icons" title="Close">close</i> {{'PVU.Common.close' | l10n}}
+                                    </button>
+                                    <button type="button" mat-raised-button class="print-btn" (click)="onPrint()" *ngIf="statusId === 327">
+                                            <i class="material-icons"> print </i> {{'PVU.Common.print' | l10n}}
+                                        </button >
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label=" {{'PVU.EmpTypeChange.attachment' | l10n}}" [disabled]="isTabDisabled">
+                    <app-attachment-etc #attachmentTab [attachmentData]="attachmentData" [statusId] = 'statusId' 
+                    [trnId] = 'tpvuRegPrboSdId' [viewMode] = 'viewMode' [dialogOpen] = 'dialogOpen' [menuId] = 'menuId'
+                    (submitClick)="submitDetails(true)"></app-attachment-etc>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

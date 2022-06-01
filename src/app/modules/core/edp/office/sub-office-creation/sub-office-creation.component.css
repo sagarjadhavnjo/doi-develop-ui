@@ -1,0 +1,15 @@
+.phoneNo {
+    display: inline-flex;
+}
+.phoneNoPaddingZero {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.textarea-error {
+    position: absolute;
+    top: 34px;
+}
+
+/* ::ng-deep .mat-dialog-container {
+    width: 900px !important;
+} */

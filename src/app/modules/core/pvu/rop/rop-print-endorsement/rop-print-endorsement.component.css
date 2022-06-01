@@ -1,0 +1,45 @@
+.spin {
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000000;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.spin.show-spinner {
+    display: flex;
+}
+
+.spin:after {
+    content: " ";
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 4px solid;
+    border-color: transparent #FFFFFF transparent;
+    animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.mat-table th.mat-header-cell, table.mat-table th, .mat-table .mat-header-cell {
+    max-width: inherit;
+}
+
+.mat-table td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type, th.mat-header-cell:last-of-type {
+    white-space: nowrap;
+}

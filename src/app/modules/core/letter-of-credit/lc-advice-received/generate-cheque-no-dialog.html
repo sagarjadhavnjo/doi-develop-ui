@@ -1,0 +1,15 @@
+<div class="container">
+    <form [formGroup]="generateChequeNoForm">
+        <div class="mat-typography centerAlign">
+            <p><strong>Once Cheque No. generated, system will not allow to delete Advice and to change any Cheque
+                    Details from Advice, Are you sure to Generate Cheque No. ?</strong></p>
+        </div>
+        <div class="form-action-button mgb15">
+            <button type="button" mat-raised-button (click)="onNo()" class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Close">close</i>No</button>
+            <button type="submit" mat-raised-button color="primary" (click)="onYes()" cdkFocusInitial>
+                <i class="material-icons" aria-hidden="true" title="Yes">check</i>Yes</button>
+        </div>
+        
+    </form>
+</div>

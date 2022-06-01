@@ -1,0 +1,78 @@
+<div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+        <div>Advice No</div>
+    </div>
+
+    <form [formGroup]="lcAdviceInputForm" (ngSubmit)="lcAdviceInputFormData()">
+        <div class="box-body">
+            <div class="mat-elevation-z8 mt-2">
+                <table mat-table [dataSource]="LcAdviceDataSource" class="mat-elevation-z8 " area-describedby="advice">
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef scope="row">
+                          <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                          </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row" class="text-center">
+                          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row) " [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                        </td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="adviceNo">
+                        <th mat-header-cell *matHeaderCellDef scope="row">Advice No.</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{element.adviceNo}}
+                        </td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="advice">
+                        <th mat-header-cell *matHeaderCellDef scope="row">Advice</th>
+                        <td mat-cell *matCellDef="let element">
+                          {{element.advice}}
+                        </td>
+                    </ng-container>
+    
+                    <tr mat-header-row *matHeaderRowDef="LcdistributionInputDATAColumn"></tr>
+                    <tr mat-row *matRowDef="let row; columns: LcdistributionInputDATAColumn;"></tr>
+                </table>
+            </div>
+            
+            <div class="objection">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <mat-checkbox matInput formControlName="raiseObjectionCheckbox" (change)="updateRemarks()">Raise Objection
+                        </mat-checkbox>
+                    </div>
+                    <div class="col-sm-4">
+                        <mat-form-field *ngIf="errorRemarks">
+                            <textarea matInput formControlName="objectionRemarks" placeholder="Enter Remarks" required></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-action-button">
+                <button mat-raised-button type="submit" class="green" title="Submit">
+                  <i class="material-icons" title="Submit" aria-hidden="true">save</i> Save</button>
+                <button type="reset" mat-raised-button color="accent" title="Reset">
+                  <i class="material-icons" title="Reset" aria-hidden="true">
+                    done
+                  </i>
+                  Verify
+                </button>
+                <button type="button" mat-raised-button class="btnClose" title="Close">
+                  <i class="material-icons" title="Close" aria-hidden="true">
+                    close
+                  </i>
+                  Close
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+    
+</div>

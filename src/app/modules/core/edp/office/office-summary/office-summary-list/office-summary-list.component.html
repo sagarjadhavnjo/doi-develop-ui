@@ -1,0 +1,135 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Office Summary </div>
+        </div>
+        <mat-accordion class="search-accordian">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <div class="heading-section">Search Office Summary List</div>
+                </mat-expansion-panel-header>
+                <div class="form-datatable-list">
+                    <form class="col-sm-12" [formGroup]="searchSummaryForm" (ngSubmit)="searchSummary()"
+                        autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput numbersOnly formControlName="districtCode"
+                                        placeholder="District Code" maxlength="9">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="districtId" placeholder="District Name">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="districtCtrl"
+                                                [placeholderLabel]="'Find District Name...'"
+                                                [noEntriesFoundLabel]="'no matching District Name found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option>
+                                            {{ matSelectNullValue }}
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let district of districtList | filterSelectInput : districtCtrl.value : 'name'"
+                                            [value]="district.id">
+                                            {{district.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row displayBlock form-action-button">
+                            <div class="centerAlign">
+                                <button type="submit" mat-raised-button color="primary">
+                                    <i class="material-icons" aria-hidden="true">search</i>
+                                    Search
+                                </button>
+                                <button type="button" mat-raised-button color="accent" (click)="clearForm();">
+                                    <i class="material-icons" aria-hidden="true">
+                                        restore
+                                    </i>
+                                    Reset
+                                </button>
+                                <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                                    <i class="material-icons" aria-hidden="true" title="Budget dashboard">close</i>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="responsive-tabel">
+            <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>Sr No.</th>
+                    <td mat-cell *matCellDef="let element;let i = index;">
+                        <span *ngIf="element.districtName !== 'ZTOTAL'">
+                            {{i+1 + ((pageIndex * pageSize))}}
+                        </span>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="7" class="centerAlign">
+                        <span *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+                            No Records Found!
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="districtCode">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">District Code</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.districtName==='ZTOTAL'? '' : (element.districtCode ? element.districtCode : '-')}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="districtName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">District Name</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span style="font-weight: 600;"
+                            *ngIf="element.districtName==='ZTOTAL'">{{element.districtName ? (element.districtName==='ZTOTAL'?'Total':element.districtName) : '-'}}</span>
+                        <span
+                            *ngIf="element.districtName !== 'ZTOTAL'">{{element.districtName ? (element.districtName==='ZTOTAL'?'Total':element.districtName) : '-'}}</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ddoCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">DDO</th>
+                    <td mat-cell *matCellDef="let element">
+                        <a class="hyper-link" (click)="ddoCountNavigate(element)"
+                            [class.disable]="element.ddoCount === 0">
+                            {{element.ddoCount ? element.ddoCount : '-'}}
+                        </a>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="nonDDOCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Non DDO</th>
+                    <td mat-cell *matCellDef="let element">
+                        <a class="hyper-link" (click)="nonDdoCountNavigate(element)"
+                            [class.disable]="element.nonDDOCount === 0">{{element.nonDDOCount ? element.nonDDOCount : '-'}}</a>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="panchayatCount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Panchayat</th>
+                    <td mat-cell *matCellDef="let element">
+                        <a class="hyper-link" (click)="panchayatCountNavigate(element)"
+                            [class.disable]="element.panchayatCount === 0">{{element.panchayatCount ? element.panchayatCount : '-'}}</a>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header scope="col">Total</th>
+                    <td mat-cell *matCellDef="let element">
+                        <a class="hyper-link" (click)="ddoTotal(element)"
+                            [class.disable]="element.total === 0">{{element.total ? element.total : '-'}}</a>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index;columns: displayedBrowseColumns;"
+                    [ngClass]="{'completed': (row.position==1 || row.position==2 || row.position==6 || row.position==7),'incomplete': (row.position!=1 || row.position!=2 || row.position!=6 || row.position!=7)}">
+                </tr>
+                <tr mat-footer-row
+                    [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+                    *matFooterRowDef="displayedColumnsFooter">
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

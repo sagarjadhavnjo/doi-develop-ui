@@ -1,0 +1,20 @@
+<form class="pt-2 pb-2 max-auto" style="height: 92px;margin: 20px;">
+    <ng-container *ngIf="flag">
+        <div class="text-center">
+            <b>{{ this.data.value.split('\n')[0] }}</b>
+        </div>
+        <div class="text-center">
+            <b>{{ this.data.value.split('\n')[1] }}</b>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!flag">
+        <p class="text-center">
+            <b [innerHtml]="data"></b>
+        </p>
+    </ng-container>
+    <div mat-dialog-actions class="form-action-button">
+        <button mat-raised-button type="button" color="primary" (click)="onOkClick()">
+            Ok
+        </button>
+    </div>
+</form>

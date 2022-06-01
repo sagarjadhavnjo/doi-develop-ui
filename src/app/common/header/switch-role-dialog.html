@@ -1,0 +1,33 @@
+<div class="switchRoleContainer">
+    <div mat-dialog-title>User Name : Pankaj Kumar Gupta</div>
+    <div class="history-table-list">
+        <table mat-table [dataSource]="switchUserDataSource" class="mat-elevation-z8 historyDataSource">
+            <ng-container matColumnDef="officeName">
+                <th mat-header-cell *matHeaderCellDef>Office Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="postName">
+                <th mat-header-cell *matHeaderCellDef>Post Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.postName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="postType">
+                <th mat-header-cell *matHeaderCellDef>Post Type</th>
+                <td mat-cell *matCellDef="let element"> {{element.postType}} </td>
+            </ng-container>
+            <ng-container matColumnDef="switchRole">
+                <th mat-header-cell *matHeaderCellDef>Switch Role</th>
+                <td mat-cell *matCellDef="let element" class="centerAlign">
+                    <mat-checkbox (change)="onUserPostChecked(element)" [checked]="element.checked"></mat-checkbox>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="historyColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: historyColumns;"></tr>
+        </table>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button type="button" mat-raised-button (click)="onCancel()"><i class="material-icons"
+                title="Budget dashboard">close</i>Cancel</button>
+        <button type="button" mat-raised-button color="primary" (click)="calculatePer()" cdkFocusInitial><i
+                class="material-icons" title="save">save</i>Switch Role</button>
+    </div>
+</div>

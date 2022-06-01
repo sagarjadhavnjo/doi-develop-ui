@@ -1,0 +1,433 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>{{ 'PVU.fixToRegular.lblScreenName' | l10n }}</div>
+            <div class="font-heading" *ngIf="showSaveasDraft"><b>Reference No:</b> {{ transNo }}</div>
+            <div class="font-heading" *ngIf="showSaveasDraft">
+                <b>Reference Date:</b> <span>{{ initiationDate | date: 'dd-MMM-yyyy hh:mm:ss a' }}</span>
+            </div>
+        </div>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [(selectedIndex)]="selectedIndex"
+            (selectedIndexChange)="onTabChange($event)">
+            <mat-tab label="{{ 'PVU.fixToRegular.lblScreenName' | l10n }}">
+            <div class="box-top">
+                <div class="box-body">
+                    <form [formGroup]="fixToRegularForm">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Office Name"
+                                                formControlName="officeName" readonly />
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" autocomplete="off"
+                                                [appAlphaNumericWithSpecialCharatecersInGujaratiAndEnglish]="true"
+                                                placeholder="Order Number" formControlName="eventOrderNo" maxlength="40"
+                                                required />
+                                            <div class="error-wrapper" *ngIf="
+                                                    fixToRegularForm.controls.eventOrderNo.touched &&
+                                                    fixToRegularForm.controls.eventOrderNo.errors
+                                                ">
+                                                <mat-error
+                                                    *ngIf="fixToRegularForm.controls.eventOrderNo.errors.required">
+                                                    {{ errorMessages.ORDER_NO }}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="fixToRegularForm.controls.eventOrderNo.errors.maxLength">
+                                                    No. of characters should not exceed 100!
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventOrderDatePicker"
+                                                [min]="fixToRegularForm.controls.eventEffectiveDate.value"
+                                                [max]="todayDate" placeholder="Order Date"
+                                                formControlName="eventOrderDate" required readonly />
+                                            <mat-datepicker-toggle matSuffix [for]="eventOrderDatePicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventOrderDatePicker></mat-datepicker>
+                                            <div class="error-wrapper" *ngIf="
+                                                    fixToRegularForm.controls.eventOrderDate.touched &&
+                                                    fixToRegularForm.controls.eventOrderDate.errors
+                                                ">
+                                                <mat-error
+                                                    *ngIf="fixToRegularForm.controls.eventOrderDate.errors.required">
+                                                    {{ errorMessages.ORDER_DATE }}
+                                                </mat-error>
+                                                <mat-error *ngIf="
+                                                        fixToRegularForm.controls.eventOrderDate.errors.matDatepickerMin
+                                                    ">
+                                                    {{ errorMessages.DATE_MIN }} &nbsp;
+                                                    {{
+                                                    fixToRegularForm.controls.eventEffectiveDate.value
+                                                    | date: 'dd-MMM-yyyy'
+                                                    }}
+                                                </mat-error>
+                                                <mat-error *ngIf="
+                                                        fixToRegularForm.controls.eventOrderDate.errors.matDatepickerMax
+                                                    ">
+                                                    {{ errorMessages.DATE_MAX }}
+                                                    &nbsp;{{ todayDate | date: 'dd-MMM-yyyy' }}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventEffectiveDatePicker"
+                                                [min]="eventMinDate" [max]="todayDate"
+                                                placeholder="Event Effective Date" formControlName="eventEffectiveDate"
+                                                required (dateChange)="onEffectiveDateChange($event.value)" readonly />
+                                            <mat-datepicker-toggle matSuffix [for]="eventEffectiveDatePicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventEffectiveDatePicker></mat-datepicker>
+                                            <div class="error-wrapper" *ngIf="
+                                                    fixToRegularForm.controls.eventEffectiveDate.touched &&
+                                                    fixToRegularForm.controls.eventEffectiveDate.errors
+                                                ">
+                                                <mat-error
+                                                    *ngIf="fixToRegularForm.controls.eventEffectiveDate.errors.required">
+                                                    {{ errorMessages.EVENT_EFFECTIVE_DATE }}
+                                                </mat-error>
+                                                <mat-error *ngIf="
+                                                        fixToRegularForm.controls.eventEffectiveDate.errors
+                                                            .matDatepickerMin
+                                                    ">
+                                                    Please enter date greater than
+                                                    {{ eventMinDate | date: 'dd-MMM-yyyy' }}
+                                                </mat-error>
+                                                <mat-error *ngIf="
+                                                        fixToRegularForm.controls.eventEffectiveDate.errors
+                                                            .matDatepickerMax
+                                                    ">
+                                                    Employee retirement date is {{ todayDate | date: 'dd-MMM-yyyy' }}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="accordionSection">
+                                    <div class="box-header">{{ 'PVU.fixToRegular.lblBoxHeader1' | l10n }}</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput numbersOnly name="employeeNo" autocomplete="off"
+                                                        formControlName="employeeNo" maxlength="10" minlength="10"
+                                                        placeholder="Employee Number"
+                                                        (keypress)="onEmployeeKeyUp($event)"
+                                                        (keydown.Tab)="onEmployeeKeyUp($event)" [readonly]="
+                                                            !isSaveDraftVisible ||
+                                                            btnSave ||
+                                                            fixToRegularForm.controls.eventEffectiveDate.errors
+                                                        " required />
+                                                    <mat-icon *ngIf="
+                                                            !isDisabled &&
+                                                            !fixToRegularForm.controls.eventEffectiveDate.errors
+                                                        " matSuffix (click)="openDialogEmployeeNumber()">
+                                                        search</mat-icon>
+                                                    <error-messages [errorMessages]="{ required: errorMessages.EMP_NO }"
+                                                        [control]="fixToRegularForm.get('employeeNo')">
+                                                    </error-messages>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput autocomplete="off" type="text"
+                                                        placeholder="Employee Name" value="" formControlName="empName"
+                                                        readonly />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" autocomplete="off" placeholder="Class"
+                                                        value="" formControlName="class" readonly />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" autocomplete="off"
+                                                        placeholder="Designation" value="" formControlName="designation"
+                                                        readonly />
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" autocomplete="off"
+                                                        placeholder="Fix Pay Details" value=""
+                                                        formControlName="empBasicPay" readonly />
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" autocomplete="off"
+                                                        placeholder="Date of Joining" value=""
+                                                        formControlName="dateJoining" readonly />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" autocomplete="off"
+                                                        placeholder="Deapartmental Details" value=""
+                                                        formControlName="departmentCategoryName" readonly />
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" autocomplete="off"
+                                                        placeholder="Office Name" value="" formControlName="ofcName"
+                                                        readonly />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <!-- remove for now  in feture needed -->
+                                        <!-- <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="box box-primary search-grid">
+                                                    <div class="box-header">CCC/CCC+ Exam Detail</div>
+                                                    <div class="box-body">
+                                                        <table mat-table #table [dataSource]="cccExamDataSource"
+                                                            class="responsive-table">
+                                                            <ng-container matColumnDef="examName">
+                                                                <th mat-header-cell *matHeaderCellDef>Exam Name
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    {{element.examName}}
+                                                                </td>
+                                                                <td mat-footer-cell *matFooterCellDef
+                                                                    [attr.colspan]="examColumns.length"
+                                                                    class="centerAlign">
+                                                                    <span
+                                                                        *ngIf="cccExamDataSource && cccExamDataSource.data && cccExamDataSource.data.length == 0">
+                                                                        No Records Found!
+                                                                    </span>
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examBody">
+                                                                <th mat-header-cell *matHeaderCellDef>Exam Body
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    {{element.examBody}}
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examPassingDate">
+                                                                <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    <span
+                                                                        *ngIf="element.examPassingDate">{{this.transforminYMDDateFormat(element.examPassingDate)}}</span>
+                                                                    <span *ngIf="!element.examPassingDate">N/A </span>
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examStatus">
+                                                                <th mat-header-cell *matHeaderCellDef
+                                                                    class="gray-color">Status</th>
+                                                                <td mat-cell *matCellDef="let element">
+                                                                    {{element.examStatus}}
+                                                                </td>
+                                                            </ng-container>
+                                                            <tr mat-header-row *matHeaderRowDef="examColumns">
+                                                            </tr>
+                                                            <tr mat-row
+                                                                *matRowDef="let row; columns: examColumns;let i= index;">
+                                                            </tr>
+                                                            <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                                                [class.hide-table-footer]="cccExamDataSource && cccExamDataSource.data && cccExamDataSource.data.length != 0">
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="box box-primary search-grid">
+                                                    <div class="box-header">Departmental Exam Detail</div>
+                                                    <div class="box-body">
+                                                        <table mat-table #table
+                                                            [dataSource]="departmentalExamDataSource"
+                                                            class="responsive-table">
+                                                            <ng-container matColumnDef="examName">
+                                                                <th mat-header-cell *matHeaderCellDef>Exam Name
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    {{element.examName}}
+                                                                </td>
+                                                                <td mat-footer-cell *matFooterCellDef
+                                                                    [attr.colspan]="examColumns.length"
+                                                                    class="centerAlign">
+                                                                    <span
+                                                                        *ngIf="departmentalExamDataSource && departmentalExamDataSource.data && departmentalExamDataSource.data.length == 0">
+                                                                        No Records Found!
+                                                                    </span>
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examBody">
+                                                                <th mat-header-cell *matHeaderCellDef>Exam Body
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    {{element.examBody}}
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examPassingDate">
+                                                                <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    <span
+                                                                        *ngIf="element.examPassingDate">{{this.transforminYMDDateFormat(element.examPassingDate)}}</span>
+                                                                    <span *ngIf="!element.examPassingDate">N/A </span>
+                                                                </td>
+                                                            </ng-container>
+
+                                                            <ng-container matColumnDef="examStatus">
+                                                                <th mat-header-cell *matHeaderCellDef
+                                                                    class="gray-color">Status</th>
+                                                                <td mat-cell *matCellDef="let element">
+                                                                    {{element.examStatus}}
+                                                                </td>
+                                                            </ng-container>
+                                                            <tr mat-header-row *matHeaderRowDef="examColumns">
+                                                            </tr>
+                                                            <tr mat-row
+                                                                *matRowDef="let row; columns: examColumns;let i= index;">
+                                                            </tr>
+                                                            <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                                                [class.hide-table-footer]="departmentalExamDataSource && departmentalExamDataSource.data && departmentalExamDataSource.data.length != 0">
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="box box-primary search-grid">
+                                                    <div class="box-header">Language Exam Detail</div>
+                                                    <div class="box-body">
+                                                        <table mat-table #table [dataSource]="languageExamDataSource"
+                                                            class="responsive-table">
+                                                            <ng-container matColumnDef="examName">
+                                                                <th mat-header-cell *matHeaderCellDef>Language Name
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    {{element.examName}}
+                                                                </td>
+                                                                <td mat-footer-cell *matFooterCellDef
+                                                                    [attr.colspan]="examColumns.length"
+                                                                    class="centerAlign">
+                                                                    <span
+                                                                        *ngIf="languageExamDataSource && languageExamDataSource.data && languageExamDataSource.data.length == 0">
+                                                                        No Records Found!
+                                                                    </span>
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examBody">
+                                                                <th mat-header-cell *matHeaderCellDef>Exam Body
+                                                                </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    {{element.examBody}}
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examPassingDate">
+                                                                <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                                                  </th>
+                                                                <td mat-cell *matCellDef="let element;let i= index;">
+                                                                    <span
+                                                                        *ngIf="element.examPassingDate">{{this.transforminYMDDateFormat(element.examPassingDate)}}</span>
+                                                                    <span *ngIf="!element.examPassingDate">N/A </span>
+                                                                </td>
+                                                            </ng-container>
+                                                            <ng-container matColumnDef="examStatus">
+                                                                <th mat-header-cell *matHeaderCellDef
+                                                                    class="gray-color">Status</th>
+                                                                <td mat-cell *matCellDef="let element">
+                                                                    {{element.examStatus}}
+                                                                </td>
+                                                            </ng-container>
+                                                            <tr mat-header-row *matHeaderRowDef="examColumns">
+                                                            </tr>
+                                                            <tr mat-row
+                                                                *matRowDef="let row; columns: examColumns;let i= index;">
+                                                            </tr>
+                                                            <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                                                [class.hide-table-footer]="languageExamDataSource && languageExamDataSource.data && languageExamDataSource.data.length != 0">
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="accordionSection">
+                                    <div class="box-header">
+                                        {{ 'PVU.fixToRegular.lblBoxHeader2' | l10n }}
+                                    </div>
+                                    <div class="box-body">
+                                        <app-fifth-commition-pay *ngIf="isFifthPC"
+                                            [payCommissionList]="payCommissionList" [employeeDetail]="employeeDetail"
+                                            [effictiveDate]="getEventEffectiveDate" [fixPay]="fixPay">
+                                        </app-fifth-commition-pay>
+
+                                        <app-seven-commition-pay *ngIf="isSeventhPC"
+                                            [payCommissionList]="payCommissionList" [employeeDetail]="employeeDetail"
+                                            [effictiveDate]="getEventEffectiveDate" [fixPay]="fixPay"
+                                            [resetPaybandVal]="resetPaybandVal"
+                                            (resetPaybandEvent)="resetPaybandEvent($event)"
+                                            >
+                                        </app-seven-commition-pay>
+
+                                        <app-six-commition-pay *ngIf="isSixthPC" [payCommissionList]="payCommissionList"
+                                            [employeeDetail]="employeeDetail" [effictiveDate]="getEventEffectiveDate"
+                                            [fixPay]="fixPay"
+                                            [payLevelId]="payLevelId"
+                                            [resetPaybandVal]="resetPaybandVal"
+                                            ></app-six-commition-pay>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-action-button">
+                        <button *ngIf="action != 'view'" mat-raised-button type="button" color="primary"
+                            (click)="saveDetails()">
+                            <i class="material-icons"> save </i> Save As Draft
+                        </button>
+
+
+                        <button *ngIf="action != 'view' && !dialogOpen" mat-raised-button type="button" class="green"
+                            (click)="onSubmitDetails()">
+                            <i class="material-icons"> done </i> {{'PVU.Common.approve' | l10n}}
+                        </button>
+
+                        <button type="button" mat-raised-button color="warn" (click)="goToListing()"
+                            *ngIf="!dialogOpen">
+                            <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                            Listing
+                        </button>
+                        <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                            <i class="material-icons" title="Close">close</i> Close
+                        </button>
+                        <button *ngIf="action != 'view'" (click)="resetForm()" type="button" mat-raised-button
+                            color="accent">
+                            <i class="material-icons">restore</i>Reset</button>
+                    </div>
+                </div>
+            </div>
+            </mat-tab>
+            <mat-tab label=" {{'PVU.EmpTypeChange.attachment' | l10n}}" [disabled]="!id">
+                <app-fix-to-regular-attachment [headerId]="id" [action]="action" menuId="878"
+                 (isFileUploadedAction)="isFileUploadedAction($event)" [dialogOpen] = 'dialogOpen'
+                 (submitAction)="submitAction()"
+                 >
+                </app-fix-to-regular-attachment>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,272 @@
+<form autocomplete="off" [formGroup]="employeeCurrentForm">
+    <div class="col-sm-6">
+        <mat-form-field class="full-width">
+            <input matInput type="text" numbersOnly class="employee-number-field" placeholder="Employee Number"
+                minlength="10" maxlength="10" formControlName="employeeNo" (keypress)="onEmployeeKeyUp($event)"
+                (keydown.Tab)="onEmployeeKeyUp($event)"
+                [readonly]="(eventDetails && eventDetails.statusId !== 205 && eventDetails.statusId !== 0) || action === 'view'"
+                required>
+            <mat-icon matSuffix (click)="openSearchEmployeeDialog()">search
+            </mat-icon>
+            <div class="error-wrapper"
+                *ngIf="employeeCurrentForm.controls.employeeNo.touched && employeeCurrentForm.controls.employeeNo.errors">
+                <mat-error *ngIf="employeeCurrentForm.controls.employeeNo.errors.required">
+                    {{errorMessage.EMP_NO}}</mat-error>
+                <mat-error *ngIf="employeeCurrentForm.controls.employeeNo.errors.minlength">
+                    {{errorMessage.EMP_NO_MAX}}</mat-error>
+            </div>
+        </mat-form-field>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header">{{title}}</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Employee Name" readonly formControlName="name">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Class" readonly formControlName="class">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Designation" readonly formControlName="designation">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('payLevel')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Level" readonly formControlName="payLevel">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('cellId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Cell Id" readonly formControlName="cellId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('payBand')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'" readonly formControlName="payBand">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('payBandValue') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Band Value" readonly
+                            formControlName="payBandValue">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('gradePay') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Grade Pay" readonly formControlName="gradePay">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('scale')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Scale" readonly formControlName="scale">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Basic Pay" readonly formControlName="basicPay">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Joining" readonly formControlName="doj">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Retirement" readonly formControlName="dor">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Office Name" readonly formControlName="officeName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Next Increment" readonly
+                            formControlName="dateOfNextIncrement">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('tikuPay1')">
+                    <mat-form-field class=" full-width">
+                        <input matInput type="text" formControlName="tikuPay1" placeholder="Date of Tiku Pay 1st"
+                            value="" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin" *ngIf="employeeCurrentForm.get('tikuPay2')">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="tikuPay2" placeholder="Date of Tiku Pay 2nd"
+                                value="" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="showExamDetails">
+                <div class="col-sm-12">
+                    <div class="box box-primary search-grid">
+                        <div class="box-header">CCC/CCC+ Exam Detail</div>
+                        <div class="box-body">
+                            <table mat-table #table [dataSource]="cccExamDataSource" class="responsive-table">
+                                <ng-container matColumnDef="examName">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examName}}
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                        class="centerAlign">
+                                        <span
+                                            *ngIf="cccExamDataSource && cccExamDataSource.data && cccExamDataSource.data.length==0">
+                                            No Records Found!
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examBody">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Body
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examBody}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examPassingDate">
+                                    <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        <span
+                                            *ngIf="element.examPassingDate">{{this.transforminYMDDateFormat(element.examPassingDate)}}</span>
+                                        <span *ngIf="!element.examPassingDate">N/A </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examStatus">
+                                    <th mat-header-cell *matHeaderCellDef class="gray-color">Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.examStatus}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="examColumns">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: examColumns;let i=index;">
+                                </tr>
+                                <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                    [class.hide-table-footer]="cccExamDataSource && cccExamDataSource.data && cccExamDataSource.data.length !=0">
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box box-primary search-grid">
+                        <div class="box-header">Departmental Exam Detail</div>
+                        <div class="box-body">
+                            <table mat-table #table [dataSource]="departmentalExamDataSource" class="responsive-table">
+                                <ng-container matColumnDef="examName">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examName}}
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                        class="centerAlign">
+                                        <span
+                                            *ngIf="departmentalExamDataSource && departmentalExamDataSource.data && departmentalExamDataSource.data.length==0">
+                                            No Records Found!
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examBody">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Body
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examBody}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examPassingDate">
+                                    <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        <span
+                                            *ngIf="element.examPassingDate">{{this.transforminYMDDateFormat(element.examPassingDate)}}</span>
+                                        <span *ngIf="!element.examPassingDate">N/A </span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="examStatus">
+                                    <th mat-header-cell *matHeaderCellDef class="gray-color">Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.examStatus}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="examColumns">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: examColumns;let i=index;">
+                                </tr>
+                                <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                    [class.hide-table-footer]="departmentalExamDataSource && departmentalExamDataSource.data && departmentalExamDataSource.data.length !=0">
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box box-primary search-grid">
+                        <div class="box-header">Language Exam Detail</div>
+                        <div class="box-body">
+                            <table mat-table #table [dataSource]="languageExamDataSource" class="responsive-table">
+                                <ng-container matColumnDef="examName">
+                                    <th mat-header-cell *matHeaderCellDef>Language Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examName}}
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                        class="centerAlign">
+                                        <span
+                                            *ngIf="languageExamDataSource && languageExamDataSource.data && languageExamDataSource.data.length==0">
+                                            No Records Found!
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examBody">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Body
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examBody}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examPassingDate">
+                                    <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        <span
+                                            *ngIf="element.examPassingDate">{{this.transforminYMDDateFormat(element.examPassingDate)}}</span>
+                                        <span *ngIf="!element.examPassingDate">N/A </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examStatus">
+                                    <th mat-header-cell *matHeaderCellDef class="gray-color">Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.examStatus}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="examColumns">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: examColumns;let i=index;">
+                                </tr>
+                                <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                    [class.hide-table-footer]="languageExamDataSource && languageExamDataSource.data && languageExamDataSource.data.length !=0">
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

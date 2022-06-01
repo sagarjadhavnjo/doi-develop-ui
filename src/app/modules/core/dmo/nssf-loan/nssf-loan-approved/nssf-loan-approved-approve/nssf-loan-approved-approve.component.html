@@ -1,0 +1,235 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Approve</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/NLR/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">DMO</a></li>
+        <li class="breadcrumb-item"><a href="#">NSSF</a></li>
+        <li class="breadcrumb-item"><a href="#">NSSF Loan Approved</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Approve</li>
+      </ol>
+    </nav>
+
+
+    <form [formGroup]="approveForm">
+      <!-- Loan Basic Details -->
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header">Loan Basic Details</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="loanNo" placeholder="loan No." required>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.loanNo.touched && approveForm.controls.loanNo.errors">
+                    <mat-error *ngIf="approveForm.controls.loanNo.errors.required">
+                      {{errorMessages.LOAN_NO}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="sanctionNo" placeholder="Sanction No." required>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.sanctionNo.touched && approveForm.controls.sanctionNo.errors">
+                    <mat-error *ngIf="approveForm.controls.sanctionNo.errors.required">
+                      {{errorMessages.SANCTION_NO}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="sanctionDate" [matDatepicker]="sanctionDate"
+                    placeholder="Sanction Date" required>
+                  <mat-datepicker-toggle matSuffix [for]="sanctionDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #sanctionDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.sanctionDate.touched && approveForm.controls.sanctionDate.errors">
+                    <mat-error *ngIf="approveForm.controls.sanctionDate.errors.required">
+                      {{errorMessages.SANCTION_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="loanReceiptDate" [matDatepicker]="loanReceiptDate"
+                    placeholder="Loan Receipt Date" required>
+                  <mat-datepicker-toggle matSuffix [for]="loanReceiptDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #loanReceiptDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.loanReceiptDate.touched && approveForm.controls.loanReceiptDate.errors">
+                    <mat-error *ngIf="approveForm.controls.loanReceiptDate.errors.required">
+                      {{errorMessages.LOAN_RECEIPT_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="loanAmount" placeholder="Loan Amount" required numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.loanAmount.touched && approveForm.controls.loanAmount.errors">
+                    <mat-error *ngIf="approveForm.controls.loanAmount.errors.required">
+                      {{errorMessages.LOAN_AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="loanTenure" placeholder="Loan Tenure" decimalPoint1 required
+                    numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.loanTenure.touched && approveForm.controls.loanTenure.errors">
+                    <mat-error *ngIf="approveForm.controls.loanTenure.errors.required">
+                      {{errorMessages.LOAN_TENURE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="moratoriumPeriod" placeholder="Moratorium Period" decimalPoint1
+                    required numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.moratoriumPeriod.touched && approveForm.controls.moratoriumPeriod.errors">
+                    <mat-error *ngIf="approveForm.controls.moratoriumPeriod.errors.required">
+                      {{errorMessages.MORATORIUM_PERIOD}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="rateOfInterest" placeholder="Rate of Interest(%)" decimalPoint1
+                    required numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.rateOfInterest.touched && approveForm.controls.rateOfInterest.errors">
+                    <mat-error *ngIf="approveForm.controls.rateOfInterest.errors.required">
+                      {{errorMessages.RATE_OF_INTEREST}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Loan Repaymant Schedule -->
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header">Loan Repaymant Schedule</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <div class="col-sm-12">
+                <div class="labelCSS">
+                  Principal
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="principalInstalmentsInYear"
+                    placeholder="No. of Installments in a Year" required>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.principalInstalmentsInYear.touched && approveForm.controls.principalInstalmentsInYear.errors">
+                    <mat-error *ngIf="approveForm.controls.principalInstalmentsInYear.errors.required">
+                      {{errorMessages.NO_OF_INSTALLMENTS_IN_A_YEAR}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="principalTotalNoOfInstalments"
+                    placeholder="Total Number of Installments " required>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.principalTotalNoOfInstalments.touched && approveForm.controls.principalTotalNoOfInstalments.errors">
+                    <mat-error *ngIf="approveForm.controls.principalTotalNoOfInstalments.errors.required">
+                      {{errorMessages.TOTAL_NO_OF_INSTALLMENTS}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6"></div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="labelCSS">
+                  Interest
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="interestInstalmentsInYear"
+                    placeholder="No. of Installments in a Year" required>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.interestInstalmentsInYear.touched && approveForm.controls.interestInstalmentsInYear.errors">
+                    <mat-error *ngIf="approveForm.controls.interestInstalmentsInYear.errors.required">
+                      {{errorMessages.NO_OF_INSTALLMENTS_IN_A_YEAR}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="interestTotalNoOfInstalments"
+                    placeholder="Total Number of Installments" required>
+                  <div class="error-wrapper"
+                    *ngIf="approveForm.controls.interestTotalNoOfInstalments.touched && approveForm.controls.interestTotalNoOfInstalments.errors">
+                    <mat-error *ngIf="approveForm.controls.interestTotalNoOfInstalments.errors.required">
+                      {{errorMessages.TOTAL_NO_OF_INSTALLMENTS}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6"></div>
+
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Action Button -->
+    <div class="form-action-button">
+      <button type="submit" mat-raised-button color="primary" (click)="onApproveAndGenerate()">
+        Approve And Generate Repayment</button>
+      <button type="button" title="Cancel" mat-raised-button class="btnClose" (click)="onCancel()">
+        <i class="material-icons " title="cancel">close</i>Cancel</button>
+    </div>
+
+  </div>
+</div>

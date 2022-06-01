@@ -1,0 +1,1107 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>PVU</div>
+            <div class="font-heading" *ngIf="trnNo"><b>Reference No:</b> {{trnNo}}</div>
+            <div class="font-heading" *ngIf="trnNo"><b>Reference Date:</b> {{ trnDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}
+            </div>
+        </div>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs>
+                <mat-tab label="PVU Event">
+                    <div class="row" *ngIf="postDetail">
+                        <div class="col-sm-3" [class.hide-details]="!postDetail.officeId && postDetail.officeId !== 0">
+                            <mat-form-field>
+                                <input matInput type="text" placeholder="Office Name" [value]="postDetail.officeId"
+                                    name="officeId" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.eventOrderNo && postDetail.eventOrderNo !== 0">
+                            <mat-form-field>
+                                <input matInput type="text" placeholder="Event Order Number" name="eventOrderNo"
+                                    [value]="postDetail.eventOrderNo" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.eventOrderDate && postDetail.eventOrderDate !== 0">
+                            <mat-form-field>
+                                <input matInput placeholder="Event Order Date" [value]="postDetail.eventOrderDate"
+                                    name="eventOrderDate" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.eventEffectiveDate && postDetail.eventEffectiveDate !== 0">
+                            <mat-form-field>
+                                <input matInput placeholder="Event Effective Date" name="eventEffectiveDate"
+                                    [value]="postDetail.eventEffectiveDate" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.payCommId && postDetail.payCommId !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput name="payCommId" placeholder="Pay Commission"
+                                    [value]="postDetail.payCommId" readonly>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.eventCode && postDetail.eventCode !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput name="eventCode" [value]="postDetail.eventCode" placeholder="Event"
+                                    readonly>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.hpScaleFor && postDetail.hpScaleFor !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput readonly name="hpScaleFor" [value]="postDetail.hpScaleFor"
+                                    placeholder="Higher Pay Scale for" readonly>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.hpScaleType && postDetail.hpScaleType !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput readonly name="hpScaleType" [value]="postDetail.hpScaleType"
+                                    placeholder="Higher Pay Scale Type">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3" [class.hide-details]="!postDetail.acpType && postDetail.acpType !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput readonly name="acpType" [value]="postDetail.acpType"
+                                    placeholder="Assured Career Progression Type">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3" [class.hide-details]="!postDetail.tikuType && postDetail.tikuType !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput readonly name="tikuType" [value]="postDetail.tikuType"
+                                    placeholder="Tiku Pay Type">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3" [class.hide-details]="!postDetail.casType && postDetail.casType !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput readonly name="casType" [value]="postDetail.casType" placeholder="Type">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3"
+                            [class.hide-details]="!postDetail.steppingUpTypeId && postDetail.steppingUpTypeId !== 0">
+                            <mat-form-field class="full-width">
+                                <input matInput readonly name="steppingUpTypeId" [value]="postDetail.steppingUpTypeId"
+                                    placeholder="Type">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header">Employee Details</div>
+                        <div class="box-body">
+                            <div class="col-sm-4" *ngIf="postDetail && postDetail.employeeNo">
+                                <mat-form-field>
+                                    <input matInput readonly placeholder="Employee Number"
+                                        [value]="postDetail.employeeNo" name="empno" />
+                                </mat-form-field>
+                            </div>
+                            <div class="box box-primary">
+                                <div class="box-header">Current Details</div>
+                                <div class="box-body">
+                                    <div class="row" *ngIf="currentDetails">
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Employee Name" readonly
+                                                    name="name" [value]="currentDetails.employeeName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Class" readonly name="class"
+                                                    [value]="currentDetails.employeeClass">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Designation" readonly
+                                                    name="designation" [value]="currentDetails.designationName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.payLevelName && currentDetails.payLevelName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Pay Level" readonly
+                                                    [value]="currentDetails.payLevelName" name="payLevel">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.cellName && currentDetails.cellName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Cell Id" readonly name="cellId"
+                                                    [value]="currentDetails.cellName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.payBandName && currentDetails.payBandName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'" readonly
+                                                    name="payBand" [value]="currentDetails.payBandName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.payBandValue && currentDetails.payBandValue !== 0" *ngIf = "!isJudiciaryDepartment">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Pay Band Value" readonly
+                                                    name="payBandValue" [value]="currentDetails.payBandValue">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.gradePayName && currentDetails.gradePayName !== 0" *ngIf = "!isJudiciaryDepartment">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Grade Pay" readonly
+                                                    name="gradePay" [value]="currentDetails.gradePayName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.payScaleName && currentDetails.payScaleName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Scale"
+                                                    [value]="currentDetails.payScaleName" readonly name="scale">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Basic Pay" readonly
+                                                    name="basicPay" [value]="currentDetails.empBasicPay">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Date of Joining" readonly
+                                                    name="doj" [value]="currentDetails.dateJoining">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Date of Retirement" readonly
+                                                    name="dor" [value]="currentDetails.retirementDate">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Office Name" readonly
+                                                    name="officeName" [value]="currentDetails.officeName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Date of Next Increment"
+                                                    readonly name="dateOfNextIncrement"
+                                                    [value]="currentDetails.dateNxtIncr">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.tikuPay1 && currentDetails.tikuPay1 !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="tikuPay1"
+                                                    placeholder="Date of Tiku Pay 1st" [value]="currentDetails.tikuPay1"
+                                                    readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin"
+                                            [class.hide-details]="!currentDetails.tikuPay2 && currentDetails.tikuPay2 !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="tikuPay2"
+                                                        placeholder="Date of Tiku Pay 2nd"
+                                                        [value]="currentDetails.tikuPay2" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionEventdate && higherPayPromotionDetails.promotionEventdate !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Promotion Date" readonly
+                                                    name="promotionEventdate"
+                                                    [value]="higherPayPromotionDetails.promotionEventdate">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionDesignation && higherPayPromotionDetails.promotionDesignation !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Promotion Designation" readonly
+                                                    name="promotionDesignation"
+                                                    [value]="higherPayPromotionDetails.promotionDesignation">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionScale && higherPayPromotionDetails.promotionScale !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="promotionScale"
+                                                        [value]="higherPayPromotionDetails.promotionScale"
+                                                        placeholder="Promotion Pay Scale" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionPayLevel && higherPayPromotionDetails.promotionPayLevel !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="promotionPayLevel"
+                                                        [value]="higherPayPromotionDetails.promotionPayLevel"
+                                                        placeholder="Promotion Pay Level" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionCell && higherPayPromotionDetails.promotionCell !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="promotionCell"
+                                                        [value]="higherPayPromotionDetails.promotionCell"
+                                                        placeholder="Promotion Cell Id" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionPayBand && higherPayPromotionDetails.promotionPayBand !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="promotionPayBand"
+                                                        [value]="higherPayPromotionDetails.promotionPayBand"
+                                                        placeholder="Promotion Pay Band" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionPayBandValue && higherPayPromotionDetails.promotionPayBandValue !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="promotionPayBandValue"
+                                                        [value]="higherPayPromotionDetails.promotionPayBandValue"
+                                                        placeholder="Promotion Pay Band Value" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayPromotionDetails"
+                                            [class.hide-details]="!higherPayPromotionDetails.promotionGradePay && higherPayPromotionDetails.promotionGradePay !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="promotionGradePay"
+                                                        [value]="higherPayPromotionDetails.promotionGradePay"
+                                                        placeholder="Promotion Grade Pay" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="higherPayDates"
+                                            [class.hide-details]="!higherPayDates.firstHigherpayDate && currentDetails.firstHigherpayDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="firstHigherpayDate"
+                                                    [value]="higherPayDates.firstHigherpayDate"
+                                                    placeholder="Date of Higher pay scale 1" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="row col-sm-3 no-padding no-margin" *ngIf="higherPayDates"
+                                            [class.hide-details]="!higherPayDates.secondHigherpayDate && higherPayDates.secondHigherpayDate !== 0">
+                                            <div class="col-sm">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" name="secondHigherpayDate"
+                                                        [value]="higherPayDates.secondHigherpayDate"
+                                                        placeholder="Date of Higher pay scale 2" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.acpEffDate && currentDetails.acpEffDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="acpEffDate"
+                                                    [value]="currentDetails.acpEffDate" placeholder="Date of ACP 1"
+                                                    readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.uniAppLectType && currentDetails.uniAppLectType !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="uniAppLectType"
+                                                    [value]="currentDetails.uniAppLectType"
+                                                    placeholder="University Approved Lecturer" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.oriCertDate && currentDetails.oriCertDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="oriCertDate"
+                                                    [value]="currentDetails.oriCertDate"
+                                                    placeholder="Orientation Certificate Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.ssEffDate && currentDetails.ssEffDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="ssEffDate"
+                                                    [value]="currentDetails.ssEffDate"
+                                                    placeholder="Senior Scale Effective Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.ssrefCertDate && currentDetails.ssrefCertDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="ssrefCertDate"
+                                                    [value]="currentDetails.ssrefCertDate"
+                                                    placeholder="Senior Scale Refresher Certificate Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.sgEffDate && currentDetails.sgEffDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="sgEffDate"
+                                                    [value]="currentDetails.sgEffDate"
+                                                    placeholder="Selection Grade Effective Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.sgrefCertDate && currentDetails.sgrefCertDate !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="sgrefCertDate"
+                                                    [value]="currentDetails.sgrefCertDate"
+                                                    placeholder="Selection Grade Refresher Certificate Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.sgEffDate3yr && currentDetails.sgEffDate3yr !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="sgEffDate3yr"
+                                                    [value]="currentDetails.sgEffDate3yr"
+                                                    placeholder="Selection Grade (3 Years)-1 Effective Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!currentDetails.sgrefCertDate3yr && currentDetails.sgrefCertDate3yr !== 0">
+                                            <mat-form-field class=" full-width">
+                                                <input matInput type="text" name="sgrefCertDate3yr"
+                                                    [value]="currentDetails.sgrefCertDate3yr"
+                                                    placeholder="Selection Grade (3 Years)-1 Refresher Certificate Date"
+                                                    readonly>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" *ngIf="steppingUpJnr && steppingUpJnr.employeeNo">
+                                <mat-form-field>
+                                    <input matInput readonly placeholder="Employee Number"
+                                        [value]="steppingUpJnr.employeeNo" name="empno" />
+                                </mat-form-field>
+                            </div>
+                            <div class="box box-primary" *ngIf="steppingUpJnr && steppingUpJnr.employeeNo">
+                                <div class="box-header">Junior Details</div>
+                                <div class="box-body">
+                                    <div class="row" *ngIf="steppingUpJnr">
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Employee Name" readonly
+                                                    name="name" [value]="steppingUpJnr.employeeName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Class" readonly name="class"
+                                                    [value]="steppingUpJnr.employeeClass">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Designation" readonly
+                                                    name="designation" [value]="steppingUpJnr.designationName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!steppingUpJnr.payLevelName && steppingUpJnr.payLevelName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Pay Level" readonly
+                                                    [value]="steppingUpJnr.payLevelName" name="payLevel">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!steppingUpJnr.cellName && steppingUpJnr.cellName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Cell Id" readonly name="cellId"
+                                                    [value]="steppingUpJnr.cellName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!steppingUpJnr.payBandName && steppingUpJnr.payBandName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'" readonly
+                                                    name="payBand" [value]="steppingUpJnr.payBandName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!steppingUpJnr.payBandValue && steppingUpJnr.payBandValue !== 0" *ngIf = "!isJudiciaryDepartment">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Pay Band Value" readonly
+                                                    name="payBandValue" [value]="steppingUpJnr.payBandValue">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!steppingUpJnr.gradePayName && steppingUpJnr.gradePayName !== 0" *ngIf = "!isJudiciaryDepartment">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Grade Pay" readonly
+                                                    name="gradePay" [value]="steppingUpJnr.gradePayName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!steppingUpJnr.payScaleName && steppingUpJnr.payScaleName !== 0">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Scale"
+                                                    [value]="steppingUpJnr.payScaleName" readonly name="scale">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Basic Pay" readonly
+                                                    name="basicPay" [value]="steppingUpJnr.empBasicPay">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Date of Joining" readonly
+                                                    name="doj" [value]="steppingUpJnr.dateJoining">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Date of Retirement" readonly
+                                                    name="dor" [value]="steppingUpJnr.retirementDate">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Office Name" readonly
+                                                    name="officeName" [value]="steppingUpJnr.officeName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <mat-form-field class="full-width">
+                                                <input matInput type="text" placeholder="Date of Next Increment"
+                                                    readonly name="dateOfNextIncrement"
+                                                    [value]="steppingUpJnr.dateNxtIncr">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box box-primary">
+                                <div class="box-header">Post Details</div>
+                                <div class="box-body" *ngIf="postDetail">
+                                    <div class="row">
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.adhocId && (postDetail.adhocId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="adhocId" [value]="postDetail.adhocId"
+                                                    placeholder="Adhoc">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.adhocFromDate && (postDetail.adhocFromDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="adhocFromDate"
+                                                    [value]="postDetail.adhocFromDate" placeholder="Adhoc From Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.adhocToDate && (postDetail.adhocToDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="adhocToDate"
+                                                    [value]="postDetail.adhocToDate" placeholder="Adhoc To Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.serviceRegularisedId && (postDetail.serviceRegularisedId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="serviceRegularisedId"
+                                                    [value]="postDetail.serviceRegularisedId"
+                                                    placeholder="Adhoc Service Regularised?">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.gpscExamPassedId && (postDetail.gpscExamPassedId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="gpscExamPassedId"
+                                                    [value]="postDetail.gpscExamPassedId"
+                                                    placeholder="GPSC Exam Passed">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.gpscExamPassedDate && (postDetail.gpscExamPassedDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="gpscExamPassedDate"
+                                                    [value]="postDetail.gpscExamPassedDate"
+                                                    placeholder="GPSC Exam Passed Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.dojRegularServiceDate && (postDetail.dojRegularServiceDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="dojRegularServiceDate"
+                                                    [value]="postDetail.dojRegularServiceDate"
+                                                    placeholder="Date of Joining in Regular Service">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.employeeClassId && (postDetail.employeeClassId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="employeeClassId"
+                                                    [value]="postDetail.employeeClassId" placeholder="Class">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.uniAppLectType && (postDetail.uniAppLectType !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="uniAppLectType"
+                                                    [value]="postDetail.uniAppLectType"
+                                                    placeholder="University Approved Lecturer">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.oriCourAtte && (postDetail.oriCourAtte !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="oriCourAtte"
+                                                    [value]="postDetail.oriCourAtte"
+                                                    placeholder="Orientation Course Attended">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.oriCertDate && (postDetail.oriCertDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="oriCertDate"
+                                                    [value]="postDetail.oriCertDate"
+                                                    placeholder="Orientation Certificate Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.refCourAtte && (postDetail.refCourAtte !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="refCourAtte"
+                                                    [value]="postDetail.refCourAtte"
+                                                    placeholder="Refresher Course Attended">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.refCertDate && (postDetail.refCertDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="refCertDate"
+                                                    [value]="postDetail.refCertDate"
+                                                    placeholder="Refresher Certificate Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.designationId && (postDetail.designationId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="designationId"
+                                                    [value]="postDetail.designationId" placeholder="Designation">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.hpType && (postDetail.hpType !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="hpType" [value]="postDetail.hpType"
+                                                    placeholder="Type">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.hpEmpType && (postDetail.hpEmpType !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="hpEmpType" [value]="postDetail.hpEmpType"
+                                                    placeholder="Employee Type">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="!currentDetails.hp1"
+                                            [class.hide-details]="!postDetail.hgEffDate && postDetail.hgEffDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Higher Grade 1st Effective Date"
+                                                    name="hgEffDate" [value]="postDetail.hgEffDate" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="currentDetails.hp1 && !currentDetails.hp2"
+                                            [class.hide-details]="!postDetail.hgEffDate && postDetail.hgEffDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Higher Grade 2nd Effective Date"
+                                                    name="hgEffDate" [value]="postDetail.hgEffDate" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="currentDetails.hp1 && currentDetails.hp2"
+                                            [class.hide-details]="!postDetail.hgEffDate && postDetail.hgEffDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Higher Grade 3rd Effective Date"
+                                                    name="hgEffDate" [value]="postDetail.hgEffDate" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.benefitEffectiveDate && postDetail.benefitEffectiveDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Event Effective Date"
+                                                    name="benefitEffectiveDate"
+                                                    [value]="postDetail.benefitEffectiveDate" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.optionAvailableId && (postDetail.optionAvailableId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="optionAvailableId"
+                                                    [value]="postDetail.optionAvailableId" placeholder="Option Availed">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.optionAvailableDate && (postDetail.optionAvailableDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="optionAvailableDate"
+                                                    [value]="postDetail.optionAvailableDate" placeholder="Option Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.decRegPrm && (postDetail.decRegPrm !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="decRegPrm" [value]="postDetail.decRegPrm"
+                                                    placeholder="Declined regular promotion on any personal ground?">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.payBandId && (postDetail.payBandId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="payBandId" [value]="postDetail.payBandId"
+                                                    [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.payBandValue && (postDetail.payBandValue !== 0)" *ngIf = "!isJudiciaryDepartment">
+                                            <mat-form-field class="full-width">
+                                                <input matInput placeholder="Pay Band Value"
+                                                    [value]="postDetail.payBandValue" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.gradePayId && (postDetail.gradePayId !== 0)" *ngIf = "!isJudiciaryDepartment">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="gradePayId"
+                                                    [value]="postDetail.gradePayId" placeholder="Grade Pay">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.payLevelId && (postDetail.payLevelId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="payLevelId"
+                                                    [value]="postDetail.payLevelId" placeholder="Pay Level">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.cellId && (postDetail.cellId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="cellId" [value]="postDetail.cellId"
+                                                    placeholder="Cell Id">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.scaleId && (postDetail.scaleId !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="scaleId" [value]="postDetail.scaleId"
+                                                    placeholder="Scale">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.payScale && (postDetail.payScale !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="payScale" [value]="postDetail.payScale"
+                                                    placeholder="Scale">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.basicPay && (postDetail.basicPay !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly type="text" placeholder="Basic Pay"
+                                                    name="basicPay" [value]="postDetail.basicPay" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.personalPay && (postDetail.personalPay !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly type="text" placeholder="Personal Pay"
+                                                    name="personalPay" [value]="postDetail.personalPay">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="!isOptionAvailed"
+                                            [class.hide-details]="!postDetail.dateOfNextIncrement && postDetail.dateOfNextIncrement !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Date of Next Increment"
+                                                    name="dateOfNextIncrement" [value]="postDetail.dateOfNextIncrement"
+                                                    readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <!-- <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.benefitEffectiveDate && postDetail.benefitEffectiveDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Event Effective Date"
+                                                    name="benefitEffectiveDate"
+                                                    [value]="postDetail.benefitEffectiveDate" readonly>
+                                            </mat-form-field>
+                                        </div> -->
+                                        <div class="col-sm-3" *ngIf="!currentDetails.acpEffDate"
+                                            [class.hide-details]="!postDetail.benEffDate && postDetail.benEffDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput name="benEffDate" [value]="postDetail.benEffDate"
+                                                    placeholder="ACP 1st Effective Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3" *ngIf="currentDetails.acpEffDate"
+                                            [class.hide-details]="!postDetail.benEffDate && postDetail.benEffDate !== 0">
+                                            <mat-form-field>
+                                                <input matInput name="benEffDate" [value]="postDetail.benEffDate"
+                                                    placeholder="ACP 2nd Effective Date" readonly>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table mat-table [dataSource]="dataSourceforCommision" class=" responsive-table">
+                                                <ng-container matColumnDef="PayAsonIncrementDate">
+                                                    <th mat-header-cell *matHeaderCellDef>Pay As on Increment Date </th>
+                                                    <td mat-cell *matCellDef="let element;let i=index" class="centerAlign">
+                                                        {{element.PayAsonIncrementDate | date: 'dd/MM/yyyy'}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="PayScale" *ngIf="tableData.payCommId == 150">
+                                                    <th mat-header-cell *matHeaderCellDef>Pay Scale</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.payScale}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="PayScale" *ngIf="tableData.payCommId == 151">
+                                                    <th mat-header-cell *matHeaderCellDef>Pay Scale</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.payScale}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="PayBand" *ngIf="tableData.payCommId == 151">
+                                                    <th mat-header-cell *matHeaderCellDef>Pay Band</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.payBand}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="PayBandValue" *ngIf="tableData.payCommId == 151">
+                                                    <th mat-header-cell *matHeaderCellDef>Pay Band Value</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.oaPayBandValue}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="GradePay" *ngIf="tableData.payCommId == 151">
+                                                    <th mat-header-cell *matHeaderCellDef>Grade Pay</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.gradePay}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="payLevel" *ngIf="tableData.payCommId == 152">
+                                                    <th mat-header-cell *matHeaderCellDef>Pay Level</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.payLevel}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="cellId" *ngIf="tableData.payCommId == 152">
+                                                    <th mat-header-cell *matHeaderCellDef>Cell Id</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.cellId}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="Basic">
+                                                    <th mat-header-cell *matHeaderCellDef>Basic Pay</th>
+                                                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                                                        {{element.oaBasicPayValue}}
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsData"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsData;"></tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-sm-3 mt-2" *ngIf="isOptionAvailed"
+                                            [class.hide-details]="!postDetail.dateOfNextIncrement && postDetail.dateOfNextIncrement !== 0">
+                                            <mat-form-field>
+                                                <input matInput placeholder="Date of Next Increment"
+                                                    name="dateOfNextIncrement" [value]="postDetail.dateOfNextIncrement"
+                                                    readonly>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box box-primary" *ngIf="postDetail && postDetail.notionalFromDate">
+                                <div class="box-header">Notional Details</div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.notionalFromDate && (postDetail.notionalFromDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="notionalFromDate"
+                                                    [value]="postDetail.notionalFromDate"
+                                                    placeholder="Notional From Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.notionalToDate && (postDetail.notionalToDate !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="notionalToDate"
+                                                    [value]="postDetail.notionalToDate" placeholder="Notional To Date">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-3"
+                                            [class.hide-details]="!postDetail.duration && (postDetail.duration !== 0)">
+                                            <mat-form-field class="full-width">
+                                                <input matInput readonly name="duration" [value]="postDetail.duration"
+                                                    placeholder="Duration">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form [formGroup]="pvuEventForm" autocomplete="off">
+                                <div class="box box-primary">
+                                    <div class="box-header">Recommendation For</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="recommendationFor"
+                                                        placeholder="Recommendation For" required
+                                                        (selectionChange)="recommendationChange()"
+                                                        [disabled]="isNonEditable">
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="recomandCtrl"
+                                                                [placeholderLabel]="'Find Recommendation For...'"
+                                                                [noEntriesFoundLabel]="'no matching Recommendation For found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let recommand of recommendationList | filterSelectInput: recomandCtrl.value: 'lookupInfoName'"
+                                                            [value]="recommand.lookupInfoId">
+                                                            {{recommand.lookupInfoName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="pvuEventForm.controls.recommendationFor.touched && pvuEventForm.controls.recommendationFor.errors">
+                                                        <mat-error
+                                                            *ngIf="pvuEventForm.controls.recommendationFor.errors.required">
+                                                            {{errorMessage.RECOMMENDATION_FOR}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12" *ngIf="isReturn">
+                                                <mat-form-field>
+                                                    <mat-select formControlName="returnReason" multiple
+                                                        placeholder="Reason" (selectionChange)="reasonChangeSelection()"
+                                                        [required]="isReturn"
+                                                        [disabled]="isNonEditable || action === 'view'">
+                                                        <mat-select-trigger>
+                                                            <mat-select-trigger>
+
+                                                            </mat-select-trigger>
+                                                        </mat-select-trigger>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="returnReasonCtrl"
+                                                                [placeholderLabel]="'Find Reason...'"
+                                                                [noEntriesFoundLabel]="'no matching Reason found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let reason of returnReasonList | filterSelectInput : returnReasonCtrl.value : 'reasonName'"
+                                                            [value]="reason.reasonId">
+                                                            {{reason.reasonName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="pvuEventForm.controls.returnReason.touched && pvuEventForm.controls.returnReason.errors">
+                                                        <mat-error
+                                                            *ngIf="pvuEventForm.controls.returnReason.errors.required">
+                                                            {{errorMessage.RETURN_REASON}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12" *ngIf="isOtherReturnReason">
+                                                <mat-form-field class="example-full-width">
+                                                    <textarea matInput placeholder="Other Reason"
+                                                        formControlName="otherReason" [required]="isOtherReturnReason"
+                                                        maxlength="500" noSpaceOnly
+                                                        [readonly]="isNonEditable"></textarea>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="pvuEventForm.controls.otherReason.touched && pvuEventForm.controls.otherReason.errors">
+                                                        <mat-error
+                                                            *ngIf="pvuEventForm.controls.otherReason.errors.required">
+                                                            {{errorMessage.WORKFLOW.VALIDATION.OTHER_REASON}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <mat-accordion class="search-accordian"
+                                    *ngIf="dataSource && dataSource.data && dataSource.data.length > 0">
+                                    <mat-expansion-panel [expanded]="true" class="mb-4">
+                                        <mat-expansion-panel-header>
+                                            Selected Reason List
+                                        </mat-expansion-panel-header>
+                                        <div class="mat-elevation-z8 table-responsive m-2 w-auto">
+                                            <table mat-table [dataSource]="dataSource" width="100%"
+                                                aria-describedby="pvuRegistry">
+
+                                                <ng-container matColumnDef="serialNo">
+                                                    <th mat-header-cell *matHeaderCellDef>Sr. No</th>
+                                                    <td mat-cell *matCellDef="let element; let i =index">
+                                                        {{i+1}}</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="reasonName">
+                                                    <th mat-header-cell *matHeaderCellDef>Return Reason
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{element.reasonName}}
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns">
+                                                </tr>
+
+                                                <tr mat-row
+                                                    *matRowDef="let row; let i = index; columns: displayedColumns">
+                                                </tr>
+                                                <tr mat-footer-row
+                                                    [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+                                                    *matFooterRowDef="[]"></tr>
+                                            </table>
+
+
+                                        </div>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                                <div class="box box-primary">
+                                    <div class="box-header">Remarks</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <mat-form-field class="example-full-width scrollable-text-area">
+                                                    <textarea matInput placeholder="Auditor Remarks" rows="2"
+                                                        formControlName="auditorRemarks" maxlength="10000" noSpaceOnly
+                                                        [class.disable]="pvuEventForm.controls.auditorRemarks.disabled || isNonEditable || !isAuditor"
+                                                        [readonly]="isNonEditable || !isAuditor"
+                                                        [required]="isAuditor && isReturn"></textarea>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="fc.auditorRemarks.errors && fc.auditorRemarks.touched">
+                                                        <mat-error *ngIf="fc.auditorRemarks.errors.required">
+                                                            {{errorMessage.ERR_AUDITOR_REMARKS}}
+                                                        </mat-error>
+                                                        <mat-error *ngIf="fc.auditorRemarks.errors.maxlength">
+                                                            {{errorMessage.REMARKS_MAX_Length_10000}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12" *ngIf="isPvuVerifier || isVerifierRemarks">
+                                                <mat-form-field class="example-full-width scrollable-text-area">
+                                                    <textarea matInput placeholder="Verifier Remarks" rows="2"
+                                                        formControlName="verifierRemarks" class="scrollable-text-area"
+                                                        maxlength="10000" noSpaceOnly
+                                                        [readonly]="isNonEditable==true || !isPvuVerifier"
+                                                        [class.disable]="isNonEditable || !isPvuVerifier"
+                                                        [required]="isPvuVerifier && isReturn"></textarea>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="fc.verifierRemarks.errors && fc.verifierRemarks.touched">
+                                                        <mat-error *ngIf="fc.verifierRemarks.errors.required">
+                                                            {{errorMessage.ERR_VERIFIER_REMARKS}}
+                                                        </mat-error>
+                                                        <mat-error *ngIf="fc.verifierRemarks.errors.maxlength">
+                                                            {{errorMessage.REMARKS_MAX_Length_10000}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12" *ngIf="isPvuApprover || isApproverRemarks">
+                                                <mat-form-field class="example-full-width scrollable-text-area">
+                                                    <textarea matInput placeholder="Authorizer Class II Remarks"
+                                                        rows="2" formControlName="approverRemarks"
+                                                        class="scrollable-text-area" maxlength="10000" noSpaceOnly
+                                                        [readonly]="isNonEditable==true || !isPvuApprover"
+                                                        [class.disable]="isNonEditable || !isPvuApprover"
+                                                        [required]="isPvuApprover && isReturn"></textarea>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="fc.approverRemarks.errors && fc.approverRemarks.touched">
+                                                        <mat-error *ngIf="fc.approverRemarks.errors.required">
+                                                            {{errorMessage.ERR_APPROVER_REMARKS}}
+                                                        </mat-error>
+                                                        <mat-error *ngIf="fc.approverRemarks.errors.maxlength">
+                                                            {{errorMessage.REMARKS_MAX_Length_10000}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12"
+                                                *ngIf="isPvuApproverClassI || isApproverClassIRemarks">
+                                                <mat-form-field class="example-full-width scrollable-text-area">
+                                                    <textarea matInput placeholder="Authorizer Class I Remarks" rows="2"
+                                                        formControlName="approverClassIRemarks"
+                                                        class="scrollable-text-area" maxlength="10000" noSpaceOnly
+                                                        [readonly]="isNonEditable==true || !isPvuApproverClassI"
+                                                        [class.disable]="isNonEditable || !isPvuApproverClassI"
+                                                        [required]="isPvuApproverClassI && isReturn"></textarea>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="fc.approverClassIRemarks.errors && fc.approverClassIRemarks.touched">
+                                                        <mat-error *ngIf="fc.approverClassIRemarks.errors.required">
+                                                            {{errorMessage.ERR_APPROVERI_REMARKS}}
+                                                        </mat-error>
+                                                        <mat-error *ngIf="fc.approverClassIRemarks.errors.maxlength">
+                                                            {{errorMessage.REMARKS_MAX_Length_10000}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-action-button">
+                                    <button type="button" mat-raised-button color="accent" (click)="viewComments()">
+                                        <i class="material-icons " title="View Comments">remove_red_eye</i>
+                                        View Comments
+                                    </button>
+                                    <button type="button" mat-raised-button color="warn"
+                                        (click)="openEventHistoryDialog()">
+                                        <i class="material-icons" aria-hidden="true" title="Listing">history</i>
+                                        Event History
+                                    </button>
+                                    <button type="button" mat-raised-button color="accent" (click)="resetForm()"
+                                        *ngIf="action !== 'view'">
+                                        <i class="material-icons">restore</i>
+                                        Reset
+                                    </button>
+                                    <button mat-raised-button type="button" class="green"
+                                        (click)="savePVUEventDetails('submit')" *ngIf="action !== 'view'">
+                                        <i class="material-icons">done</i>
+                                        Submit
+                                    </button>
+                                    <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                                        <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                                        Listing
+                                    </button>
+                                    <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                                        <i class="material-icons" title="Dashboard">close</i>
+                                        Close
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Attachments" [disabled]="isTabDisabled">
+                    <app-attachment-pvu #attachmentTab *ngIf="eventType && !isTabDisabled" [showSubmit]="false"
+                        (onSubmitClick)="savePVUEventDetails('submit')" [attachmentData]="attachmentData"
+                        [viewAttachmentOnly]="true" (onListClickEmit)="goToListing()" [transactionId]="trnId"
+                        [statusId]="eventData.statusId">
+                    </app-attachment-pvu>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

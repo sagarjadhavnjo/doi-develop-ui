@@ -1,0 +1,157 @@
+<div class="box box-primary">
+  <div class="box-header">Upload</div>
+  <div class="box-body">
+    <div class="mat-elevation-z8 mt-2 overflow-x-auto">
+      <table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable" aria-describedby="attachment">
+        <ng-container matColumnDef="srNo">
+          <th mat-header-cell *matHeaderCellDef>
+            <b>Sr. No.</b>
+          </th>
+          <td mat-cell *matCellDef="let item; let i = index" class="centerAlign">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="attachmentType">
+          <th mat-header-cell *matHeaderCellDef scope="row">Attachment Type</th>
+          <td mat-cell *matCellDef="let item">
+
+            <div *ngIf="isStampView; then stampView else notStampView"></div>
+
+            <ng-template #stampView>
+              {{item.attachmentType}}
+            </ng-template>
+
+            <ng-template #notStampView>
+              <mat-form-field class="full-width">
+                <mat-select [ngModelOptions]="{standalone: true}" [(ngModel)]="item.attachmentType">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="attachmentTypeCtrl"
+                      [placeholderLabel]="'Find Attachment Type...'"
+                      [noEntriesFoundLabel]="'No matching Attachment Type found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let item of attachmentTypeList | filterSelectInput:attachmentTypeCtrl.value"
+                    [value]="item.value">
+                    {{item.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-template>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fileName">
+          <th mat-header-cell *matHeaderCellDef scope="row">File name</th>
+          <td mat-cell *matCellDef="let item">
+
+            <div *ngIf="isStampView; then stampView else notStampView"></div>
+
+            <ng-template #stampView>
+              {{item.fileName}}
+            </ng-template>
+
+            <ng-template #notStampView>
+              <mat-form-field floatLabel="never">
+                <textarea matInput [value]="item.fileName" [(ngModel)]="item.fileName"
+                  [ngModelOptions]="{standalone: true}"></textarea>
+              </mat-form-field>
+            </ng-template>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="browse">
+          <th mat-header-cell *matHeaderCellDef scope="row">Browse File</th>
+          <td mat-cell *matCellDef="let i = index" class="centerAlign">
+            <button type="button" (click)="openFileSelector(i)" class="btn-browse">Browse
+              Files</button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="downloadTemplate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Download Template</th>
+          <td mat-cell *matCellDef="let i = index" class="centerAlign">
+            <button type="button" class="btn-browse">Download Template
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="uploadedFileName">
+          <th mat-header-cell *matHeaderCellDef scope="row">Uploaded file name</th>
+          <td mat-cell *matCellDef="let item">
+            <span *ngIf="item.file && item.file.name">{{item.file.name}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="uploadedBy">
+          <th mat-header-cell *matHeaderCellDef scope="row">Uploaded By</th>
+          <td mat-cell *matCellDef="let item">
+            {{item.uploadedBy}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef scope="row">Action</th>
+          <td mat-cell *matCellDef="let item; let i = index" class="centerAlign">
+            <table class="iconTable" aria-describedby="actionBtn">
+              <tbody>
+                <tr>
+
+                  <div *ngIf="isStampView; then stampView else notStampView"></div>
+
+                  <ng-template #stampView>
+                    <td width="30">
+                      <i class="material-icons plus view-icon" aria-hidden="true" title="view">
+                        visibility
+                      </i>
+                    </td>
+                  </ng-template>
+
+                  <ng-template #notStampView>
+                    <td width="30">
+                      <i class="material-icons plus view-icon" title="Download">
+                        vertical_align_bottom
+                          </i>
+                    </td>
+                    <td width="30">
+                      <i class="material-icons plus view-icon" title="Reset">
+                        restore
+                          </i>                      
+                    </td>
+                  </ng-template>
+
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+      </table>
+    </div>
+    <input type="file" id="fileBrowse" style="visibility: hidden;" (change)="onFileSelection($event)" />
+    <div class="legend">
+      1. Total File size should be under 2MB<br> 2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf',
+      JPG’, ‘JPEG’, ‘PNG’, ‘PDF’.
+    </div>
+
+    <div class="form-action-button">
+
+      <button mat-raised-button type="submit" class="green" title="Submit" (click)="closeDialog()">
+        <i class="material-icons">
+          done
+        </i>
+        Submit
+      </button>
+
+      <button type="button" mat-raised-button (click)="closeDialog()" class="btnClose" title="Close">
+        <i class="material-icons" aria-hidden="true" title="Close">
+          close
+        </i>
+        Close
+      </button>
+
+    </div>
+  </div>
+</div>

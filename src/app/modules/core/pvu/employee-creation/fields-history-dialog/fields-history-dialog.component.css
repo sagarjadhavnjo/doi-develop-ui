@@ -1,0 +1,39 @@
+.highlight {
+    background-color: yellow;
+}
+
+.deleted {
+    color: lightyellow;
+    background-color: rgb(255, 73, 73);
+}
+
+.added {
+    background-color: rgb(86, 255, 142);
+}
+
+.sub-table {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.sub-table tr{
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+.sub-table tr td{
+    margin: 0;
+    padding: 2px;
+    text-align: center;
+    vertical-align: center;
+    background-color: transparent !important;
+    justify-content: center;
+    height: max-content;
+}
+
+.sub-table-padding {
+    padding: 2px;
+}

@@ -1,0 +1,727 @@
+<form autocomplete="off" [formGroup]="employeeCurrentForm">
+    <div class="col-sm-6">
+        <mat-form-field class="full-width">
+            <input matInput type="text" numbersOnly class="employee-number-field" placeholder="Employee Number"
+                minlength="10" maxlength="10" formControlName="employeeNo" (keypress)="onEmployeeKeyUp($event)"
+                (keydown.Tab)="onEmployeeKeyUp($event)"
+                [readonly]="(!isRework && eventDetails && eventDetails.statusId !== 205 && eventDetails.statusId !== 0) || action === 'view'"
+                required>
+            <mat-icon matSuffix (click)="openSearchEmployeeDialog()">search
+            </mat-icon>
+            <div class="error-wrapper"
+                *ngIf="employeeCurrentForm.controls.employeeNo.touched && employeeCurrentForm.controls.employeeNo.errors">
+                <mat-error *ngIf="employeeCurrentForm.controls.employeeNo.errors.required">
+                    {{errorMessage.EMP_NO}}</mat-error>
+                <mat-error *ngIf="employeeCurrentForm.controls.employeeNo.errors.minlength">
+                    {{errorMessage.EMP_NO_MAX}}</mat-error>
+            </div>
+        </mat-form-field>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header">Current Details</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Employee Name" readonly formControlName="name">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Class" readonly formControlName="class">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Designation" readonly formControlName="designation">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('payLevel')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Level" readonly formControlName="payLevel">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('cellId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Cell Id" readonly formControlName="cellId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('payBand')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Band" readonly formControlName="payBand">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('payBandValue')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Band Value" readonly
+                            formControlName="payBandValue">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('gradePay')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Grade Pay" readonly formControlName="gradePay">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('scale')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Scale" readonly formControlName="scale">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Basic Pay" readonly formControlName="basicPay">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Joining" readonly formControlName="doj">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Retirement" readonly formControlName="dor">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Office Name" readonly formControlName="officeName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Next Increment" readonly
+                            formControlName="dateOfNextIncrement">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Fix / Probational Pay Joining Date" readonly
+                            formControlName="fixProbationalPayDate">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date Of Conversion To Regular" readonly
+                            formControlName="conversionDateToRegular">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3"
+                    *ngIf="employeeCurrentForm.get('promoDate') && employeeCurrentForm.get('promoDate').value">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Promotion Date" readonly formControlName="promoDate">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3"
+                    *ngIf="employeeCurrentForm.get('promoDesignation') && employeeCurrentForm.get('promoDesignation').value">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Promotion Designation" readonly
+                            formControlName="promoDesignation">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3"
+                    *ngIf="employeeCurrentForm.get('promoScale') && employeeCurrentForm.get('promoScale').value">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Promotion Scale" readonly formControlName="promoScale">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="employeeCurrentForm.get('hp1') && employeeCurrentForm.get('hp1').value">
+                    <mat-form-field class=" full-width">
+                        <input matInput type="text" formControlName="hp1" placeholder="Date of Higher pay scale 1"
+                            readonly>
+                    </mat-form-field>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('hp2') && employeeCurrentForm.get('hp2').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="hp2" placeholder="Date of Higher pay scale 2"
+                                readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('promotionScale') && employeeCurrentForm.get('promotionScale').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="promotionScale"
+                                placeholder="Promotion Pay Scale" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('promotionPayLevel') && employeeCurrentForm.get('promotionPayLevel').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="promotionPayLevel"
+                                placeholder="Promotion Pay Level" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('promotionCell') && employeeCurrentForm.get('promotionCell').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="promotionCell" placeholder="Promotion Cell Id"
+                                readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('promotionPayBand') && employeeCurrentForm.get('promotionPayBand').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="promotionPayBand"
+                                placeholder="Promotion Pay Band" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('promotionPayBandValue') && employeeCurrentForm.get('promotionPayBandValue').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="promotionPayBandValue"
+                                placeholder="Promotion Pay Band Value" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row col-sm-3 no-padding no-margin"
+                    *ngIf="employeeCurrentForm.get('promotionGradePay') && employeeCurrentForm.get('promotionGradePay').value">
+                    <div class="col-sm">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" formControlName="promotionGradePay"
+                                placeholder="Promotion Grade Pay" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="box box-primary search-grid">
+                        <div class="box-header">CCC/CCC+ Exam Detail</div>
+                        <div class="box-body">
+                            <table mat-table #table [dataSource]="cccExamDataSource" class="responsive-table">
+                                <ng-container matColumnDef="examName">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examName}}
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                        class="centerAlign">
+                                        <span
+                                            *ngIf="cccExamDataSource && cccExamDataSource.data && cccExamDataSource.data.length==0">
+                                            No Records Found!
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examBody">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Body
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examBody}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examPassingDate">
+                                    <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        <span
+                                            *ngIf="element.examPassingDate">{{this.transforminDDMYateFormat(element.examPassingDate)}}</span>
+                                        <span *ngIf="!element.examPassingDate">N/A </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examStatus">
+                                    <th mat-header-cell *matHeaderCellDef class="gray-color">Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.examStatus}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="examColumns">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: examColumns;let i=index;">
+                                </tr>
+                                <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                    [class.hide-table-footer]="cccExamDataSource && cccExamDataSource.data && cccExamDataSource.data.length !=0">
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box box-primary search-grid">
+                        <div class="box-header">Departmental Exam Detail</div>
+                        <div class="box-body">
+                            <table mat-table #table [dataSource]="departmentalExamDataSource" class="responsive-table">
+                                <ng-container matColumnDef="examName">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examName}}
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                        class="centerAlign">
+                                        <span
+                                            *ngIf="departmentalExamDataSource && departmentalExamDataSource.data && departmentalExamDataSource.data.length==0">
+                                            No Records Found!
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examBody">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Body
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examBody}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examPassingDate">
+                                    <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        <span
+                                            *ngIf="element.examPassingDate">{{this.transforminDDMYateFormat(element.examPassingDate)}}</span>
+                                        <span *ngIf="!element.examPassingDate">N/A </span>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="examStatus">
+                                    <th mat-header-cell *matHeaderCellDef class="gray-color">Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.examStatus}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="examColumns">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: examColumns;let i=index;">
+                                </tr>
+                                <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                    [class.hide-table-footer]="departmentalExamDataSource && departmentalExamDataSource.data && departmentalExamDataSource.data.length !=0">
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="box box-primary search-grid">
+                        <div class="box-header">Language Exam Detail</div>
+                        <div class="box-body">
+                            <table mat-table #table [dataSource]="languageExamDataSource" class="responsive-table">
+                                <ng-container matColumnDef="examName">
+                                    <th mat-header-cell *matHeaderCellDef>Language Name
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examName}}
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                        class="centerAlign">
+                                        <span
+                                            *ngIf="languageExamDataSource && languageExamDataSource.data && languageExamDataSource.data.length==0">
+                                            No Records Found!
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examBody">
+                                    <th mat-header-cell *matHeaderCellDef>Exam Body
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        {{element.examBody}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examPassingDate">
+                                    <th mat-header-cell *matHeaderCellDef>Date of Passing
+                                    </th>
+                                    <td mat-cell *matCellDef="let element;let i=index;">
+                                        <span
+                                            *ngIf="element.examPassingDate">{{this.transforminDDMYateFormat(element.examPassingDate)}}</span>
+                                        <span *ngIf="!element.examPassingDate">N/A </span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="examStatus">
+                                    <th mat-header-cell *matHeaderCellDef class="gray-color">Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.examStatus}}
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="examColumns">
+                                </tr>
+                                <tr mat-row *matRowDef="let row; columns: examColumns;let i=index;">
+                                </tr>
+                                <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                                    [class.hide-table-footer]="languageExamDataSource && languageExamDataSource.data && languageExamDataSource.data.length !=0">
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form [formGroup]="postForm" *ngIf="postForm">
+    <div class="box box-primary">
+        <div class="box-header">Post Details</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3" *ngIf="postForm.get('hpType')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="hpType" placeholder="Type" required
+                            (selectionChange)="onTypeChange($event)">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="typeCtrl" [placeholderLabel]="'Find Type...'"
+                                    [noEntriesFoundLabel]="'no matching Type found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let class of typeList | filterSelectInput: typeCtrl.value: 'lookupInfoName'"
+                                [value]="class.lookupInfoId">
+                                {{class.lookupInfoName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.hpType.touched && postForm.controls.hpType.errors">
+                            <mat-error *ngIf="postForm.controls.hpType.errors.required">
+                                {{errorMessage.OPTION_TYPE}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="hpType === 321 && postForm.get('hpEmpType')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="hpEmpType" placeholder="Employee Type" required
+                            (selectionChange)="onEmployeeTypeChange($event)">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="empTypeCtrl"
+                                    [placeholderLabel]="'Find Employee Type...'"
+                                    [noEntriesFoundLabel]="'no matching Employee Type found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let optionEmpType of empTypeList | filterSelectInput: empTypeCtrl.value: 'lookupInfoName'"
+                                [value]="optionEmpType.lookupInfoId">
+                                {{optionEmpType.lookupInfoName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.hpEmpType.touched && postForm.controls.hpEmpType.errors">
+                            <mat-error *ngIf="postForm.controls.hpEmpType.errors.required">
+                                {{errorMessage.OPTION_EMP_TYPE}}
+                            </mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('hgEffDate')">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="picker4" formControlName="hgEffDate"
+                            [placeholder]="hgEffDatePlaceholder" [min]="eventEffectiveDate" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="picker4" disabled>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.hgEffDate.touched && postForm.controls.hgEffDate.errors">
+                            <mat-error *ngIf="postForm.controls.hgEffDate.errors.required">
+                                Please select effective date!</mat-error>
+                            <mat-error *ngIf="postForm.controls.hgEffDate.errors.matDatepickerMin">
+                                Please enter greater than {{eventEffectiveDate | date : 'dd-MMM-yyyy'}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('optionAvailableId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="optionAvailableId" placeholder="Option Availed"
+                            (selectionChange)="onYesNoChange('optionAvailableId', 'optionAvailableDate')" required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="optionAvailedCtrl"
+                                    [placeholderLabel]="'Find option Opted...'"
+                                    [noEntriesFoundLabel]="'no matching option Opted found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let optionAvailed of optionAvailedList | filterSelectInput: optionAvailedCtrl.value: 'lookupInfoName'"
+                                [value]="optionAvailed.lookupInfoId">
+                                {{optionAvailed.lookupInfoName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.optionAvailableId.touched && postForm.controls.optionAvailableId.errors">
+                            <mat-error *ngIf="postForm.controls.optionAvailableId.errors.required">
+                                {{errorMessage.OPTION_AVAILED}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3"
+                    *ngIf="postForm.get('optionAvailableId') && postForm.get('optionAvailableId').value == 2">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="optionDate1" [min]="optionMinDate" placeholder="Option Date"
+                            formControlName="optionAvailableDate" required readonly
+                            (dateChange)="optionAvailDateChanged()">
+                        <mat-datepicker-toggle matSuffix [for]="optionDate1" disabled>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #optionDate1></mat-datepicker>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.optionAvailableDate.touched && postForm.controls.optionAvailableDate.errors">
+                            <mat-error *ngIf="postForm.controls.optionAvailableDate.errors.required">
+                                {{errorMessage.OPTION_DATE}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.optionAvailableDate.errors.matDatepickerMin">
+                                Please enter greater than {{optionMinDate | date : 'dd-MMM-yyyy'}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payBandId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payBandId" placeholder="Pay Band" required
+                            (selectionChange)="onPayBandChange()">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payBandCtrl"
+                                    [placeholderLabel]="'Find Pay Band...'"
+                                    [noEntriesFoundLabel]="'no matching Pay Band found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngIf="!payBandList || payBandList.length === 0">
+                                No Pay Band available
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let payBand of payBandList | filterSelectInput:payBandCtrl.value : 'payBandName'"
+                                [value]="payBand.id">
+                                {{payBand.payBandName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payBandId.touched && postForm.controls.payBandId.errors">
+                            <mat-error *ngIf="postForm.controls.payBandId.errors.required">
+                                {{errorMessage.PAY_BAND}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payBandValue')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="number" placeholder="Pay Band Value" formControlName="payBandValue"
+                            [disabled]="!postForm.get('payBandId').value" readonly>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payBandValue.touched && postForm.controls.payBandValue.errors">
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.required">
+                                {{errorMessage.PAY_BAND_VALUE}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.min">
+                                {{errorMessage.PAY_BAND_MIN_MAX}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.max">
+                                {{errorMessage.PAY_BAND_MIN_MAX}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('gradePayId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="gradePayId" (selectionChange)="calculateSixthBasicPay()"
+                            placeholder="Grade Pay" required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="gradePayCtrl"
+                                    [placeholderLabel]="'Find Grade Pay...'"
+                                    [noEntriesFoundLabel]="'no matching Grade Pay found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngIf="!gradePayList || gradePayList.length === 0">
+                                No Grade Pay available
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let gradePay of gradePayList | filterSelectInput:gradePayCtrl.value: 'gradePayValue'"
+                                [value]="gradePay.id">
+                                {{gradePay.gradePayValue}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.gradePayId.touched && postForm.controls.gradePayId.errors">
+                            <mat-error *ngIf="postForm.controls.gradePayId.errors.required">
+                                {{errorMessage.GRADE_PAY}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payLevelId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payLevelId" placeholder="Pay Level" required
+                            (selectionChange)="onPayLevelChange()">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payLevelCtrl"
+                                    [placeholderLabel]="'Find pay level...'"
+                                    [noEntriesFoundLabel]="'no matching pay level found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngIf="!payLevelList || payLevelList.length === 0">
+                                No Pay Level available
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let payLevel of payLevelList | filterSelectInput:payLevelCtrl.value: 'payLevelValue'"
+                                [value]="payLevel.id">
+                                {{payLevel.payLevelValue}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payLevelId.touched && postForm.controls.payLevelId.errors">
+                            <mat-error *ngIf="postForm.controls.payLevelId.errors.required">
+                                {{errorMessage.PAY_LEVEL}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('cellId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="cellId" placeholder="Cell Id" required readonly>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="cellIdCtrl"
+                                    [placeholderLabel]="'Find Cell Id ...'"
+                                    [noEntriesFoundLabel]="'no matching Cell Id found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngIf="!cellList || cellList.length === 0">
+                                No Cell available
+                            </mat-option>
+                            <mat-option *ngFor="let cellId of cellList | filterSelectInput:cellIdCtrl.value : 'cellId'"
+                                [value]="cellId.id">
+                                {{cellId.cellId}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.cellId.touched && postForm.controls.cellId.errors">
+                            <mat-error *ngIf="postForm.controls.cellId.errors.required">
+                                {{errorMessage.CELL_ID}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payScale')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payScale" placeholder="Scale" required
+                            (selectionChange)="setFifthBasicParams($event)">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="scaleCtrl" [placeholderLabel]="'Find Scale ...'"
+                                    [noEntriesFoundLabel]="'no matching Scale found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngIf="!scaleList || scaleList.length === 0">
+                                No Scale available
+                            </mat-option>
+                            <mat-option [title]="scale.name"
+                                *ngFor="let scale of scaleList | filterSelectInput:scaleCtrl.value : 'name'"
+                                [value]="scale.id">
+                                {{scale.name}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payScale.touched && postForm.controls.payScale.errors">
+                            <mat-error *ngIf="postForm.controls.payScale.errors.required">
+                                {{errorMessage.SCALE}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" *ngIf="!isFifth" placeholder="Basic Pay" formControlName="basicPay"
+                            readonly>
+                        <input matInput type="text" *ngIf="isFifth" numbersOnly [min]="fifthMin" [max]="fifthMax"
+                            (focusout)="computeFifththIncrement(postForm.controls.basicPay)"
+                            (keydown.enter)="computeFifththIncrement(postForm.controls.basicPay)"
+                            placeholder="Basic Pay" formControlName="basicPay"
+                            [readonly]="currentPayscaleSelected.length === 0" required>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.basicPay.touched && postForm.controls.basicPay.errors">
+                            <mat-error *ngIf="postForm.controls.basicPay.errors.required">
+                                {{errorMessage.BASIC_PAY}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.basicPay.errors.min">
+                                {{errorMessage.BASIC_PAY_MIN + fifthMin}}!</mat-error>
+                            <mat-error *ngIf="postForm.controls.basicPay.errors.max">
+                                {{errorMessage.BASIC_PAY_MAX + fifthMax}}!</mat-error>
+                            <mat-error class="custom-mat-error" *ngIf="postForm.controls.basicPay.errors.wrongValue">
+                                {{postForm.controls.basicPay.errors.wrongValue}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3 " *ngIf="postForm.get('optionAvailableId').value === 1 && !optionValid">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="dateOfNextIncrement1" placeholder="Date of Next Increment"
+                            formControlName="dateOfNextIncrement" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="dateOfNextIncrement1" disabled>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateOfNextIncrement1></mat-datepicker>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.dateOfNextIncrement.touched && postForm.controls.dateOfNextIncrement.errors">
+                            <mat-error *ngIf="postForm.controls.dateOfNextIncrement.errors.required">
+                                {{errorMessage.DATE_OF_NEXT_INCREMENT}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                    <table mat-table [dataSource]="dataSource" class=" responsive-table"
+                        *ngIf="postForm.get('optionAvailableId').value === 2 && optionValid">
+                        <ng-container matColumnDef="PayAsonIncrementDate">
+                            <th mat-header-cell *matHeaderCellDef>Pay As on Increment Date </th>
+                            <td mat-cell *matCellDef="let element;let i=index" class="centerAlign">
+                                {{element.PayAsonIncrementDate | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="{{column.colHeader}}" *ngFor="let column of columnsToDisplay;">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-headerse>{{column.colHeader}}</th>
+                            <td mat-cell *matCellDef="let element;" class="centerAlign">
+                                {{element[column.key]}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Basic">
+                            <th mat-header-cell *matHeaderCellDef>Basic Pay</th>
+                            <td mat-cell *matCellDef="let element" class="centerAlign"> {{element.oaBasicPayValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="examName">
+                            <div
+                                *ngIf="eventForm.get('payCommId').value == 150 || eventForm.get('payCommId').value == 152">
+                                <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns.length"
+                                    class="centerAlign">
+                                    <span *ngIf="dataSource && dataSource.data && dataSource.data.length==0">
+                                        No Records Found!
+                                    </span>
+                                </td>
+                            </div>
+                            <div *ngIf="eventForm.get('payCommId').value == 151">
+                                <td mat-footer-cell *matFooterCellDef [attr.colspan]="examColumns2.length"
+                                    class="centerAlign">
+                                    <span *ngIf="dataSource && dataSource.data && dataSource.data.length==0">
+                                        No Records Found!
+                                    </span>
+                                </td>
+                            </div>
+
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-footer-row *matFooterRowDef="examFooterColumns"
+                            [class.hide-table-footer]="optionValid && dataSource && dataSource.data && dataSource.data.length !=0">
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-3 mt-2" *ngIf="postForm.get('optionAvailableId').value === 2 && optionValid">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="dateOfNextIncrement1" placeholder="Date of Next Increment"
+                            formControlName="dateOfNextIncrement" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="dateOfNextIncrement1" disabled>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateOfNextIncrement1></mat-datepicker>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.dateOfNextIncrement.touched && postForm.controls.dateOfNextIncrement.errors">
+                            <mat-error *ngIf="postForm.controls.dateOfNextIncrement.errors.required">
+                                {{errorMessage.DATE_OF_NEXT_INCREMENT}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<div class="form-action-button"
+    *ngIf="(!eventDetails || (eventDetails && (eventDetails.statusId === 205 || eventDetails.statusId === 0))) && action !== 'view'">
+    <button type="button" mat-raised-button color="primary" (click)="saveDetails()">
+        <i class="material-icons" title="Save">
+            save
+        </i>
+        Save as Draft
+    </button>
+    <button type="button" mat-raised-button color="accent" (click)="resetForm()">
+        <i class="material-icons">
+            restore
+        </i>
+        Reset
+    </button>
+</div>

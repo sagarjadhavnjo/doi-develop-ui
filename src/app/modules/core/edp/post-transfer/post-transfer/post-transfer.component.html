@@ -1,0 +1,716 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div> Post Transfer </div>
+            <div class="font-heading" *ngIf="transactionNo"><strong>Reference Number:</strong> {{transactionNo}}</div>
+            <div class="font-heading" *ngIf="transactionDate"><strong>Reference Date:</strong>
+                {{ transactionDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div #parentGrids>
+            <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [(selectedIndex)]="selectedIndex">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        Post Mapping Request
+                    </ng-template>
+                    <div class="box box-primary">
+                        <div class="box-header">Search</div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <mat-form-field class="full-width">
+                                        <input matInput placeholder="Employee Number" numbersOnly maxlength="10"
+                                            autocomplete="off" (ngModelChange)="employeeNoKeyUp($event)"
+                                            [formControl]="empNoCtrl">
+                                        <mat-icon matSuffix class="searchIcon">search</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form [formGroup]="postTransferForm" #postTransferForms="ngForm" (ngSubmit)="savePostTransfer2()">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="box box-primary">
+                                    <!-- >Office Detail part-->
+                                    <div class="box-header">Office Detail</div>
+                                    <div class="box-body">
+                                        <div class="row" *ngIf="isDATUser">
+                                            <div class="col-md-3">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select name="district" formControlName="district"
+                                                        placeholder="District" (selectionChange)="onDistrictChange()"
+                                                        required>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="districtCtrl"
+                                                                [placeholderLabel]="'Search District...'"
+                                                                [noEntriesFoundLabel]="'no matching District found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option>
+                                                            {{ matSelectNullValue }}
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let list of districtNameList | filterSelectInput : districtCtrl.value : 'name'"
+                                                            [value]="list.id">
+                                                            {{list.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.district.touched && postTransferForm.controls.district.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.district.errors.required">
+                                                            {{errorMessages.DDO_OFFICE.DISTRICT}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput numbersOnly formControlName="ddoNo"
+                                                        placeholder="DDO No" maxlength="4" (blur)="onCardexDDOChange()"
+                                                        autocomplete="off" required>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.ddoNo.touched && postTransferForm.controls.ddoNo.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.ddoNo.errors.required">
+                                                            {{errorMessages.DDO_OFFICE.DDO_NO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput numbersOnly formControlName="cardexNo"
+                                                        placeholder="Cardex No" maxlength="4"
+                                                        (blur)="onCardexDDOChange()" autocomplete="off" required>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.cardexNo.touched && postTransferForm.controls.cardexNo.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.cardexNo.errors.required">
+                                                            {{errorMessages.DDO_OFFICE.CARDEX_NO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput formControlName="officeName"
+                                                        placeholder="DDO Office" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row" *ngIf="!isDATUser">
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput numbersOnly formControlName="district" placeholder="District"
+                                                        readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput numbersOnly formControlName="ddoNo" placeholder="DDO No"
+                                                        readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput formControlName="cardexNo" placeholder="Cardex No "
+                                                        readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput formControlName="officeName"
+                                                        placeholder="DDO Office " readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row" *ngIf="isOfficeDetailSearch">
+                                            <div class="col-sm-3">
+                                                <label>
+                                                    Search Office Details
+                                                    <i (click)="searchOfficeDetails()" class="material-icons plus view-icon" title="View" >find_in_page</i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Transfer Frome part    -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="box box-primary">
+                                    <div class="box-header">Post Transfer From:</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="postTransFrom"
+                                                        (selectionChange)="postTransferFormChange()"
+                                                        placeholder="Post Transfer From" required>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="postCtrl"
+                                                                [placeholderLabel]="'Find post Type...'"
+                                                                [noEntriesFoundLabel]="'no matching Post found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option>
+                                                            {{ matSelectNullValue }}
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let post of postTransferFromList | filterSelectInput : postCtrl.value : 'lookUpInfoName'"
+                                                            [value]="post.lookUpInfoValue">
+                                                            {{post.lookUpInfoName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.postTransFrom.touched && postTransferForm.controls.postTransFrom.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.postTransFrom.errors.required">
+                                                            {{errorMessages.POST_TRANSFER.CREATE.POST_TRANS_FROM}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-6 mgt15" *ngIf="isPostTransferFromEmpl">
+                                                <mat-form-field>
+                                                    <input matInput numbersOnly formControlName="employeeNoFrom"
+                                                        placeholder="Employee Number" autocomplete="off"
+                                                        (keyup)="employeeNoFromKeyUp()" maxlength="10"
+                                                        [required]="emplFromRequired">
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.employeeNoFrom.touched && postTransferForm.controls.employeeNoFrom.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.employeeNoFrom.errors.required">
+                                                            {{errorMessages.POST_TRANSFER.CREATE.EMP_NO_FROM}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-6" *ngIf="isPostTransferFromEmplName">
+                                                <mat-form-field>
+                                                    <input matInput formControlName="employeeNameFrom"
+                                                        placeholder="Employee Name" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12 user-post-table" *ngIf="isPostTransferFromTable">
+                                                <div class=" postlisttitle">Mapped Post</div>
+                                                <div class="history-table-list scroll">
+                                                    <table mat-table class="user-post-table tableSpace"
+                                                        [dataSource]="dataSourceFromPostList">
+                                                        <!-- Checkbox Column -->
+                                                        <ng-container matColumnDef="select">
+                                                            <th mat-header-cell *matHeaderCellDef>
+                                                                <mat-checkbox
+                                                                    (change)="$event ? fromPostListTableMasterToggle($event) : null"
+                                                                    [checked]="selectionFromPostListTable.hasValue() && isAllSelectedFromPostList()"
+                                                                    [indeterminate]="selectionFromPostListTable.hasValue() && !isAllSelectedFromPostList()"
+                                                                    [aria-label]="checkboxLabelFromPostList()"
+                                                                    [disabled]="!isWfStatusDraft || action === 'view'">
+                                                                </mat-checkbox>
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let item">
+                                                                <mat-checkbox (click)="$event.stopPropagation()"
+                                                                    (change)="$event ? mappedSelectionChange(item) : null"
+                                                                    [checked]="selectionFromPostListTable.isSelected(item) || item.transfered"
+                                                                    [aria-label]="checkboxLabelFromPostList(item)"
+                                                                    [disabled]="!isWfStatusDraft || action === 'view'"
+                                                                    *ngIf="item.isSameOffice">
+                                                                </mat-checkbox>
+                                                            </td>
+                                                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="6"
+                                                                class="centerAlign">
+                                                                <span
+                                                                    *ngIf="dataSourceFromPostList && dataSourceFromPostList.data && dataSourceFromPostList.data.length != 0">
+                                                                    No Records Found!
+                                                                </span>
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!-- Position Column -->
+                                                        <ng-container matColumnDef="srNo">
+                                                            <th mat-header-cell *matHeaderCellDef>Sr No.</th>
+                                                            <td mat-cell *matCellDef="let item; let i = index"
+                                                                class="rightAllign">
+                                                                {{ i + 1 }}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!--  Post Name Column -->
+                                                        <ng-container matColumnDef="postName">
+                                                            <th mat-header-cell *matHeaderCellDef>Post Name</th>
+                                                            <td fxLayout="column wrap" mat-cell *matCellDef="let item"
+                                                                class="text-left breakName">
+                                                                {{item.postName}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!-- Post Type Column -->
+                                                        <ng-container matColumnDef="postType">
+                                                            <th mat-header-cell *matHeaderCellDef> Post Type </th>
+                                                            <td fxLayout="column wrap" mat-cell *matCellDef="let item"
+                                                                class="text-left">
+                                                                {{item.postType}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!-- Office NameColumn -->
+                                                        <ng-container matColumnDef="officeName">
+                                                            <th mat-header-cell *matHeaderCellDef>Office Name</th>
+                                                            <td fxLayout="column wrap" mat-cell *matCellDef="let item"
+                                                                class="text-left breakName office-name-width">
+                                                                {{item.officeName}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!-- Office NameColumn -->
+                                                        <ng-container matColumnDef="action">
+                                                            <th mat-header-cell *matHeaderCellDef>Action</th>
+                                                            <td mat-cell *matCellDef="let item" class="text-center">
+                                                                <button type="button" class="changebutton" mat-raised-button
+                                                                    color="primary" *ngIf="!item.isPrimaryPost"
+                                                                    (click)="showConfirmationPopup(item)"
+                                                                    [disabled]="!isWfStatusDraft || action === 'view'">
+                                                                    Change
+                                                                </button>
+                                                            </td>
+                                                        </ng-container>
+    
+    
+                                                        <tr mat-header-row *matHeaderRowDef="displayColumnFromPost; sticky: true">
+                                                        </tr>
+                                                        <tr mat-row *matRowDef="let row; columns: displayColumnFromPost;">
+                                                        </tr>
+                                                        <tr mat-footer-row
+                                                            [class.hide-table-footer]="dataSourceFromPostList && dataSourceFromPostList.data && dataSourceFromPostList.data.length != 0"
+                                                            *matFooterRowDef="displayedColumnsFooter">
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <!-- vacant post -->
+                                            <div class="col-sm-12 user-post-table" *ngIf="isVacantPostTable">
+                                                <div class=" postlisttitle">Vacant Post</div>
+                                                <div class="history-table-list scroll">
+                                                    <table mat-table class="user-post-table tableSpace"
+                                                        [dataSource]="dataSourceVacantPost">
+    
+                                                        <ng-container matColumnDef="select">
+                                                            <th mat-header-cell *matHeaderCellDef class="text-left">
+                                                                <mat-checkbox
+                                                                    (change)="$event ? vacantPostListTableMasterToggle() : null"
+                                                                    [checked]="selectionVacantPostListTable.hasValue() && isAllSelectedVacantPostList()"
+                                                                    [indeterminate]="selectionVacantPostListTable.hasValue() && !isAllSelectedVacantPostList()"
+                                                                    [aria-label]="checkboxLabelVacantPostList()"
+                                                                    [disabled]="!isWfStatusDraft || action === 'view'">
+                                                                </mat-checkbox>
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let item">
+                                                                <mat-checkbox (click)="$event.stopPropagation()"
+                                                                    (change)="$event ? vacantSelectionChange(item) : null"
+                                                                    [checked]="selectionVacantPostListTable.isSelected(item) || item.transfered"
+                                                                    [aria-label]="checkboxLabelVacantPostList(item)"
+                                                                    [disabled]="!isWfStatusDraft || action === 'view'">
+                                                                </mat-checkbox>
+                                                            </td>
+                                                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="4"
+                                                                class="centerAlign">
+                                                                <span
+                                                                    *ngIf="dataSourceVacantPost && dataSourceVacantPost.data && dataSourceVacantPost.data.length == 0">
+                                                                    No Records Found!
+                                                                </span>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="srNo">
+                                                            <th mat-header-cell *matHeaderCellDef> Sr No. </th>
+                                                            <td mat-cell *matCellDef="let item; let i = index"
+                                                                class="rightAllign">
+                                                                {{ i + 1 }}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!--  Post Name Column -->
+                                                        <ng-container matColumnDef="postName">
+                                                            <th mat-header-cell *matHeaderCellDef> Post Name </th>
+                                                            <td mat-cell *matCellDef="let element"
+                                                                class="text-left  breakName">
+                                                                {{element.postName}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!-- Post Type Column -->
+                                                        <ng-container matColumnDef="userName">
+                                                            <th mat-header-cell *matHeaderCellDef> Last Mapped with</th>
+                                                            <td mat-cell *matCellDef="let element" class="text-left">
+                                                                {{element.userName}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <tr mat-header-row *matHeaderRowDef="displayedColumnVacantPost; sticky: true">
+                                                        </tr>
+                                                        <tr mat-row
+                                                            *matRowDef="let row; columns: displayedColumnVacantPost;">
+                                                        </tr>
+                                                        <tr mat-footer-row
+                                                            [class.hide-table-footer]="dataSourceVacantPost && dataSourceVacantPost.data && dataSourceVacantPost.data.length != 0"
+                                                            *matFooterRowDef="displayedColumnsFooter"></tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12 user-post-table"
+                                                *ngIf="isPostToBeTransferVisible && dataSourceSelectedPostList && dataSourceSelectedPostList.data && dataSourceSelectedPostList.data.length > 0">
+                                                <div class=" postlisttitle">Post To Be Transferred </div>
+                                                <table mat-table class="user-post-table mat-elevation-z8"
+                                                    [dataSource]="dataSourceSelectedPostList" class="mat-elevation-z8">
+                                                    <!-- Position Column -->
+                                                    <ng-container matColumnDef="srNo">
+                                                        <th mat-header-cell *matHeaderCellDef> Sr No. </th>
+                                                        <td mat-cell *matCellDef="let item; let i = index"
+                                                            class="rightAllign">
+                                                            {{ i + 1 }}
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <!--  Post Name Column -->
+                                                    <ng-container matColumnDef="postName">
+                                                        <th mat-header-cell *matHeaderCellDef> Post Name </th>
+                                                        <td mat-cell *matCellDef="let element"
+                                                            class="text-left breakName">
+                                                            {{element.postName}}
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <!-- Post Type Column -->
+                                                    <ng-container matColumnDef="postType">
+                                                        <th mat-header-cell *matHeaderCellDef> Transfer As </th>
+                                                        <td mat-cell *matCellDef="let element" class="text-left">
+                                                            <mat-form-field>
+                                                                <mat-select [(ngModel)]="element.postTypeValue"
+                                                                    [ngModelOptions]="{standalone: true}"
+                                                                    placeholder="Post Type"
+                                                                    [disabled]="!isWfStatusDraft || action === 'view'">
+                                                                    <mat-option
+                                                                        *ngFor="let post of postTypeList | filterSelectInput : postCtrl.value : 'lookUpInfoName'"
+                                                                        [value]="post.lookUpInfoValue">
+                                                                        {{post.lookUpInfoName}}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <tr mat-header-row *matHeaderRowDef="displayedColumnPostTransfer">
+                                                    </tr>
+                                                    <tr mat-row
+                                                        *matRowDef="let row; columns: displayedColumnPostTransfer;">
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Post Transfer To part  -->
+                            <div class="col-sm-6">
+                                <div class="box box-primary">
+                                    <div class="box-header">Post Transfer To:</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <mat-form-field>
+                                                    <mat-select formControlName="postTransTo"
+                                                        (selectionChange)="postTransferToChange()"
+                                                        placeholder="Post Transfer To" required>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="Postnamecodectrl"
+                                                                [placeholderLabel]="'Find post Type...'"
+                                                                [noEntriesFoundLabel]="'no matching Post found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option>
+                                                            {{ matSelectNullValue }}
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let post of postTransferToList | filterSelectInput : Postnamecodectrl.value : 'lookUpInfoName'"
+                                                            [value]="post.lookUpInfoValue">
+                                                            {{post.lookUpInfoName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.postTransTo.touched && postTransferForm.controls.postTransTo.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.postTransTo.errors.required">
+                                                            {{errorMessages.POST_TRANSFER.CREATE.POST_TRANS_TO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-6" *ngIf="isPostTransferToEmpl">
+                                                <mat-form-field>
+                                                    <input matInput numbersOnly formControlName="employeeNoTo"
+                                                        autocomplete="off" placeholder="Employee Number"
+                                                        (keyup)="employeeNoToKeyUp()" maxlength="10"
+                                                        [required]="emplToRequired">
+                                                    <div class="error-wrapper"
+                                                        *ngIf="postTransferForm.controls.employeeNoTo.touched && postTransferForm.controls.employeeNoTo.errors">
+                                                        <mat-error
+                                                            *ngIf="postTransferForm.controls.employeeNoTo.errors.required">
+                                                            {{errorMessages.POST_TRANSFER.CREATE.EMP_NO_TO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-6" *ngIf="isPostTransferToEmplName">
+                                                <mat-form-field>
+                                                    <input matInput formControlName="employeeNameTo"
+                                                        placeholder="Employee Name" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-12 user-post-table" *ngIf="isPostTransferToTable">
+                                                <div class="history-table-list scroll">
+                                                    <table mat-table [dataSource]="dataSourceToPostList"
+                                                        class=" tableSpace">
+                                                        <!-- Position Column -->
+                                                        <ng-container matColumnDef="srNo">
+                                                            <th mat-header-cell *matHeaderCellDef> Sr No. </th>
+                                                            <td mat-cell *matCellDef="let element; let i = index;">
+                                                                {{i + 1}}
+                                                            </td>
+                                                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="3"
+                                                                class="centerAlign">
+                                                                <span
+                                                                    *ngIf="dataSourceToPostList && dataSourceToPostList.data && dataSourceToPostList.data.length == 0">
+                                                                    No Records Found!
+                                                                </span>
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!--  Post Name Column -->
+                                                        <ng-container matColumnDef="postName">
+                                                            <th mat-header-cell *matHeaderCellDef> Post Name </th>
+                                                            <td mat-cell *matCellDef="let element"
+                                                                class="text-left breakName">
+                                                                {{element.postName}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <!-- Post Typ Column -->
+                                                        <ng-container matColumnDef="postType">
+                                                            <th mat-header-cell *matHeaderCellDef> Post Type </th>
+                                                            <td mat-cell *matCellDef="let element" class="text-left">
+                                                                {{element.postType}}
+                                                            </td>
+                                                        </ng-container>
+    
+                                                        <tr mat-header-row *matHeaderRowDef="displayedColumnToPost; sticky: true"></tr>
+                                                        <tr mat-row *matRowDef="let row; columns: displayedColumnToPost;">
+                                                        </tr>
+                                                        <tr mat-footer-row
+                                                            [class.hide-table-footer]="dataSourceToPostList && dataSourceToPostList.data && dataSourceToPostList.data.length != 0"
+                                                            *matFooterRowDef="displayedColumnsToPostFooter">
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary" *ngIf="isObjectionRequired">
+                            <div class="box-header">Objection Detail</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-checkbox [(ngModel)]="objStatus" formControlName="objStatus" (change)="objectionRemarks()">
+                                            Objection
+                                        </mat-checkbox>
+                                    </div>
+                                    <div class="col-sm-12" *ngIf="objStatus">
+                                        <mat-form-field>
+                                            <textarea matInput name="objRemark" formControlName="objRemark" placeholder="Objection Remarks" maxlength="2000" required></textarea>
+                                            <div class="error-wrapper textarea-error" *ngIf="postTransferForm.controls.objRemark.touched && postTransferForm.controls.objRemark.errors">
+                                                <mat-error *ngIf="postTransferForm.controls.objRemark.errors.required">
+                                                    {{errorMessages.POST_TRANSFER.CREATE.OBJECTION_REMARKS}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Form action buttons -->
+                        <div class="form-action-button">
+                            <button type="submit" mat-raised-button color="primary" [disabled]="isDraftOrSaveDisabled()"
+                                *ngIf="action !== 'view'">
+                                <i class="material-icons" title="Save">
+                                    save
+                                </i>
+                                Save as Draft
+                            </button>
+                            <button *ngIf="!isWfStatusDraft && action === 'view'" type="button"  mat-raised-button color="accent" (click)="viewComments()">
+                                <i class="material-icons " title="View">remove_red_eye</i>
+                                View Comments
+                            </button>
+                            <button mat-raised-button type="button" class="green" (click)="submitRequest()"
+                                *ngIf="action !== 'view'" [disabled]="isDraftOrSaveDisabled()">
+                                <i class="material-icons">
+                                    done
+                                </i>
+                                Submit
+                            </button>
+                            <button type="button" mat-raised-button color="accent"
+                                (click)="resetForm(postTransferForms)" *ngIf="action !== 'view'">
+                                <i class="material-icons">
+                                    restore
+                                </i>
+                                Reset
+                            </button>
+                            <button type="button" mat-raised-button (click)="gotoListing()" color="warn">
+                                <i class="material-icons" title="Listing">
+                                    list
+                                </i>
+                                Listing
+                            </button>
+                            <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                                <i class="material-icons" title="Budget dashboard">
+                                    close
+                                </i>
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Attachment" [disabled]="!postTransferId">
+                    <table mat-table [dataSource]="dataSourceBrowse" id="browseTable">
+                        <ng-container matColumnDef="id">
+                            <th class="tabelSrNo" mat-header-cell *matHeaderCellDef>
+                                Sr. No.
+                            </th>
+                            <td mat-cell *matCellDef="let item; let i = index" class="rightAllign">
+                                {{ i + 1 }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="attachmentType">
+                            <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+                            <td class="attechmentData" mat-cell *matCellDef="let item;let i=index">
+                                {{item.attachmentName}}
+                                <span *ngIf="item.mandatoryFlag && !isDATUser" class="starSign">*</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="fileName">
+                            <th mat-header-cell *matHeaderCellDef>File Name</th>
+                            <td mat-cell *matCellDef="let item">
+                                <mat-form-field floatLabel="never">
+                                    <input matInput [value]="item.fileName" [(ngModel)]="item.fileName"
+                                        [readonly]="!isWfStatusDraft || action === 'view'" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="browse">
+                            <th mat-header-cell *matHeaderCellDef>Browse File</th>
+                            <td mat-cell *matCellDef="let item;let i = index">
+                                <button type="button" (click)="openFileSelector(i)" id="fileBrowse{{i}}"
+                                    class="btn-browse" [disabled]="!isWfStatusDraft || action === 'view' || item.edpUsrPoTranAttId">
+                                    Browse Files
+                                </button>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="uploadedFileName">
+                            <th mat-header-cell *matHeaderCellDef>Uploaded File Name</th>
+                            <td mat-cell *matCellDef="let item; let i = index" class="breakFileNameAttach">
+                                <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}
+                                    <i *ngIf="isWfStatusDraft && action !== 'view'" class="material-icons closesmall"
+                                        (click)="removeFile(item, i)" title="Delete File">close</i>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="uploadedBy">
+                            <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+                            <td mat-cell *matCellDef="let item">
+                                <mat-label>{{item.uploadedByName}}</mat-label>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>Action</th>
+                            <td mat-cell *matCellDef="let item; let i = index">
+                                <table class="iconTable">
+                                    <tbody>
+                                        <tr>
+                                            <td class="action-btn-i centerAlign">
+                                                <a *ngIf="isWfStatusDraft && action !== 'view'">
+                                                    <i class="material-icons plus add"
+                                                        *ngIf="dataSourceBrowse && dataSourceBrowse.data && (i == dataSourceBrowse.data.length - 1)"
+                                                        (click)="addBrowse()">add
+                                                    </i>
+                                                </a>
+                                                <a>
+                                                    <i class="material-icons plus view-icon" title="View"
+                                                        (click)="viewAttachment(item)"
+                                                        [class.disable-delete-btn]="!item.edpUsrPoTranAttId"
+                                                        aria-hidden="true">remove_red_eye</i>
+                                                </a>
+                                                <a>
+                                                    <i class="material-icons plus view-icon" title="Download"
+                                                        (click)="downloadAttachment(item)"
+                                                        [class.disable-delete-btn]="!item.edpUsrPoTranAttId"
+                                                        aria-hidden="true">vertical_align_bottom</i>
+                                                </a>
+                                                <a *ngIf="isWfStatusDraft && action !== 'view'">
+                                                    <i class="material-icons plus delete"
+                                                        *ngIf="dataSourceBrowse && dataSourceBrowse.data && ((i >= noOfAttachment-1) && (dataSourceBrowse.data.length-1 > noOfAttachment-1))"
+                                                        (click)="deleteBrowse(i)">delete
+                                                    </i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedBrowseColumnsAttachment"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedBrowseColumnsAttachment;"></tr>
+                    </table>
+                    <input #postTransferAttachment type="file" accept="image/png,application/pdf,image/jpeg,image/jpg"
+                        id="fileBrowse" class="fileBrowse" (change)="onFileSelection($event)" />
+                    <div class="legend">
+                        1. Total File size should be under 2MB<br>
+                        2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', JPG’, ‘JPEG’, ‘PNG’, ‘PDF’.
+                    </div>
+                    <div class="form-action-button">
+                        <button type="button" mat-raised-button color="primary" (click)="uploadFiles()"
+                            *ngIf="action !== 'view'">
+                            <i class="material-icons" title="Save">cloud_upload</i>
+                            Upload
+                        </button>
+                        <button mat-raised-button type="button" class="green" (click)="submitRequest()"
+                            *ngIf="action !== 'view'" [disabled]="isSubmitDisable">
+                            <i class="material-icons">done</i>
+                            Submit
+                        </button>
+                        <button type="button" mat-raised-button color="accent" (click)="resetAttachment()"
+                            *ngIf="action !== 'view'">
+                            <i class="material-icons">restore</i>
+                            Reset
+                        </button>
+                        <button type="button" mat-raised-button color="warn" (click)="gotoListing()">
+                            <i class="material-icons" title="Listing">list</i>
+                            Listing
+                        </button>
+                        <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                            <i class="material-icons" title="Budget dashboard">close</i>
+                            Close
+                        </button>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

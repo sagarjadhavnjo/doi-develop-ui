@@ -1,0 +1,249 @@
+<app-pvu-employee-current-details [eventDetails]="eventDetails" [showExamDetails]="showExamDetails" [action]="action"
+[eventForm]="eventForm" (employeeDetailChange)="onEmployeeDetailsChange($event)" [clearEmployeeDetails]="clearEmployeeCurrentDetails" [clearExamDetails]="clearExamDetails" [isRework]='isRework'>
+</app-pvu-employee-current-details>
+<form [formGroup]="postForm" *ngIf="postForm">
+    <div class="box box-primary">
+        <div class="box-header">Post Details</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3" *ngIf="postForm.get('designationId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="designationId" placeholder="Designation" disabled readonly required >
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="designationCtrl"
+                                    [placeholderLabel]="'Find Designation...'"
+                                    [noEntriesFoundLabel]="'no matching Designation found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let payBand of designationList | filterSelectInput:designationCtrl.value: 'designationName'"
+                                [value]="payBand.designationId">
+                                {{payBand.designationName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.designationId.touched && postForm.controls.designationId.errors">
+                            <mat-error *ngIf="postForm.controls.designationId.errors.required">
+                                Select Designation</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payBandId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payBandId" 
+                        [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'"
+                        (selectionChange)="onPayBandChange()" required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payBandCtrl"
+                                [placeholderLabel]="isJudiciaryDepartment ? 'Find Pay Scale...' : 'Find Pay Band...'"
+                                [noEntriesFoundLabel]="isJudiciaryDepartment ? 'no matching Pay Scale found' : 'no matching Pay Band found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngIf="!isJudiciaryDepartment && (!payBandList || payBandList.length === 0)">
+                                No Pay Band available
+                            </mat-option>
+                            <mat-option *ngIf="isJudiciaryDepartment && (!payBandList || payBandList.length === 0)">
+                                No Pay Scale available
+                            </mat-option>
+                            <mat-option *ngFor="let payBand of payBandList | filterSelectInput:payBandCtrl.value: 'payBandName'"
+                                [value]="payBand.id">
+                                {{payBand.payBandName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payBandId.touched && postForm.controls.payBandId.errors">
+                            <mat-error *ngIf="postForm.controls.payBandId.errors.required">
+                                {{isJudiciaryDepartment ? errorMessage.SCALE : errorMessage.PAY_BAND }}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payBandValue')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="number" placeholder="Pay Band Value" (change)="calculateSixthBasic()"
+                            formControlName="payBandValue" disabled readonly
+                            *ngIf="!isJudiciaryDepartment">
+                        <input matInput type="text" numbersOnly [min]="fifthMin" [max]="fifthMax"
+                            placeholder="Basic Pay" formControlName="payBandValue"
+                            (blur)="onPayBandValueChange(postForm.get('payBandValue'))" required
+                            *ngIf="isJudiciaryDepartment">
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payBandValue.touched && postForm.controls.payBandValue.errors && !isJudiciaryDepartment">
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.required">
+                                {{errorMessage.PAY_BAND_VALUE}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.min">
+                                {{errorMessage.PAY_BAND_MIN_MAX}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.max">
+                                {{errorMessage.PAY_BAND_MIN_MAX}}</mat-error>
+                        </div>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payBandValue.touched && postForm.controls.payBandValue.errors && isJudiciaryDepartment">
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.required">
+                                {{errorMessage.BASIC_PAY}}</mat-error>
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.min">
+                                {{errorMessage.BASIC_PAY_MIN + fifthMin}}!</mat-error>
+                            <mat-error *ngIf="postForm.controls.payBandValue.errors.max">
+                                {{errorMessage.BASIC_PAY_MAX + fifthMax}}!</mat-error>
+                            <mat-error class="custom-mat-error"
+                                *ngIf="postForm.controls.payBandValue.errors.wrongValue">
+                                {{postForm.controls.payBandValue.errors.wrongValue}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('gradePayId') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="gradePayId" placeholder="Grade Pay"
+                            (selectionChange)="calculateSixthBasic()" required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="gradePayCtrl"
+                                    [placeholderLabel]="'Find Grade Pay...'"
+                                    [noEntriesFoundLabel]="'no matching Grade Pay found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngIf="!gradePayList || gradePayList.length === 0">
+                                No Grade Pay available
+                            </mat-option>
+                            <mat-option *ngFor="let gradePay of gradePayList | filterSelectInput:gradePayCtrl.value: 'gradePayValue'"
+                                [value]="gradePay.id">
+                                {{gradePay.gradePayValue}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.gradePayId.touched && postForm.controls.gradePayId.errors">
+                            <mat-error *ngIf="postForm.controls.gradePayId.errors.required">
+                                {{errorMessage.GRADE_PAY}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="col-sm-3" *ngIf="postForm.get('payLevelId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payLevelId" placeholder="Pay Level" required
+                        (selectionChange)="onPayLevelChange()">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payLevelCtrl"
+                                    [placeholderLabel]="'Find Pay Level...'"
+                                    [noEntriesFoundLabel]="'no matching Pay Level found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngIf="!payLevelList || payLevelList.length === 0">
+                                No Pay Level available
+                            </mat-option>
+                            <mat-option *ngFor="let payLevel of payLevelList | filterSelectInput:payLevelCtrl.value: 'payLevelValue'"
+                                [value]="payLevel.id">
+                                {{payLevel.payLevelValue}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payLevelId.touched && postForm.controls.payLevelId.errors">
+                            <mat-error *ngIf="postForm.controls.payLevelId.errors.required">
+                                {{errorMessage.PAY_LEVEL}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('cellId')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="cellId" placeholder="Cell Id" readonly disabled required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="cellIdCtrl" [placeholderLabel]="'Find Cell Id...'"
+                                    [noEntriesFoundLabel]="'no matching Cell Id found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngIf="!cellList || cellList.length === 0">
+                                No Cell available
+                            </mat-option>
+                            <mat-option *ngFor="let cellId of cellList | filterSelectInput:cellIdCtrl.value: 'displayName'"
+                                [value]="cellId.id">
+                                {{cellId.cellId}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.cellId.touched && postForm.controls.cellId.errors">
+                            <mat-error *ngIf="postForm.controls.cellId.errors.required">
+                                {{errorMessage.CELL_ID}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('payScale')">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payScale" placeholder="Scale" (selectionChange)="onPayScaleChange()" required >
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payScaleCtrl" [placeholderLabel]="'Find Scale...'"
+                                    [noEntriesFoundLabel]="'no matching Scale found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngIf="!scaleList || scaleList.length === 0">
+                                No Scale available
+                            </mat-option>
+                            <mat-option *ngFor="let postScale of scaleList | filterSelectInput: payScaleCtrl.value: 'name'"
+                                [value]="postScale.id">
+                                {{postScale.name}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="postForm.controls.payScale.touched && postForm.controls.payScale.errors">
+                            <mat-error *ngIf="postForm.controls.payScale.errors.required">
+                                {{errorMessage.PAY_SCALE}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3"  *ngIf="postForm.get('basicPay') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" numbersOnly placeholder="Basic Pay" (change)="calculateFifthBasicPay(postForm.get('basicPay'))"  formControlName="basicPay" [required] = '!enableBasicPayEdit' [readonly]='enableBasicPayEdit'>
+                        <div class="error-wrapper"
+                        *ngIf="postForm.controls.basicPay.touched && postForm.controls.basicPay.errors && postForm.get('payScale')">
+                        <mat-error *ngIf="postForm.controls.basicPay.errors.required">
+                            {{errorMessage.BASIC_PAY}}</mat-error>
+                        <mat-error *ngIf="postForm.controls.basicPay.errors.min">
+                            {{errorMessage.BASIC_PAY_MIN + fifthMin}}</mat-error>
+                        <mat-error *ngIf="postForm.controls.basicPay.errors.max">
+                            {{errorMessage.BASIC_PAY_MAX + fifthMax}}</mat-error>
+                        <mat-error class="custom-mat-error" *ngIf="postForm.controls.basicPay.errors.wrongValue">
+                            {{postForm.controls.basicPay.errors.wrongValue}}</mat-error>
+                    </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('beneEffictDate')">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="beneEffictDatePicker" formControlName="beneEffictDate"
+                          readonly  placeholder="Benefit Effective Date">
+                        <mat-datepicker-toggle matSuffix [for]="beneEffictDatePicker" disabled>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #beneEffictDatePicker>
+                        </mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="postForm.get('dateOfNextIncrement')">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="dateOfNextIncrementPicker"
+                            formControlName="dateOfNextIncrement" placeholder="Date of Next Increment" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="dateOfNextIncrementPicker" disabled>
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateOfNextIncrementPicker >
+                        </mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="form-action-button" 
+*ngIf="(!eventDetails || (eventDetails && (eventDetails.statusId === 205 || eventDetails.statusId === 0))) && action !== 'view'">
+    <button type="button" mat-raised-button color="primary" (click)="saveDetails()">
+        <i class="material-icons" title="Save">
+            save
+        </i>
+        Save as Draft
+    </button>
+    <button type="button" mat-raised-button color="accent" (click)="resetForm()">
+        <i class="material-icons">
+            restore
+        </i>
+        Reset
+    </button>
+</div>

@@ -1,0 +1,300 @@
+<div class="container" id="component2">
+  <div class="form-wrapper">
+
+    <!-- Screen Name, Reference No and Reference Date Header -->
+    <div class="heading-section ng-star-inserted">
+      <div>LC Cheque Book Activate / Inactivate Details</div>
+      <div class="font-heading"><strong>Reference Number</strong> {{refNo}}</div>
+      <div class="font-heading"><strong>Reference Date </strong> {{ refDate  | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="javascript:void(0)">LC</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="javascript:void(0)">LC Cheque Book Activate /
+            Inactivate Details</a></li>
+      </ol>
+    </nav>
+
+    
+    <!-- Form Starts -->
+    <form [formGroup]="lcChequeBookActivateInactivateEditForm"
+      (ngSubmit)="lcChequeBookActivateInactivateEditFormData()">
+      <div class="box box-primary">
+        <div class="box-header">View</div>
+        <div class="box-body">
+          <div class="row">
+
+            <!-- Input Field for Division Code -->
+            <div class="col-sm-3">
+              <mat-form-field class="disabled">
+                <input matInput placeholder="Division Code" formControlName="divisionCode" value="{{divisionCode}}"
+                  readonly>
+              </mat-form-field>
+            </div>
+
+            <!-- Input Field for Division Name -->
+            <div class="col-sm-3">
+              <!-- <label class="disabled"><strong>Division Name:</strong> {{divisionName}} </label> -->
+              <mat-form-field class="disabled">
+                <input matInput placeholder="Division Name" formControlName="divisionName" value="{{divisionCode}}"
+                  readonly>
+              </mat-form-field>
+            </div>
+
+            <!-- Input Field for Bank Name -->
+            <div class="col-sm-3">
+              <!-- <label class="disabled"><strong>Bank Name:</strong> {{bankName}} </label> -->
+              <mat-form-field class="disabled">
+                <input matInput placeholder="Bank Name" formControlName="bankName" value="{{divisionCode}}" readonly>
+              </mat-form-field>
+            </div>
+
+            <!-- Input Field for Bank Account Number -->
+            <div class="col-sm-3">
+              <!-- <label class="disabled"><strong>Bank Account No.:</strong> {{bankAccountNo}} </label> -->
+              <mat-form-field class="disabled">
+                <input matInput placeholder="Bank Account No" formControlName="bankAccountNo" value="{{divisionCode}}"
+                  readonly>
+              </mat-form-field>
+            </div>
+
+            <!-- Input Field for Cheque Type -->
+            <div class="col-sm-3">
+              <mat-form-field class="full-width">
+                <mat-select formControlName="chequeType" placeholder="Cheque Type" disabled>
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="ChequeTypeCTRL" [placeholderLabel]="'Find Cheque Type...'"
+                      [noEntriesFoundLabel]="'No matching Cheque Type found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let chequeTypeName of ChequeTypeList | filterSelectInput:ChequeTypeCTRL.value:'viewValue'"
+                    [value]="chequeTypeName.value">
+                    {{chequeTypeName.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Input Field for Request Type -->
+            <div class="col-sm-3">
+              <mat-form-field class="full-width">
+                <mat-select formControlName="requestType" placeholder="Request Type" (selectionChange)="showTable()"
+                  disabled>
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="RequestTypeCTRL" [placeholderLabel]="'Find Cheque Type...'"
+                      [noEntriesFoundLabel]="'No matching Cheque Type found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let requestTypeName of RequestTypeList | filterSelectInput:RequestTypeCTRL.value :'viewValue'"
+                    [value]="requestTypeName.value">
+                    {{requestTypeName.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="box box-primary"  *ngIf="optionActivated">
+        <div class="box-header">Cheque Inventory Issued Cheque Series And Not Activated In LC</div>
+        <div class="box-body">
+          <div class="mat-elevation-z8 mt-2">
+            <!-- Cheque Inventory Issued Cheque Series And Not Activated In LC Table Starts -->
+            <table mat-table [dataSource]="NotActivateInLCDataSource" class="mat-elevation-z8 "
+              area-describedby="not-activated-data">
+
+              <!-- Serial Number Column -->
+              <ng-container matColumnDef="srno">
+                <th mat-header-cell *matHeaderCellDef scope="row">
+                  Serial No.
+                </th>
+                <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+                  {{ i + 1 }}
+                </td>
+              </ng-container>
+
+              <!-- Issue Date Column -->
+              <ng-container matColumnDef="issueDate">
+                <th mat-header-cell *matHeaderCellDef scope="row">Issue Date</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <!-- {{element.issueDate}} -->
+                  {{element.issueDate  | date: 'dd-MMM-yyyy'}}
+                </td>
+              </ng-container>
+
+              <!-- Starting Cheque Series Column -->
+              <ng-container matColumnDef="startingChequeSeries">
+                <th mat-header-cell *matHeaderCellDef scope="row">Starting Cheque Series</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <!-- {{element.startingChequeSeries}} -->
+                  {{element.startSeries}}
+                </td>
+              </ng-container>
+
+              <!-- Ending Cheque Series Column -->
+              <ng-container matColumnDef="endingChequeSeries">
+                <th mat-header-cell *matHeaderCellDef scope="row">Ending Cheque Series</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <!-- {{element.endingChequeSeries}} -->
+                  {{element.endSeries}}
+                </td>
+              </ng-container>
+
+              <!-- Header and Footer Row Definition -->
+              <tr mat-header-row *matHeaderRowDef="NotActivateInLCDataColumn"></tr>
+              <tr mat-row *matRowDef="let row; columns: NotActivateInLCDataColumn;"></tr>
+            </table>
+            <!-- Cheque Inventory Issued Cheque Series And Not Activated In LC Table Ends -->
+          </div>
+        </div>
+      </div>
+      <div class="box box-primary" *ngIf="optionActivated">
+        <div class="box-header">Inactivated Cheque Series In LC</div>
+        <div class="box-body">
+          <div class="mat-elevation-z8 mt-2">
+            <!-- Inactivated Cheque Series In LC Table Starts -->
+            <table mat-table [dataSource]="InactivatedChequeInLCDataSource" class="mat-elevation-z8 "
+              area-describedby="inactivated-cheque">
+
+              <!-- Serial Number Column -->
+              <ng-container matColumnDef="srno">
+                <th mat-header-cell *matHeaderCellDef scope="row">
+                  Serial No.
+                </th>
+                <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+                  {{ i + 1 }}
+                </td>
+              </ng-container>
+
+              <!-- Inactivated Date Column -->
+              <ng-container matColumnDef="inactivateDate">
+                <th mat-header-cell *matHeaderCellDef scope="row">Inactivated Date</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{element.inActiveDate  | date: 'dd-MMM-yyyy'}}
+                </td>
+              </ng-container>
+
+              <!-- Activated Date Column -->
+              <ng-container matColumnDef="activatedDate">
+                <th mat-header-cell *matHeaderCellDef scope="row">Activated Date</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{element.activeDate  | date: 'dd-MMM-yyyy'}}
+                </td>
+              </ng-container>
+
+              <!-- Starting Cheque Series Column -->
+              <ng-container matColumnDef="startingChequeSeries">
+                <th mat-header-cell *matHeaderCellDef scope="row">Starting Cheque Series</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{element.startSeries}}
+                </td>
+              </ng-container>
+
+              <!-- Ending Cheque Series Column -->
+              <ng-container matColumnDef="endingChequeSeries">
+                <th mat-header-cell *matHeaderCellDef scope="row">Ending Cheque Series</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{element.endSeries}}
+                </td>
+              </ng-container>
+
+              <!-- Header and Footer Row Definition -->
+              <tr mat-header-row *matHeaderRowDef="InactivatedChequeInLCDataColumn"></tr>
+              <tr mat-row *matRowDef="let row; columns: InactivatedChequeInLCDataColumn;"></tr>
+            </table>
+            <!-- Inactivated Cheque Series In LC Table Ends -->
+          </div>
+
+        </div>
+      </div>
+      <div class="box box-primary" *ngIf="optionInactivated">
+        <div class="box-header">Activated Cheque Series In LC</div>
+        <div class="box-body">
+          <div class="mat-elevation-z8 mt-2">
+            <!-- Activated Cheque Series In LC Table Starts -->
+            <table mat-table [dataSource]="ActivatedChequeInLCDataSource" class="mat-elevation-z8 "
+              area-describedby="activated-cheque">
+
+              <!-- Serial Number Column -->
+              <ng-container matColumnDef="srno">
+                <th mat-header-cell *matHeaderCellDef scope="row">
+                  Serial No.
+                </th>
+                <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+                  {{ i + 1 }}
+                </td>
+              </ng-container>
+
+              <!-- Activated Date Column -->
+              <ng-container matColumnDef="activatedDate">
+                <th mat-header-cell *matHeaderCellDef scope="row">Activated Date</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <!-- {{element.activatedDate}} -->
+                  {{element.activeDate  | date: 'dd-MMM-yyyy'}}
+                </td>
+              </ng-container>
+
+              <!-- Starting Cheque Series Column -->
+              <ng-container matColumnDef="startingChequeSeries">
+                <th mat-header-cell *matHeaderCellDef scope="row">Starting Cheque Series</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <!-- {{element.startingChequeSeries}} -->
+                  {{element.startSeries}}
+                </td>
+              </ng-container>
+
+              <!-- Ending Cheque Series Column -->
+              <ng-container matColumnDef="endingChequeSeries">
+                <th mat-header-cell *matHeaderCellDef scope="row">Ending Cheque Series</th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <!-- {{element.endingChequeSeries}} -->
+                  {{element.endSeries}}
+                </td>
+              </ng-container>
+
+              <!-- Header and Footer Row Definition -->
+              <tr mat-header-row *matHeaderRowDef="ActivatedChequeInLCDataColumn"></tr>
+              <tr mat-row *matRowDef="let row; columns: ActivatedChequeInLCDataColumn;"></tr>
+            </table>
+            <!-- Activated Cheque Series In LC Table Ends -->
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <!-- Action Buttons Starts -->
+      <div class="form-action-button">
+        <button type="list" mat-raised-button color="warn" title="List"
+          (click)="directiveObject.goToScreen('/lc/lc-chequebook-listing')">
+          <i class="material-icons" title="List" aria-hidden="true">
+            list
+          </i>
+          Listing
+        </button>
+        <button type="button" mat-raised-button class="btnClose" title="Close"
+        (click)="directiveObject.goToDashboard()">
+          <i class="material-icons" title="Close" aria-hidden="true">
+            close
+          </i>
+          Close
+        </button>
+        <button type="button" mat-raised-button class="green" title="Print"  (click)="printComponent('component2')">
+          <i class="material-icons" title="Print" aria-hidden="true">
+            print
+          </i>
+          Print
+        </button>
+      </div>
+      <!-- Action Buttons Ends -->
+    </form>
+    <!-- Form Ends -->
+
+  </div>
+</div>

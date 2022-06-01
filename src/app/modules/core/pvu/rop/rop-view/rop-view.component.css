@@ -1,0 +1,384 @@
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.mat-expansion-panel-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    padding: 6px;
+}
+
+.mat-expansion-panel:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+
+.mat-expansion-panel-body .mat-checkbox label.mat-checkbox-layout {
+    margin-top: 15px !important;
+}
+
+.margintop {
+    margin-top: 5px;
+}
+
+.box.nopadding[_ngcontent-c3] {
+    padding: 0px 0px 0px !important;
+}
+
+.mat-expansion-panel-header .mat-expansion-indicator::after {
+    position: absolute;
+    bottom: -25px;
+    left: 55px;
+}
+
+.space[_ngcontent-c3] {
+    margin: 0px 50px;
+}
+
+.hideData[_ngcontent-c3] {
+    display: flex;
+    margin: 0px auto;
+    justify-content: center;
+}
+
+.search-grid {
+    border-top: 3px solid #989898 !important;
+}
+
+.search-grid .box-header {
+    color: #464646;
+    justify-content: left;
+    background: unset !important;
+}
+
+.search-grid th {
+    background: #e8e8e8;
+    color: #464646;
+    border-bottom: 1px solid #989898;
+    border-right: 1px solid #989898 !important;
+}
+
+/*  Common Action Workflow CSS */
+
+.success {
+    color: aliceblue;
+    background-color: #228c22;
+}
+
+.mat-footer-row, mat-header-row, mat-row {
+    align-items: unset;
+    border-bottom-width: 0px;
+}
+
+::ng-deep .example-chip-list .mat-form-field-wrapper {
+    font-size: 13px;
+}
+
+table.mat-table thead {
+    background: #f2f2f2;
+    color: black;
+    font-size: 14px;
+}
+
+::ng-deep .mat-tab-header, .mat-tab-nav-bar {
+    border-bottom: none;
+}
+
+mat-cell>span {
+    width: 100%;
+}
+
+.mat-drawer.mat-drawer-side {
+    z-index: 2;
+    position: fixed;
+    width: 320px;
+    background: #f3f2f8;
+}
+
+.disable-delete-btn {
+    pointer-events: none;
+    color: #333;
+}
+
+.selected-row {
+    background: #f7f0ee !important;
+}
+
+::ng-deep .mat-pseudo-checkbox {
+    margin-left: 10px;
+}
+
+::ng-deep .mat-pseudo-checkbox ::ng-deep {
+    margin-left: 15px;
+}
+
+::ng-deep.mat-option .mat-pseudo-checkbox {
+    position: relative !important;
+}
+
+::ng-deep.mat-option .mat-option-pseudo-checkbox {
+    margin-left: 0px;
+}
+
+.historyDataSource[_ngcontent-c26] tr[_ngcontent-c26] td.mat-cell[_ngcontent-c26]:last-of-type, .historyDataSource[_ngcontent-c26] tr[_ngcontent-c26] th.mat-header-cell[_ngcontent-c26]:last-of-type {
+    min-width: 400px;
+    max-width: 500px;
+}
+
+/* temperory code for view comments*/
+
+.histy-box {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.txt-heading {
+    /* width: auto; */
+    display: flex;
+    color: black;
+    font-weight: bold;
+}
+
+.comment-text {
+    text-overflow: ellipsis;
+    height: auto;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.comment-text p {
+    margin-bottom: 0px;
+}
+
+.history-common-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.action-common-section {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+::ng-deep .mat-dialog-container {
+    padding: 0px;
+}
+
+.forward-module-container {
+    width: 100%;
+    padding-top: 10px;
+}
+
+.heading-section {
+    padding: 10px;
+}
+
+.full-width {
+    margin-top: 15px;
+}
+
+.htry-hding-name {
+    margin: 10px 0px;
+}
+
+.column-box {
+    width: 100%;
+    border-bottom: 1px solid #333333;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+/* ::ng-deep .mat-expansion-panel{
+    margin: 10px !important;
+  } */
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+    position: fixed;
+    /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+    z-index: 2;
+}
+
+h1.example-app-name {
+    margin-left: 8px;
+}
+
+.example-sidenav-container {
+    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+    flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+       `<body>` to be our scrolling element for mobile layouts. */
+    flex: 1 0 auto;
+}
+
+#parent {
+    display: flex;
+    min-height: 20px;
+    width: 100%;
+}
+
+#block1 {
+    flex-grow: 1;
+    flex-direction: row;
+    /* resize: horizontal; */
+    resize: both;
+    overflow: auto;
+    cursor: nw-resize;
+}
+
+#block2 {
+    flex-grow: 1;
+    flex-direction: row-reverse;
+    max-width: 100% !important;
+    background: #f9f9f9;
+    margin-left: 5px;
+    box-sizing: border-box;
+}
+
+::ng-deep .mat-card {
+    background: #f9f9f9;
+}
+
+::ng-deep .mat-icon {
+    float: right;
+}
+
+mat-icon:hover {
+    color: #0433e0;
+}
+
+::ng-deep .mat-icon {
+    float: right;
+}
+
+::ng-deep .mat-expansion-panel-header-description {
+    display: block !important;
+}
+
+::ng-deep .pdfViewer .canvasWrapper {
+    display: block;
+}
+
+::ng-deep .page, ::ng-deep .canvasWrapper, ::ng-deep #page2, ::ng-deep .textLayer {
+    min-width: 400px !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+    max-width: 95% !important;
+}
+
+.category-deprt {
+    background: #ececec;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.justifycontent.ng-star-inserted {
+    text-align: justify !important
+}
+
+.flexicon {
+    display: flex;
+    margin-bottom: 0px;
+}
+
+.attachmentType {
+    min-width: 92px !important;
+    padding: 5px;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    align-items: center;
+}
+
+.column-box[_ngcontent-c19] {
+    padding-bottom: 0px;
+}
+
+.mat-checkbox label.mat-checkbox-layout {
+    margin-bottom: 0px;
+}
+
+.cover-box {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    border-bottom: 1px solid #333333;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+    white-space: nowrap;
+}
+
+.check-box-contain-list .heading-txt {
+    font-weight: bold;
+}
+
+.check-box-contain-list {
+    width: 100%;
+}
+
+.check-box-list-btn {
+    margin-right: 10px;
+}
+
+.e-heading-txt {
+    justify-content: space-between;
+}
+
+label.txt-heading {
+    margin-bottom: 0px;
+}
+
+.forward-module-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.forward-dialog-left {
+    display: flex;
+    width: 50%;
+    border-right: 1px solid black;
+}
+
+.material-icons.iconset {
+    font-size: 18px !important;
+    line-height: 18px !important;
+}
+
+.mat-list .mat-list-item, .mat-list .mat-list-option, .mat-nav-list .mat-list-item, .mat-nav-list .mat-list-option, .mat-selection-list .mat-list-item, .mat-selection-list .mat-list-option {
+    height: auto !important;
+}
+
+/* temperory code for view comments ends here */
+
+::ng-deep .mat-select-search-no-entries-found {
+    position: absolute;
+    /* top: 22px; */
+    top: calc(100% - 0.4375em);
+    font-size: 11px;
+    padding: 0px !important;
+}

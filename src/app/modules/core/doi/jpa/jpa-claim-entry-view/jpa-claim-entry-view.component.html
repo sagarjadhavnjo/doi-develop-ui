@@ -1,0 +1,1167 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>JPA Claim Entry </div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/JPA/JCE/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI / JPA</li>
+        <li class="breadcrumb-item active" aria-current="page">JPA Claim Entry </li>
+      </ol>
+    </nav>
+
+
+
+    <div class="panel-group">
+      <!-- JPA Claim Entry  Form-->
+      <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [selectedIndex]="selectedindex">
+        <mat-tab label="JPA Claim Entry">
+          <form [formGroup]="jpaClaimEntry">
+
+            <!-- Claim Details -->
+            <div class="row">
+              <!-- Claim ID -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input type="text" required matInput formControlName="clID"
+                    placeholder="Claim ID">
+
+                </mat-form-field>
+              </div>
+              <!-- Claim Date -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="clDate" formControlName="clDate"
+                    placeholder="Claim Date ">
+                  <mat-datepicker-toggle matSuffix [for]="clDate"></mat-datepicker-toggle>
+                  <mat-datepicker #clDate></mat-datepicker>
+                </mat-form-field>
+
+              </div>
+
+            </div>
+            <!-- Details of Deceased/Disabled -->
+            <div class="box box-primary">
+              <div class="box-header">Details of Deceased/Disabled</div>
+              <div class="box-body">
+                <!-- Account Transfer -->
+                <div class="row">
+                  <!-- Is Deceased Person Died or permanent disabled -->
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-select name="disabledDied" formControlName="disabledDied" placeholder="Deceased Person"
+                        (selectionChange)="onSelect($event)" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="adisabledDiedCtrl"
+                            [placeholderLabel]="'Select Is Deceased Person Died or permanent disabled ...'"
+                            [noEntriesFoundLabel]="'no matching Tange type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let DA of deac_list | filterSelectInput : adisabledDiedCtrl.value : 'viewValue'"
+                          [value]="DA.value">
+                          {{DA.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.disabledDied.touched && jpaClaimEntry.controls.disabledDied.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.disabledDied.errors.required">
+                          {{ errorMessage.DIED }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-select formControlName="aadharAvail" placeholder="Aadhar Available" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="aadharAvailCtrl"
+                            [placeholderLabel]="'Select Aadhar Available ...'"
+                            [noEntriesFoundLabel]="'no matching Aadhar Available found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let DA of aadharAvail_list | filterSelectInput : aadharAvailCtrl.value : 'viewValue'"
+                          [value]="DA.value" [matTooltip]="DA.viewValue">
+                          {{DA.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- Person Disability percentage -->
+                  <div class="col-md-3" *ngIf="isTokentable">
+                    <mat-form-field>
+                      <mat-select name="PersonDisabllity" formControlName="PersonDisabllity" placeholder=" Disability "
+                        readonly>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="PersonDisabllityCtrl"
+                            [placeholderLabel]="'Select  Disability  ...'"
+                            [noEntriesFoundLabel]="'no matching Tange type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let pd of PersonDisabllity_list | filterSelectInput : PersonDisabllityCtrl.value : 'viewValue'"
+                          [value]="pd.value">
+                          {{pd.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.disabledDied.touched && jpaClaimEntry.controls.disabledDied.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.disabledDied.errors.required">
+                          {{ errorMessage.PERSONDI }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Name of Applicant (As per Aadhar) -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" required matInput formControlName="nameOfApplicant" readonly
+                        placeholder="Name of Applicant (As per Aadhar)">
+
+                    </mat-form-field>
+                  </div>
+                  <!-- Aadhar Card No. -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" maxlength="12" matInput formControlName="adharNo" required numbersOnly
+                        placeholder="  Aadhar Card No." readonly>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.adharNo.touched && jpaClaimEntry.controls.adharNo.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.adharNo.errors.required">
+                          {{ errorMessage.ADHARNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Father / Husband Name -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="fatherName" readonly
+                        placeholder="  Father / Husband Name">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.fatherName.touched && jpaClaimEntry.controls.fatherName.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.fatherName.errors.required">
+                          {{ errorMessage.FATHERNAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Mother / wife Name -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="motherName" readonly
+                        placeholder="  Mother / Wife Name">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.motherName.touched && jpaClaimEntry.controls.motherName.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.motherName.errors.required">
+                          {{ errorMessage.MOTHERNAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Person Disability percentage -->
+                  <div class="col-md-3">
+                    <mat-form-field>
+                      <mat-select name="maritalStatus" formControlName="maritalStatus" placeholder="Marital Status"
+                        disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="maritalStatusCtrl"
+                            [placeholderLabel]="'Select Marital Status ...'"
+                            [noEntriesFoundLabel]="'no matching Tange type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let MS of maritalStatus_list | filterSelectInput : maritalStatusCtrl.value : 'viewValue'"
+                          [value]="MS.value">
+                          {{MS.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.maritalStatus.touched && jpaClaimEntry.controls.maritalStatus.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.maritalStatus.errors.required">
+                          {{ errorMessage.MARITALSTATUS }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Communication Address -->
+                  <!-- <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <textarea matInput rows="1" maxlength="200" placeholder="Communication Address "
+                        formControlName="commAdd" readonly></textarea>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.commAdd.touched && jpaClaimEntry.controls.commAdd.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.commAdd.errors.required">
+                          {{ errorMessage.COMMADD }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div> -->
+                  <!-- District -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="district" placeholder="District" (selectionChange)="selectDistrict()"
+                        disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="districtCtrl" [placeholderLabel]="'Find District...'"
+                            [noEntriesFoundLabel]="'No matching District found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of districtList |
+                              filterSelectInput:districtCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.district.touched && jpaClaimEntry.controls.district.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.district.errors.required">
+                          {{ errorMessage.DISTRICT }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Taluka -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select name='taluka' formControlName='taluka' placeholder='Taluka' disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]='talukaCtrl' [placeholderLabel]="'Select Taluka ...'"
+                            [noEntriesFoundLabel]="'no matching Taluka found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let item of taluka_list | filterSelectInput : talukaCtrl.value : 'viewValue'"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.taluka.touched && jpaClaimEntry.controls.taluka.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.taluka.errors.required">
+                          {{ errorMessage.TALUKA }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- village -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="village" placeholder="Village" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="villageCtrl" [placeholderLabel]="'Find Village...'"
+                            [noEntriesFoundLabel]="'No matching Village found'" alphabetsSpaceOnly>
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of villageList |
+                            filterSelectInput:villageCtrl.value" [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.village.touched && jpaClaimEntry.controls.village.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.village.errors.required">
+                          {{ errorMessage.village }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Pincode -->
+                  <!-- <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="pincode" readonly numbersOnly
+                        placeholder="  Pincode">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.pincode.touched && jpaClaimEntry.controls.pincode.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.pincode.errors.required">
+                          {{ errorMessage.PINCODE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div> -->
+                  <!-- gender -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="gender" placeholder="Gender" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="genderCtrl" [placeholderLabel]="'Find Gender...'"
+                            [noEntriesFoundLabel]="'No matching Gender found'" alphabetsSpaceOnly>
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of genderList |
+                            filterSelectInput:villageCtrl.value" [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.gender.touched && jpaClaimEntry.controls.gender.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.gender.errors.required">
+                          {{ errorMessage.GENDER }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Date Of Birth -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="dateOfBirth" formControlName="dateOfBirth"
+                        placeholder="Date Of Birth " readonly>
+                      <mat-datepicker-toggle matSuffix [for]="dateOfBirth" [disabled]="true"></mat-datepicker-toggle>
+                      <mat-datepicker #dateOfBirth></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.dateOfBirth.touched && jpaClaimEntry.controls.dateOfBirth.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.dateOfBirth.errors.required">
+                          {{ errorMessage.DATE_OF_BIRTH }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+                  <!-- Date of Accident   -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="dateOfAccident" formControlName="dateOfAccident"
+                        placeholder="Date Of Accident " readonly>
+                      <mat-datepicker-toggle matSuffix [for]="dateOfAccident" [disabled]="true"></mat-datepicker-toggle>
+                      <mat-datepicker #dateOfAccident></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.dateOfAccident.touched && jpaClaimEntry.controls.dateOfAccident.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.dateOfAccident.errors.required">
+                          {{ errorMessage.DATE_OF_ACCIDENT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Date of Death / Disability     -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="dateOfDisability" (click)="ageOnYear(($event))"
+                        formControlName="dateOfDisability" placeholder="Date of Death / Disability">
+                      <mat-datepicker-toggle matSuffix [for]="dateOfDisability"></mat-datepicker-toggle>
+                      <mat-datepicker #dateOfDisability></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.dateOfDisability.touched && jpaClaimEntry.controls.dateOfDisability.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.dateOfDisability.errors.required">
+                          {{ errorMessage.DATE_OF_DIS}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Age On Death -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="ageOnDeath" readonly placeholder=" Age On Death">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.ageOnDeath.touched && jpaClaimEntry.controls.ageOnDeath.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.ageOnDeath.errors.required">
+                          {{ errorMessage.AGEONDEATH }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Place of Accident -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="placeofAccident" readonly
+                        placeholder=" Place of Accident">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.placeofAccident.touched && jpaClaimEntry.controls.placeofAccident.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.placeofAccident.errors.required">
+                          {{ errorMessage.PLACEONDEATH }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Cause of Loss -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="causeofLoss" (selectionChange)="oncauseofLoss($event)"
+                        placeholder="Cause of Loss" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="causeofLossCtrl"
+                            [placeholderLabel]="'Find Cause of Loss...'"
+                            [noEntriesFoundLabel]="'No matching Cause of Loss found'" alphabetsSpaceOnly>
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of causeofLoss_List |
+                              filterSelectInput:causeofLossCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.causeofLoss.touched && jpaClaimEntry.controls.causeofLoss.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.causeofLoss.errors.required">
+                          {{ errorMessage.CAUSSOFLOSS }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Is Deceased Person Drive Vehicle ? -->
+                  <div class="col-sm-3" *ngIf="iscauseToken">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="driveVEhicle" (selectionChange)="onLicon($event)"
+                        placeholder="Is Deceased Person Drive Vehicle ?" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="driveVEhicleCtrl"
+                            [placeholderLabel]="'Find Is Deceased Person Drive Vehicle...'"
+                            [noEntriesFoundLabel]="'No matching Is Deceased Person Drive Vehicle found'"
+                            alphabetsSpaceOnly>
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of driveVEhicle_List |
+                                filterSelectInput:driveVEhicleCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.driveVEhicle.touched && jpaClaimEntry.controls.driveVEhicle.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.driveVEhicle.errors.required">
+                          {{ errorMessage.DRIVEVEHICLE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Pincode -->
+                  <div class="col-sm-3 disabled" *ngIf="liceno">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="licenseNo" numbersOnly readonly
+                        placeholder="License No ">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.licenseNo.touched && jpaClaimEntry.controls.licenseNo.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.licenseNo.errors.required">
+                          {{ errorMessage.LICNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Details of Deceased/Disabled -->
+            <!-- Applicant Details -->
+            <div class="box box-primary">
+              <div class="box-header">Applicant Details</div>
+              <div class="box-body">
+                <span class="change-direction">
+                  <!-- <mat-checkbox checked="true" [disabled]="true" class="change-direction">Same
+                    as Above (Applicant Address)
+                  </mat-checkbox> -->
+
+                </span>
+                <div class="row">
+                  <!-- Full Name of Applicant (As per Aadhar ID) -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="fullName" readonly
+                        placeholder="  Full Name of Applicant (As per Aadhar ID) ">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.fullName.touched && jpaClaimEntry.controls.fullName.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.fullName.errors.required">
+                          {{ errorMessage.FULLNAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Applicant Aadhar ID No.   -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="applicantNo" readonly
+                        placeholder="  Applicant Aadhar ID No.">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.applicantNo.touched && jpaClaimEntry.controls.applicantNo.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.applicantNo.errors.required">
+                          {{ errorMessage.APPCLNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="applicantADD" readonly
+                        placeholder=" Communication Address">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.applicantADD.touched && jpaClaimEntry.controls.applicantADD.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.applicantADD.errors.required">
+                          {{ errorMessage.ADDAPP }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-checkbox checked="true" [disabled]="true" class="change-direction">Same
+                      as Communication Address
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="permAdd" readonly
+                        placeholder="Permanent address">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.permAdd.touched && jpaClaimEntry.controls.permAdd.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.permAdd.errors.required">
+                          {{ errorMessage.ADDAPP }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Relation with Deceased Person -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="relationPerson" (selectionChange)="onLicon($event)"
+                        placeholder="Relation with Deceased Person" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="relationPersonCtrl"
+                            [placeholderLabel]="'Find Relation with Deceased Person...'"
+                            [noEntriesFoundLabel]="'No matching Relation with Deceased Person found'"
+                            alphabetsSpaceOnly>
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of relationPerson_List |
+                                filterSelectInput:relationPersonCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.relationPerson.touched && jpaClaimEntry.controls.relationPerson.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.relationPerson.errors.required">
+                          {{ errorMessage.RELATION }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- District -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="districtadd" placeholder="District"
+                        (selectionChange)="selectDistrict()" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="districtCtrl" [placeholderLabel]="'Find District...'"
+                            [noEntriesFoundLabel]="'No matching District found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of districtList |
+                                  filterSelectInput:districtCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.districtadd.touched && jpaClaimEntry.controls.districtadd.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.districtadd.errors.required">
+                          {{ errorMessage.DISTRICT }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Taluka -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select name='taluka' formControlName='talukaadd' placeholder='Taluka' disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]='talukaCtrl' [placeholderLabel]="'Select Taluka ...'"
+                            [noEntriesFoundLabel]="'no matching Taluka found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let item of taluka_list | filterSelectInput : talukaCtrl.value : 'viewValue'"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.talukaadd.touched && jpaClaimEntry.controls.talukaadd.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.talukaadd.errors.required">
+                          {{ errorMessage.TALUKA }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- village -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="villageadd" placeholder="Village" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="villageCtrl" [placeholderLabel]="'Find Village...'"
+                            [noEntriesFoundLabel]="'No matching Village found'" alphabetsSpaceOnly>
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of villageList |
+                                    filterSelectInput:villageCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.villageadd.touched && jpaClaimEntry.controls.villageadd.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.villageadd.errors.required">
+                          {{ errorMessage.village }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Pincode -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="pincodeadd" numbersOnly readonly
+                        placeholder="  Pincode">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.pincodeadd.touched && jpaClaimEntry.controls.pincodeadd.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.pincodeadd.errors.required">
+                          {{ errorMessage.PINCODE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Bank Name   -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select formControlName="banName" placeholder="Bank Name" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="bankCtrl" [placeholderLabel]="'Select  Bank Name...'"
+                            [noEntriesFoundLabel]="'no matching Bank Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let bl of bank_list | filterSelectInput : bankCtrl.value : 'viewValue'"
+                          [value]="bl.value">
+                          {{bl.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.banName.touched && jpaClaimEntry.controls.banName.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.banName.errors.required">
+                          {{ errorMessage.BANKNAME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Bank Branch   -->
+                  <div class="col-sm-3">
+
+                    <mat-form-field>
+                      <mat-select formControlName="bankBranch" placeholder="Bank Branch"
+                        (selectionChange)="onSelectBank($event)" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="bankbranchCtrl"
+                            [placeholderLabel]="'Select  Bank Branch...'"
+                            [noEntriesFoundLabel]="'no matching Bank Branch found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let bl of bankbranch_list | filterSelectInput : bankbranchCtrl.value : 'viewValue'"
+                          [value]="bl.value">
+                          {{bl.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.bankBranch.touched && jpaClaimEntry.controls.bankBranch.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.bankBranch.errors.required">
+                          {{ errorMessage.BANKBRANCH }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Name of Applicant (As per Bank)   -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="nameOfApp" readonly
+                        placeholder="Name of Applicant (As per Bank)">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.nameOfApp.touched && jpaClaimEntry.controls.nameOfApp.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.nameOfApp.errors.required">
+                          {{ errorMessage.NAMEOFAPP }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Bank Account No    -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="bankAccount" readonly
+                        placeholder="  Bank Account No ">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.bankAccount.touched && jpaClaimEntry.controls.bankAccount.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.bankAccount.errors.required">
+                          {{ errorMessage.BANKACCONO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Bank  IFSC Code   -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="bankIFSC" readonly placeholder="Bank IFSC Code  ">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.bankIFSC.touched && jpaClaimEntry.controls.bankIFSC.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.bankIFSC.errors.required">
+                          {{ errorMessage.BANKIFSC }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Mobile No.   -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="mobileNo" readonly placeholder=" Mobile No.">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.mobileNo.touched && jpaClaimEntry.controls.mobileNo.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.mobileNo.errors.required">
+                          {{ errorMessage.MOBILENO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="mobileNoAlt" maxlength="10"
+                        placeholder="Alternate Mobile Number" readonly>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3 disabled">
+                      <mat-form-field class="full-width">
+                          <input matInput type="text" formControlName="email"
+                              placeholder="Email ID" readonly>
+                      </mat-form-field>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- DetaiApplicant Details -->
+            <div class="box box-primary">
+              <div class="box-header">General Details</div>
+              <div class="box-body">
+                <span class="change-direction">
+                  <mat-checkbox checked="true" [disabled]="true" class="change-direction">Same as Above(Nodal Address)
+                  </mat-checkbox>
+                </span>
+                <div class="row">
+                  <!-- Nodal District     -->
+                  <!-- District -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="nodalDistrict" placeholder="Nodal District"
+                        (selectionChange)="selectDistrict()" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="districtCtrl"
+                            [placeholderLabel]="'Find Nodal District...'"
+                            [noEntriesFoundLabel]="'No matching Nodal District found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of districtList |
+                                      filterSelectInput:districtCtrl.value" [value]="item.value"
+                          matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.nodalDistrict.touched && jpaClaimEntry.controls.nodalDistrict.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.nodalDistrict.errors.required">
+                          {{ errorMessage.NODALDISTRICT }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Taluka -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select name='taluka' formControlName='nodalTaluka' placeholder='Nodal Taluka' disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]='talukaCtrl'
+                            [placeholderLabel]="'Select Nodal Taluka ...'"
+                            [noEntriesFoundLabel]="'no matching Nodal Taluka found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let item of taluka_list | filterSelectInput : talukaCtrl.value : 'viewValue'"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.nodalTaluka.touched && jpaClaimEntry.controls.nodalTaluka.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.nodalTaluka.errors.required">
+                          {{ errorMessage.NODALTALUKA }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="schemeType" placeholder="Scheme"
+                        (selectionChange)="onSelectScheme($event)" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="schemeTypeCtrl" [placeholderLabel]="'Find Scheme ...'"
+                            [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let schemeType of schemeType_list | filterSelectInput: schemeTypeCtrl.value"
+                          [value]="schemeType.value">
+                          {{schemeType.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.schemeType.touched && (jpaClaimEntry.controls.schemeType.errors)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.schemeType.errors.required">
+                          {{errorMessages.SCHEME}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3" *ngIf="schemeNo">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="farmer" placeholder="Who is Registred Farmer" disabled>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="farmerCtrl" [placeholderLabel]="'Find Scheme ...'"
+                            [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let fa of farmer_list | filterSelectInput: farmerCtrl.value"
+                          [value]="fa.value">
+                          {{fa.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.farmer.touched && (jpaClaimEntry.controls.farmer.errors)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.farmer.errors.required">
+                          {{errorMessages.SCHEMEFARMER}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Nodal Officer -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input matInput formControlName="nodalOffice" placeholder="Nodal Officer " readonly>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.nodalOffice.touched && jpaClaimEntry.controls.nodalOffice.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.nodalOffice.errors.required">
+                          {{ errorMessage.NODALOFFICER}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="nodalEmail" placeholder="Nodal Email id" readonly>
+                    </mat-form-field>
+                  </div>
+                  <!-- Policy No. -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input matInput formControlName="ploicyNo" placeholder="Policy No.  " readonly>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.ploicyNo.touched && jpaClaimEntry.controls.ploicyNo.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.ploicyNo.errors.required">
+                          {{ errorMessage.PLOICYNO}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Claim Amount -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input matInput formControlName="claimAmount" placeholder="Claim Amount " readonly>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.claimAmount.touched && jpaClaimEntry.controls.claimAmount.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.claimAmount.errors.required">
+                          {{ errorMessage.CLAIMAMUNT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Inward No. -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="inwardNo" placeholder=" Inward No." readonly>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.inwardNo.touched && jpaClaimEntry.controls.inwardNo.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.inwardNo.errors.required">
+                          {{ errorMessage.INWARDNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Inward Date -->
+                  <div class="col-sm-3 disabled">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="inwardDate" formControlName="inwardDate"
+                        placeholder="Inward Date " readonly>
+                      <mat-datepicker-toggle matSuffix [for]="inwardDate"></mat-datepicker-toggle>
+                      <mat-datepicker #inwardDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.inwardDate.touched && jpaClaimEntry.controls.inwardDate.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.inwardDate.errors.required">
+                          {{ errorMessage.INWARDDATE}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Recommonded -->
+                  <!-- <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="recomnded" placeholder="Recommended " #recommend>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="recomndedCtrl"
+                            [placeholderLabel]="'Find Recommonded ...'"
+                            [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let fa of recomnded_list | filterSelectInput: recomndedCtrl.value"
+                          [value]="fa.value" matTooltip="{{fa.viewValue}}">
+                          {{fa.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                  </div> -->
+
+                  <!-- <div class="col-sm-3" *ngIf="recommend.value == '6'">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="surveyorName" placeholder="Investigator Name" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="surveyorNameCtrl"
+                            [placeholderLabel]="'Find Surveyor Name...'"
+                            [noEntriesFoundLabel]="'no matching Surveyor Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of surveyorNameList | filterSelectInput: surveyorNameCtrl.value"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                  </div> -->
+                  <!-- <div class="col-sm-3">
+                    <button mat-raised-button type="button" color="primary" (click)="onSubmit();"
+                      [ngStyle]="{'cursor': !recommend.value ? 'no-drop' : 'pointer' }"
+                      [disabled]="!recommend.value">Select
+                    </button>
+                  </div> -->
+
+
+                </div>
+              </div>
+            </div>
+            <!-- Interest Payment -->
+            <div class="box box-primary" *ngIf="jpaClaimEntry.controls.recomnded.value=='2'">
+              <div class="box-header">Interest Payment</div>
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="intPerc" placeholder="Interest (%)" percentageOnly>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input type="text" matInput formControlName="amont" placeholder="Amount" numberDotOnly>
+                    </mat-form-field>
+                  </div>
+                  
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="appFrom" formControlName="appFrom"
+                        placeholder="Applicable From">
+                      <mat-datepicker-toggle matSuffix [for]="appFrom"></mat-datepicker-toggle>
+                      <mat-datepicker #appFrom></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <textarea type="text" matInput formControlName="remarks" placeholder="Remarks"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Attachments when click print -->
+            <div class="print-view">
+              <app-common-attachment [attachemntValue]="attachmentObj"></app-common-attachment>
+            </div>
+
+            <div class="form-action-button">
+              <button mat-raised-button type="submit" (click)="onEdit()" class="green"><i class="material-icons">
+                  done
+                </i> Edit
+              </button>
+
+              <button type="reset" mat-raised-button color="accent">
+                <i class="material-icons" aria-hidden="true">
+                  restore
+                </i>
+                Reset
+              </button>
+
+              <button type="button" mat-raised-button color="warn" (click)="navigate()">
+                <i class="material-icons" aria-hidden="true" title="Listing">
+                  list
+                </i>
+                Listing
+              </button>
+
+              <button type="button" mat-raised-button class="print-btn" title="Print" (click)="print()">
+                <i class="material-icons" title="Print" aria-hidden="true">
+                  print
+                </i>
+                Print
+              </button>
+
+              <button type="button" mat-raised-button class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                  close
+                </i>
+                Close
+              </button>
+            </div>
+          </form>
+        </mat-tab>
+
+        <mat-tab label="Attachments" class="without-print-view">
+          <app-common-attachment [attachemntValue]="attachmentObj"></app-common-attachment>
+          <div class="form-action-button">
+            <button type="submit" mat-raised-button color="primary">
+              <i class="material-icons" aria-hidden="true" title="Save">
+                save
+              </i>
+              Upload
+            </button>
+            <button type="button" mat-raised-button budget-list (click)="gotoListing()" color="warn">
+              <i class="material-icons" aria-hidden="true" title="Listing">
+                list
+              </i>
+              Listing
+            </button>
+            <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+              <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                close
+              </i>
+              Close
+            </button>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Query Compliance">
+          <!-- <div class="form-action-button">
+            <button type="button" mat-raised-button (click)="addRow()" color="primary">
+              <i class="material-icons" aria-hidden="true" title="Add Row">
+                add
+              </i>
+              Add
+            </button>
+          </div> -->
+          <div class="mat-elevation-z8 table-responsive mt-2">
+            <table mat-table [dataSource]="dataSource" width="100%" aria-describedby="listingScreen">
+
+              <ng-container matColumnDef="srno">
+                <th mat-header-cell *matHeaderCellDef scope="row">Sr No.</th>
+                <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+                  {{ i +1 }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="query">
+                <th mat-header-cell *matHeaderCellDef scope="row">Query Generated</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  
+                  <div *ngIf="!element.disp; else elseBlock">{{ element.query }}</div>
+                  <ng-template #elseBlock>
+                    <mat-form-field>
+                      <mat-select [(value)]="element.querName">
+                        <mat-option *ngFor="let item of querName_List" [value]="item.viewValue" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </ng-template>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef scope="row">Status</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  
+                  <div *ngIf="!element.disp; else elseBlock">{{ element.status }}</div>
+                  <ng-template #elseBlock>
+                    <mat-form-field>
+                      <input matInput >
+                    </mat-form-field>
+                  </ng-template>
+                </td>
+              </ng-container>
+              
+              <ng-container matColumnDef="resolvedOn">
+                <th mat-header-cell *matHeaderCellDef scope="row">Resolved On</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  
+                  <div *ngIf="!element.disp; else elseBlock">{{ element.resolvedOn }}</div>
+                  <ng-template #elseBlock>                  
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="resolvedOn" [value]="element.resolvedOn">
+                      <mat-datepicker-toggle matSuffix [for]="resolvedOn"></mat-datepicker-toggle>
+                      <mat-datepicker #resolvedOn></mat-datepicker>
+                    </mat-form-field>
+                  </ng-template>
+                </td>
+              </ng-container>
+              
+              <ng-container matColumnDef="updateBy">
+                <th mat-header-cell *matHeaderCellDef scope="row">Updated By</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{element.updateBy}}
+                </td>
+              </ng-container>
+              <!-- Header Section Of table -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <!-- Data Fetch From .TS File to table -->
+              <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
+            </table>
+          </div>
+
+
+          <div class="form-action-button">
+            <button type="button" mat-raised-button budget-list (click)="gotoListing()" color="warn">
+              <i class="material-icons" aria-hidden="true" title="Listing">
+                list
+              </i>
+              Listing
+            </button>
+            <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+              <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                close
+              </i>
+              Close
+            </button>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+      <!-- End JPA Claim Entry  Form-->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,531 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Premium Register (Re-Insurance ) </div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/PRC/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI </li>
+        <li class="breadcrumb-item " aria-current="page">Re Insurance </li>
+        <li class="breadcrumb-item active" aria-current="page">Premium Register (Re-Insurance ) </li>
+      </ol>
+    </nav>
+
+    <div class="panel-group">
+      <form [formGroup]="premiumRegisterForm">
+        <!-- Applicant Details -->
+        <div class="box box-primary">
+          <div class="box-header">Premium Register (Re-Insurance )</div>
+          <div class="box-body">
+            <div class="row">
+              <!-- Policy Type -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="ploicyType" #polTypeVal placeholder="Policy Type">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="ploicyTypeCtrl" [placeholderLabel]="'Find Policy Type...'"
+                        [noEntriesFoundLabel]="'no matching Policy Type found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of ploicyType_list | filterSelectInput: ploicyTypeCtrl.value"
+                      [value]="item.id" [matTooltip]="item.name">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+
+                </mat-form-field>
+              </div>
+              <!-- Insurance Company Name -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="insuranceCompanyName" placeholder="Insurance Company Name" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="insuranceCompanyNameCtrl"
+                        [placeholderLabel]="'Find Insurance Company Name...'"
+                        [noEntriesFoundLabel]="'no matching Insurance Company Name found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                      *ngFor="let item of insuranceCompanyName_list | filterSelectInput: insuranceCompanyNameCtrl.value"
+                      [value]="item.id" [matTooltip]="item.name">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.insuranceCompanyName.touched && premiumRegisterForm.controls.insuranceCompanyName.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.insuranceCompanyName.errors.required">
+                      {{errorMessage.INSURANCE_COMPANY_NAME}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Insurance Company location -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="insuranceCompanylocation" placeholder="Insurance Company location"
+                    required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="insuranceCompanylocationCtrl"
+                        [placeholderLabel]="'Find Insurance Company location...'"
+                        [noEntriesFoundLabel]="'no matching Insurance Company location found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                      *ngFor="let item of insuranceCompanylocationCtrl_list | filterSelectInput: insuranceCompanylocationCtrl.value"
+                      [value]="item.id" [matTooltip]="item.name">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.insuranceCompanylocation.touched && premiumRegisterForm.controls.insuranceCompanylocation.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.insuranceCompanylocation.errors.required">
+                      {{errorMessage.INSURANCE_COMPANY_LOCATION}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Insurance Company Office Branch code -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="insuranceCompanyOfficeBranchcode"
+                    placeholder="Insurance Company Office Branch code" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="insuranceCompanyOfficeBranchcodeCtrl"
+                        [placeholderLabel]="'Find Insurance Company Office Branch code...'"
+                        [noEntriesFoundLabel]="'no matching Insurance Company Office Branch code found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                      *ngFor="let item of insuranceCompanyOfficeBranchcode_list | filterSelectInput: insuranceCompanyOfficeBranchcodeCtrl.value"
+                      [value]="item.id" [matTooltip]="item.name">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.insuranceCompanyOfficeBranchcode.touched && premiumRegisterForm.controls.insuranceCompanyOfficeBranchcode.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.insuranceCompanyOfficeBranchcode.errors.required">
+                      {{errorMessage.INSURANCE_COMPANY_BRANCH_CODE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Risk Type -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="riskType" placeholder="Risk Type" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="riskTypeCtrl" [placeholderLabel]="'Find Risk Type...'"
+                        [noEntriesFoundLabel]="'no matching Risk Type found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of riskType_list | filterSelectInput: riskTypeCtrl.value"
+                      [value]="item.id" [matTooltip]="item.name">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.riskType.touched && premiumRegisterForm.controls.riskType.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.riskType.errors.required">
+                      {{errorMessage.RISK_TYPE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Start Date of Insurance -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="premiumReceiveStartOfDate"
+                    formControlName="premiumReceiveStartOfDate" placeholder="Premium Receive Start Of Date" required>
+                  <mat-datepicker-toggle matSuffix [for]="premiumReceiveStartOfDate"></mat-datepicker-toggle>
+                  <mat-datepicker #premiumReceiveStartOfDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.premiumReceiveStartOfDate.touched && premiumRegisterForm.controls.premiumReceiveStartOfDate.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.premiumReceiveStartOfDate.errors.required">
+                      {{ errorMessage.STARTOFPREMUM}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- End Date of Insurance -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="premiumReceiveEndOfDate" formControlName="premiumReceiveEndOfDate"
+                    placeholder="Premium Receive End Of Date" required>
+                  <mat-datepicker-toggle matSuffix [for]="premiumReceiveEndOfDate"></mat-datepicker-toggle>
+                  <mat-datepicker #premiumReceiveEndOfDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.premiumReceiveEndOfDate.touched && premiumRegisterForm.controls.premiumReceiveEndOfDate.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.premiumReceiveEndOfDate.errors.required">
+                      {{ errorMessage.ENDOFPREMUM}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Policy No -->
+              <div class="col-md-3">
+                <mat-form-field>
+                  <input matInput formControlName="policyNo" (blur)="setValues()" placeholder="Policy No" required>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.policyNo.touched && premiumRegisterForm.controls.policyNo.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.policyNo.errors.required">
+                      {{errorMessage.POLICY_NO}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Endorsement No -->
+              <div *ngIf="premiumRegisterForm.controls.ploicyType.value=='2'" class="col-md-3">
+                <mat-form-field>
+                  <input matInput formControlName="endorsementNo" placeholder="Endorsement No" required readonly>
+                </mat-form-field>
+              </div>
+              <!-- Name of the Insured -->
+              <div class="col-md-3">
+                <mat-form-field>
+                  <input matInput formControlName="nameoftheInsured" placeholder="Name of the Insured" required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.nameoftheInsured.touched && premiumRegisterForm.controls.nameoftheInsured.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.nameoftheInsured.errors.required">
+                      {{errorMessage.NAMEOFINSURED}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Risk Location -->
+              <div class="col-md-3">
+                <mat-form-field>
+                  <input matInput formControlName="riskLocation" placeholder="Risk Location" readonly>
+
+                </mat-form-field>
+              </div>
+              <!-- Start Date of Insurance -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="startDateofInsurance " formControlName="startDateofInsurance"
+                    placeholder="Start Date of Insurance  " required>
+                  <mat-datepicker-toggle matSuffix [for]="startDateofInsurance"></mat-datepicker-toggle>
+                  <mat-datepicker #startDateofInsurance></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.startDateofInsurance.touched && premiumRegisterForm.controls.startDateofInsurance.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.startDateofInsurance.errors.required">
+                      {{ errorMessage.STARTOFINSURANCE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- End Date of Insurance -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="endDateofInsurance " formControlName="endDateofInsurance"
+                    placeholder="End Date of Insurance  " required>
+                  <mat-datepicker-toggle matSuffix [for]="endDateofInsurance"></mat-datepicker-toggle>
+                  <mat-datepicker #endDateofInsurance></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.endDateofInsurance.touched && premiumRegisterForm.controls.endDateofInsurance.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.endDateofInsurance.errors.required">
+                      {{ errorMessage.ENDOFINSURANCE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Gross Sum Insured -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="grossSumInsured" numbersOnly placeholder="Gross Sum Insured  "
+                  [value]="(premiumRegisterForm.controls.grossSumInsured.value) | number :'1.2-2'"
+                    required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.grossSumInsured.touched && premiumRegisterForm.controls.grossSumInsured.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.grossSumInsured.errors.required">
+                      {{ errorMessage.GROSSSUMINSURED}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Gross Premium -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="grossPremium" numbersOnly placeholder="Gross Premium"
+                  [value]="(premiumRegisterForm.controls.grossPremium.value) | number :'1.2-2'" required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.grossPremium.touched && premiumRegisterForm.controls.grossPremium.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.grossPremium.errors.required">
+                      {{ errorMessage.GROSSSPREMINUM}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Terrorisms Premium -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="terrorismsPremium" numbersOnly
+                  [value]="(premiumRegisterForm.controls.terrorismsPremium.value) | number :'1.2-2'"
+                  placeholder="Terrorisms Premium" readonly>
+                </mat-form-field>
+              </div>
+              <!-- TOTAL Premium -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="totalPremium" numbersOnly 
+                  [value]="(premiumRegisterForm.controls.totalPremium.value) | number :'1.2-2'"
+                  placeholder="Total Premium" required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.totalPremium.touched && premiumRegisterForm.controls.totalPremium.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.totalPremium.errors.required">
+                      {{ errorMessage.TOTALPREMINUM}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- GIF Premium percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="gIFPremiumpercentage"
+                    placeholder=" GIF Premium percentage (%)" required percentageOnly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.gIFPremiumpercentage.touched && premiumRegisterForm.controls.gIFPremiumpercentage.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.gIFPremiumpercentage.errors.required">
+                      {{ errorMessage.GPREMINUM}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- GIF Premium Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="gIFPremiumAmount" placeholder="GIF Premium Amount"
+                  [value]="gIFPremiumAmount() | number :'1.2-2'"
+                    required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.gIFPremiumAmount.touched && premiumRegisterForm.controls.gIFPremiumAmount.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.gIFPremiumAmount.errors.required">
+                      {{ errorMessage.GPREMINUMAMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- GIF Terrorism pool Premium Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="GIFTerrorismPremiumPercentage"
+                    placeholder="GIF Terrorism Premium Percentage (%)" percentageOnly>
+                </mat-form-field>
+              </div>
+              <!-- GIF Terrorism pool Premium Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="GIFTerrorismPremiumAmount" numbersOnly
+                  [value]="percentageTotalFundAvailablePremium() | number :'1.2-2'"
+                    placeholder="GIF Terrorism pool Premium Amount" readonly>
+                </mat-form-field>
+              </div>
+              <!-- Total GIF Premium -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="totalGIFPremium"  placeholder=" Total GIF Premium "
+                  [value]="totalGIFPremium() | number :'1.2-2'"
+                    required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.totalGIFPremium.touched && premiumRegisterForm.controls.totalGIFPremium.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.totalGIFPremium.errors.required">
+                      {{ errorMessage.TOTALGIFP}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- GIF Premium Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="challanNo" numbersOnly placeholder="Challan No"
+                  (blur)="setChallanFields()"
+                  required>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.challanNo.touched && premiumRegisterForm.controls.challanNo.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.challanNo.errors.required">
+                      {{ errorMessage.CHALLANNO}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Challan Date -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="challanDate " formControlName="challanDate"
+                    placeholder="Challan Date  " required>
+                  <mat-datepicker-toggle matSuffix [for]="challanDate"></mat-datepicker-toggle>
+                  <mat-datepicker #challanDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.challanDate.touched && premiumRegisterForm.controls.challanDate.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.challanDate.errors.required">
+                      {{ errorMessage.CHALLANDATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Challan Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="challanAmount" numbersOnly placeholder="Challan Amount"
+                  [value]="(premiumRegisterForm.controls.challanAmount.value) | number :'1.2-2'"
+                   required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.challanAmount.touched && premiumRegisterForm.controls.challanAmount.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.challanAmount.errors.required">
+                      {{ errorMessage.CHALLANAMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Co-Insurer  Premium percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="CoInsurerPremiumpercentage" #CoInsurerPremiumpercentage
+                    placeholder="Co-Insurer  Premium percentage (%)" required percentageOnly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.CoInsurerPremiumpercentage.touched && premiumRegisterForm.controls.CoInsurerPremiumpercentage.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.CoInsurerPremiumpercentage.errors.required">
+                      {{ errorMessage.COINSUSHAREPER}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Co-Insurer  Premium Share -->
+                  <!-- Total Premium * Co-Insurer  Premium percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="CoInsurerPremiumShare"
+                  [value]="totalCoInsurerPremiumShare() | number :'1.2-2'"
+                    placeholder="Co-Insurer  Premium Share" required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.CoInsurerPremiumShare.touched && premiumRegisterForm.controls.CoInsurerPremiumShare.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.CoInsurerPremiumShare.errors.required">
+                      {{ errorMessage.COINSUSHARE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- GIC share percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="GICsharepercentage" #GICsharepercentage placeholder="GIC Share Percentage (%)"
+                    required percentageOnly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.GICsharepercentage.touched && premiumRegisterForm.controls.GICsharepercentage.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.GICsharepercentage.errors.required">
+                      {{ errorMessage.GISSHAREPER}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- GIC share amount -->
+                  <!-- Total GIF Premium Formula * GIC share percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="GICshareamount" #GICshareamount numbersOnly placeholder="GIC Share Amount"
+                  [value]="totalGICshareamount() | number :'1.2-2'" required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.GICshareamount.touched && premiumRegisterForm.controls.GICshareamount.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.GICshareamount.errors.required">
+                      {{ errorMessage.GISSHAREAMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Reinsurance Premium percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="reinsurancePremiumpercentage" #reinsurancePremiumpercentage percentageOnly
+                    placeholder="Reinsurance Premium percentage (%)">
+                </mat-form-field>
+              </div>
+              <!-- Reinsurance Premium Amount -->
+                  <!-- Total Premium * Reinsurance Premium percentage -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="reinsurancePremiumAmount" #reinsurancePremiumAmount
+                  [value]="totalreinsurancePremiumAmount() | number :'1.2-2'"
+                    placeholder="Reinsurance Premium Amount" readonly>
+                </mat-form-field>
+              </div>
+              <!-- Net GIF share -->
+                <!-- Total GIF Premium Formula - (GIC share amount formula + Reinsurance Premium Amount) -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="netGIFshare" placeholder="Net GIF share"
+                  [value]="netGIFshare() | number :'1.2-2'"
+                  required readonly>
+                  <div class="error-wrapper"
+                    *ngIf="premiumRegisterForm.controls.netGIFshare.touched && premiumRegisterForm.controls.netGIFshare.errors">
+                    <mat-error *ngIf="premiumRegisterForm.controls.netGIFshare.errors.required">
+                      {{ errorMessage.NETGIFSHARE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Agency Commission Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="agencyCommissionAmount" numbersOnly
+                    placeholder="Agency Commission Amount">
+                </mat-form-field>
+              </div>
+              <!-- Excess Premium -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="excessPremium" numbersOnly placeholder="Excess Premium ">
+                </mat-form-field>
+              </div>
+              <!-- Short Premium -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="shortPremium" numbersOnly placeholder="Short Premium">
+                </mat-form-field>
+              </div>
+              <!-- Remarks -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="remarks" placeholder="Remarks  ">
+                </mat-form-field>
+              </div>
+
+            </div>
+            <!-- Common Button -->
+            <div class="form-action-button">
+              <button type="submit" mat-raised-button color="primary" (click)="saveData()">
+                <i class="material-icons" aria-hidden="true" title="Save">
+                  save
+                </i>
+                Save
+              </button>
+              <button type="reset" mat-raised-button color="accent">
+                <i class="material-icons" aria-hidden="true">
+                  restore
+                </i>
+                Reset
+              </button>
+              <button type="submit" mat-raised-button color="primary">
+                + Add Risk location
+              </button>
+              <button type="submit" mat-raised-button color="primary">
+                + Add policy
+              </button>
+              <button type="button" mat-raised-button class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Close">
+                  close
+                </i>
+                Close
+              </button>
+
+            </div>
+            <!-- ENd Common Button -->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

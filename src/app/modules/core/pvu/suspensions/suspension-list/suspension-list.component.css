@@ -1,0 +1,14 @@
+::ng-deep .mat-table thead {
+    background: #f2f2f2;
+    color: black;
+    font-size: 14px;
+}
+
+.action-btn-i .delete-icon{
+    color: #bb1e1e !important;
+    cursor: pointer;
+}
+
+.mat-table {
+    display: block;
+}

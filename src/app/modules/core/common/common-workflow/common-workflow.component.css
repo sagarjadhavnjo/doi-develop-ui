@@ -1,0 +1,14 @@
+.lang-btn{
+    background: #356a94;
+	color: #FFF;
+	font-weight: 600;
+}
+
+.cursorPointer {
+	cursor: pointer;
+}
+
+.wf-remarks {
+    min-height: 60px;
+    max-height: 60px;
+}

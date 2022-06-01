@@ -1,0 +1,11 @@
+.upload-btn {
+    line-height: 29px;
+}
+
+/* .mat-column-action, .mat-column-title {
+    width: 15%;
+} */
+
+.mat-column-fileName {
+    width: 30%;
+}

@@ -1,0 +1,217 @@
+<div class="mat-elevation-z8 mt-2 ">
+    <!-- Form Starts -->
+    <form [formGroup]="smartSearch" >
+        <div class="box box-primary">
+            <div class="box-header"> Search </div>
+            <div class="box-body">
+                <div class="row">
+                    <!-- Input Field for Vendor Party Name -->
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput placeholder="Vendor / Party Name" formControlName="vendorName"
+                                class="text-disabled" (keypress)="directiveObject.onlyAlphabetSpaceDot($event)">
+                        </mat-form-field>
+                    </div>
+
+                    
+                    <!-- Input Field for Check Type Name -->
+                    <div class="col-sm-3">
+                        <mat-form-field class="full-width">
+                            <mat-select formControlName="checkTypeName" placeholder="Cheque List Type ">
+                                <mat-option>
+                                    <ngx-mat-select-search (keypress)="directiveObject.onlyAlphabet($event)"
+                                        [formControl]="checkTypeNameCtrl"
+                                        [placeholderLabel]="'Select Cheque Type Category...'"
+                                        [noEntriesFoundLabel]="'No matching  Cheque Type Category'">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let CT of
+                                checkTypeNameList |
+                            filterSelectInput:
+                            checkTypeNameCtrl.value" [value]="CT.id" matTooltip="{{CT.name}}">
+                                    {{CT.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Input Field for Bank Account Number -->
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput placeholder=" Bank Account No." formControlName="accountNoName"
+                                class="text-disabled" (keypress)="directiveObject.noSpecialCharacter($event)">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Input Field for IFSC Code -->
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput placeholder="IFSC Code" formControlName="ifscCode" class="text-disabled"
+                                (blur)="checkIfsc()" noSpecialCharacter
+                                (keypress)="directiveObject.onlyNumberAndAlphabets($event)">
+                            <div class="error-wrapper" *ngIf="fc.ifscCode.touched && !isIFSCValid">
+                                <mat-error>
+                                    Please enter valid IFSC Code
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Input Field for Bank Branch Name -->
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput placeholder="Bank Branch Name" formControlName="branchName"
+                                class="text-disabled"
+                                (keypress)="directiveObject.onlyAlphabetsAndSpace($event)">
+
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Input Field for Pan Number -->
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput formControlName="panNoName" maxlength="10" placeholder="PAN No." class="text-disabled">
+                        </mat-form-field>
+
+                        <mat-error *ngIf="smartSearch.controls.panNoName.errors?.pattern">
+                            {{ error_message }}
+                        </mat-error>
+                    </div>
+
+                    <!-- Input Field for Rate of Income Tax -->
+                    <div class="col-sm-3">
+                        <mat-form-field>
+                            <input matInput placeholder="Rate of Income Tax (%)" maxlength="2" formControlName="rateOfIncomeTax"
+                                class="text-disabled" (keypress)="directiveObject.onlyNumber($event)">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Input Field for Mobile Number -->
+                    <div class=" col-sm-3">
+                        <mat-form-field>
+                            <input matInput formControlName="mobileNoName" maxlength="10" placeholder="Mobile  No."
+                                class="text-disabled" (keypress)="directiveObject.onlyNumber($event)">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Action Buttons Starts -->
+                <div class="form-action-button">
+                    <button type="submit" mat-raised-button color="primary" (click)="onSearch()"
+                    [disabled]= "(!this.smartSearch.value.vendorName) && (!this.smartSearch.value.checkTypeName) &&
+                     (!this.smartSearch.value.accountNoName) && ((!this.smartSearch.value.ifscCode) || (!this.isIFSCValid)) && 
+                     (!this.smartSearch.value.branchName) && (!this.smartSearch.value.panNoName) &&
+                      (!this.smartSearch.value.rateOfIncomeTax) && (!this.smartSearch.value.mobileNoName)" >
+                        <i class="material-icons" aria-hidden="true" title="search">search</i>
+                        Search
+                    </button>&nbsp;&nbsp;&nbsp;
+                    <button type="reset" mat-raised-button color="accent" (click)="clearForm();">
+                        <i class="material-icons" aria-hidden="true" title="reset">
+                            restore
+                        </i>
+                        Reset
+                    </button>
+                </div>
+                <!-- Action Buttons Ends -->
+
+            </div>
+        </div>
+    </form>
+    <!-- Form Ends -->
+
+    <!-- Cheque Details Table Starts -->
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
+
+        <!-- Selection Checkbox Column -->
+        <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? directiveObject.masterToggle(dataSource.data) : null"
+                    [checked]="directiveObject.selection.hasValue() && directiveObject.isAllSelected(dataSource.data)"
+                    [indeterminate]="directiveObject.selection.hasValue() && !directiveObject.isAllSelected(dataSource.data)"
+                    [aria-label]="directiveObject.checkboxLabel(dataSource.data)">
+                </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row" class="centerAlign">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? directiveObject.selection.toggle(row) : null"
+                    [checked]="directiveObject.selection.isSelected(row)"
+                    [aria-label]="directiveObject.checkboxLabel(dataSource.data,row)">
+                </mat-checkbox>
+            </td>
+        </ng-container>
+
+        <!-- Vendor Column -->
+        <ng-container matColumnDef="partyName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Vendor / Party Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.vendorName}} </td>
+        </ng-container>
+
+        <!-- Cheque Type Column -->
+        <ng-container matColumnDef="checkType">
+            <th mat-header-cell *matHeaderCellDef> Cheque List Type </th>
+            <td mat-cell *matCellDef="let element"> {{element.chequeType}} </td>
+        </ng-container>
+
+        <!-- Account Number Column -->
+        <ng-container matColumnDef="bankAccountNumber">
+            <th mat-header-cell *matHeaderCellDef> Bank Account No.</th>
+            <td mat-cell *matCellDef="let element"> {{element.accNo}} </td>
+        </ng-container>
+
+        <!-- IFSC Code Column -->
+        <ng-container matColumnDef="IFSCCode">
+            <th mat-header-cell *matHeaderCellDef> IFSC Code </th>
+            <td mat-cell *matCellDef="let element"> {{element.ifscCode}} </td>
+        </ng-container>
+
+        <!-- Bank Branch Name Column -->
+        <ng-container matColumnDef="bankBranchName">
+            <th mat-header-cell *matHeaderCellDef> Bank Branch Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.branchName}} </td>
+        </ng-container>
+
+        <!-- Pan Number Column -->
+        <ng-container matColumnDef="panNo">
+            <th mat-header-cell *matHeaderCellDef> PAN No. </th>
+            <td mat-cell *matCellDef="let element"> {{element.panNo}} </td>
+        </ng-container>
+
+        <!-- Rate of Income Tax Column -->
+        <ng-container matColumnDef="rateOfIncomeTax">
+            <th mat-header-cell *matHeaderCellDef> Rate of Income Tax (%) </th>
+            <td mat-cell *matCellDef="let element"> {{element.incomeTaxRate}} </td>
+        </ng-container>
+
+        <!-- Mobile Number Column -->
+        <ng-container matColumnDef="mobileNo">
+            <th mat-header-cell *matHeaderCellDef> Mobile No. </th>
+            <td mat-cell *matCellDef="let element"> {{element.mobileNo}} </td>
+        </ng-container>
+
+        <!-- Vendor Party Details Column -->
+        <ng-container matColumnDef="vendorPartyDetails">
+            <th [attr.colspan]="9" mat-header-cell *matHeaderCellDef scope="row">Vendor / Party Details</th>
+        </ng-container>
+
+        <!-- Header and Footer Row Definition -->
+        <tr mat-header-row *matHeaderRowDef="['vendorPartyDetails']"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="directiveObject.selection.toggle(row)">
+        </tr>
+    </table>
+    <!-- Cheque Details Table Ends -->
+
+    <!-- Action Buttons Starts -->
+    <div class="form-action-button">
+        <button mat-raised-button type="submit" class="green" (click)="onAddAdvice()" title="Submit">
+            <i class="material-icons" title="Submit" aria-hidden="true">done</i> Add To Advice</button>
+        <button type="button" mat-raised-button class="btnClose" title="Close" (click)="onClose()">
+            <i class="material-icons" title="Close" aria-hidden="true">
+                close
+            </i>
+            Close
+        </button>
+        
+    </div>
+    <!-- Action Buttons Ends -->
+</div>

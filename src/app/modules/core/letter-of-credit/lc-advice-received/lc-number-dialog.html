@@ -1,0 +1,69 @@
+<div class="form-wrapper">
+  <!-- Header Section -->
+  <div class="heading-section ng-star-inserted">
+    <div>Select LC Number</div>
+  </div>
+
+  
+  
+  <!-- Form Starts -->
+  <form [formGroup]="lcNumberForm" (ngSubmit)="lcNumberFormData()">
+    <div class="box-body">
+      <div class="mat-elevation-z8 mt-2">
+        <!-- LC Number Table Starts -->
+        <table mat-table [dataSource]="LcNumberDataSource" class="mat-elevation-z8 " area-describedby="number">
+
+          <!-- LC Order Number Column -->
+          <ng-container matColumnDef="lcOrderNo">
+            <th mat-header-cell *matHeaderCellDef scope="row">LC Number</th>
+            <td mat-cell *matCellDef="let element">
+              <a style="cursor:pointer;" (click)="onLcOrderNo(element)">
+                {{element.lcNumber}}
+              </a>
+            </td>
+          </ng-container>
+
+          <!-- Demand Number Column -->
+          <ng-container matColumnDef="demandNo">
+            <th mat-header-cell *matHeaderCellDef scope="row">Demand</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.demandCode}}
+            </td>
+          </ng-container>
+
+          <!-- Major Head Column -->
+          <ng-container matColumnDef="majorHead">
+            <th mat-header-cell *matHeaderCellDef scope="row">Major Head</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.majorHeadName}}
+            </td>
+          </ng-container>
+
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef scope="row">Amount</th>
+            <td mat-cell *matCellDef="let element" class="rightAlign">
+              {{(amountType=='State' ? element.stateAmount : element.amount)}}
+            </td>
+          </ng-container>
+
+          <!-- Header and Footer Row Definition -->
+          <tr mat-header-row *matHeaderRowDef="LcNumberDataCoumn"></tr>
+          <tr mat-row *matRowDef="let row; columns: LcNumberDataCoumn;"></tr>
+        </table>
+        <!-- LC Number Table Ends -->
+      </div>
+      <!-- Action Buttons Starts -->
+      <div class="form-action-button">
+        <button type="button" mat-raised-button class="btnClose" title="Close" (click)="onNoClick()">
+          <i class="material-icons" title="Close" aria-hidden="true">
+            close
+          </i>
+          Close
+        </button>
+      </div>
+      <!-- Action Buttons Ends -->
+    </div>
+  </form>
+  <!-- Form Ends -->
+</div>

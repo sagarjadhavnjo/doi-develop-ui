@@ -1,0 +1,181 @@
+<div class="container">
+  <div class="form-wrapper">
+
+    <!-- Screen Name -->
+    <div class="heading-section ng-star-inserted">
+      <div>Market Loan Received</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/NLR/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/dashboard/dmo']">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Market Loan Received</li>
+      </ol>
+    </nav>
+
+    <!-- Form Starts -->
+    <form [formGroup]="marketLoanReceivedForm">
+
+      <mat-accordion class="colapsedata">
+        <mat-expansion-panel [expanded]="true" class="nopadding">
+          <mat-expansion-panel-header>
+            <div class="heading-section">Market Loan Received DP Sheet</div>
+          </mat-expansion-panel-header>
+
+          <div class="box-body">
+            <div class="row">
+
+              <!-- Input Field for Reference From Date -->
+              <div class="col-sm-3">
+                <mat-form-field (click)="picker1.open()">
+                  <input matInput formControlName="fromDate" [matDatepicker]="picker1" placeholder="From Date" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Reference To Date -->
+              <div class="col-sm-3">
+                <mat-form-field (click)="picker2.open()">
+                  <input matInput formControlName="toDate" [matDatepicker]="picker2" placeholder="To Date" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 [disabled]="false"></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-12">
+                <!-- Buttons for Search and Reset Starts -->
+                <div class="form-action-button">
+                  <button type="button" mat-raised-button color="primary" title="Get Details" (click)="getDetails(null)">
+                    <i class="material-icons" aria-hidden="true">vertical_align_bottom</i> Get Details
+                  </button>
+                  <button type="reset" mat-raised-button color="accent">
+                    <i class="material-icons" aria-hidden="true">
+                      restore
+                    </i>
+                    Reset
+                  </button>
+                </div>
+                <!-- Buttons for Search and Reset Ends -->
+              </div>
+
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+    <!-- Form Ends -->
+
+    <div class="mat-elevation-z8 mt-2 overflow-auto" *ngIf="showTable">
+      <!-- Market Loan Received Table Starts -->
+      <table mat-table [dataSource]="dataSource" width="100%" aria-describedby="LoanRepaymentScheduleTable">
+
+        <!-- Sr. No. Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef scope="row" style="width: 5%;">Sr. No.</th>
+          <td mat-cell *matCellDef="let element; let i = index;" class="centerAlign">
+            {{ i + 1 }} </td>
+          <td mat-footer-cell *matFooterCellDef>Total</td>
+        </ng-container>
+
+        <!-- Memo No Column -->
+        <ng-container matColumnDef="memoNo">
+          <th mat-header-cell *matHeaderCellDef scope="row">Memo No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.memoNo}}
+          </td>
+        </ng-container>
+
+        <!-- Advice No Column -->
+        <ng-container matColumnDef="adviceNo">
+          <th mat-header-cell *matHeaderCellDef scope="row">Advice No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.adviceNo}}
+          </td>
+        </ng-container>
+
+        <!-- DP Date Column -->
+        <ng-container matColumnDef="dpDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">DP Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.dpDate}}
+          </td>
+        </ng-container>
+
+        <!-- Advice Date Column -->
+        <ng-container matColumnDef="adviceDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Advice Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.adviceDate}}
+          </td>
+        </ng-container>
+
+        <!-- Advice By Column -->
+        <ng-container matColumnDef="adviceBy">
+          <th mat-header-cell *matHeaderCellDef scope="row">Advice By</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.adviceBy}}
+          </td>
+        </ng-container>
+
+        <!-- Transaction Description Column -->
+        <ng-container matColumnDef="transactionDescription">
+          <th mat-header-cell *matHeaderCellDef scope="row">Transaction Description</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.transactionDescription}}
+          </td>
+        </ng-container>
+
+        <!-- Credit Amount Column -->
+        <ng-container matColumnDef="creditAmount">
+          <th mat-header-cell *matHeaderCellDef scope="row">Credit Amount</th>
+          <td mat-cell *matCellDef="let element" class="rightAlign">
+            {{element.creditAmount | number: '1.2-2'}}
+          </td>
+        </ng-container>
+
+        <!-- Action View/Edit/Delete Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef scope="row" scope="row" style="width: 12%;">Add Details</th>
+          <td mat-cell *matCellDef="let element" style="text-align: center;" class="action-btn-i centerAlign">
+            <table class="iconTable" aria-describedby="actionBtn">
+              <tbody>
+                <tr>
+                  <td width="30">
+                    <div *ngIf="(element.addDetails); then notHidden else isHidden">
+                    </div>
+                    <ng-template #notHidden>
+                      <button type="button" mat-raised-button color="primary" (click)="addDetails(element)" title="Add Detials"
+                        style="margin:5px;">
+                        Add Detials
+                      </button>
+                    </ng-template>
+                    <ng-template #isHidden>
+                      Done
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </ng-container>
+
+        <!-- Header, Footer and Data column of Table -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns;"></tr>
+
+      </table>
+      <!-- Market Loan Received Table Ends -->
+
+      <!-- Paginator -->
+      <mat-paginator #paginator [pageSizeOptions]="[pageSize]" (page)="pageEvent = $event; onPaginateChange($event)"
+          [length]="totalRecords" showFirstLastButtons></mat-paginator>
+      <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,12 @@
+::ng-deep .breakFileName{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+    white-space: normal;
+}
+.tableSpace{
+    border-collapse: unset;
+}
+.scroll {
+    height: 400px;
+    overflow: auto;
+}

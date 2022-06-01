@@ -1,0 +1,376 @@
+<div class="row">
+	<div class="col-sm-12">
+		<mat-accordion class="colapsedata mt-2">
+			<mat-expansion-panel [expanded]="true" class="nopadding mt-2">
+				<mat-expansion-panel-header>
+					<div class="heading-section">
+						Joining Details
+					</div>
+				</mat-expansion-panel-header>
+				<table #eventSort = 'matSort' mat-table [dataSource]="dataSourceEvents" style="width: 100%; display: inline-table;" class="table-responsive" matSort>
+					<ng-container matColumnDef="srNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Sr. No.</th>
+						<td mat-cell *matCellDef="let element; let i = index;">
+							{{ i + 1 }} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="transacNumber">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Number
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.transacNumber}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="eventName">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Event Name</th>
+						<td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="eventDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Event Effective date
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.eventDate}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="empName">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Name</th>
+						<td mat-cell *matCellDef="let element"> {{element.empName}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="empPayScalPayBand">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Pay Scale/Pay Band
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.empPayScalPayBand}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="gradPayPayLevel">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Grade Pay/Pay Level
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.gradPayPayLevel}}
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="payGrandValuCellId">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>PayBand value/Cell Id
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.payGrandValuCellId}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="empBasicPay">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Basic Pay
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.empBasicPay}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="designation">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Designation</th>
+						<td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+					</ng-container>
+					<ng-container matColumnDef="approvalDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Date of Audit / Approval
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.approvalDate}} </td>
+					</ng-container>
+					<ng-container matColumnDef="status">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Status
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.status}} </td>
+					</ng-container>
+					<ng-container matColumnDef="noData">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+						<td mat-cell *matCellDef="let element" [attr.colspan]="displayedEventsColumns.length">No Data Available </td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedEventsColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: joiningEventsClm.value;"></tr>
+				</table>
+			</mat-expansion-panel>
+		</mat-accordion>
+		<mat-accordion class="colapsedata mt-2">
+			<mat-expansion-panel class="nopadding mt-2" [expanded]="toggle5 === 1" (opened)="setStep(1,150)">
+				<mat-expansion-panel-header>
+					<div class="heading-section">
+						5th Pay Commission
+					</div>
+				</mat-expansion-panel-header>
+				<mat-accordion class="colapsedata m-2 d-block">
+					<mat-expansion-panel class="nopadding mt-2">
+						<mat-expansion-panel-header>
+							<div class="heading-section">
+								Regular
+							</div>
+						</mat-expansion-panel-header>
+						<app-event-table [data] = "regularFifth" payCommision = "150" tableType = "true" (viewEvent)="openEventPopup($event)"></app-event-table>
+					</mat-expansion-panel>
+				</mat-accordion>
+				<ng-container *ngIf="revisedFifth && revisedFifth[0] && revisedFifth[0].length > 0">
+					<ng-container *ngFor = "let dataSource1 of revisedFifth; let i = index;">
+						<mat-accordion class="colapsedata m-2 d-block">
+							<mat-expansion-panel class="nopadding mt-2">
+								<mat-expansion-panel-header>
+									<div class="heading-section">
+										{{i+1}}-Revised 5th Pay Commission ({{revisedFifth[i][0].eventByeffectedName + ' - ' + revisedFifth[i][0].eventByTranNumber}})
+									</div>
+								</mat-expansion-panel-header> 
+								<app-event-table [data] = "dataSource1" payCommision = "150" tableType = "false" (viewEvent)="openEventPopup($event)"></app-event-table>
+							</mat-expansion-panel>
+						</mat-accordion>
+					</ng-container>
+				</ng-container>
+			</mat-expansion-panel>
+		</mat-accordion>
+		<mat-accordion class="colapsedata mt-2">
+			<mat-expansion-panel class="nopadding mt-2" [expanded]="toggle6 === 1" (opened)="setStep(1,151)">
+				<mat-expansion-panel-header>
+					<div class="heading-section">
+						6th Pay commission
+					</div>
+				</mat-expansion-panel-header>
+				<mat-accordion class="colapsedata m-2 d-block">
+					<mat-expansion-panel class="nopadding mt-2">
+						<mat-expansion-panel-header>
+							<div class="heading-section">
+								Regular
+							</div>
+						</mat-expansion-panel-header>
+						<app-event-table [data] = "regularSix" payCommision = "151" tableType = "true" (viewEvent)="openEventPopup($event)"></app-event-table>
+					</mat-expansion-panel>
+				</mat-accordion>
+				<ng-container *ngIf="revisedSix && revisedSix[0] && revisedSix[0].length > 0">
+					<ng-container *ngFor = "let dataSource2 of revisedSix; let i = index;">
+						<mat-accordion class="colapsedata m-2 d-block">
+							<mat-expansion-panel class="nopadding mt-2">
+								<mat-expansion-panel-header>
+									<div class="heading-section">
+										{{i+1}}-Revised 6th Pay Commission ({{revisedSix[i][0].eventByeffectedName + ' - ' + revisedSix[i][0].eventByTranNumber}})
+									</div>
+								</mat-expansion-panel-header> 
+								<app-event-table [data] = "dataSource2" payCommision = "151" tableType = "false" (viewEvent)="openEventPopup($event)"></app-event-table>
+							</mat-expansion-panel>
+						</mat-accordion>
+					</ng-container>
+				</ng-container>
+			</mat-expansion-panel>
+		</mat-accordion>
+		<mat-accordion class="colapsedata mt-2">
+			<mat-expansion-panel class="nopadding mt-2" [expanded]="toggle7 === 1" (opened)="setStep(1,152)">
+				<mat-expansion-panel-header>
+					<div class="heading-section">
+						7th Pay Commission
+					</div>
+				</mat-expansion-panel-header>
+				<mat-accordion class="colapsedata m-2 d-block">
+					<mat-expansion-panel class="nopadding mt-2">
+						<mat-expansion-panel-header>
+							<div class="heading-section">
+								Regular
+							</div>
+						</mat-expansion-panel-header>
+						<app-event-table [data] = "regularSeven" payCommision = "152" tableType = "true" (viewEvent)="openEventPopup($event)"></app-event-table>
+					</mat-expansion-panel>
+				</mat-accordion>
+				<ng-container *ngIf="revisedSeven && revisedSeven[0] && revisedSeven[0].length > 0">
+					<ng-container *ngFor = "let dataSource3 of revisedSeven; let i = index;">
+						<mat-accordion class="colapsedata m-2 d-block">
+							<mat-expansion-panel class="nopadding mt-2">
+								<mat-expansion-panel-header>
+									<div class="heading-section">
+										{{i+1}}-Revised 7th Pay Commission ({{revisedSeven[i][0].eventByeffectedName + ' - ' + revisedSeven[i][0].eventByTranNumber}})
+									</div>
+								</mat-expansion-panel-header> 
+								<app-event-table [data] = "dataSource3" payCommision = "152" tableType = "false" (viewEvent)="openEventPopup($event)"></app-event-table>
+							</mat-expansion-panel>
+						</mat-accordion>
+					</ng-container>
+				</ng-container>
+			</mat-expansion-panel>
+		</mat-accordion>
+		<mat-accordion class="colapsedata mt-2">
+			<mat-expansion-panel class="nopadding mt-2" [expanded]= "toggle1 === 1" (opened)="setStep(1,1)">
+				<mat-expansion-panel-header>
+					<div class="heading-section">
+						Transfer Events
+					</div>
+				</mat-expansion-panel-header>
+				<table #transferSort = 'matSort' mat-table [dataSource]="dataSourceTransferEvents" class="table-responsive" style="width: 100%; display: inline-table;" matSort>
+					<ng-container matColumnDef="srNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Sr. No.</th>
+						<td mat-cell *matCellDef="let element; let i = index;">
+							{{ i + 1 }} </td>
+						<td mat-footer-cell *matFooterCellDef [attr.colspan]="13" class="centerAlign">
+							<span *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+								No Records Found!
+							</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="trnNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Number
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.trnNo}} </td>
+					</ng-container>
+					<ng-container matColumnDef="designation">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Designation</th>
+						<td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+					</ng-container>
+					<ng-container matColumnDef="fromLocation">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>From Location</th>
+						<td mat-cell *matCellDef="let element"> {{element.fromLocation}} </td>
+					</ng-container>
+					<ng-container matColumnDef="toLocation">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>To Location</th>
+						<td mat-cell class="break-word" *matCellDef="let element"> {{element.toLocation}} </td>
+					</ng-container>
+					<ng-container matColumnDef="relievingDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header class="w-6">Relieving Date</th>
+						<td mat-cell *matCellDef="let element"> {{element.relievingDate}} </td>
+					</ng-container>
+					<ng-container matColumnDef="status">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+						<td mat-cell *matCellDef="let element"> {{element.status}} </td>
+					</ng-container>
+					<ng-container matColumnDef="action">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Action
+						</th>
+						<td mat-cell *matCellDef="let element" class="text-center"> 
+							<a *ngIf="element.visibleFlag == '1'" style="text-decoration:underline" (click)="openEventPopup(element)">
+								<i class="material-icons plus view-icon" title="View">remove_red_eye</i>
+							</a> 
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="noData">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+						<td mat-cell *matCellDef="let element" [attr.colspan]="displayedTransferEventColumns.length">No Data Available </td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedTransferEventColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: transferEventsClm.value;"></tr>
+				</table>
+			</mat-expansion-panel>
+		</mat-accordion>
+		<mat-accordion class="colapsedata mt-2">
+			<mat-expansion-panel class="nopadding mt-2" [expanded]= "toggle2 === 1" (opened)="setStep(1,2)">
+				<mat-expansion-panel-header>
+					<div class="heading-section">
+						Other Events
+					</div>
+				</mat-expansion-panel-header>
+				<table #otherSort = 'matSort' mat-table [dataSource]="dataSourceOtherEvents" class="table-responsive" style="width: 100%; display: inline-table;" matSort>
+					<ng-container matColumnDef="srNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Sr. No.</th>
+						<td mat-cell *matCellDef="let element; let i = index;">
+							{{ i + 1 }} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="trnNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Transaction Number
+						</th>
+						<td mat-cell *matCellDef="let element"> {{element.trnNo}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="eventName">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Event Name</th>
+						<td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="designation">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Designation</th>
+						<td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+					</ng-container>
+					
+					<ng-container matColumnDef="officeName">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Office Name</th>
+						<td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+					</ng-container>
+					
+					<ng-container matColumnDef="payCommission">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Pay Commission</th>
+						<td mat-cell *matCellDef="let element"> {{element.payCommission ? element.payCommission : "NA"}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="fromDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">From Date</th>
+						<td mat-cell *matCellDef="let element"> {{element.fromDate}} </td>
+					</ng-container>
+					
+					<ng-container matColumnDef="endDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">To Date</th>
+						<td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
+					</ng-container>
+					
+					<ng-container matColumnDef="payScale">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Pay in Pay Band/Scale/Pay level</th>
+						<td mat-cell *matCellDef="let element"> {{getPay(element)}} </td>
+					</ng-container>
+					
+					<ng-container matColumnDef="gradePay">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Grade Pay/Cell Id</th>
+						<td mat-cell *matCellDef="let element"> {{getGradePayCellId(element)}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="status">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Status</th>
+						<td mat-cell *matCellDef="let element"> {{element.activeStatus}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="action">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">Action</th>
+						<td mat-cell *matCellDef="let element" class="text-center" >
+							<a *ngIf="element.visibleFlag == '1' && element.eventName != 'Auto Increment'" style="text-decoration:underline" (click)="openEventPopup(element)">
+								<i class="material-icons plus view-icon" title="View">remove_red_eye</i>
+							</a> 
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="srNo1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Sr. No.</th>
+					</ng-container>
+
+					<ng-container matColumnDef="trnNo1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Transaction Number</th>
+					</ng-container>
+
+					<ng-container matColumnDef="eventName1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Event Name</th>
+					</ng-container>
+
+					<ng-container matColumnDef="designation1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Designation</th>
+					</ng-container>
+					
+					<ng-container matColumnDef="officeName1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Office Name</th>
+					</ng-container>
+					
+					<ng-container matColumnDef="payCommission1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Pay Commission</th>
+					</ng-container>
+
+					<ng-container matColumnDef="fromDate1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">From Date</th>
+					</ng-container>
+					
+					<ng-container matColumnDef="endDate1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2" class="w-6">To Date</th>
+					</ng-container>
+
+					<ng-container matColumnDef="basicPay1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.colspan]="2">Pay Details</th>
+					</ng-container>
+
+					<ng-container matColumnDef="status1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Status</th>
+					</ng-container>
+
+					<ng-container matColumnDef="action1">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header scope="row" [attr.rowspan]="2">Action</th>
+					</ng-container>
+					<ng-container matColumnDef="noData">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+						<td mat-cell *matCellDef="let element" [attr.colspan]="displayedOtherEventColumns.length">No Data Available </td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="['srNo1', 'trnNo1', 'eventName1', 'designation1', 'officeName1', 'payCommission1', 'fromDate1', 'endDate1', 'basicPay1', 'status1', 'action1']"></tr>	
+					<tr mat-header-row *matHeaderRowDef="displayedOtherEventColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: otherEventsClm.value;"></tr>
+				</table>
+			</mat-expansion-panel>
+		</mat-accordion>
+	</div>
+</div>

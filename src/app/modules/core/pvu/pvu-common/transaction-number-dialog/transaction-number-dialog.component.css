@@ -1,0 +1,24 @@
+form {
+    padding: 20px;
+    border: 1px dotted #a4b3bf;
+}
+
+.mat-dialog-container {
+    background: #efefef;
+}
+
+.msg {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.empInfo {
+    text-align: left;
+    line-height: 22px;
+    margin-bottom: unset;
+}
+
+.mat-dialog-actions {
+    margin-bottom: unset;
+    margin-top: unset;
+}

@@ -1,0 +1,142 @@
+<form [formGroup]="form7pc">
+    <div class="box-body">
+        <div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payCommId"
+                            placeholder="Pay Commission" disabled>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payCommIdCtrl"
+                                    [placeholderLabel]="'Find payCommission...'"
+                                    [noEntriesFoundLabel]="'no matching Promotion For found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let pay of payCommissionList | filterSelectInput: payCommIdCtrl.value: 'lookupInfoName'"
+                                [value]="pay.lookupInfoId">
+                                {{pay.lookupInfoName}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="form7pc.controls.payCommId.touched && form7pc.controls.payCommId.errors">
+                            <mat-error
+                                *ngIf="form7pc.controls.payCommId.errors.required">
+                                {{errorMessages.PAY_COMMISSION}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="payLevelId" placeholder="Pay Level" [disabled]="!employeeDetail"
+                            required (selectionChange)="onPayLevelChange($event.value, true)">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="payLevelCtrl"
+                                    [placeholderLabel]="'Find pay level...'"
+                                    [noEntriesFoundLabel]="'no matching pay level found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngIf="!payLevelList || payLevelList.length === 0">
+                                No Pay Level available
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let payLevel of payLevelList | filterSelectInput:payLevelCtrl.value: 'value'"
+                                [value]="payLevel.id">
+                                {{payLevel.value}}
+                            </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                            *ngIf="form7pc.controls.payLevelId.touched && form7pc.controls.payLevelId.errors">
+                            <mat-error
+                                *ngIf="form7pc.controls.payLevelId.errors.required">
+                                {{errorMessages.PAY_LEVEL}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Cell Id" value="" autocomplete="off"
+                        formControlName="cellId" readonly>
+                        <!-- <mat-select formControlName="cellId" placeholder="Cell Id"
+                            required readonly 
+                            (selectionChange)="onCellChange($event.value)"
+                            >
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="cellIdCtrl"
+                                    [placeholderLabel]="'Find Cell Id ...'"
+                                    [noEntriesFoundLabel]="'no matching Cell Id found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option *ngIf="!cellList || cellList.length === 0">
+                                No Cell available
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let cellId of cellList | filterSelectInput:cellIdCtrl.value : 'id'"
+                                [value]="cellId.id">
+                                {{cellId.id}}
+                            </mat-option>
+                        </mat-select> -->
+                        <div class="error-wrapper"
+                            *ngIf="form7pc.controls.cellId.touched && form7pc.controls.cellId.errors">
+                            <mat-error
+                                *ngIf="form7pc.controls.cellId.errors.required">
+                                {{errorMessages.CELL_ID}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+
+                
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Basic Pay" value="" autocomplete="off"
+                            formControlName="basicPay" readonly>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Effective Date" value="" autocomplete="off"
+                            formControlName="benEffDate" readonly>
+                    </mat-form-field>
+
+
+                    <!-- <mat-form-field>
+                        <input matInput [matDatepicker]="beneEffictDatePicker"
+                            formControlName="benEffDate"
+                            placeholder="Effective Date" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="beneEffictDatePicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #beneEffictDatePicker>
+                        </mat-datepicker>
+                    </mat-form-field> -->
+                </div>
+                <div class="col-sm-3">
+
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Next Increment date" value="" autocomplete="off"
+                            formControlName="dateOfNxtInc" readonly>
+                    </mat-form-field>
+                    
+                    <!-- <mat-form-field>
+                        <input matInput [matDatepicker]="dateOfNextIncrementPicker"
+                            formControlName="dateOfNxtInc"
+                            placeholder="Next Increment date" readonly>
+                        <mat-datepicker-toggle matSuffix
+                            [for]="dateOfNextIncrementPicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateOfNextIncrementPicker>
+                        </mat-datepicker>
+                        <div class="error-wrapper"
+                            *ngIf="form7pc.controls.dateOfNxtInc.touched && form7pc.controls.dateOfNxtInc.errors">
+                            <mat-error
+                                *ngIf="form7pc.controls.dateOfNxtInc.errors.required">
+                                {{errorMessages.DATE_OF_NEXT_INCREMENT}}</mat-error>
+                        </div>
+                    </mat-form-field> -->
+                </div>
+            </div>
+        </div>
+    </div>    
+</form>

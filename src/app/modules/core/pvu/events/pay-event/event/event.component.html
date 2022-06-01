@@ -1,0 +1,268 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div class="">{{eventWorkFlow}}</div>
+            <div class="font-heading" *ngIf="transactionNumber">
+                <strong>Reference No:</strong> {{transactionNumber}}
+            </div>
+            <div class="font-heading" *ngIf="transactionNumber">
+                <strong>Reference Date:</strong> <span *ngIf="transactionDate">{{ transactionDate | date: 'dd-MMM-yyyy
+                    hh:mm:ss a'}}</span>
+            </div>
+        </div>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [(selectedIndex)]="selectedIndex"
+                (selectedIndexChange)="onTabChange()">
+                <!-- (click)="onTabChange($event)" -->
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <!-- <mat-icon class="example-tab-icon" *ngIf="doneHeader">check</mat-icon> -->
+                        {{eventWorkFlow}} Event
+                    </ng-template>
+                    <form autocomplete="off" [formGroup]="eventForm" #eventFormTag="ngForm">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Office Name"
+                                                formControlName="officeName" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" alphaNumericWithSlashHyphenOnly
+                                                placeholder="Event Order Number" formControlName="eventOrderNo"
+                                                maxlength="100" required>
+                                            <div class="error-wrapper"
+                                                *ngIf="eventForm.controls.eventOrderNo.touched && eventForm.controls.eventOrderNo.errors">
+                                                <mat-error *ngIf="eventForm.controls.eventOrderNo.errors.required">
+                                                    {{errorMessage.ORDER_NO}}
+                                                </mat-error>
+                                                <mat-error *ngIf="eventForm.controls.eventOrderNo.errors.maxLength">
+                                                    No. of characters should not exceed 100!
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventOrderDatePicker"
+                                                [min]="eventForm.controls.eventEffectiveDate.value" [max]="todayDate"
+                                                placeholder="Event Order Date" formControlName="eventOrderDate" required
+                                                readonly>
+                                            <mat-datepicker-toggle matSuffix [for]="eventOrderDatePicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventOrderDatePicker></mat-datepicker>
+                                            <div class="error-wrapper"
+                                                *ngIf="eventForm.controls.eventOrderDate.touched && eventForm.controls.eventOrderDate.errors">
+                                                <mat-error *ngIf="eventForm.controls.eventOrderDate.errors.required">
+                                                    {{errorMessage.EVENT_ORDER_DATE}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="eventForm.controls.eventOrderDate.errors.matDatepickerMin">
+                                                    Please
+                                                    enter date greater than
+                                                    {{eventForm.controls.eventEffectiveDate.value | date :
+                                                    'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="eventForm.controls.eventOrderDate.errors.matDatepickerMax">
+                                                    Employee retirement date is {{todayDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventEffectiveDatePicker"
+                                                [min]="eventMinDate" [max]="todayDate"
+                                                placeholder="Event Effective Date" formControlName="eventEffectiveDate"
+                                                required (dateChange)="onEffectiveDateChange($event)" readonly>
+                                            <mat-datepicker-toggle matSuffix [for]="eventEffectiveDatePicker">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventEffectiveDatePicker></mat-datepicker>
+                                            <div class="error-wrapper"
+                                                *ngIf="eventForm.controls.eventEffectiveDate.touched && eventForm.controls.eventEffectiveDate.errors">
+                                                <mat-error
+                                                    *ngIf="eventForm.controls.eventEffectiveDate.errors.required">
+                                                    {{errorMessage.EVENT_EFFECTIVE_DATE}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="eventForm.controls.eventEffectiveDate.errors.matDatepickerMin">
+                                                    Please
+                                                    enter date greater than {{eventMinDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="eventForm.controls.eventEffectiveDate.errors.matDatepickerMax">
+                                                    Employee retirement date is {{todayDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="payCommId" placeholder="Pay Commission"
+                                                (selectionChange)="onPayCommissionChange()" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="payCommissionCtrl"
+                                                        [placeholderLabel]="'Find payCommission...'"
+                                                        [noEntriesFoundLabel]="'no matching Promotion For found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let pay of payCommissionList | filterSelectInput: payCommissionCtrl.value: 'lookupInfoName'"
+                                                    [value]="pay.lookupInfoId">
+                                                    {{pay.lookupInfoName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="eventForm.controls.payCommId.touched && eventForm.controls.payCommId.errors">
+                                                <mat-error *ngIf="eventForm.controls.payCommId.errors.required">
+                                                    {{errorMessage.PAY_COMMISSION}}</mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="eventCode" placeholder="Event"
+                                                (selectionChange)="onEventChange()" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="eventCtrl"
+                                                        [placeholderLabel]="'Find Event ...'"
+                                                        [noEntriesFoundLabel]="'no matching Event found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let type of eventList | filterSelectInput: eventCtrl.value : 'eventName'"
+                                                    [value]="type.eventCode">
+                                                    {{type.eventName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="eventForm.controls.eventCode.touched && eventForm.controls.eventCode.errors">
+                                                <mat-error *ngIf="eventForm.controls.eventCode.errors.required">
+                                                    {{errorMessage.OPTION_TYPE}}</mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="showPromotionType">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="promotionTypeId" placeholder="Promotion Type"
+                                                required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="promotionTypeCtrl"
+                                                        [placeholderLabel]="'Find Promotion Type ...'"
+                                                        [noEntriesFoundLabel]="'no matching Promotion Selected found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let promotionType of promotionTypeList | filterSelectInput: promotionTypeCtrl.value : 'lookupInfoName'"
+                                                    [value]="promotionType.lookupInfoId">
+                                                    {{promotionType.lookupInfoName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="eventForm.controls.promotionTypeId.touched && eventForm.controls.promotionTypeId.errors">
+                                                <mat-error *ngIf="eventForm.controls.promotionTypeId.errors.required">
+                                                    {{errorMessage.EVENT_SUB_TYPE}}</mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="accordionSection">
+                                    <div class="box-header">Employee Details</div>
+                                    <div class="box-body">
+                                        <app-promotion #eventRef [eventDetails]="eventDetails"
+                                            *ngIf="eventType === 'Promotion'"
+                                            (employeeDetailChange)="setEmployeeId($event)"
+                                            (getLookupData)="onPromotionLookupData($event)"
+                                            (resetEvent)="resetForm(eventFormTag)" (saveEvent)="saveDetails($event)"
+                                            [eventType]="eventType" [action]="action" [eventForm]="eventForm">
+                                        </app-promotion>
+                                        <app-change-of-scale *ngIf="eventType === 'Change_of_Scale'" #eventRef
+                                            [eventDetails]="eventDetails" (employeeDetailChange)="setEmployeeId($event)"
+                                            (resetEvent)="resetForm(eventFormTag)" (saveEvent)="saveDetails()"
+                                            [eventType]="eventType" [action]="action" [eventForm]="eventForm">
+                                        </app-change-of-scale>
+                                        <app-deemed-date #eventRef [eventDetails]="eventDetails"
+                                            *ngIf="eventType === 'Deemed_Date'"
+                                            (employeeDetailChange)="setEmployeeId($event)"
+                                            (resetEvent)="resetForm(eventFormTag)" (saveEvent)="saveDetails($event)"
+                                            [eventType]="eventType" [action]="action" [eventForm]="eventForm">
+                                        </app-deemed-date>
+                                        <app-senior-scale #eventRef [eventDetails]="eventDetails"
+                                            *ngIf="eventType === 'Senior_Scale'"
+                                            (employeeDetailChange)="setEmployeeId($event)"
+                                            (resetEvent)="resetForm(eventFormTag)" (saveEvent)="saveDetails()"
+                                            [action]="action" [eventForm]="eventForm" [eventType]="eventType">
+                                        </app-senior-scale>
+                                        <app-reversion #eventRef [eventDetails]="eventDetails"
+                                            *ngIf="eventType === 'Reversion'"
+                                            (employeeDetailChange)="setEmployeeId($event)"
+                                            (resetEvent)="resetForm(eventFormTag)" (saveEvent)="saveDetails()"
+                                            [action]="action" [eventForm]="eventForm" [eventType]="eventType">
+                                        </app-reversion>
+                                        <app-promotion-forgo #eventRef [eventDetails]="eventDetails"
+                                            *ngIf="eventType === 'Promotion_Forgo'"
+                                            (employeeDetailChange)="setEmployeeId($event)"
+                                            (resetEvent)="resetForm(eventFormTag)" (saveEvent)="saveDetails()"
+                                            [action]="action" [eventForm]="eventForm" [eventType]="eventType">
+                                        </app-promotion-forgo>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-action-button">
+                                    <button mat-raised-button type="submit" class="green" (click)="submitDetails()"
+                                        *ngIf="action !== 'view'">
+                                        <i class="material-icons"> done</i> Submit</button>
+                                    <button type="view"
+                                        [disabled]="(!eventDetails || (eventDetails && (eventDetails.statusId === 205 || eventDetails.statusId === 0) && this.transactionId && this.empId))"
+                                        *ngIf="!dialogOpen" mat-raised-button color="accent" (click)="viewComments()">
+                                        <i class="material-icons " title="View">remove_red_eye</i>
+                                        View Comments
+                                    </button>
+                                    <button type="button" mat-raised-button color="warn" (click)="OnListClick()"
+                                        *ngIf="!dialogOpen">
+                                        <i class="material-icons" title="Listing">list</i>Listing
+                                    </button>
+                                    <button type="button" mat-raised-button class="btnClose"
+                                        (click)="goBackToPreviousPage()" skipLocationChange>
+                                        <i class="material-icons" title="Close">
+                                            close
+                                        </i>
+                                        Close
+                                    </button>
+                                    <button type="button" mat-raised-button title="Print" class="print-btn"
+                                        (click)="onPrint()" *ngIf="!dialogOpen">
+                                        <i class="material-icons" title="Print">
+                                            print
+                                        </i>
+                                        Print
+                                    </button>
+                                    <button type="button" mat-raised-button class="btnClose" color="accent"
+                                        (click)="printComparisonStatement()" [disabled]="!empId || !transactionId"
+                                        *ngIf="eventType === 'Deemed_Date' && !dialogOpen">
+                                        <i class="material-icons" title="Print Comparison Statement">
+                                            compare_arrows
+                                        </i>
+                                        Comparison Statement
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Attachments" [disabled]="isTabDisabled">
+                    <app-attachment-pvu #attachmentTab *ngIf="eventType && !isTabDisabled"
+                        [showSubmit]="showSubmitButton" (onSubmitClick)="submitDetails(true)"
+                        [attachmentData]="attachmentData" (onListClickEmit)="OnListClick()"
+                        [transactionId]="transactionId" [statusId]="statusId" [dialogOpen]="dialogOpen"
+                        [dialogLinkMenuId]="dialogLinkMenuId" (dialogClose)="goBackToPreviousPage()">
+                    </app-attachment-pvu>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,166 @@
+<form [formGroup]="searchEmployeeNo">
+    <div class="box box-primary">
+        <div class="box-header">Search</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" alphabetInBtwSpaceOnly placeholder="Employee Name" autocomplete="off"
+                            formControlName="empName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="empDesignation" placeholder="Designation">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="designationCtrl"
+                                    [placeholderLabel]="'Find Designation...'"
+                                    [noEntriesFoundLabel]="'no matching Designation found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let designation of designationList | filterSelectInput: designationCtrl.value : 'designationName'"
+                                [value]="designation.designationId">
+                                {{designation.designationName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="PAN Number" autocomplete="off" formControlName="pan">
+                        <div class="error-wrapper" *ngIf="searchEmployeeNo.controls.pan.touched && searchEmployeeNo.controls.pan.errors">
+                            <mat-error *ngIf="searchEmployeeNo.controls.pan.errors.invalidPanNo">
+                                Please enter valid PAN no. !
+                            </mat-error>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf = "!data?.hideCaseNo">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Case Number" autocomplete="off"
+                            formControlName="caseNo">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3"  *ngIf = "!data?.hideGpfNo">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" numbersWithSpecialCharactersOnly placeholder="GPF Number" maxlength="15" autocomplete="off"
+                            formControlName="pPan">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field>
+                        <input matInput placeholder="Retirement date" formControlName="retirementDate"
+                            [matDatepicker]="picker2">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="empType" placeholder="Employee Type">
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="employeetypeCtrl"
+                                    [placeholderLabel]="'Find Employee Type...'"
+                                    [noEntriesFoundLabel]="'no matching Employee Type found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+                            <mat-option
+                                *ngFor="let employeetype of employee_type_list | filterSelectInput: employeetypeCtrl.value : 'lookupInfoName'"
+                                [value]="employeetype.lookupInfoId">
+                                {{employeetype.lookupInfoName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Office" readonly [(ngModel)]="officeName"
+                            [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf = 'data?.empPayType'>
+                    <mat-form-field>
+                        <mat-label>Employee Pay Type</mat-label>
+                        <mat-select formControlName="empPayType" disabled>
+                            <mat-option
+                                *ngFor="let EPT of empPayTypeList"
+                                [value]="EPT.id">
+                                {{EPT.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row centerbtn" style="display: flex;justify-content: center;">
+                <button type="submit" mat-raised-button color="primary" [disabled]="disabledEmpSearch.value"
+                    (click)="onSubmitSearch()">
+                    <i class="material-icons">search</i>Search
+                </button>
+                <button mat-raised-button mat-dialog-close class="btnClose" style="margin-left: 5px;">
+                    <i class="material-icons" title="Close">
+                        close
+                    </i> Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</form>
+<div>
+    <table mat-table #table [dataSource]="dataSource" class="responsive-table">
+        <ng-container matColumnDef="employeeNumber">
+            <th mat-header-cell *matHeaderCellDef>Employee Number</th>
+            <td mat-cell *matCellDef="let element;let i= index;">
+                <a (click)="onClickEmpNo(i)" style="cursor:pointer;text-decoration:underline">{{element.employeeNo}}</a>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="empName">
+            <th mat-header-cell *matHeaderCellDef>Employee Name</th>
+            <td mat-cell *matCellDef="let element;let i= index;" class="">
+                {{element.empName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="empDesignation">
+            <th mat-header-cell *matHeaderCellDef>Designation</th>
+            <td mat-cell *matCellDef="let element;let i= index;" class="">
+                {{element.designation}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="classLevel">
+            <th mat-header-cell *matHeaderCellDef class="gray-color">Class</th>
+            <td mat-cell *matCellDef="let element" class="">
+                {{element.classLevel}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="employeeType">
+            <th mat-header-cell *matHeaderCellDef class="gray-color">Employee Type</th>
+            <td mat-cell *matCellDef="let element" class="">
+                {{element.empType}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="pan">
+            <th mat-header-cell *matHeaderCellDef>PAN</th>
+            <td mat-cell *matCellDef="let element;let i= index;" class="">
+                {{element.pan}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="officeId">
+            <th mat-header-cell *matHeaderCellDef>Office Name</th>
+            <td mat-cell *matCellDef="let element;let i= index;" class="">
+                {{element.officeName}}
+            </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="noData">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+            <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="centerAlign">No Data
+                Available</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; let i = index;columns: variableClm.value;"></tr>
+    </table>
+    <mat-paginator #paginator [pageSize]="'5'" (page)="pageEvent = $event; onPaginateChange($event)"
+        [length]="totalRecords" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,303 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Daily Position Sheet</div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Daily Position Sheet</li>
+      </ol>
+    </nav>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <div class="heading-section">
+          Search
+        </div>
+      </mat-expansion-panel-header>
+      <div class=" form-datatable-list">
+        <form class="col-sm-12" [formGroup]="dailyPositionSheetForm" (ngSubmit)="dailyPositionSheetFormData()">
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field class="full-width">
+                <mat-select formControlName="finYear" placeholder="Financial Year" required>
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="finYearCtrl" [placeholderLabel]="'Find Financial Year...'"
+                      [noEntriesFoundLabel]="'no matching Financial Year found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option *ngFor="let FY of finYear_list | filterSelectInput:finYearCtrl.value" [value]="FY.value">
+                    {{FY.viewValue}}
+                  </mat-option>
+                </mat-select>
+                <div class="error-wrapper"
+                  *ngIf="dailyPositionSheetForm.controls.finYear.touched && dailyPositionSheetForm.controls.finYear.errors">
+                  <mat-error *ngIf="dailyPositionSheetForm.controls.finYear.errors.required">
+                    {{errorMessages.FINANCIAL_YEAR}}
+                  </mat-error>
+                </div>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="dpFromDate" placeholder="DP Sheet From Date"
+                  [matDatepicker]="dpFromDate" required>
+                <mat-datepicker-toggle matSuffix [for]="dpFromDate"></mat-datepicker-toggle>
+                <mat-datepicker #dpFromDate></mat-datepicker>
+                <div class="error-wrapper"
+                  *ngIf="dailyPositionSheetForm.controls.dpFromDate.touched && dailyPositionSheetForm.controls.dpFromDate.errors">
+                  <mat-error *ngIf="dailyPositionSheetForm.controls.dpFromDate.errors.required">
+                    {{errorMessages.FROM_DATE}}
+                  </mat-error>
+                </div>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="dpToDate" placeholder="DP Sheet To Date" [matDatepicker]="dpToDate">
+                <mat-datepicker-toggle matSuffix [for]="dpToDate"></mat-datepicker-toggle>
+                <mat-datepicker #dpToDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="refNo" placeholder="Reference No.">
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="fromDate" placeholder="Reference No. From Date"
+                  [matDatepicker]="pickerFromDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFromDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="toDate" placeholder="Reference No. To Date"
+                  [matDatepicker]="pickerToDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
+                <mat-datepicker #pickerToDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field class="full-width">
+                <mat-select formControlName="receive" #receiveVal placeholder="Received From / Sent To">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="receiveCtrl"
+                      [placeholderLabel]="'Find Received From / Sent To...'"
+                      [noEntriesFoundLabel]="'no matching Received From / Sent To found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option *ngFor="let stm of receive_List | filterSelectInput:receiveCtrl.value"
+                    [value]="stm.value">
+                    {{stm.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="receiveVal.value=='1'" class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="recFrom" placeholder="Received From">
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="receiveVal.value=='2'" class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="sentTo" placeholder="Sent To">
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field class="full-width">
+                <mat-select formControlName="wStatus" placeholder="Workflow Status">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="wStatusCtrl" [placeholderLabel]="'Find Workflow Status...'"
+                      [noEntriesFoundLabel]="'no Workflow Status found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option *ngFor="let req of wStatus_List | filterSelectInput:wStatusCtrl.value"
+                    [value]="req.value">
+                    {{req.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+            <div class="col-sm-3">
+              <mat-form-field class="full-width">
+                <mat-select formControlName="status" placeholder="Status">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="statusCtrl" [placeholderLabel]="'Find Status...'"
+                      [noEntriesFoundLabel]="'no Status found'">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option *ngFor="let st of status_List | filterSelectInput:statusCtrl.value" [value]="st.value">
+                    {{st.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <!-- Buttons for Search and Reset Starts -->
+          <div class="col-sm-12">
+            <div class="form-action-button">
+              <button type="submit" mat-raised-button color="primary" title="Save As Draft">
+                <i class="material-icons" aria-hidden="true">search</i> Search
+              </button>
+              <button type="reset" mat-raised-button class="green" (click)="goToScreen()">
+                <i class="material-icons" aria-hidden="true">
+                  add
+                </i>
+                Add DP Sheet Details
+              </button>
+              <button type="reset" mat-raised-button color="accent">
+                <i class="material-icons" aria-hidden="true">
+                  restore
+                </i>
+                Reset
+              </button>
+            </div>
+          </div>
+          <!-- Buttons for Search and Reset Ends -->
+
+        </form>
+      </div>
+    </mat-expansion-panel>
+
+    <div class="mat-elevation-z8 mt-2">
+      <!-- Macro Outcome Listing Table Starts -->
+      <table mat-table [dataSource]="DailyPositionSheetDataSource" class="mat-elevation-z8"
+        area-describedby="adviceCardexVerification">
+
+        <!-- Main Header -->
+        <ng-container matColumnDef="parent1">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="20" scope="row">Daily Position Sheet
+          </th>
+        </ng-container>
+
+        <!-- Serial Number Column -->
+        <ng-container matColumnDef="srno">
+          <th mat-header-cell *matHeaderCellDef scope="row">
+            Sr. No.
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+
+        <!-- Financial Year Column -->
+        <ng-container matColumnDef="financialYear">
+          <th mat-header-cell *matHeaderCellDef scope="row">Financial Year</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.financialYear}}
+          </td>
+        </ng-container>
+
+        <!-- Reference Number -->
+        <ng-container matColumnDef="refNum">
+          <th mat-header-cell *matHeaderCellDef scope="row">Reference Number</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.refNum}}
+          </td>
+        </ng-container>
+
+        <!-- Reference Date -->
+        <ng-container matColumnDef="refDate">
+          <th mat-header-cell *matHeaderCellDef scope="row">Reference Date</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.refDate}}
+          </td>
+        </ng-container>
+
+        <!-- Reference Date -->
+        <ng-container matColumnDef="dateOfDPSheet">
+          <th mat-header-cell *matHeaderCellDef scope="row">Date Of DP Sheet</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.dateOfDPSheet}}
+          </td>
+        </ng-container>
+
+        <!-- Received From Received On -->
+        <ng-container matColumnDef="recFromOn">
+          <th mat-header-cell *matHeaderCellDef scope="row">Received From Received On</th>
+          <td mat-cell *matCellDef="let element" class="leftAlign"> {{element.recFromOn}} </td>
+        </ng-container>
+
+        <!-- Sent To Sent On -->
+        <ng-container matColumnDef="sentToON">
+          <th mat-header-cell *matHeaderCellDef scope="row">Sent To Sent On</th>
+          <td mat-cell *matCellDef="let element" class="leftAlign"> {{element.sentToON}} </td>
+        </ng-container>
+
+        <!-- Lying With -->
+        <ng-container matColumnDef="lyingWith">
+          <th mat-header-cell *matHeaderCellDef scope="row">Lying With</th>
+          <td mat-cell *matCellDef="let element" class="leftAlign"> {{element.lyingWith}} </td>
+        </ng-container>
+
+        <!-- Worfklow Status -->
+        <ng-container matColumnDef="wStatus">
+          <th mat-header-cell *matHeaderCellDef scope="row">Worfklow Status</th>
+          <td mat-cell *matCellDef="let element" class="leftAlign"> {{element.wStatus}} </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef scope="row">Status</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.status}}
+          </td>
+        </ng-container>
+
+        <!-- Action View/Edit/Delete Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef scope="row" scope="row">Action</th>
+          <td mat-cell *matCellDef="let element" style="text-align: center; max-width: 200px;"
+            class="action-btn-i centerAlign">
+            <a>
+              <i aria-hidden="true" class="material-icons plus edit-icon" title="Edit">edit</i>
+            </a>
+            <a>
+              <i class="material-icons plus view-icon" aria-hidden="true" title="View">remove_red_eye
+              </i>
+            </a>
+            <!-- <a>
+              <i class="material-icons plus" (click)="showHistoryDialog()" aria-hidden="true" title="History">update</i>
+            </a> -->
+            <a>
+              <i class="material-icons plus details" (click)="showHistoryDialog()" aria-hidden="true"
+                title="History Details">receipt
+              </i>
+            </a>
+          </td>
+        </ng-container>
+
+        <!-- Header and Footer Row Definition -->
+        <!-- <tr mat-header-row *matHeaderRowDef="['parent1']"></tr> -->
+        <tr mat-header-row *matHeaderRowDef="DailyPositionSheetDataColumn"></tr>
+        <tr mat-row *matRowDef="let row; columns: DailyPositionSheetDataColumn;"></tr>
+      </table>
+      <!-- Macro Outcome Listing Table Ends -->
+
+      <!-- Paginator -->
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>

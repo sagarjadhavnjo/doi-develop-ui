@@ -1,0 +1,262 @@
+
+@import "../../edp_common_style.css";
+.searchIcon {
+    color: #356a94;
+}
+.starSign{
+    color: #ff0000;
+}
+.mat-table td.mat-cell{ max-width: inherit;}
+.changebutton{
+    min-width: 67px;
+    line-height: 26px;
+    padding: 0px;
+    font-size: 13px;
+}
+.mgt15{ margin-top: 15px;;}
+::ng-deep .breakName{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+    white-space: normal;
+}
+
+.example-viewport {
+    height: 200px;
+    width: 100%;
+    border: 1px solid black;
+}
+
+.example-viewport p {
+    padding-left: 5px;
+    background: #f2f2f2;
+}
+
+.mat-checkbox {
+    padding-left: 5px;
+}
+
+.selectedvalue p {
+    background: #f2f2f2;
+}
+
+.example-item[_ngcontent-c3] {
+    height: 25px;
+}
+
+.textcenter {
+    text-align: center;
+}
+
+.filterfield.col-sm-12 {
+    flex: 0 0 50%;
+    max-width: 100%;
+}
+
+.textcenter .mat-raised-button {
+    margin: 10px;
+}
+
+textarea {
+    resize: none !important;
+}
+
+mat-list-item.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    text-decoration: none;
+    pointer-events: none;
+}
+
+.nobrd {
+    border: none !important;
+}
+
+.wrkflowbrd {
+    border-bottom: 1px solid #ccc !important;
+    display: inline-block;
+    width: 100%;
+}
+
+.mrgzero {
+    margin-right: 0px !important;
+}
+
+.mat-checkbox[_ngcontent-c3] {
+    padding-left: 0px;
+}
+
+.editcheckbox {
+    position: relative;
+    left: 4px;
+}
+
+.checkboxHidden {
+    visibility: hidden;
+}
+
+.checkboxVisible {
+    visibility: visible;
+    background: #f1f1f1 !important;
+}
+
+.Moduleidth {
+    width: 15%;
+}
+
+.submenuwidth {
+    width: 12%;
+}
+
+.alreadyApproved {
+    color: green;
+}
+
+.removeApproved {
+    color: red;
+}
+
+.addNewApproved {
+    color: blue;
+}
+
+.biger_box_one {
+    width: 16% !important;
+}
+
+.custom-list .mat-table td.mat-cell {
+    max-width: inherit !important;
+}
+
+.custom-list h3 {
+    font-size: 13px !important;
+}
+
+.rolemappingbox {
+    width: 19%;
+}
+
+.lastbox {
+    width: 20%;
+}
+
+::ng-deep .UserRoleViewDialog {
+    margin: auto !important;
+}
+
+.viewMapViewtable tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.viewMapViewtable tr:nth-child(odd) {
+    background: #FFF
+}
+
+.transparentRow {
+    background-color: white;
+    /* text-align: center; */
+}
+
+.viewMapViewtable tbody tr td p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.viewMapViewtable tbody tr td,
+.viewMapViewtable tbody tr th {
+    width: 20%;
+    border: 1px solid #d8d3d3;
+}
+
+/* .viewMapViewtable tbody tr td { */
+    /* color: #757575; */
+/* } */
+
+.viewMapViewtable tbody tr:nth-of-type(1) {
+    background-color: #356a94;
+    color: white;
+    line-height: 2;
+    text-align: center;
+}
+
+
+/* .chekBox .mat-checkbox {
+    padding-left: 0px;
+} */
+
+section.chekBox .chkboxAlign4 {
+    padding-left: 32px;
+}
+
+section.chekBox .chkboxAlign3 {
+    padding-left: 45px;
+}
+
+.viewMapViewtable .PermissionBox th:nth-of-type(1) {
+    border-style: hidden;
+    /* border-bottom-style: hidden;
+    border-left-style: hidden;
+    border-right-style: hidden; */
+}
+
+.viewMapViewtable .PermissionBox th:nth-of-type(2) {
+    border-top-style: hidden;
+    border-bottom-style: hidden;
+}
+
+.roleview {
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.allpercheckboxlist mat-checkbox,
+.custom-list .allworkflowlist .mat-checkbox {
+    width: 100%;
+    display: block;
+}
+
+.lastbox {
+    margin-right: 0px !important;
+}
+
+.select-list {
+    height: 200px;
+}
+
+.removetablepointer {
+    cursor: default;
+    background-color: rebeccapurple;
+}
+
+.searchmappinglist .mat-table .mat-row:hover {
+    cursor: pointer;
+    background-color: #e2e1e1;
+}
+
+.searchmappinglist .mat-table .mat-row.selected-user-post {
+    background-color: #e2e1e1;
+}
+
+.searchmappinglist.selected-user-post .mat-table .mat-row:hover {
+    cursor: default;
+}
+
+.right-mapping-container-model .mat-table td.mat-cell {
+    border-bottom: 1px solid #e2e2e2;
+}
+.confirmationDialog {
+    height: 92px;
+    margin: 20px;
+}
+table {
+    border: 0px solid rgba(102, 102, 102, .2);
+}
+::ng-deep .breakFileNameAttach{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+    white-space: normal;
+}
+
+.office-name-width {
+    min-width: 100px;
+}

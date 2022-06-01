@@ -1,0 +1,121 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Extra Ordinary Leave</div>
+            <div class="font-heading" *ngIf="showSaveasDraft">
+                <b>Reference No:</b> {{transNo}}</div>
+            <div class="font-heading" *ngIf="showSaveasDraft">
+                <b>Reference Date:</b> <span>{{ initiationDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</span></div>
+        </div>
+        <div class="panel-group">
+            <div class="box-top">
+                <div class="box-body">
+                    <form [formGroup]="createEOLForm">
+                        <div class="box box-primary">
+                            <div class="box-header">Employee Details</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly name="employeeNo" formControlName="employeeNo" maxlength="10" minlength="10" placeholder="Employee Number" (keypress)="onEmployeeKeyUp($event)" (keydown.Tab)="onEmployeeKeyUp($event)" [readonly]="(!isSaveDraftVisible) || btnSave"
+                                                required>
+                                            <mat-icon *ngIf="!isDisabled" matSuffix (click)="openDialogEmployeeNumber()">search</mat-icon>
+                                            <error-messages [errorMessages]="{'required': errorMessages.EMP_NO}" [control]="createEOLForm.get('employeeNo')"></error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Employee Name" value="" formControlName="empName" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Class" value="" formControlName="class" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Designation" value="" formControlName="designation" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Office Name" value="" formControlName="ofcName" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Leave Details</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="startDate" [min]="EolStartDate" placeholder="Leave Start Date" formControlName="startDate" [max]="retirementDate" (dateChange)="durationCal()" [required]="isStartDate" [readonly]="!approverCase" >
+                                            <error-messages [errorMessages]="{'required': errorMessages.LEAVE_START}" [control]="createEOLForm.get('startDate')"></error-messages>
+                                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                                            <mat-datepicker #startDate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="endtDate" placeholder="Leave End Date" formControlName="endDate" required [max]="retirementDate" [min]="createEOLForm.controls.startDate.value" (dateChange)="durationCal()" [readonly]="!approverCase" [required]="isEndDate">
+                                            <error-messages [errorMessages]="{'required': errorMessages.LEAVE_END}" [control]="createEOLForm.get('endDate')"></error-messages>
+                                            <mat-datepicker-toggle matSuffix [for]="endtDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #endtDate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput type="text" alphaNumericWithSlashHyphenOnly maxlength="100" formControlName="orderNoDate" placeholder="Order Number & Date" autocomplete="off" required [readonly]="approverCase && !viewMode" [required]="isOrderNoDate">
+                                            <error-messages [errorMessages]="{'required': errorMessages.ORDER_NO_DATE}" [control]="createEOLForm.get('orderNoDate')"></error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Duration (In days)" value="" readonly formControlName="noOfDays">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-action-button">
+                            <button type="button" [disabled]="btnSave" mat-raised-button color="primary" (click)="saveEOLData()" *ngIf="isSaveDraftVisible && !dialogOpen">
+                                <i class="material-icons" title="Save">
+                                save
+                                </i>
+                                Save as Draft
+                            </button>
+                            <button type="button" mat-raised-button color="accent" (click)="viewComments()" *ngIf="!dialogOpen">
+                                <i class="material-icons " title="View">remove_red_eye</i>
+                                View Comments
+                            </button>
+                            <button mat-raised-button type="button" class="green" (click)="submitEOLDetails()" *ngIf="(viewMode && !dialogOpen) || approverCase ">
+                                <i class="material-icons">
+                                done </i> Submit
+                            </button>
+                            <button type="reset" mat-raised-button color="accent" (click)="reset()" *ngIf="viewMode && !dialogOpen">
+                                <i class="material-icons">
+                                restore
+                                </i>
+                                Reset
+                            </button>
+                            <button type="button" mat-raised-button color="warn" (click)="goToListing()" *ngIf="!dialogOpen">
+                                <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                                Listing
+                            </button>
+                            <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                                <i class="material-icons" title="Close">close</i> Close
+                            </button>
+                            <button type="button" mat-raised-button class="print-btn" (click)="onPrint()" *ngIf="viewMode && !dialogOpen">
+                                <i class="material-icons"> print </i> Print
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

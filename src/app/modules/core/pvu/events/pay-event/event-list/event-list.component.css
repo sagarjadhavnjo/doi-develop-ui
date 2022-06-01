@@ -1,0 +1,137 @@
+/* table {
+    width: 100%;
+} */
+
+.table-outer {
+    clear: both;
+    margin-top: 10px;
+}
+
+/* .completed {
+    background-color: #8FBC8F
+}
+
+.incomplete {
+    background-color: #F08080
+} */
+
+/* h1 {
+    font-size: 1.5em;
+    font-family: Arial, Helvetica, sans-serif;
+} */
+
+.mat-form-field {
+    width: 100% !important;
+}
+
+/* .action-btn-i .view-icon {
+    color: #3f51b5;
+}
+
+    
+
+.action-btn-i .edit-icon {
+    color: orange;
+}
+
+.action-btn-i .send-icon {
+    color: orangered
+} */
+
+/* .completed td,
+.incompleted td {
+    color: white;
+} */
+
+/* .completed .action-btn-i i,
+.incomplete .action-btn-i i {
+    color: white;
+} */
+
+/* .completed:before {
+    width: 2px;
+    background-color: #F08080;
+    content: '';
+    position: absolute;
+    left: 0px;
+} */
+
+/* .completed {
+    position: relative
+}
+
+.completed::before {
+    width: 2px;
+    content: '';
+    background-color: red;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+} */
+
+td.mat-cell:first-of-type {
+    padding-left: 24px;
+    /* border-left: 5px solid transparent; */
+}
+
+.incomplete td.mat-cell:first-of-type {
+    border-left-color: #f08080;
+}
+
+.completed td.mat-cell:first-of-type {
+    border-left-color: #8fbc8f;
+}
+
+::ng-deep .mat-table thead {
+    background: #f2f2f2;
+    color: black;
+    font-size: 14px;
+}
+
+/* table.mat-table th {
+    font-size: 12px;
+    font-weight: 600;
+    color: black;
+    border-top: 1px solid #66666640;
+} */
+
+/* tr.mat-header-row,
+tr.mat-footer-row,
+tr.mat-row {
+    height: 35px !important;
+} */
+
+.heading-wrap {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em 0px;
+}
+
+/* .heading {
+    display: flex;
+    margin-right: auto;
+    width: auto;
+    margin: 0px;
+} */
+
+::ng-deep.example-full-width {
+    width: 100%;
+}
+
+/* ::ng-deep tbody tr:nth-child(even) {
+    background-color: #f9f9f9 !important;
+} */
+
+.action-btn-i .delete-icon {
+    color: #bb1e1e !important;
+    cursor: pointer;
+}
+
+.mat-table td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    font-weight: normal !important;
+}

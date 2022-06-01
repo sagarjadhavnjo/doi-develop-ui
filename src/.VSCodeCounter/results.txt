@@ -1,0 +1,41 @@
+Date : 2020-07-24 12:39:13
+Directory : d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry
+Total : 12 files,  2459 codes, 237 comments, 506 blanks, all 3202 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| HTML       |          5 |      1,410 |        123 |        244 |      1,777 |
+| TypeScript |          4 |      1,040 |        114 |        259 |      1,413 |
+| CSS        |          3 |          9 |          0 |          3 |         12 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                    | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                       |         12 |      2,459 |        237 |        506 |      3,202 |
+| ..                                                                                                                      |          7 |      1,411 |        100 |        284 |      1,795 |
+| ..\voucher-entry-listing                                                                                                |          3 |        323 |         33 |         37 |        393 |
+| ..\voucher-entry_NancyKumari                                                                                            |          4 |      1,088 |         67 |        247 |      1,402 |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry-listing\voucher-entry-listing.component.css  | CSS        |          3 |          0 |          1 |          4 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry-listing\voucher-entry-listing.component.html | HTML       |        133 |         14 |         11 |        158 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry-listing\voucher-entry-listing.component.ts   | TypeScript |        187 |         19 |         25 |        231 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry\voucher-entry-dialog.html                    | HTML       |        229 |          0 |         48 |        277 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry\voucher-entry.component.css                  | CSS        |          3 |          0 |          1 |          4 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry\voucher-entry.component.html                 | HTML       |        361 |        109 |         62 |        532 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry\voucher-entry.component.spec.ts              | TypeScript |         20 |          0 |          6 |         26 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry\voucher-entry.component.ts                   | TypeScript |        435 |         28 |        105 |        568 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry_NancyKumari\voucher-entry-dialog.html        | HTML       |        229 |          0 |         48 |        277 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry_NancyKumari\voucher-entry.component.css      | CSS        |          3 |          0 |          1 |          4 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry_NancyKumari\voucher-entry.component.html     | HTML       |        458 |          0 |         75 |        533 |
+| d:\IFMS_Angular\surbhi\ifms\src\app\modules\core\dppfgpf\gpf\voucher-entry_NancyKumari\voucher-entry.component.ts       | TypeScript |        398 |         67 |        123 |        588 |
+| Total                                                                                                                   |            |      2,459 |        237 |        506 |      3,202 |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

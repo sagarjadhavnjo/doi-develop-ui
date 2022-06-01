@@ -1,0 +1,7 @@
+
+@media(max-width:1200px){
+    .lc-saved-advice .mat-table td.mat-cell {
+        max-width: 110px;
+    }
+    
+}

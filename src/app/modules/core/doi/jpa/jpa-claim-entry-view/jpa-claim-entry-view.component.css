@@ -1,0 +1,19 @@
+.pop-number {
+    display: inline-flex;
+}
+
+.print-view{
+    display: none;
+}
+.without-print-view {
+    display: block;
+ }
+
+@media print {
+    .print-view {
+        display: block;
+     }
+    .without-print-view {
+        display: none;
+     }
+}

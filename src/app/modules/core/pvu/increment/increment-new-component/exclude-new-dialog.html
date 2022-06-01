@@ -1,0 +1,146 @@
+<div class="dialogContainer">
+    <div class="mat-dialog-title" mat-dialog-title>
+        Reason for exclude
+    </div>
+    <form [formGroup]="excludeDialogForm">
+        <div class="row">
+            <div class="col-sm-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Reason for exclusion</mat-label>
+                    <mat-select formControlName="exclusionReasion" (selectionChange)="onExclusionReasionChange('exclusionReasion')" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="exclusionReasionCtrl" [placeholderLabel]="'Find Reason...'" [noEntriesFoundLabel]="'No Reason found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of reasonForExclusionList | filterSelectInput: exclusionReasionCtrl.value : 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.exclusionReasion.touched && excludeDialogForm.controls.exclusionReasion.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.exclusionReasion.errors.maxlength">
+                            {{errorMessages.EXCLUSION_REASON}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="showExclusionReasion">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Stop Increment</mat-label>
+                    <mat-select formControlName="resionForStop" (selectionChange)="onResionForStopChange('resionForStop')" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="resionForStopCtrl" [placeholderLabel]="'Find Option...'" [noEntriesFoundLabel]="'No Option found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of stopIncrementList | filterSelectInput:resionForStopCtrl.value: 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.resionForStop.touched && excludeDialogForm.controls.resionForStop.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.resionForStop.errors.maxlength">
+                            {{errorMessages.REASON_FOR_STOP}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="hideStopIncType || excludeDialogForm.get('resionForStop').value == 303 || excludeDialogForm.get('resionForStop').value == 304">
+                <mat-form-field class="example-full-width">
+                    <input matInput [matDatepicker]="picker1" [max]='incEffectiveDate' placeholder="Order Date" formControlName="stopIncOrderDate" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncOrderDate.touched && excludeDialogForm.controls.stopIncOrderDate.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncOrderDate.errors.maxlength">
+                            {{errorMessages.FROM_DATE}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="hideStopIncType || excludeDialogForm.get('resionForStop').value == 303 || excludeDialogForm.get('resionForStop').value == 304">
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Order Number" formControlName="stopIncOrderNo" required>
+                    <div class="error-wrapper"
+                        *ngIf="excludeDialogForm.controls.stopIncOrderNo.touched && excludeDialogForm.controls.stopIncOrderNo.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncOrderNo.errors.minlength">
+                            {{errorMessages.EMP_NO_MAX}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="hideStopIncType || excludeDialogForm.get('resionForStop').value == 304">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Duration In</mat-label>
+                    <mat-select formControlName="stopIncrementDuration" (selectionChange)="onIncDurationChange('stopIncrementDuration')" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="stopIncrementDurationCtrl" [placeholderLabel]="'Find Option...'" [noEntriesFoundLabel]="'No Option found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of stopIncrementDurationList | filterSelectInput:stopIncrementDurationCtrl.value: 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncrementDuration.touched && excludeDialogForm.controls.stopIncrementDuration.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncrementDuration.errors.maxlength">
+                            {{errorMessages.REASON_FOR_STOP}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="hideStopIncType || excludeDialogForm.get('resionForStop').value == 304 && excludeDialogForm.get('stopIncrementDuration').value == 1537">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Select Month Duration</mat-label>
+                    <mat-select formControlName="stopIncMonth" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="stopIncMonthCtrl" [placeholderLabel]="'Find Option...'" [noEntriesFoundLabel]="'No Option found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of stopIncMonthList | filterSelectInput:stopIncMonthCtrl.value: 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncMonth.touched && excludeDialogForm.controls.stopIncMonth.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncMonth.errors.maxlength">
+                            {{errorMessages.REASON_FOR_STOP}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="hideStopIncType || excludeDialogForm.get('resionForStop').value == 304 && excludeDialogForm.get('stopIncrementDuration').value == 1538">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Select Year Duration</mat-label>
+                    <mat-select formControlName="stopIncYear" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="stopIncYearCtrl" [placeholderLabel]="'Find Option...'" [noEntriesFoundLabel]="'No Option found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of stopIncYearList | filterSelectInput:stopIncYearCtrl.value: 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncYear.touched && excludeDialogForm.controls.stopIncYear.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncYear.errors.maxlength">
+                            {{errorMessages.REASON_FOR_STOP}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="hideStopIncType || excludeDialogForm.get('resionForStop').value == 303 || excludeDialogForm.get('resionForStop').value == 304">
+                <mat-form-field class="example-full-width">
+                    <mat-label>No. of Increment</mat-label>
+                    <mat-select formControlName="stopIncNumber" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="stopIncNumberCtrl" [placeholderLabel]="'Find Option...'" [noEntriesFoundLabel]="'No Option found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of stopIncNumberList | filterSelectInput:stopIncNumberCtrl.value: 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncNumber.touched && excludeDialogForm.controls.stopIncNumber.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncNumber.errors.maxlength">
+                            {{errorMessages.REASON_FOR_STOP}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+        </div>
+        <div mat-dialog-actions>
+            <button type="button" (click)="excludeDialogFormSubmit()" mat-raised-button color="primary">
+                Exclude
+            </button>
+            <button type="button" mat-raised-button mat-dialog-close class="btnClose">
+                Close
+            </button>
+        </div>
+    </form>
+</div>

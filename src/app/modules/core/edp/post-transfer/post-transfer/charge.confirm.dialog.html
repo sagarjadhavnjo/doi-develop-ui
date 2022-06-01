@@ -1,0 +1,21 @@
+<div class="col-sm-12">
+    <h3 mat-dialog-title>Confirm Changes</h3>
+    <mat-dialog-content class="mat-typography">
+        <label>Are you sure to change this post to primary post ?</label>
+    </mat-dialog-content>
+
+    <div class="form-action-button">
+        <button type="submit" mat-raised-button color="primary" (click)="onSave()" cdkFocusInitial>
+            <i class="material-icons" title="Yes">
+                check
+            </i>
+            Yes
+        </button>
+        <button type="button" mat-raised-button class="btnClose" (click)="onCancel()">
+            <i class="material-icons" title="No">
+                close
+            </i>
+            No
+        </button>
+    </div>
+</div>

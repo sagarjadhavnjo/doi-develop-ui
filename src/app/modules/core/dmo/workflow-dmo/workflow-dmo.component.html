@@ -1,0 +1,276 @@
+<div class="container common-workflow-section">
+  <div class="row">
+    <div class="heading-section ng-star-inserted">
+      <div>{{screenName}}</div>
+      <div class="font-heading"><strong>Reference No:</strong> 19-20/STM/SCE/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ date | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+    <mat-tab-group mat-stretch-tabs class="standing-est-tabing
+        mat-form-field" [selectedIndex]="selectedIndex">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <!-- doneHeader was not defined that why i commented this line ↓ -->
+          <!-- <mat-icon class="example-tab-icon" *ngIf="doneHeader">check</mat-icon> -->
+          Comment
+        </ng-template>
+        <div class="row header-detail">
+          <div class="col-sm-6 colPadding" *ngFor="let item of headerJso">
+            <div class="col-sm-6 labelCSS">{{item.label}}<span class="floatRight">:</span></div>
+            <div class="col-sm-6 paddingUnset">{{item.value}}</div>
+          </div>
+        </div>
+
+        <div class="forward-module-container">
+          <div class="forward-dialog-left">
+            <div class="col-sm-12">
+              <div class="form-datatable-list
+                            history-common-section">
+
+                <div class="col-sm-12">
+                  <div class="row">
+                    <div class="htry-hding-name">
+                      <strong>Comment History:</strong>
+                    </div>
+                    <div class="back-to-action">
+                      <a (click)="checkDisplayFileToggle()">Back to Action Form</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="category-deprt"><strong>Education Department</strong></div>
+                <div class="history-list-container">
+                  <mat-list *ngFor="let comments of
+                                forwardDialog_history_list" class="column-box">
+                    <div class="histy-box">
+                      <mat-list-item class="txt-heading">
+                        {{comments.userName}},{{comments.designation}} ({{comments.role}})
+                      </mat-list-item>
+                      <mat-list-item class="txt-heading">{{ date | date: 'dd-MMM-yyyy HH:mm'}}
+                      </mat-list-item>
+                    </div>
+                    <mat-list-item class="comment-text">
+                      <span *ngIf="comments.comment.length>
+                                        250">{{comments.comment |
+                        slice:0:249}}<a (click)="readMoreId=
+                                            comments.id;" *ngIf="readMoreId !=
+                                            comments.id">&nbsp;&nbsp;..read
+                          more</a></span>
+                      <span *ngIf="readMoreId == comments.id">{{comments.comment
+                        | slice:249}}<a (click)="readMoreId= undefined;" *ngIf="readMoreId ==
+                                            comments.id">&nbsp;&nbsp;less</a></span>
+                      <span *ngIf="comments.comment.length
+                                    <250">{{comments.comment}}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                      <div class="box-opener">
+                        <p class="flexicon">
+                          <a *ngFor="let file of
+                                                attachment" (click)="checkDisplayFile(file)" class="attachmentType"
+                            (click)="file_name=
+                                                file.fileName;">{{file.fileName}}
+                            <i class="material-icons
+                                                    iconset" title="Download">
+                              save_alt
+                            </i>
+                          </a>
+                        </p>
+                      </div>
+                    </mat-list-item>
+                  </mat-list>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-datatable-list action-common-section">
+            <form class="col-sm-12" [formGroup]="actionForm">
+              <div *ngIf="show">
+                <div *ngFor="let file of attachment">
+                  <div class="open-file-box" *ngIf="file_name === file.fileName">
+                    <img *ngIf="file.imgStatus &&
+                                        file.fileType == 'image'" src="{{file.filePath}}" alt="file.filePath">
+                    <span *ngIf="file.pdfStatus &&
+                                        file.fileType == 'pdf'">
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="showAction">
+                <div class="col-sm-12">
+                  <div class="row">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="actionCode" placeholder="Action" #singleSelect1 required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="actionCtrl" [placeholderLabel]="'Find Action...'"
+                            [noEntriesFoundLabel]="'no matching Action found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+
+                        <mat-option *ngFor="let action
+                                                of filteredAction | async" [value]="action.value">
+                          {{action.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="actionForm.controls.actionCode.touched && (actionForm.controls.actionCode.errors)">
+                        <mat-error *ngIf="actionForm.controls.actionCode.errors.required">
+                          {{errorMessages.ACTION}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="row">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="userCode" placeholder="User" #singleSelect1 required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="userCodeCtrl" [placeholderLabel]="'Find User...'"
+                            [noEntriesFoundLabel]="'no matching User found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+
+                        <mat-option *ngFor="let user of
+                                                filteredUserCode | async" [value]="user.value">
+                          {{user.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="row">
+                    <mat-form-field class="full-width">
+
+                      <textarea matInput class="textarea" autocomplete="off" name="additionalText"
+                        (focus)="setGEnglishDefault()" [ngClass]="hasFocusSet == 1 ? 'hasfocus' : ''"
+                        (focusout)="hasFocusSet=1;setEnglishOnFocusOut()" formControlName="additionalText"
+                        placeholder="Comment (ગુજરાતી)" required></textarea>
+
+                      <!-- <div class="error-wrapper"
+                                              *ngIf="actionForm.controls.additionalText.touched || (actionForm.controls.additionalText.errors && isSubmitted)">
+                                              <mat-error *ngIf="actionForm.controls.additionalText.errors.required">
+                                                  {{errorMessages.COMMENT}}
+                                              </mat-error>
+                                          </div> -->
+                    </mat-form-field>
+                  </div>
+                  <div class="text-right row rightAlign">
+                    <button mat-raised-button type="button" class="lang-btn"
+                      (click)="toggleLanguage()">{{currentLang.value == 'Eng' ? 'Guj' : 'Eng' }}</button>
+                  </div>
+                </div>
+
+                <div class="form-action-button">
+                  <button type="submit" title="Submit" mat-raised-button class="green" (click)="onSubmit()"><i
+                      class="material-icons" title="Submit">save</i>
+                    Submit</button>
+                  <button type="button" title="Cancel" mat-raised-button (click)="onNoClick()" class="btnClose"><i
+                      class="material-icons " title="Cancel
+                                        dashboard">close</i>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Attachments" class="full-width">
+        <table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+            <td mat-cell *matCellDef="let item;let i=index" class="centerAlign">
+              {{i+1}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="attachmentType">
+            <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+            <td mat-cell *matCellDef="let item;let i= index;">
+              <mat-select placeholder="Attachment Type" #singleSelect1 required [(ngModel)]="item.attachmentType">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="attachmentTypeCodeCtrl" [placeholderLabel]="'Find Attachment
+                                    Type...'" [noEntriesFoundLabel]="'no matching
+                                    Attachment Type found'">
+                  </ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option *ngFor="let AT of
+                                filteredAttachmentTypeCode | async" [value]="AT.value">
+                  {{AT.viewValue}}
+                </mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="fileName">
+            <th mat-header-cell *matHeaderCellDef>File name</th>
+            <td mat-cell *matCellDef="let item">
+              <mat-form-field floatLabel="never">
+                <textarea matInput [value]="item.name" [(ngModel)]="item.name"></textarea>
+              </mat-form-field>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="browse">
+            <th mat-header-cell *matHeaderCellDef>Browse File</th>
+            <td mat-cell *matCellDef="let i= index" class="centerAlign">
+              <button type="button" (click)="openFileSelector(i)" class="btn-browse">Browse
+                Files</button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="uploadedFileName">
+            <th mat-header-cell *matHeaderCellDef>Uploaded file name</th>
+            <td mat-cell *matCellDef="let item">
+              <span *ngIf="item.file && item.file.name">{{item.file.name}}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let item; let i= index">
+              <table class="iconTable">
+                <tbody>
+                  <tr>
+                    <td width="30">
+                      <i class="material-icons plus
+                                            delete" *ngIf="dataSourceBrowse &&
+                                            dataSourceBrowse.data &&
+                                            dataSourceBrowse.data.length> 1" (click)="deleteBrowse(i)">
+                        delete
+                      </i>
+                    </td>
+                    <td width="30">
+                      <i class="material-icons plus add" *ngIf="dataSourceBrowse &&
+                                            dataSourceBrowse.data && (i ==
+                                            dataSourceBrowse.data.length -
+                                            1)" (click)="addBrowse()">
+                        add
+                      </i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns:
+                    displayedBrowseColumns;"></tr>
+        </table>
+        <input type="file" id="fileBrowse" style="visibility: hidden;" (change)="onFileSelection($event)" />
+        <div class="legend">
+          1. Max size of attachment is 2MB<br> 2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', JPG’,
+          ‘JPEG’, ‘PNG’, ‘PDF’.
+        </div>
+        <div class="form-action-button">
+          <button type="submit" mat-raised-button color="primary">
+            <i class="material-icons" aria-hidden="true" title="Save">
+              save
+            </i>
+            Upload
+          </button>
+          <button type="button" mat-raised-button class="btnClose" (click)="onNoClick()">
+            <i class="material-icons" title="Grant dashboard">
+              close
+            </i>
+            Cancel
+          </button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

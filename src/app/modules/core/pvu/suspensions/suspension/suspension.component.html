@@ -1,0 +1,1096 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Suspension</div>
+            <div class="font-heading" *ngIf="trnNo"><b>Reference No:</b>{{trnNo}}</div>
+            <div class="font-heading" *ngIf="trnNo"><b>Reference
+                    Date:</b>{{initiationDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs [(selectedIndex)]="selectedIndex"
+                (selectedIndexChange)="onTabChange($event)">
+                <mat-tab label="Suspension Details">
+                    <form autocomplete="off" [formGroup]="suspensionForm">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Office Name"
+                                                formControlName="officeName" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="payCommission" placeholder="Pay Commission"
+                                                (selectionChange)="onPayCommissionSelect($event.value)"
+                                                [disabled]="(!isSaveDraftVisible) || isClosure || isView" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="payCommissionCtrl"
+                                                        [placeholderLabel]="'Find Pay Commission ...'"
+                                                        [noEntriesFoundLabel]="'no matching Pay Commission found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let pay of payCommissionList | filterSelectInput: payCommissionCtrl.value : 'lookupInfoName'"
+                                                    [value]="pay.lookupInfoId">
+                                                    {{pay.lookupInfoName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <error-messages [errorMessages]="{'required': errorMessages.PAY_COMMISSION}"
+                                                [control]="suspensionForm.get('payCommission')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Suspension Order Number"
+                                                alphaNumericWithSlashHyphenOnly formControlName="susOrderNo"
+                                                maxlength="50" [readonly]="isClosure" required>
+                                            <error-messages [errorMessages]="{'required': errorMessages.ORDER_NO}"
+                                                [control]="suspensionForm.get('susOrderNo')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="picker5"
+                                                placeholder="Suspension Order Date" formControlName="susOrderDate"
+                                                required [max]="date" [min]="suspensionForm.controls.susEventDate.value"
+                                                [readonly]="isClosure">
+                                            <div class="error-wrapper"
+                                                *ngIf="suspensionForm.controls.susOrderDate.touched && suspensionForm.controls.susOrderDate.errors">
+                                                <mat-error *ngIf="suspensionForm.controls.susOrderDate.errors.required">
+                                                    {{errorMessages.ORDER_DATE}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="suspensionForm.controls.susOrderDate.errors.matDatepickerMin">
+                                                    {{errorMessages.DATE_MIN}} &nbsp;
+                                                    {{suspensionForm.controls.susEventDate.value | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="suspensionForm.controls.susOrderDate.errors.matDatepickerMax">
+                                                    {{errorMessages.DATE_MAX }}
+                                                    &nbsp;{{date | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                            </div>
+                                            <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                                            <mat-datepicker [disabled]="isClosure || isView" #picker5></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="susEventDate"
+                                                placeholder="Suspension Event Date " [max]="date" [min]="eventMinDate"
+                                                formControlName="susEventDate" (dateChange)="onEventDateSelect($event)"
+                                                required [readonly]="isClosure">
+
+                                            <div class="error-wrapper"
+                                                *ngIf="suspensionForm.controls.susEventDate.touched && suspensionForm.controls.susEventDate.errors">
+                                                <mat-error *ngIf="suspensionForm.controls.susEventDate.errors.required">
+                                                    {{errorMessages.SUSPENSION_EVENT_DATE}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="suspensionForm.controls.susEventDate.errors.matDatepickerMin">
+                                                    {{errorMessages.DATE_MIN}} &nbsp;
+                                                    {{eventMinDate | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="suspensionForm.controls.susEventDate.errors.matDatepickerMax">
+                                                    {{errorMessages.DATE_MAX }}
+                                                    &nbsp;{{date | date : 'dd-MMM-yyyy'}}
+                                                </mat-error>
+                                            </div>
+                                            <mat-datepicker-toggle matSuffix [for]="susEventDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker [disabled]="isClosure || isView" #susEventDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Employee Details</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3 empnoicon">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly placeholder="Employee Number"
+                                                formControlName="employeeNumber" maxlength="10"
+                                                (keypress)="onEmployeeKeyUp($event)"
+                                                (keydown.Tab)="onEmployeeKeyUp(null)"
+                                                [readonly]="(!isSaveDraftVisible) || isClosure || isView" required>
+                                            <mat-icon *ngIf="isSaveDraftVisible" matSuffix (click)="openDialogEmpNo()">
+                                                search
+                                            </mat-icon>
+                                            <error-messages [errorMessages]="{'required': errorMessages.EMP_NO}"
+                                                [control]="suspensionForm.get('employeeNumber')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Employee Name " value=""
+                                                [(ngModel)]="employeeName" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Class" value="" [(ngModel)]="class"
+                                                [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Designation" value=""
+                                                [(ngModel)]="designation" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div *ngIf="show6thPC" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Pay Band" value=""
+                                                [(ngModel)]="payBand" [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="show6thPC" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Pay Band Value" value=""
+                                                [(ngModel)]="payBandValue" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="show6thPC" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Grade Pay" value=""
+                                                [(ngModel)]="gradePay" [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="show7thPC" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Pay Level" value=""
+                                                [(ngModel)]="payLevel" [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="show7thPC" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Cell Id" value=""
+                                                [(ngModel)]="cellId" [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="show5thPC" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Scale" value="" [(ngModel)]="scale"
+                                                [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Basic Pay" value=""
+                                                [(ngModel)]="basicPay" [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+
+
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Date of Joining" value=""
+                                                [(ngModel)]="dateOfJoining" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Date of Retirement" value=""
+                                                [(ngModel)]="dateOfRetirement" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Office Name" value=""
+                                                [(ngModel)]="employeeOfficeName" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Date of Next Increment" value=""
+                                                [(ngModel)]="dateOfNextIncrement" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Suspension Details</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="reasonForSus"
+                                                placeholder="Reason for Suspension" [disabled]="isClosure || isView"
+                                                required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="reasonForSuspensionCtrl"
+                                                        [placeholderLabel]="'Find Reason for Suspension ...'"
+                                                        [noEntriesFoundLabel]="'no matching Reason for Suspension found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let reason of suspensionReasonList | filterSelectInput: reasonForSuspensionCtrl.value : 'lookupInfoName'"
+                                                    [value]="reason.lookupInfoId">
+                                                    {{reason.lookupInfoName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <error-messages
+                                                [errorMessages]="{'required': errorMessages.REASON_FOR_SUSPENSION}"
+                                                [control]="suspensionForm.get('reasonForSus')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput formControlName="susStartDate"
+                                                [matDatepicker]="susStartDate" placeholder="Suspension Start Date"
+                                                required [max]="date" [min]="doj"
+                                                (dateChange)="onStartDateSelect($event)" [readonly]="isClosure">
+                                            <error-messages
+                                                [errorMessages]="{'required': errorMessages.SUSPENSION_START_DATE}"
+                                                [control]="suspensionForm.get('susStartDate')">
+                                            </error-messages>
+                                            <mat-datepicker-toggle matSuffix [for]="susStartDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker [disabled]="isClosure || isView" #susStartDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-6 ">
+                                        <mat-form-field class="example-full-width">
+                                            <textarea class="textArea" matInput maxlength="5000" rows="2"
+                                                placeholder="Description" formControlName="description"
+                                                [readonly]="isClosure" required></textarea>
+                                            <error-messages [errorMessages]="{'required': errorMessages.DESCRIPTION}"
+                                                [control]="suspensionForm.get('description')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box box-primary" *ngIf="isClosure">
+                            <div class="box-header reinsist">
+                                <div>Reinstate</div>
+                                <div>
+                                    <mat-radio-group (change)="onReinstate($event.value)"
+                                        formControlName="reinstateFlagId" required>
+                                        <mat-radio-button [value]="reinstateFlagId.lookupInfoId"
+                                            *ngFor="let reinstateFlagId of reinstateList"
+                                            [disabled]="isView || isFinalEnd">
+                                            {{reinstateFlagId.lookupInfoName}} &nbsp;</mat-radio-button>
+                                        <mat-error
+                                            *ngIf="suspensionForm.controls.reinstateFlagId && suspensionForm.controls.reinstateFlagId.errors && suspensionForm.controls.reinstateFlagId.errors.required">
+                                            {{errorMessages.REINSTATE}}
+                                        </mat-error>
+                                    </mat-radio-group>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput formControlName="susEndDate" [matDatepicker]="susEndDate"
+                                                placeholder="Suspension End Date" [min]="endDate" [max]="date"
+                                                (dateChange)="onEndDateSelect($event)" [required]="!isReinstate"
+                                                [readonly]="isReinstate || isView || (isReinstateYes && statusId === 327 && isFinalEnd) || isFinalEnd">
+                                            <error-messages
+                                                [errorMessages]="{'required': errorMessages.SUSPENSION_END_DATE}"
+                                                [control]="suspensionForm.get('susEndDate')">
+                                            </error-messages>
+                                            <mat-datepicker-toggle matSuffix [for]="susEndDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker
+                                                [disabled]="isReinstate || isView || (isReinstateYes && statusId === 327 && isFinalEnd) || isFinalEnd"
+                                                #susEndDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput formControlName="susClsDate"
+                                                (dateChange)="onClosureDateSelect()" [matDatepicker]="susClsDate"
+                                                placeholder="Suspension Closure Date" [min]="closureDate" [max]="date"
+                                                [readonly]="isReinstate|| isView">
+                                            <mat-datepicker-toggle matSuffix [for]="susClsDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker [disabled]="isReinstate|| isView" #susClsDate>
+                                            </mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="closureId" placeholder="Closure"
+                                                (selectionChange)="showClosureDetails($event)"
+                                                [disabled]="isReinstate || isView" [required]="isClsDate">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="closureCtrl"
+                                                        [placeholderLabel]="'Find Cloure ...'"
+                                                        [noEntriesFoundLabel]="'no matching Closure found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let closureId of closureList | filterSelectInput: closureCtrl.value : 'lookupInfoName'"
+                                                    [value]="closureId.lookupInfoId">
+                                                    {{closureId.lookupInfoName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <error-messages [errorMessages]="{'required': errorMessages.CLOSURE}"
+                                                [control]="suspensionForm.get('closureId')">
+                                            </error-messages>
+                                        </mat-form-field>
+
+                                    </div>
+                                    <div *ngIf="closureGuilty" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="No. of Days in Suspension"
+                                                formControlName="noOfDayInSus" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div *ngIf="closureGuilty" class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" [readonly]="isReinstate|| isView"
+                                                maxlength="5000" placeholder="Type of Punishment"
+                                                formControlName="punishmentType" required>
+                                            <error-messages
+                                                [errorMessages]="{'required': errorMessages.TYPE_OF_PUNISHMENT}"
+                                                [control]="suspensionForm.get('punishmentType')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div *ngIf="closureNotGuilty" class="col-sm-3 remark">
+                                        <mat-form-field class="example-full-width">
+                                            <textarea matInput placeholder="Remark" [readonly]="isReinstate|| isView"
+                                                rows="2" maxlength="200" formControlName="closureRemarks"
+                                                required></textarea>
+                                            <error-messages [errorMessages]="{'required': errorMessages.REMARKS}"
+                                                [control]="suspensionForm.get('closureRemarks')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div *ngIf="show5thPC" class="box box-primary">
+                            <div class="box-header">Suspension Pay Details</div>
+                            <div class="box-body">
+                                <table mat-table [dataSource]="dataSource5thPC" width="100%">
+
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">
+                                            Sr. No.
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index" class="rightAlign">
+                                            {{ i + 1 }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableFromDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">From Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [(value)]="item.payableFromDate" [(ngModel)]="item.payableFromDate"
+                                                    [min]="getPayableFromMinDate(i)" [ngModelOptions]="{standalone: true}"
+                                                    [readonly]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))"
+                                                    (dateChange)="onPayDetailChange($event.value)" required>
+                                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker (dateChange)="onPayDetailChange()"
+                                                    [disabled]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))">
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableToDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">To Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item ;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [min]="item.payableFromDate" [(value)]="item.payableToDate"
+                                                    [(ngModel)]="item.payableToDate"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    readonly
+                                                    disabled>
+                                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #toPicker
+                                                   disabled>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="currentScale">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Scale
+                                        </th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentScale}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="currentBasicPay">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Grade Pay</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentBasicPay}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableBasicPayPerc">
+                                        <th mat-header-cell *matHeaderCellDef> % <span class="asterisk">*</span></th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <mat-form-field floatLabel="never" class="rightAlign"
+                                                [class.highlight]="!item.payableBasicPayPerc && item.isHighlight">
+                                                <input matInput [value]="item.payableBasicPayPerc"
+                                                    [(ngModel)]="item.payableBasicPayPerc"
+                                                    [ngModelOptions]="{standalone: true}" maxlength="5"
+                                                    (keypress)="percentKeyPress($event)"
+                                                    (blur)="decimalPoint(item,'payableBasicPayPerc')"
+                                                    (change)="onPayDetailChange()"
+                                                    [disabled]="isView || (((!isReinstate && isClosure) || i < this.disableLength) && item.statusId == 327 ) || ((item.statusId == 205 || item.statusId == 267) && this.isSixMonths)"
+                                                    required>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableBasicPayAmt">
+                                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{calculatePayable(item) | number : '1.2-2'}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Action">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Action
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <table class="iconTable">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="material-icons plus delete"
+                                                                *ngIf="(((dataSource5thPC && dataSource5thPC.data && dataSource5thPC.data.length > 1) && (i == dataSource5thPC.data.length - 1))  && isReinstate && showDeleteBtnPayDetail && !isView)  || (item.statusId !== 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && !isView)"
+                                                                (click)="delete5thPC(item.id, i, 1)">
+                                                                delete
+                                                            </i>
+                                                        </td>
+                                                        <td width="30">
+                                                            <i class="material-icons plus add"
+                                                                [class.highlight-plus]="addButtonValidate"
+                                                                *ngIf="((dataSource5thPC && dataSource5thPC.data && dataSource5thPC.data.length > 0) && dataSource5thPC.data[dataSource5thPC.data.length - 1].statusId === 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && (i == dataSource5thPC.data.length - 1) && !isView)"
+                                                                (click)="add5thPC(i)">
+                                                                add
+                                                            </i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="srNo2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sr No.
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fromDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">From Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="toDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">To Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payBandValue2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Scale
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentBasicPay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Basic Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payablePercentOfGradePay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Payable Basic Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Action
+                                        </th>
+                                    </ng-container>
+                                    <tr mat-header-row
+                                        *matHeaderRowDef="['srNo2','fromDate2', 'toDate2','payBandValue2','currentBasicPay2','payablePercentOfGradePay2','action2']">
+                                    </tr>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayed5thPCColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayed5thPCColumns;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div *ngIf="show6thPC" class="box box-primary">
+                            <div class="box-header">Suspension Pay Details</div>
+                            <div class="box-body">
+                                <table mat-table [dataSource]="dataSource6thPC" width="100%">
+
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">
+                                            Sr. No.
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index" class="rightAlign">
+                                            {{ i + 1 }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableFromDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">From Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item ;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [min]="getPayableFromMinDate(i)" [(value)]="item.payableFromDate"
+                                                    [(ngModel)]="item.payableFromDate"
+                                                    [ngModelOptions]="{standalone: true}" required
+                                                    [readonly]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))"
+                                                    (dateChange)="onPayDetailChange($event.value)" required>
+                                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker (dateChange)="onPayDetailChange()"
+                                                    [disabled]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))">
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableToDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">To Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item ;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [min]="item.payableFromDate" [(value)]="item.payableToDate"
+                                                    [(ngModel)]="item.payableToDate"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    readonly
+                                                    disabled>
+                                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #toPicker
+                                                   disabled>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentPayBand">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Pay Band
+                                        </th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentPayBand}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="currentPayBandValue">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Pay Band
+                                            Value
+                                        </th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentPayBandValue}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="currentGradePay">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Grade Pay</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentGradePay}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableGradePayPerc">
+                                        <th mat-header-cell *matHeaderCellDef> % <span class="asterisk">*</span> </th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <mat-form-field floatLabel="never" class="rightAlign"
+                                                [class.highlight]="!item.payableGradePayPerc && item.isHighlight">
+                                                <input matInput [value]="item.payableGradePayPerc"
+                                                    [(ngModel)]="item.payableGradePayPerc"
+                                                    [ngModelOptions]="{standalone: true}" maxlength="5"
+                                                    (keypress)="percentKeyPress($event)"
+                                                    (blur)="decimalPoint(item,'payableGradePayPerc')"
+                                                    [disabled]="isView || (((!isReinstate && isClosure) || i < this.disableLength) && item.statusId == 327 ) || ((item.statusId == 205 || item.statusId == 267) && this.isSixMonths)"
+                                                    (change)="onPayDetailChange()" required>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableGradePayAmt">
+                                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{calculatePayableGP(item) | number : '1.2-2'}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payablePayBandPerc">
+                                        <th mat-header-cell *matHeaderCellDef> % <span class="asterisk">*</span></th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <mat-form-field floatLabel="never" class="rightAlign"
+                                                [class.highlight]="!item.payablePayBandPerc && item.isHighlight">
+                                                <input matInput [value]="item.payablePayBandPerc"
+                                                    [(ngModel)]="item.payablePayBandPerc"
+                                                    [ngModelOptions]="{standalone: true}" maxlength="5"
+                                                    (keypress)="percentKeyPress($event)"
+                                                    (blur)="decimalPoint(item,'payablePayBandPerc')"
+                                                    [disabled]="isView || (((!isReinstate && isClosure) || i < this.disableLength) && item.statusId == 327 ) || ((item.statusId == 205 || item.statusId == 267) && this.isSixMonths)"
+                                                    (change)="onPayDetailChange()" required>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payablePayBandAmt">
+                                        <th mat-header-cell *matHeaderCellDef> Amount </th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{calculatePayablePBV(item) | number : '1.2-2'}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Action">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Action
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <table class="iconTable">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="material-icons plus delete"
+                                                                *ngIf="(((dataSource6thPC && dataSource6thPC.data && dataSource6thPC.data.length > 1) && (i == dataSource6thPC.data.length - 1))  && isReinstate && showDeleteBtnPayDetail && !isView)  || (item.statusId !== 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && !isView)"
+                                                                (click)="delete6thPC(item.id,i,1)">
+                                                                delete
+                                                            </i>
+                                                        </td>
+                                                        <td width="30">
+                                                            <i class="material-icons plus add"
+                                                                [class.highlight-plus]="addButtonValidate"
+                                                                *ngIf="((dataSource6thPC && dataSource6thPC.data && dataSource6thPC.data.length > 0) && dataSource6thPC.data[dataSource6thPC.data.length - 1].statusId === 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && (i == dataSource6thPC.data.length - 1) && !isView)"
+                                                                (click)="add6thPC(i)">
+                                                                add
+                                                            </i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="srNo2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sr No.
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fromDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">From Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="toDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">To Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentPayBand2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Pay Band
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payBandValue2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Pay Band Value
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentGradePay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Grade Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payablePercentOfGradePay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Payable Grade Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payablePercentOfPayBandValue2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Payable Pay Band value
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Action
+                                        </th>
+                                    </ng-container>
+                                    <tr mat-header-row
+                                        *matHeaderRowDef="['srNo2','fromDate2', 'toDate2','currentPayBand2','payBandValue2','currentGradePay2','payablePercentOfGradePay2','payablePercentOfPayBandValue2','action2']">
+                                    </tr>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayed6thPCColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayed6thPCColumns;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div *ngIf="show7thPC" class="box box-primary">
+                            <div class="box-header">Suspension Pay Details</div>
+                            <div class="box-body">
+                                <table mat-table [dataSource]="dataSource7thPC" width="100%">
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">
+                                            Sr. No.
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index" class="rightAlign">
+                                            {{ i + 1 }}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableFromDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">From Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item ;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [min]="getPayableFromMinDate(i)" [(value)]="item.payableFromDate"
+                                                    [(ngModel)]="item.payableFromDate"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [readonly]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))"
+                                                    (dateChange)="onPayDetailChange($event.value)" required>
+                                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker (dateChange)="onPayDetailChange()"
+                                                    [disabled]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))">
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableToDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">To Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item ;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [min]="item.payableFromDate" [(value)]="item.payableToDate"
+                                                    [(ngModel)]="item.payableToDate"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    readonly
+                                                    disabled>
+                                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #toPicker
+                                                   disabled>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentPayLevel">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Pay Level
+                                        </th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentPayLevel}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentCellId">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Cell Id</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentCellId}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentBasicPay">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Basic Pay</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentBasicPay}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableBasicPayPerc">
+                                        <th mat-header-cell *matHeaderCellDef> % <span class="asterisk">*</span> </th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <mat-form-field floatLabel="never" class="rightAlign"
+                                                [class.highlight]="!item.payableBasicPayPerc && item.isHighlight">
+                                                <input matInput
+                                                    [disabled]="isView || (((!isReinstate && isClosure) || i < this.disableLength) && item.statusId == 327 )  || ((item.statusId == 205 || item.statusId == 267) && this.isSixMonths)"
+                                                    [value]="item.payableBasicPayPerc"
+                                                    [(ngModel)]="item.payableBasicPayPerc" maxlength="5"
+                                                    (keypress)="percentKeyPress($event)"
+                                                    (blur)="decimalPoint(item,'payableBasicPayPerc')"
+                                                    [ngModelOptions]="{standalone: true}" (change)="onPayDetailChange()"
+                                                    required>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableBasicPayAmt">
+                                        <th mat-header-cell *matHeaderCellDef> Amount </th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{calculatePayable(item) | number : '1.2-2'}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="Action">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Action
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <table class="iconTable">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="material-icons plus delete"
+                                                                *ngIf="(((dataSource7thPC && dataSource7thPC.data && dataSource7thPC.data.length > 1) && (i == dataSource7thPC.data.length - 1))  && isReinstate && showDeleteBtnPayDetail && !isView)  || (item.statusId !== 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && !isView)"
+                                                                (click)="delete7thPC(item.id, i, 1)">
+                                                                delete
+                                                            </i>
+                                                        </td>
+                                                        <td width="30">
+                                                            <i class="material-icons plus add"
+                                                                [class.highlight-plus]="addButtonValidate"
+                                                                *ngIf=" ((dataSource7thPC && dataSource7thPC.data && dataSource7thPC.data.length > 0) && dataSource7thPC.data[dataSource7thPC.data.length - 1].statusId === 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && (i == dataSource7thPC.data.length - 1) && !isView)"
+                                                                (click)="add7thPC(i)">
+                                                                add
+                                                            </i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="srNo2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sr No.
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fromDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">From Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="toDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">To Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentPayLevel2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Pay Level
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentCellId2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Cell Id
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentBasicPay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Basic Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payablePercentOfBasicPay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Payable Basic Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Action
+                                        </th>
+                                    </ng-container>
+                                    <tr mat-header-row
+                                        *matHeaderRowDef="['srNo2','fromDate2', 'toDate2','currentPayLevel2','currentCellId2','currentBasicPay2','payablePercentOfBasicPay2','action2']">
+                                    </tr>
+                                    <tr mat-header-row *matHeaderRowDef="displayed7thPCColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayed7thPCColumns;"></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Fix Pay Data -->
+                        <div *ngIf="showFixPc" class="box box-primary">
+                            <div class="box-header">Suspension Pay Details</div>
+                            <div class="box-body">
+                                <table mat-table [dataSource]="dataSourceFixPC" width="100%">
+
+                                    <ng-container matColumnDef="srNo">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">
+                                            Sr. No.
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index" class="rightAlign">
+                                            {{ i + 1 }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableFromDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">From Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [(value)]="item.payableFromDate" [(ngModel)]="item.payableFromDate"
+                                                    [min]="getPayableFromMinDate(i)" [ngModelOptions]="{standalone: true}"
+                                                    [readonly]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))"
+                                                    (dateChange)="onPayDetailChange($event.value)" required>
+                                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker (dateChange)="onPayDetailChange()"
+                                                    [disabled]="isView || ((!isReinstate && isClosure) || ((i < this.disableLength) && item.statusId == 327 ))">
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payableToDate">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">To Date
+                                        </th>
+                                        <td mat-cell *matCellDef="let item ;let i= index;">
+                                            <mat-form-field>
+                                                <input matInput [matDatepicker]="picker" [max]="date"
+                                                    [min]="item.payableFromDate" [(value)]="item.payableToDate"
+                                                    [(ngModel)]="item.payableToDate"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    readonly
+                                                    disabled>
+                                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                                <mat-datepicker #toPicker
+                                                   disabled>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="currentBasicPay">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Current
+                                            Basic Pay</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{item.currentBasicPay}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableBasicPayPerc">
+                                        <th mat-header-cell *matHeaderCellDef> % <span class="asterisk">*</span></th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <mat-form-field floatLabel="never" class="rightAlign"
+                                                [class.highlight]="!item.payableBasicPayPerc && item.isHighlight">
+                                                <input matInput [value]="item.payableBasicPayPerc"
+                                                    [(ngModel)]="item.payableBasicPayPerc"
+                                                    [ngModelOptions]="{standalone: true}" maxlength="5"
+                                                    (keypress)="percentKeyPress($event)"
+                                                    (blur)="decimalPoint(item,'payableBasicPayPerc')"
+                                                    (change)="onPayDetailChange()"
+                                                    [disabled]="isView || (((!isReinstate && isClosure) || i < this.disableLength) && item.statusId == 327 ) || ((item.statusId == 205 || item.statusId == 267) && this.isSixMonths)"
+                                                    required>
+                                            </mat-form-field>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="payableBasicPayAmt">
+                                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                                        <td mat-cell *matCellDef="let item" class="rightAlign">
+                                            {{calculatePayable(item) | number : '1.2-2'}}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="Action">
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Action
+                                        </th>
+                                        <td mat-cell *matCellDef="let item; let i = index;">
+                                            <table class="iconTable">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <i class="material-icons plus delete"
+                                                                *ngIf="(((dataSourceFixPC && dataSourceFixPC.data && dataSourceFixPC.data.length > 1) && (i == dataSourceFixPC.data.length - 1))  && isReinstate && showDeleteBtnPayDetail && !isView)  || (item.statusId !== 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && !isView)"
+                                                                (click)="deleteFixPc(item.id, i, 1)">
+                                                                delete
+                                                            </i>
+                                                        </td>
+                                                        <td width="30">
+                                                            <i class="material-icons plus add"
+                                                                [class.highlight-plus]="addButtonValidate"
+                                                                *ngIf="((dataSourceFixPC && dataSourceFixPC.data && dataSourceFixPC.data.length > 0) && dataSourceFixPC.data[dataSourceFixPC.data.length - 1].statusId === 327 && this.suspensionForm.controls.reinstateFlagId.value == 1 && (i == dataSourceFixPC.data.length - 1) && !isView)"
+                                                                (click)="addFixPc(i)">
+                                                                add
+                                                            </i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="srNo2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sr No.
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fromDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">From Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="toDate2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">To Date <span
+                                                class="asterisk">*</span>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="currentBasicPay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Current Basic Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="payablePercentOfGradePay2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Payable Basic Pay
+                                        </th>
+                                    </ng-container>
+                                    <ng-container matColumnDef="action2">
+                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Action
+                                        </th>
+                                    </ng-container>
+                                    <tr mat-header-row
+                                        *matHeaderRowDef="['srNo2','fromDate2', 'toDate2','currentBasicPay2','payablePercentOfGradePay2','action2']">
+                                    </tr>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedFixPcColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedFixPcColumns;"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-action-button">
+                        <button type="button" mat-raised-button color="primary" (click)="saveSuspension()"
+                            [disabled]="isView" *ngIf="isSaveDraftVisible && !dialogOpen">
+                            <i class="material-icons" title="Save">save</i> Save as Draft
+                        </button>
+                        <button type="view" [disabled]="isSaveDraftVisible" mat-raised-button color="accent"
+                            (click)="viewComments()" *ngIf="!dialogOpen">
+                            <i class="material-icons " title="View">remove_red_eye</i>
+                            View Comments
+                        </button>
+                        <button mat-raised-button type="submit" class="green" *ngIf="!(action == 'view') && !dialogOpen"
+                            (click)="submitSuspension()" [disabled]="isView">
+                            <i class="material-icons">
+                                done </i> Submit</button>
+                        <button mat-raised-button color="accent" *ngIf="!(action == 'view') && !dialogOpen" (click)="reset()"
+                            [disabled]="isView">
+                            <i class="material-icons">restore</i>Reset</button>
+                        <button type="button" mat-raised-button class="print-btn" (click)="onPrint()" *ngIf="!dialogOpen">
+                            <i class="material-icons"> print </i> Print
+                        </button>
+                        <button type="button" mat-raised-button (click)="goToListing()" color="warn" *ngIf="!dialogOpen">
+                            <i class="material-icons" title="Listing">
+                                list
+                            </i>
+                            Listing
+                        </button>
+                        <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                            <i class="material-icons" title="PVU dashboard"> close</i> Close
+                        </button>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Attachments" [disabled]="isTabDisabled">
+                    <app-attachment-pvu #attachmentTab [showSubmit]="showSubmitButton"
+                        (onSubmitClick)="submitSuspension()" [attachmentData]="attachmentData"
+                        [transactionId]="suspensionId" [statusId]="statusId" (onListClickEmit)="goToListing()" [dialogOpen]="dialogOpen" [dialogLinkMenuId]="dialogLinkMenuId" (dialogClose)="goToDashboard()">
+                    </app-attachment-pvu>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

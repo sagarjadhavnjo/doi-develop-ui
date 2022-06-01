@@ -1,0 +1,33 @@
+.starSign{
+    color: #ff0000;
+}
+.attechmentData{
+    text-align: left;
+}
+.subofficelisttable {
+    margin-top: 5px;
+}
+.spacesINIcon{
+    margin-right: 3px;
+}
+.to_level {
+    padding-left: 15px;
+}
+.officeNameData {
+    display:flex; 
+    align-items:center;
+}
+.subOffice {
+    margin-left: auto;
+}
+.attachmentListMargin {
+    margin: 0px 10px;
+}
+.noteSpaces {
+    margin-top: 20px;
+}
+
+::ng-deep .breakFileNameAttach{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+}

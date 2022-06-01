@@ -1,0 +1,502 @@
+<div class="container">
+	<div class="form-wrapper">
+		<div class="heading-section ng-star-inserted">
+			<div>ROP</div>
+			<div class="font-heading" *ngIf="trnNo"><b>Reference No:</b> {{trnNo}}</div>
+			<div class="font-heading" *ngIf="trnNo"><b>Reference Date:</b> {{ trnDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}
+			</div>
+		</div>
+		<div class="panel-group">
+			<mat-tab-group mat-stretch-tabs [(selectedIndex)]="selectedIndex">
+				<mat-tab label="ROP Details">
+					<form [formGroup]="ropForm" autocomplete="off">
+						<div class="box box-primary">
+							<div class="box-header">Events</div>
+							<div class="box-body">
+								<div class="row">
+									<div class="col-sm-3">
+										<mat-form-field class="full-width">
+											<input matInput type="text" placeholder="Office Name"
+												formControlName="officeName" readonly
+												[title]="ropForm.get('officeName').value">
+										</mat-form-field>
+									</div>
+									<div class="col-sm-3">
+										<mat-form-field class="full-width">
+											<input matInput type="text" placeholder="Event Order Number"
+												formControlName="orderNumber" required maxlength="100"
+												alphaNumericWithSlashHyphenSmallBracketsOnly [readonly]="isNonEditable">
+											<div class="error-wrapper"
+												*ngIf="ropForm.controls.orderNumber.touched && ropForm.controls.orderNumber.errors">
+												<mat-error *ngIf="ropForm.controls.orderNumber.errors.required">
+													{{errorMessage.ROP_ORDER_NO}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+									<div class="col-sm-3">
+										<mat-form-field>
+											<input matInput [min]="ropForm.controls.effectiveDate.value" [max]="maxDate"
+												[matDatepicker]="eventOrderDate1" formControlName="orderDate"
+												placeholder="Event Order Date" required [disabled]="isNonEditable"
+												readonly>
+											<mat-datepicker-toggle matSuffix [for]="eventOrderDate1">
+											</mat-datepicker-toggle>
+											<mat-datepicker #eventOrderDate1></mat-datepicker>
+											<div class="error-wrapper"
+												*ngIf="ropForm.controls.orderDate.touched && ropForm.controls.orderDate.errors">
+												<mat-error *ngIf="ropForm.controls.orderDate.errors.required">
+													{{errorMessage.ROP_ORDER_DATE}}
+												</mat-error>
+												<mat-error *ngIf="ropForm.controls.orderDate.errors.matDatepickerMin">
+													Please enter date greater than {{ropForm.controls.effectiveDate.value | date : 'dd/MM/yyyy'}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+
+								<div class="accordionSection">
+									<div class="box-header">Employee Details</div>
+									<mat-accordion class="colapsedata" *ngFor="let container of containers">
+										<mat-expansion-panel [expanded]="true" class="nopadding">
+											<mat-expansion-panel-header (click)="emplyeeeDataList()">
+												<div *ngIf="showDataEmployee" class="hideData">
+													<span>Employee Id</span>
+													<span>Employee Name</span>
+													<span>Employee Type</span>
+													<span>Designation</span>
+													<span>Employee Type</span>
+													<span>Employee Pay Type</span>
+												</div>
+											</mat-expansion-panel-header>
+											<div class="currentdetails">
+												<div class="row">
+													<div class="col-sm-3">
+														<mat-form-field class="full-width">
+															<mat-select formControlName="ropType" placeholder="ROP Type"
+																required (selectionChange)="ropTypeChange()"
+																[disabled]="isRework || isVerifier || isApprover || isNonEditable">
+																<mat-option>
+																	<ngx-mat-select-search [formControl]="ropCtrl"
+																		[placeholderLabel]="'Find ROP...'"
+																		[noEntriesFoundLabel]="'no matching ROP found'">
+																	</ngx-mat-select-search>
+																</mat-option>
+																<mat-option
+																	*ngFor="let rop of ropTypeList | filterSelectInput: ropCtrl.value : 'lookupInfoName'"
+																	[value]="rop.lookupInfoId">
+																	{{rop.lookupInfoName}}
+																</mat-option>
+															</mat-select>
+															<div class="error-wrapper"
+																*ngIf="ropForm.controls.ropType.touched && ropForm.controls.ropType.errors">
+																<mat-error
+																	*ngIf="ropForm.controls.ropType.errors.required">
+																	{{errorMessage.ROP_TYPE}}
+																</mat-error>
+															</div>
+														</mat-form-field>
+													</div>
+													<div class="col-sm-3">
+														<mat-form-field>
+															<input matInput [matDatepicker]="eventEffectiveDate1"
+																formControlName="effectiveDate"
+																placeholder="Event Effective Date" required
+																(dateChange)="effectiveDateChange()"
+																[disabled]="isVerifier || isApprover || isNonEditable"
+																[min]="eventMinDate" [max]="maxDate" readonly>
+															<mat-datepicker-toggle matSuffix
+																[for]="eventEffectiveDate1">
+															</mat-datepicker-toggle>
+															<mat-datepicker #eventEffectiveDate1></mat-datepicker>
+															<div class="error-wrapper"
+																*ngIf="ropForm.controls.effectiveDate.touched && ropForm.controls.effectiveDate.errors">
+																<mat-error
+																	*ngIf="ropForm.controls.effectiveDate.errors.required">
+																	{{errorMessage.EFF_DATE}}
+																</mat-error>
+															</div>
+														</mat-form-field>
+													</div>
+													<div class="col-sm-6">
+														<mat-form-field class="full-width">
+															<input matInput type="text" numbersOnly
+																placeholder="Employee Number"
+																formControlName="empNumber" required
+																(keypress)="onEmployeeKeyUp($event)"
+																(keydown.Tab)="onEmployeeKeyUp($event)"
+																[readonly]="isRework || isVerifier || isApprover || isNonEditable"
+																maxlength="10">
+															<mat-icon matSuffix (click)="openDialogEmployeeNumber()"
+																*ngIf="action !== 'view' && !isVerifier && !isApprover && !isRework && !isNonEditable">
+																search
+															</mat-icon>
+															<div class="error-wrapper"
+																*ngIf="ropForm.controls.empNumber.touched && ropForm.controls.empNumber.errors">
+																<mat-error
+																	*ngIf="ropForm.controls.empNumber.errors.required">
+																	{{errorMessage.EMPL_NO}}
+																</mat-error>
+																<mat-error
+																	*ngIf="(ropForm.controls.empNumber.errors.minlength || ropForm.controls.empNumber.errors.maxlength) && !ropForm.controls.empNumber.errors.required">
+																	{{errorMessage.VALID_EMPL_NO}}
+																</mat-error>
+															</div>
+														</mat-form-field>
+													</div>
+												</div>
+												<div class="box box-primary">
+													<div class="box-header">Current Details</div>
+													<div class="box-body">
+														<div class="row">
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Employee Name"
+																		[matTooltip]="ropForm.get('empName').value !== null ? ropForm.get('empName').value : ''"
+																		readonly formControlName="empName">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Class"
+																		readonly formControlName="empClass">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Designation" readonly
+																		formControlName="empDesignation">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Pay Band"
+																		readonly formControlName="employeePayBand">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Pay Band Value" readonly
+																		formControlName="employeePayBandValue">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Grade Pay"
+																		readonly formControlName="employeeGradePay">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSixthPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Pay Scale"
+																		readonly formControlName="empPayScale">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Basic Pay"
+																		readonly formControlName="employeeBasicPay">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Date of Joining" readonly
+																		formControlName="employeeDoj">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Date of Retirement"
+																		formControlName="dateOfRetirement" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Office Name" readonly
+																		formControlName="employeeOfficeName"
+																		[title]="ropForm.get('employeeOfficeName').value">
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field>
+																	<input matInput type="text"
+																		placeholder="Date of Next Increment"
+																		formControlName="empDateOfNextIncrement"
+																		readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="NPA"
+																		readonly formControlName="npaValue">
+																</mat-form-field>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="box box-primary">
+													<div class="box-header">Post Details</div>
+													<div class="box-body">
+														<div class="row">
+															<div class="col-sm-3" *ngIf="showSixthPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Pay Band"
+																		formControlName="payBand" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSixthPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="Pay Band Value"
+																		formControlName="payBandValue" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSixthPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Grade Pay"
+																		formControlName="gradePay" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Pay Level"
+																		formControlName="payLevel" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Cell Id"
+																		formControlName="cellId" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field class="full-width">
+																	<input matInput type="text" placeholder="Basic Pay"
+																		formControlName="basicPay" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSixthPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="6th Pay Effective Date"
+																		formControlName="postEffectiveDate" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="showSeventhPayCommField">
+																<mat-form-field class="full-width">
+																	<input matInput type="text"
+																		placeholder="7th Pay Effective Date"
+																		formControlName="postEffectiveDate" readonly>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3">
+																<mat-form-field>
+																	<input matInput
+																		[matDatepicker]="dateOfNextIncrement"
+																		formControlName="dateOfNextIncrement"
+																		placeholder="Date of Next Increment"
+																		[disabled]="isVerifier || isApprover || isNonEditable"
+																		readonly [min]="minDateOfNextInc">
+																	<mat-datepicker-toggle matSuffix
+																		[for]="dateOfNextIncrement">
+																	</mat-datepicker-toggle>
+																	<mat-datepicker #dateOfNextIncrement>
+																	</mat-datepicker>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-3" *ngIf="isReasonForChangeVisible">
+																<mat-form-field class="full-width">
+																	<mat-select
+																		formControlName="reasonForChangeEffectiveDate"
+																		placeholder="Reason For Change In Effective Date"
+																		required (selectionChange)="reasonChange()"
+																		[disabled]="isVerifier || isApprover || isNonEditable">
+																		<mat-option>
+																			<ngx-mat-select-search
+																				[formControl]="reasonForChangeCtrl"
+																				[placeholderLabel]="'Find Reason For Change In Effective Date...'"
+																				[noEntriesFoundLabel]="'no matching Reason For Change In Effective Date found'">
+																			</ngx-mat-select-search>
+																		</mat-option>
+																		<mat-option
+																			*ngFor="let reasonForChange of reasonForChangeList | filterSelectInput: reasonForChangeCtrl.value: 'lookupInfoName'"
+																			[value]="reasonForChange.lookupInfoId">
+																			{{reasonForChange.lookupInfoName}}
+																		</mat-option>
+																	</mat-select>
+																	<div class="error-wrapper"
+																		*ngIf="ropForm.controls.reasonForChangeEffectiveDate.touched && ropForm.controls.reasonForChangeEffectiveDate.errors">
+																		<mat-error
+																			*ngIf="ropForm.controls.reasonForChangeEffectiveDate.errors.required">
+																			{{errorMessage.REASON_FOR_CHANGE}}
+																		</mat-error>
+																	</div>
+																</mat-form-field>
+															</div>
+															<div class="col-sm-12 scrollable-text-area"
+																*ngIf="remarksVisible">
+																<mat-form-field class="example-full-width">
+																	<textarea matInput placeholder="Remarks"
+																		formControlName="remarks" maxlength="2000"
+																		noSpaceOnly
+																		[readonly]="isVerifier || isApprover || isNonEditable"
+																		[disabled]=" action==='view' || isVerifier || isApprover || isNonEditable"
+																		autocomplete="off" required></textarea>
+																	<div class="error-wrapper"
+																		*ngIf="ropForm.controls.remarks.touched && ropForm.controls.remarks.errors">
+																		<mat-error
+																			*ngIf="ropForm.controls.remarks.errors.required">
+																			{{errorMessage.ROP_POST_REMARKS}}
+																		</mat-error>
+																	</div>
+																</mat-form-field>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</mat-expansion-panel>
+									</mat-accordion>
+									<div class="box box-primary" *ngIf="recommendationFlag  && isApprover">
+										<div class="box-header">Return Reason</div>
+										<div class="box-body">
+											<div class="row">
+
+												<div class="col-sm-12" *ngIf="isOtherReturnReason">
+													<mat-form-field class="example-full-width">
+														<textarea matInput placeholder="Other Reason"
+															formControlName="otherReason" maxlength="500" noSpaceOnly
+															readonly></textarea>
+														<div class="error-wrapper"
+															*ngIf="ropForm.controls.otherReason.touched && ropForm.controls.otherReason.errors">
+															<mat-error
+																*ngIf="ropForm.controls.otherReason.errors.required">
+																{{errorMessage.ROP_OTHER_REASON}}
+															</mat-error>
+														</div>
+
+													</mat-form-field>
+												</div>
+											</div>
+											<mat-accordion class="search-accordian"
+												*ngIf="dataSource && dataSource.data && dataSource.data.length > 0">
+												<mat-expansion-panel [expanded]="true" class="mb-4">
+													<mat-expansion-panel-header>
+														Selected Reason List
+													</mat-expansion-panel-header>
+													<div class="mat-elevation-z8 table-responsive m-2 w-auto">
+														<table mat-table [dataSource]="dataSource" width="100%"
+															aria-describedby="pvuRegistry">
+
+															<ng-container matColumnDef="serialNo">
+																<th mat-header-cell *matHeaderCellDef>Sr. No</th>
+																<td mat-cell *matCellDef="let element; let i =index">
+																	{{i+1}}</td>
+															</ng-container>
+															<ng-container matColumnDef="reasonName">
+																<th mat-header-cell *matHeaderCellDef>Return Reason
+																</th>
+																<td mat-cell *matCellDef="let element">
+																	{{element.reasonName}}
+																</td>
+															</ng-container>
+															<tr mat-header-row *matHeaderRowDef="displayedColumns">
+															</tr>
+
+															<tr mat-row
+																*matRowDef="let row; let i = index; columns: displayedColumns">
+															</tr>
+															<tr mat-footer-row
+																[class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+																*matFooterRowDef="[]"></tr>
+														</table>
+													</div>
+												</mat-expansion-panel>
+											</mat-accordion>
+										</div>
+									</div>
+
+								</div>
+								<div class="box box-primary" *ngIf="recommendationFlag && isApprover">
+									<div class="box-header">Remarks</div>
+									<div class="box-body">
+										<div class="row">
+											<div class="col-sm-12">
+												<mat-form-field class="example-full-width scrollable-text-area">
+													<textarea matInput placeholder="Approver Remarks" rows="2"
+														formControlName="approverRemarks" class="scrollable-text-area"
+														maxlength="10000" noSpaceOnly [readonly]="recommendationFlag"
+														[class.disable]="recommendationFlag"></textarea>
+												</mat-form-field>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-action-button">
+									<button type="button" mat-raised-button color="primary"
+										(click)="saveRopDetails('save')"
+										*ngIf="action !== 'view' && !isVerifier && !isApprover && !isRework && !isNonEditable">
+										<i class="material-icons" title="Save">save</i>
+										Save as Draft
+									</button>
+									<button type="button" mat-raised-button color="accent" (click)="viewComments()"
+										(viewCommmentsRopEvents)="viewComments()"
+										*ngIf="!isCreator && action !== 'new'">
+										<i class="material-icons " title="View Comments">remove_red_eye</i>
+										View Comments
+									</button>
+									<button type="button" mat-raised-button color="accent" (click)="resetForm()"
+										*ngIf="action !== 'view' && !isNonEditable">
+										<i class="material-icons">restore</i>
+										Reset
+									</button>
+									<button mat-raised-button type="button" class="green"
+										(click)="saveRopDetails('submit')" *ngIf="action !== 'view'"
+										(submitRopEvent)="saveRopDetails('submit')" [disabled]="!eventId">
+										<i class="material-icons">done</i>
+										Submit
+									</button>
+									<button type="button" mat-raised-button color="warn" (click)="goToListing()">
+										<i class="material-icons" aria-hidden="true" title="Listing">list</i>
+										Listing
+									</button>
+									<button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+										<i class="material-icons" title="Dashboard">close</i>
+										Close
+									</button>
+									<button type="button" mat-raised-button (click)="print()" class="print-btn"
+										[disabled]="isPrintEnable==false" (printRopEvent)="print()">
+										<i class="material-icons">print</i>
+										Print
+									</button>
+									<button type="button" mat-raised-button (click)="ddoCertificate()" class="print-btn"
+										[disabled]="!isApproved" (printRopEvent)="print()">
+										<i class="material-icons">print</i>
+										DDO Certificate
+									</button>
+								</div>
+							</div>
+						</div>
+
+					</form>
+
+				</mat-tab>
+				<mat-tab label="Attachments" [disabled]="!eventId">
+					<app-rop-attachment #attachmentTab [attachmentData]="attachmentData"
+						(submitRopEvent)="saveRopDetails('submit')" [transactionId]="eventId"
+						(viewCommmentsRopEvents)="viewComments()" [isPrintEnable]="isPrintEnable"
+						(printRopEvent)="print()">
+					</app-rop-attachment>
+				</mat-tab>
+			</mat-tab-group>
+		</div>
+	</div>
+</div>

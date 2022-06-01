@@ -1,0 +1,122 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Branch Creation</div>
+            <div class="font-heading" *ngIf="trnNo"><strong>Reference No:</strong> {{trnNo}} </div>
+            <div class="font-heading" *ngIf="trnDate"><strong>Reference Date:</strong> {{ trnDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">EDP</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Branch Creation</li>
+            </ol>
+        </nav>
+        <form [formGroup]="branchCreationForm" #branchCreationForms="ngForm" autocomplete="off">
+            <!--Office Detail Starts -->
+            <div class="panel-group">
+                <div class="box box-primary">
+                    <div class="box-header">Office Detail</div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput formControlName="district" placeholder="District" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput numbersOnly formControlName="ddoNo" placeholder="DDO No" maxlength="4" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput numbersOnly formControlName="cardexNo" placeholder="Cardex No" maxlength="4" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput formControlName="ddoOffice" placeholder="DDO Office" readonly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Office Detail Ends -->
+            <!--Branch Details Starts -->
+            <div class="panel-group">
+                <div class="box box-primary">
+                    <div class="box-header">Branch Details</div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput alphabetNumberWithSpaceOnly formControlName="branchName" placeholder="Branch Name" maxlength="100" required>
+                                    <div class="error-wrapper" *ngIf="branchCreationForm.controls.branchName.touched && branchCreationForm.controls.branchName.errors">
+                                        <mat-error *ngIf="branchCreationForm.controls.branchName.errors.required">
+                                            {{errorMessages.BRANCH.BRANCH_CRATION.BRANCH_NAME}}
+                                        </mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="branchType" placeholder="Branch type" required>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="branchTypeCtrl"
+                                                [placeholderLabel]="'Find Branch Type ...'"
+                                                [noEntriesFoundLabel]="'no matching Branch Type found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let item of branchTypeList | filterSelectInput : branchTypeCtrl.value : 'name'"
+                                            [value]="item.id">
+                                            {{item.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <div class="error-wrapper"
+                                        *ngIf="branchCreationForm.controls.branchType.touched && (branchCreationForm.controls.branchType.errors)">
+                                        <mat-error *ngIf="branchCreationForm.controls.branchType.errors?.required">
+                                            {{errorMessages.BRANCH.BRANCH_CRATION.BRANCH_TYPE}}
+                                        </mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Branch Details Ends -->
+            <!-- Action Buttons Starts -->
+            <div class="form-action-button">
+                <button type="button" mat-raised-button color="primary" (click)="branch('save')" [disabled]="!saveDraftEnable" *ngIf="!isSaveDraftDisabled && action !== 'view'" >
+                    <i class="material-icons" title="Save" aria-hidden="true" >save </i>
+                    Save as Draft
+                </button>
+                <button mat-raised-button type="submit" class="green" (click)="branch('submit')" *ngIf="action !== 'view'" [disabled]="!submitEnable">
+                    <i class="material-icons" title="Submit" aria-hidden="true" >done</i>
+                    Submit
+                </button>
+                <button type="button" mat-raised-button color="accent" title="Reset" (click)="resetForm(branchCreationForms)" *ngIf="action !== 'view'">
+                    <i class="material-icons" title="Reset" aria-hidden="true">restore</i>
+                    Reset
+                </button>
+                <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                    <i class="material-icons" aria-hidden="true" title="Listing">
+                        list
+                    </i>
+                    Listing
+                </button>
+                <button type="button" mat-raised-button class="btnClose" title="Close" (click)="goToDashboard()">
+                    <i class="material-icons" title="Close" aria-hidden="true">
+                        close
+                    </i>
+                    Close
+                </button>
+            </div>
+            <!-- Action Buttons Ends -->
+        </form>
+    </div>
+</div>

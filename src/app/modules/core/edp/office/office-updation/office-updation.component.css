@@ -1,0 +1,26 @@
+.subofficelisttable {
+    margin-top: 5px;
+}
+.attechmentData{
+    text-align: left;
+}
+.officeNameData {
+    display:flex; 
+    align-items:center;
+}
+.subOffice {
+    margin-left: auto;
+}
+.phoneNo {
+    display: inline-flex;
+}
+.phoneNoPaddingZero {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+::ng-deep .custom-tooltip-blue{
+    background-color: rgba(125, 177, 245, 0.582);
+    color: #356a94 !important;
+    font-size: 12px;
+    font-weight: bold;
+}

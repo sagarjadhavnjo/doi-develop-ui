@@ -1,0 +1,27 @@
+@import "../../edp_common_style.css";
+.officeName {
+    font-size: 11px;
+}
+::ng-deep .breakFileNameAttach{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+}
+.mat-vacant-list{ 
+    padding: 0px 12px ;
+}
+
+::ng-deep .mat-dialog-container{
+    overflow: hidden;
+}
+
+::ng-deep .mat-dialog-content{
+    max-height:270px;
+}
+
+.tableSpace {
+    border-collapse: separate;
+}
+
+.starSign{
+    color: #ff0000;
+}

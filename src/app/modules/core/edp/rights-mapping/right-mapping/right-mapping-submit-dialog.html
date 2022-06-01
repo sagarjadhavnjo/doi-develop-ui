@@ -1,0 +1,16 @@
+<div class="heading-section">
+    <div>User Rights Mapping Submit</div>
+</div>
+<form class="pt-2 pb-2 max-auto confirmationDialog">
+    <p class="text-center"><b>Are you sure you want to submit ?</b></p>
+    <div mat-dialog-actions class="form-action-button">
+        <button type="submit" mat-raised-button color="primary" (click)="onYesClick()">
+            <i class="material-icons" title="yes" aria-hidden="true">done</i>
+            Yes
+        </button>
+        <button type="button" mat-raised-button  (click)="onNoClick()">
+            <i class="material-icons" aria-hidden="true" title="Close">close</i>
+            No
+        </button>
+    </div>
+</form>

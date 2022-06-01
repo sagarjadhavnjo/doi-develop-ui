@@ -1,0 +1,144 @@
+<h2 mat-dialog-title>Create Sub Office</h2><hr>
+<mat-dialog-content class="mat-typography">
+    <form class="subOfficeDialog" [formGroup]="ddoSubOffice">
+        <div class="row">
+            <div class="sub-heading-txt heading-section ng-star-inserted">
+                <div>Office Detail</div>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" placeholder="Sub Office Code" formControlName="subOfficeCode" matInput readonly>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" readonly placeholder="Unique ID" formControlName="uniqueId" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" placeholder="Office Name"  formControlName="ddoOfficeName" matInput required>
+                    <div class="error-wrapper" *ngIf="ddoSubOffice.controls.ddoOfficeName.touched && ddoSubOffice.controls.ddoOfficeName.errors">
+                        <mat-error *ngIf="ddoSubOffice.controls.ddoOfficeName.errors.required">
+                            {{errorMessages.officeName}}
+                        </mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <mat-select formControlName="department" name="department" placeholder="Department" [(ngModel)]="department">
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="departmentCtrl"
+                            [placeholderLabel]="'Find Department Name...'"
+                            [noEntriesFoundLabel]="'no matching Department Name found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let departmentName of departmentList | filterSelectInput : departmentCtrl.value : 'viewValue'" 
+                            [value]="departmentName.value"> 
+                            {{departmentName.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>    
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <mat-select placeholder="HOD" formControlName="hod" [(ngModel)]="hod">
+                        <mat-option *ngFor="let mn of hodList" [value]="mn.value">
+                            {{mn.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off"  formControlName="address" placeholder="Address" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="sub-heading-txt heading-section ng-star-inserted">
+                <div>Office Address Detail</div>
+            </div>  
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <mat-select name="district" formControlName="district" placeholder="District">
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="districtCtrl"
+                            [placeholderLabel]="'Find District...'"
+                            [noEntriesFoundLabel]="'no matching District found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let list of districtList | filterSelectInput : districtCtrl.value : 'viewValue'" 
+                            [value]="list.value">
+                            {{list.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="ddoSubOffice.controls.district.touched && ddoSubOffice.controls.district.errors">
+                        <mat-error *ngIf="ddoSubOffice.controls.district.errors.required">
+                            {{errorMessages.district}}
+                        </mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field>
+                    <mat-select formControlName="taluka" name="taluka" placeholder="Taluka">
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="talukaCtrl"
+                            [placeholderLabel]="'Find Taluka Name...'"
+                            [noEntriesFoundLabel]="'no matching Taluka Name found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let talukaName of talukaList | filterSelectInput : talukaCtrl.value : 'viewValue'" 
+                            [value]="talukaName.value">
+                            {{talukaName.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" formControlName="station" placeholder="station" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" formControlName="pinCode"  placeholder="Pin Code" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" formControlName="phoneNo" placeholder="Phone No." matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" formControlName="emailId" placeholder="Office Email ID" matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" formControlName="faxNo" placeholder="Fax No." matInput>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                    <input autocomplete="off" placeholder="Remarks" formControlName="remarks" matInput>
+                </mat-form-field>
+            </div>
+        </div>  
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <div class="form-action-button">
+        <button type="submit" mat-raised-button color="primary" (click)="saveSubOffice()">
+            <i class="material-icons" aria-hidden="true" title="Save">save</i>
+            Submit
+        </button>
+        <button type="button" mat-raised-button mat-dialog-close class="btnClose">
+            <i class="material-icons" aria-hidden="true" title="Close">close</i>
+            Cancel
+        </button>
+    </div>
+</mat-dialog-actions>

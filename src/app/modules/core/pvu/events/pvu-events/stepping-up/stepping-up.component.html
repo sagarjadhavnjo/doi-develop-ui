@@ -1,0 +1,301 @@
+<app-pvu-employee-current-details [eventDetails]="eventDetails" [showExamDetails]="showExamDetails"
+    [title]="employeeTitle" [action]="action" [eventForm]="eventForm"
+    [clearEmployeeDetails]="clearEmployeeCurrentDetails" (employeeDetailChange)="onEmployeeDetailsChange($event)"
+    [isRework]='isRework'>
+</app-pvu-employee-current-details>
+<form autocomplete="off" [formGroup]="steppingUpJnr" *ngIf="steppingUpJnr">
+    <div class="col-sm-6">
+        <mat-form-field class="full-width">
+            <input matInput type="text" placeholder="Employee Number" minlength="10" maxlength="10"
+                formControlName="jrEmpNo" (keypress)="onEmployeeKeyUp($event)" (keydown.Tab)="onEmployeeKeyUp($event)"
+                [readonly]="(!isRework && eventDetails && eventDetails.statusId !== 205 && eventDetails.statusId !== 0) || !seniorEmployeeSelected || action === 'view'"
+                required>
+            <mat-icon matSuffix (click)="openSearchEmployeeDialog()">search
+            </mat-icon>
+            <div class="error-wrapper"
+                *ngIf="steppingUpJnr.controls.jrEmpNo.touched && steppingUpJnr.controls.jrEmpNo.errors">
+                <mat-error *ngIf="steppingUpJnr.controls.jrEmpNo.errors.required">
+                    {{errorMessage.EMP_NO}}</mat-error>
+                <mat-error *ngIf="steppingUpJnr.controls.jrEmpNo.errors.minlength">
+                    Employee number should be of minimum 10 numbers</mat-error>
+                <mat-error *ngIf="steppingUpJnr.controls.jrEmpNo.errors.maxlength">
+                    Employee number should be of maximum 10 numbers</mat-error>
+            </div>
+        </mat-form-field>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header">Stepping Up Against Junior Employee details</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Employee Name" formControlName="name" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Class" formControlName="class" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Designation" formControlName="designation" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payBandId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'" formControlName="payBandId" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payBandValue') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="number" placeholder="Pay Band Value" formControlName="payBandValue"
+                            readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('gradePayId') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Grade Pay" formControlName="gradePayId" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payLevelId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Level" formControlName="payLevelId" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('cellId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Cell" formControlName="cellId" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payScale')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Scale" formControlName="payScale" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Basic Pay" formControlName="basicPay" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Joining" formControlName="doj" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Retirement" formControlName="dor" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Office Name" formControlName="officeName" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Next Increment"
+                            formControlName="dateOfNextIncrement" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form autocomplete="off" [formGroup]="postForm" *ngIf="postForm">
+    <div class="box box-primary">
+        <div class="box-header">{{title}}</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Class" formControlName="class">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Class" formControlName="classId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Designation" formControlName="designation">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Designation" formControlName="designationId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Band" formControlName="payBandId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payBandId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" [placeholder]="isJudiciaryDepartment ? 'Pay Scale' : 'Pay Band'" 
+                        formControlName="payBandName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payBandValue') && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="number" placeholder="Pay Band Value" formControlName="payBandValue">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Grade Pay" formControlName="gradePayId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('gradePayId')  && !isJudiciaryDepartment">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Grade Pay" formControlName="gradePayName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Level" formControlName="payLevelId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payLevelId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Pay Level" formControlName="payLevelName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Cell" formControlName="cellId">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('cellId')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Cell" formControlName="cellName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Scale" formControlName="payScale">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="steppingUpJnr.get('payScale')">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Scale" formControlName="payScaleName">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Basic Pay" formControlName="basicPay">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3" *ngIf="false">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Next Increment"
+                            formControlName="dateOfNextIncrSrJnr">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Date of Next Increment"
+                            formControlName="dateOfNextIncrSrJnrOf">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="chBeneEffDate" placeholder="Benefit Effective Date"
+                            formControlName="chBeneEffDate">
+                        <mat-datepicker-toggle matSuffix [for]="chBeneEffDate">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #chBeneEffDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-sm-3" *ngIf = "isDateStepUp">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="dateOfNextIncrement1" placeholder="Date of Next Increment"
+                            formControlName="chDateNexInc" required>
+                        <mat-datepicker-toggle matSuffix [for]="dateOfNextIncrement1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #dateOfNextIncrement1></mat-datepicker>
+                        <div class="error-wrapper"
+                            *ngIf="steppingUpJnr.controls.chDateNexInc.touched && steppingUpJnr.controls.chDateNexInc.errors">
+                            <mat-error *ngIf="steppingUpJnr.controls.chDateNexInc.errors.required">
+                                {{errorMessage.DATE_OF_NEXT_INCREMENT}}</mat-error>
+                        </div>
+                    </mat-form-field>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="box box-primary" *ngIf="otherDetailsForm">
+        <div class="box-header">Other Details</div>
+        <div class="box-body">
+            <form autocomplete="off" [formGroup]="otherDetailsForm">
+                <div class="row">
+                    <div class="col-sm-3" *ngIf="otherDetailsForm.get('srSeniorNo')">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" placeholder="Senior Seniority Number" numbersOnly minlength="1"
+                                maxlength="10" formControlName="srSeniorNo"
+                                [readonly]="(eventDetails && eventDetails.statusId !== 205 && eventDetails.statusId !== 0) || !seniorEmployeeSelected || action === 'view'"
+                                required>
+                            <div class="error-wrapper"
+                                *ngIf="otherDetailsForm.controls.srSeniorNo.touched && otherDetailsForm.controls.srSeniorNo.errors">
+                                <mat-error *ngIf="otherDetailsForm.controls.srSeniorNo.errors.required">
+                                    {{errorMessage.SR_SENIORITY_NO}}</mat-error>
+                                <mat-error *ngIf="otherDetailsForm.controls.srSeniorNo.errors.minlength">
+                                    Employee number should be of minimum 1 numbers</mat-error>
+                                <mat-error *ngIf="otherDetailsForm.controls.srSeniorNo.errors.maxlength">
+                                    Employee number should be of maximum 10 numbers</mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3" *ngIf="otherDetailsForm.get('jrSeniorNo')">
+                        <mat-form-field class="full-width">
+                            <input matInput type="text" placeholder="Junior Seniority Number" numbersOnly minlength="1"
+                                maxlength="10" formControlName="jrSeniorNo"
+                                [readonly]="(eventDetails && eventDetails.statusId !== 205 && eventDetails.statusId !== 0) || !seniorEmployeeSelected || action === 'view'"
+                                required>
+                            <div class="error-wrapper"
+                                *ngIf="otherDetailsForm.controls.jrSeniorNo.touched && otherDetailsForm.controls.jrSeniorNo.errors">
+                                <mat-error *ngIf="otherDetailsForm.controls.jrSeniorNo.errors.required">
+                                    {{errorMessage.SR_SENIORITY_NO}}</mat-error>
+                                <mat-error *ngIf="otherDetailsForm.controls.jrSeniorNo.errors.minlength">
+                                    Employee number should be of minimum 1 numbers</mat-error>
+                                <mat-error *ngIf="otherDetailsForm.controls.jrSeniorNo.errors.maxlength">
+                                    Employee number should be of maximum 10 numbers</mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-12">
+                        IS STEPPING UP AVAILED PREVIOUSLY FOR THIS REASON &nbsp;&nbsp;
+                        <mat-checkbox (change)="onClickAvailedReason($event)" [checked]="isStpAvail"
+                            formControlName="isStpAvail" class="change-direction" [disabled]="action === 'view'">
+                            Is Applicable?
+                        </mat-checkbox>
+                    </div>
+                    <div class="col-sm-12" *ngIf="isStpAvail">
+                        <mat-form-field class="example-full-width">
+                            <textarea matInput formControlName="prvStpAvailDtls" [required]="isStpAvail"
+                                placeholder="Remarks"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="form-action-button"
+        *ngIf="(!eventDetails || (eventDetails && (eventDetails.statusId === 205 || eventDetails.statusId === 0))) && action !== 'view'">
+        <button type="button" mat-raised-button color="primary" (click)="saveDetails()">
+            <i class="material-icons" title="Save">
+                save
+            </i>
+            Save as Draft
+        </button>
+        <button type="button" mat-raised-button color="accent" (click)="resetForm()">
+            <i class="material-icons">
+                restore
+            </i>
+            Reset
+        </button>
+    </div>
+</form>

@@ -1,0 +1,338 @@
+<div *ngIf="isUpdate !== 'office-update' && (isHodUser || isToPaoUser)">
+    <div>
+        <div class="sub-heading-txt heading-section ng-star-inserted">
+            <div class="to_level">AD / HOD Level</div>
+        </div>
+        <table mat-table [dataSource]="dataSourceAttachment1" width="100%" id="browseTable">
+            <ng-container matColumnDef="sr_no">
+                <th class="tabelSrNo" mat-header-cell *matHeaderCellDef>
+                    Sr. No.
+                </th>
+                <td mat-cell *matCellDef="let item; let i = index" class="rightAllign">
+                    {{ i + 1 }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="attachmentType">
+                <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+                <td class="attechmentData" mat-cell *matCellDef="let item;let i=index">
+                    {{item.attachmentName}}
+                    <span
+                        *ngIf="item.mandatoryFlag && (userType === 'hod_user'|| (userType === 'edp_user' && !hasWorkFlow))"
+                        class="starSign">*</span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="fileName">
+                <th mat-header-cell *matHeaderCellDef>File Name</th>
+                <td mat-cell *matCellDef="let item">
+                    <mat-form-field floatLabel="never">
+                        <input matInput [value]="item.fileName" [(ngModel)]="item.fileName"
+                            [readonly]="action === 'view' || !isEditAttachment || !isHodUser || isDATfromWF"
+                            autocomplete="off">
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="browse">
+                <th mat-header-cell *matHeaderCellDef>Browse File</th>
+                <td mat-cell *matCellDef="let item;let i = index">
+                    <button type="button" (click)="openFileSelector1(i)" class="btn-browse"
+                        [disabled]="action === 'view' || !isEditAttachment || item.ofcAttactmentId || !isHodUser || isDATfromWF">
+                        Browse Files
+                    </button>
+                    <input type="file" onclick="this.value = null;"
+                        accept="image/png,application/pdf,image/jpeg,image/jpg" id="fileBrowse1{{i}}" class="fileBrowse"
+                        (change)="onFileSelection1($event, i)" />
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="uploadedFileName">
+                <th mat-header-cell *matHeaderCellDef>Uploaded File Name</th>
+                <td mat-cell *matCellDef="let item; let i = index" class="breakFileNameAttach">
+                    <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}
+                        <i *ngIf="(action !== 'view' && isEditAttachment ) && isHodUser && !isDATfromWF"
+                            class="material-icons closesmall" (click)="removeFile1(item, i)" title="Delete File"
+                            aria-hidden="true">close</i>
+                    </span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="uploadedBy">
+                <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+                <td mat-cell *matCellDef="let item">
+                    <mat-label>{{item.uploadedBy}}</mat-label>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <td mat-cell *matCellDef="let item; let i = index">
+                    <table class="iconTable">
+                        <tbody>
+                            <tr>
+                                <td class="action-btn-i centerAlign">
+                                    <a *ngIf="action !== 'view' && isEditAttachment">
+                                        <i class="material-icons plus add" title="Add"
+                                            *ngIf="dataSourceAttachment1 && dataSourceAttachment1.data && (i == dataSourceAttachment1.data.length - 1) && isHodUser && !isDATfromWF"
+                                            (click)="addBrowse1()" aria-hidden="true">add</i>
+                                    </a>
+                                    <a>
+                                        <i class="material-icons plus view-icon" title="View"
+                                            (click)="viewAttachment(item)"
+                                            [class.disable-delete-btn]="!item.ofcAttactmentId"
+                                            aria-hidden="true">remove_red_eye</i>
+                                    </a>
+                                    <a>
+                                        <i class="material-icons plus view-icon" title="Download"
+                                            (click)="downloadAttachment(item)"
+                                            [class.disable-delete-btn]="!item.ofcAttactmentId"
+                                            aria-hidden="true">vertical_align_bottom</i>
+                                    </a>
+                                    <a *ngIf="action !== 'view' && isEditAttachment">
+                                        <i class="material-icons plus delete"
+                                            *ngIf="dataSourceAttachment1 && dataSourceAttachment1.data && (i >= noOfAttachmentDept - 1) && (noOfAttachmentDept < dataSourceAttachment1.data.length)  && isHodUser && !isDATfromWF"
+                                            (click)="deleteBrowse1(i)" aria-hidden="true">delete
+                                        </i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+        </table>
+    </div>
+</div>
+
+<br *ngIf="isHodUser" />
+
+<div *ngIf="isUpdate === 'office-update' || ( isToPaoUser)">
+    <div class="sub-heading-txt heading-section" *ngIf="isToPaoUser && this.isUpdate  !== 'office-update'">
+        <div class="to_level">TO / PAO Level</div>
+    </div>
+    <table mat-table [dataSource]="dataSourceAttachment" width="100%" id="browseTable" *ngIf="!isEdpUser">
+        <ng-container matColumnDef="sr_no">
+            <th class="tabelSrNo" mat-header-cell *matHeaderCellDef>
+                Sr. No.
+            </th>
+            <td mat-cell *matCellDef="let item; let i = index" class="rightAllign">
+                {{ i + 1 }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="attachmentType">
+            <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+            <td class="attechmentData" mat-cell *matCellDef="let item;let i=index">
+                {{item.attachmentName}}
+                <span *ngIf="item.mandatoryFlag && !((isUpdate !== 'office-update' && isDATfromWF) && !isRequestTC)"
+                    class="starSign">*</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="fileName">
+            <th mat-header-cell *matHeaderCellDef>File Name</th>
+            <td mat-cell *matCellDef="let item">
+                <mat-form-field floatLabel="never">
+                    <input matInput [value]="item.fileName" [(ngModel)]="item.fileName" [maxlength]="200"
+                        [readonly]="action === 'view' || !isEditAttachment || ((isUpdate !== 'office-update' && isDATfromWF) && !isRequestTC) || disableForUpdateOffice"
+                        autocomplete="off">
+                </mat-form-field>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="browse">
+            <th mat-header-cell *matHeaderCellDef>Browse File</th>
+            <td mat-cell *matCellDef="let item;let i = index">
+                <button type="button" (click)="openFileSelector(i)" class="btn-browse"
+                    [disabled]="action === 'view' || !isEditAttachment || (item.ofcAttactmentId && item.uploadedFileName ) || ((isUpdate !== 'office-update' && isDATfromWF) && !isRequestTC) || disableForUpdateOffice">
+                    Browse Files
+                </button>
+
+                <input type="file" onclick="this.value = null;" accept="image/png,application/pdf,image/jpeg,image/jpg"
+                    id="fileBrowse{{i}}" class="fileBrowse" (change)="onFileSelection($event, i)" />
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploadedFileName">
+            <th mat-header-cell *matHeaderCellDef>Uploaded File Name</th>
+            <td mat-cell *matCellDef="let item; let i = index" class="breakFileNameAttach">
+                <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}
+                    <i *ngIf="action !== 'view' && isEditAttachment && ((isUpdate !== 'office-update' &&!isDATfromWF)  || isRequestTC) || (isUpdate === 'office-update') && !disableForUpdateOffice"
+                        class="material-icons closesmall" (click)="removeFile(item, i)" title="Delete File"
+                        aria-hidden="true">close</i>
+                </span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploadedBy">
+            <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+            <td mat-cell *matCellDef="let item">
+                <mat-label>{{item.uploadedBy}}</mat-label>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let item; let i = index">
+                <table class="iconTable">
+                    <tbody>
+                        <tr>
+                            <td class="action-btn-i centerAlign">
+                                <a *ngIf="action !== 'view' && isEditAttachment">
+                                    <i class="material-icons plus add" title="Add"
+                                        *ngIf="dataSourceAttachment && dataSourceAttachment.data && (i === dataSourceAttachment.data.length - 1) &&
+                                        (((isUpdate !== 'office-update' &&!isDATfromWF) || isRequestTC) || (isUpdate === 'office-update')) && !disableForUpdateOffice"
+                                        (click)="addBrowse()" aria-hidden="true">add</i>
+                                </a>
+                                <a>
+                                    <i class="material-icons plus view-icon" title="View" (click)="viewAttachment(item)"
+                                        [class.disable-delete-btn]="!item.ofcAttactmentId"
+                                        aria-hidden="true">remove_red_eye</i>
+                                </a>
+                                <a>
+                                    <i class="material-icons plus view-icon" title="Download"
+                                        (click)="downloadAttachment(item)"
+                                        [class.disable-delete-btn]="!item.ofcAttactmentId"
+                                        aria-hidden="true">vertical_align_bottom</i>
+                                </a>
+                                <a *ngIf="action !== 'view' && isEditAttachment">
+                                    <i class="material-icons plus delete"
+                                        *ngIf="dataSourceAttachment && dataSourceAttachment.data && dataSourceAttachment.data.length>1 && !item.mandatoryFlag && (noOfAttachment < dataSourceAttachment.data.length)
+                                            && !disableForUpdateOffice && ((isRequestTC === undefined || isRequestTC) && ((this.userType !== 'edp_user' || !hasWorkFlow) || isRequestTC))"
+                                        (click)="deleteBrowse(i)" aria-hidden="true">delete
+                                    </i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+    </table>
+</div>
+<br />
+
+<div class="legend noteSpaces" *ngIf="!isEdpUser">
+    1. Total File size should be under {{dispTotalAllowSize}}MB<br>
+    2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', 'JPG','JPEG', 'PNG', 'PDF'<br>
+</div>
+<div class="form-action-button" *ngIf="!isEdpUser">
+    <button type="button" mat-raised-button color="primary" (click)="uploadFiles()" [disabled]="isUpload"
+        *ngIf="action !== 'view' && isEditAttachment">
+        <i class="material-icons" title="Upload" aria-hidden="true">cloud_upload</i>
+        Upload
+    </button>
+    <button mat-raised-button type="button" class="green" (click)="saveDDO('submit')" [disabled]="isSubmitDisable"
+        *ngIf="action !== 'view'">
+        <i class="material-icons" aria-hidden="true">done</i>
+        Submit
+    </button>
+    <button type="view" mat-raised-button color="accent" (click)="viewComments()"
+        *ngIf="isUpdate === 'office-update' && !userTypeForUpdate.isDatSuperAdmin && action === 'view'">
+        <i aria-hidden="true" class="material-icons " title="View">remove_red_eye</i>
+        View Comments
+    </button>
+    <button type="reset" mat-raised-button color="accent" (click)="resetAttachmentForm()"
+        *ngIf="action !== 'view' && isEditAttachment">
+        <i class="material-icons" aria-hidden="true">restore</i>
+        Reset
+    </button>
+    <button type="button" mat-raised-button color="warn" (click)="goToListing1()">
+        <i class="material-icons" title="Listing" aria-hidden="true">list</i>
+        Listing
+    </button>
+    <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+        <i class="material-icons" title="Budget dashboard" aria-hidden="true">close</i>
+        Close
+    </button>
+</div>
+
+<div class="row" *ngIf="isEdpUser">
+    <div class="sub-heading-txt heading-section ng-star-inserted">
+        <div class="to_level">HOD Level</div>
+    </div>
+    <table mat-table [dataSource]="dataSourceAttachment1" width="100%" id="browseTable" class="attachmentListMargin">
+        <ng-container matColumnDef="sr_no">
+            <th class="tabelSrNo" mat-header-cell *matHeaderCellDef>Sr. No.</th>
+            <td mat-cell *matCellDef="let item; let i = index" class="rightAllign">
+                {{ i + 1 }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="attachmentName">
+            <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+            <td class="attechmentData" mat-cell *matCellDef="let item;let i = index;">
+                {{item.attachmentName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploadedFileName">
+            <th mat-header-cell *matHeaderCellDef>File Name</th>
+            <td mat-cell *matCellDef="let item" class="breakFileNameAttach">
+                {{item.uploadedFileName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploadedByName">
+            <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+            <td mat-cell *matCellDef="let item">
+                {{item.uploadedByName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td class="action-btn-i centerAlign" *matCellDef="let item">
+                <a><i class="material-icons plus view-icon" title="Download" (click)="downloadAttachment(item)"
+                        aria-hidden="true"> vertical_align_bottom </i></a>
+                <a><i class="material-icons plus view-icon" title="View" (click)="viewAttachment(item)"
+                        aria-hidden="true">remove_red_eye </i></a>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedHodAttachmentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedHodAttachmentColumns;"></tr>
+    </table>
+</div>
+
+<div class="row" *ngIf="isEdpUser">
+    <div class="sub-heading-txt heading-section ng-star-inserted">
+        <div class="to_level">TO Level</div>
+    </div>
+    <table mat-table [dataSource]="dataSourceAttachment" width="100%" id="browseTable" class="attachmentListMargin">
+        <ng-container matColumnDef="sr_no">
+            <th class="tabelSrNo" mat-header-cell *matHeaderCellDef>Sr. No.</th>
+            <td mat-cell *matCellDef="let item; let i = index" class="rightAllign">
+                {{ i + 1 }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="attachmentName">
+            <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+            <td class="attechmentData" mat-cell *matCellDef="let item;let i = index;">
+                {{item.attachmentName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploadedFileName">
+            <th mat-header-cell *matHeaderCellDef>File Name</th>
+            <td mat-cell *matCellDef="let item" class="breakFileNameAttach">
+                {{item.uploadedFileName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="uploadedByName">
+            <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+            <td mat-cell *matCellDef="let item">
+                {{item.uploadedByName}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let item">
+                <a><i class="material-icons plus view-icon" title="Download" (click)="downloadAttachment(item)"
+                        aria-hidden="true"> vertical_align_bottom </i></a>
+                <a><i class="material-icons plus view-icon" title="View" (click)="viewAttachment(item)"
+                        aria-hidden="true">remove_red_eye </i></a>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedToAttachmentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedToAttachmentColumns;"></tr>
+    </table>
+</div>
+
+<div class="form-action-button" *ngIf="isEdpUser">
+    <button type="button" mat-raised-button color="warn" (click)="goToListing1()">
+        <i class="material-icons" title="Listing" aria-hidden="true">list</i>
+        Listing
+    </button>
+    <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+        <i class="material-icons" title="Budget dashboard" aria-hidden="true">close</i>
+        Close
+    </button>
+</div>

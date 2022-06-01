@@ -1,0 +1,51 @@
+.table-outer {
+    clear: both;
+    margin-top: 10px;
+}
+
+.icontab{white-space: nowrap;}
+
+
+/* td.mat-cell:first-of-type {
+    padding-left: 24px;
+    border-left: 5px solid transparent;
+}
+
+.incomplete td.mat-cell:first-of-type {
+    border-left-color: #F08080;
+}
+
+.completed td.mat-cell:first-of-type {
+    border-left-color: #8FBC8F;
+} */
+
+
+
+::ng-deep .mat-table thead {
+    background: #f2f2f2;
+    color: black;
+    font-size: 14px;
+}
+.heading-wrap {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em 0px;
+}
+
+::ng-deep.example-full-width {
+    width: 100%;
+}
+
+.action-btn-i .delete-icon{
+    color: #bb1e1e !important;
+    cursor: pointer;
+}
+
+.history {
+    background: transparent;
+    color: #ee8800;
+    font-weight: 600;
+}

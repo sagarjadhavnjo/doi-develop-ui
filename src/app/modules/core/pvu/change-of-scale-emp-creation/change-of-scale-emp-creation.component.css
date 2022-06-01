@@ -1,0 +1,62 @@
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.mat-expansion-panel-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    padding: 6px;
+}
+
+.mat-expansion-panel:not([class*=mat-elevation-z]){
+    box-shadow: none;
+}
+
+.mat-expansion-panel-body .mat-checkbox label.mat-checkbox-layout {
+    margin-top: 15px !important;
+}
+
+.margintop {
+    margin-top: 5px;
+}
+
+.box.nopadding[_ngcontent-c3] {
+    padding: 0px 0px 0px !important;
+}
+.mat-expansion-panel-header .mat-expansion-indicator::after {
+    position: absolute;
+    bottom: -25px;
+    left: 55px;
+}
+
+.space[_ngcontent-c3] {
+    margin: 0px 50px;
+}
+
+.hideData[_ngcontent-c3] {
+    display: flex;
+    margin: 0px auto;
+    justify-content: center;
+}
+
+.search-grid {
+    border-top: 3px solid #989898 !important;
+}
+
+.search-grid .box-header{
+    color: #464646;
+    justify-content: left;
+    background: unset !important;
+}
+
+.search-grid th{
+    background: #e8e8e8;
+    color: #464646;
+    border-bottom: 1px solid #989898;
+    border-right: 1px solid #989898 !important;
+}

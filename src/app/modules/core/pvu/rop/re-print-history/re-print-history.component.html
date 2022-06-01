@@ -1,0 +1,64 @@
+<div class="container common-workflow-section">
+  <div class="row">
+    <div class="heading-section ng-star-inserted">
+      <div>{{heading}}</div>
+    </div>
+    <div class="col-sm-12">
+      <div class="row header-detail">
+        <div class="col-sm-4 colPadding" *ngFor="let item of headerJSON">
+          <div class="labelCSS">{{item.label}}<span class="floatRight">:</span></div>
+          <div class="paddingUnset">{{item.value}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="forward-module-container">
+      <div class="col-sm-12">
+        <div class="form-datatable-list history-common-section">
+          <b class="htry-hding-name">Remarks History:</b>
+          <div class="category-deprt">
+            <strong>DDO Office</strong>
+            <div style="float: right; margin-left: auto;"><strong>Reprint Count:
+                {{forwardDialog_history_list.length}}</strong></div>
+          </div>
+          <div class="history-list-container">
+            <mat-list *ngFor="let comments of forwardDialog_history_list" class="column-box">
+              <div class="histy-box">
+                <mat-list-item class="txt-heading">
+                  {{comments.userName}},{{comments.postName}}
+                </mat-list-item>
+                <mat-list-item class="txt-heading comment-date">{{
+                                              comments.reprintDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}
+                </mat-list-item>
+              </div>
+              <mat-list-item class="comment-text">
+                <span *ngIf="comments.remarks == null">
+                  Remarks: N/A
+                </span>
+                <span *ngIf="comments.remarks != null">
+                  <span *ngIf="comments.remarks.length>
+                    250"><strong>Remarks: </strong>{{comments.remarks |
+                    slice:0:249}}<a (click)="readMoreId=
+                        comments.rpEventId;" *ngIf="readMoreId !=
+                        comments.rpEventId">&nbsp;&nbsp;..read
+                      more</a>
+                  </span>
+                  <span *ngIf="readMoreId == comments.rpEventId"><strong>Remarks: </strong>{{comments.remarks
+                    | slice:249}}<a (click)="readMoreId= undefined;" *ngIf="readMoreId ==
+                        comments.rpEventId">&nbsp;&nbsp;less</a></span>
+                  <span *ngIf="comments.remarks.length < 250"><strong>Remarks: </strong>{{comments.remarks}}</span>
+                </span>
+              </mat-list-item>
+              <br>
+            </mat-list>
+          </div>
+        </div>
+        <div mat-dialog-actions class="form-action-button">
+          <button type="button" mat-raised-button mat-dialog-close (click)="onNoClick()" class="btnClose">
+            <i class="material-icons" title="Close">close</i>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

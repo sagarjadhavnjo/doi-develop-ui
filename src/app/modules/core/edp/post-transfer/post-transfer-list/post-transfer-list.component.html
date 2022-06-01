@@ -1,0 +1,264 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Post Transfer List </div>
+        </div>
+        <mat-accordion class="search-accordian">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <div class="heading-section">Search Post Transfer</div>
+                </mat-expansion-panel-header>
+                <div class=" form-datatable-list">
+                    <form class="col-sm-12" [formGroup]="seachPostTransferListForm" (ngSubmit)="onSubmitSearch()">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="trnNo" placeholder="Reference Number"
+                                        autocomplete="off" maxlength="50">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput readonly [matDatepicker]="fromDate" formControlName="fromDate"
+                                        [max]="fromMaxDate" placeholder="Reference From Date"
+                                        (dateChange)="resetToDate()">
+                                    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #fromDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput readonly [matDatepicker]="toDate" formControlName="toDate"
+                                        placeholder="Reference To Date" [min]="toMinDate" [max]="toMaxDate">
+                                    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #toDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput numbersOnly formControlName="employeeNo"
+                                        placeholder="Employee number" maxlength="10" autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput formControlName="employeeName" placeholder="Employee Name"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="districtId" name="districtId" placeholder="District">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="districtCtrl"
+                                                [placeholderLabel]="'Find District...'"
+                                                [noEntriesFoundLabel]="'no matching District found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option>
+                                            {{ matSelectNullValue }}
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let districtName of districtNameList | filterSelectInput : districtCtrl.value : 'name'"
+                                            [value]="districtName.id">
+                                            {{districtName.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput numbersOnly name="ddoNo" maxlength="4" formControlName="ddoNo"
+                                        placeholder="DDO No" autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput numbersOnly name="cardexNo" maxlength="4" formControlName="cardexNo"
+                                        placeholder="Cardex No" autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="statusId" name="statusId"
+                                        placeholder="Transaction Status">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="statusCtrl"
+                                                [placeholderLabel]="'Find Status...'"
+                                                [noEntriesFoundLabel]="'no matching status found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option>
+                                            {{ matSelectNullValue }}
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let statusName of statusList | filterSelectInput : statusCtrl.value : 'name'"
+                                            [value]="statusName.statusId">
+                                            {{statusName.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="wfStatusId" name="wfStatusId"
+                                        placeholder="Workflow Status">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="wfStatusCtrl"
+                                                [placeholderLabel]="'Find Workflow Status...'"
+                                                [noEntriesFoundLabel]="'no matching workflow status found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option>
+                                            {{ matSelectNullValue }}
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let statusName of workFlowStatusList | filterSelectInput : wfStatusCtrl.value : 'name'"
+                                            [value]="statusName.statusId">
+                                            {{statusName.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="form-action-button">
+                            <button type="submit" mat-raised-button color="primary">
+                                Search
+                            </button>
+                            <button type="button" (click)="onResetClick()" mat-raised-button color="accent">
+                                <i class="material-icons">restore</i>
+                                Reset
+                            </button>
+                            <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                                <i class="material-icons" title="Budget dashboard">
+                                    close
+                                </i>
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="form-datatable-list">
+            <table mat-table [dataSource]="dataSource" class="scroll-h text-center" matSort>
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef class="srnowidth">Sr No.</th>
+                    <td mat-cell *matCellDef="let element;let i=index"> {{i+1 + ((pageIndex * pageSize))}}</td>
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="18" class="centerAlign">
+                        <span *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+                            No Records Found!
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="transactionNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference Number</th>
+                    <td mat-cell *matCellDef="let element" class="action-btn-i">
+                        {{element.transactionNumber ? element.transactionNumber : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="transactionDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference Date</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.createdDate ? (element.createdDate | date: 'dd-MMM-yyyy hh:mm:ss a') : '-'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="districtName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+                    <td mat-cell *matCellDef="let element"> {{element.districtName ? element.districtName : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="ddoNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>DDO No.</th>
+                    <td mat-cell *matCellDef="let element"> {{element.ddoNo ? element.ddoNo : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="cardexNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cardex No.</th>
+                    <td mat-cell *matCellDef="let element">{{element.cardexNo ? element.cardexNo : '-'}}</td>
+                </ng-container>
+                <ng-container matColumnDef="ddoOffice">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Office Name</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.ddoOffice ? element.ddoOffice : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="postTransferFrom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Post Transfer From</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{(element.postTransferFrom === 'VACANT')? (element.fromEmployeeName ? element.fromEmployeeName
+                        : '-') : (element.fromEmployeeName ? element.fromEmployeeName : '-')}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="fromEmployeeNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>From Employee Number </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fromEmployeeNo }} </td>
+                </ng-container>
+                <ng-container matColumnDef="fromEmployeeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>From Employee Name</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.fromEmployeeName ? element.fromEmployeeName : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="postname">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Post Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.postname ? element.postname : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="postTransferTo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Post Transfer To</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{(element.postTransferTo === 'VACANT') ? (element.toEmployeeName ? element.toEmployeeName :
+                        '-') : (element.toEmployeeName ? element.toEmployeeName : '-')}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="toEmployeeNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>To Employee Number</th>
+                    <td mat-cell *matCellDef="let element"> {{element.toEmployeeNo }} </td>
+                </ng-container>
+                <ng-container matColumnDef="toEmployeeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>To Employee Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.toEmployeeName ? element.toEmployeeName : '-'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="lyingWith">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Lying With</th>
+                    <td mat-cell *matCellDef="let element"> {{element.lyingWith ? element.lyingWith : '-'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="trnStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Status</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.status ? element.status : '-'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="wfStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Workflow Status</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.wfStatus ? element.wfStatus : '-'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef style="width: 8%;" class="srnowidth">Action</th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="action-btn-i centerAlign">
+                        <a *ngIf="element.isEditable === 1">
+                            <i class="material-icons plus edit-icon" title="Edit"
+                                (click)="editPostTransfer(element)">edit</i>
+                        </a>
+                        <a>
+                            <i class="material-icons plus view-icon" title="View"
+                                (click)="viewPostTransfer(element)">remove_red_eye</i>
+                        </a>
+                        <a *ngIf="element.isEditable === 1 && element.wfStatus.toLowerCase() === 'draft'">
+                            <i class="material-icons plus delete" title="Delete"
+                                (click)="deletePostTransfer(element)">delete</i>
+                        </a>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index;columns:displayedColumns"></tr>
+                <tr mat-footer-row
+                    [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+                    *matFooterRowDef="displayedColumnsFooter">
+                </tr>
+            </table>
+
+            <mat-paginator #paginator [pageSize]="'25'" (page)="pageEvent = $event; onPaginateChange($event)"
+                [length]="totalRecords" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+<table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable">
+    <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+        <td mat-cell *matCellDef="let element; let i = index" class="white-space">
+            {{ i + 1 }}
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="attachmentType">
+        <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+            <mat-select
+                placeholder="Attachment Type"
+                [title]="
+                    getTitleNameDataSorce(
+                        attachmentTypeList,
+                        item.attachmentTypeId,
+                        'attachmentId',
+                        'attachmentTypeName'
+                    )
+                "
+                [value]="item.attachmentTypeId"
+                [(ngModel)]="item.attachmentTypeId"
+                [disabled]="item.attachmentId != 0 || action === 'view'"
+            >
+                <mat-option>
+                    <ngx-mat-select-search
+                        [formControl]="getCtrl(attachmentTypeCodeCtrl, i)"
+                        [placeholderLabel]="'Find Attachment Type...'"
+                        [noEntriesFoundLabel]="'No Matching Attachment Type Found'"
+                    >
+                    </ngx-mat-select-search>
+                </mat-option>
+                <mat-option
+                    *ngFor="
+                        let attachment of attachmentTypeList
+                            | filterSelectInput: getCtrl(attachmentTypeCodeCtrl, i).value:'attachmentTypeName'
+                    "
+                    [matTooltip]="attachment.attachmentTypeName"
+                    [value]="attachment.attachmentTypeId"
+                >
+                    {{ attachment.attachmentTypeName }}*
+                </mat-option>
+            </mat-select>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="fileName">
+        <th mat-header-cell *matHeaderCellDef>File name</th>
+        <td mat-cell *matCellDef="let item">
+            <mat-form-field floatLabel="never">
+                <input
+                    matInput
+                    [value]="item.fileName"
+                    [(ngModel)]="item.fileName"
+                    maxlength="50"
+                    autocomplete="off"
+                    [matTooltip]="item.fileName"
+                    [readonly]="item.attachmentId != 0 || action === 'view'"
+                />
+            </mat-form-field>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="browse">
+        <th mat-header-cell *matHeaderCellDef>Browse File</th>
+        <td mat-cell *matCellDef="let i = index; let item" class="centerAlign">
+            <button
+                type="button"
+                (click)="openFileSelector(i)"
+                id="fileBrowse{{ i }}"
+                class="btn-browse"
+                [disabled]="item.attachmentId != 0 || action === 'view'"
+            >
+                Browse Files
+            </button>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="uploadedFileName">
+        <th mat-header-cell *matHeaderCellDef>Uploaded file Name</th>
+        <td mat-cell *matCellDef="let item; let i = index" class="breakFileNameAttach">
+            <span *ngIf="item.uploadedFileName">
+                {{ item.uploadedFileName }}
+            </span>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="uploadedBy">
+        <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+        <td mat-cell *matCellDef="let item">
+            <mat-form-field>
+                <input matInput autocomplete="off" [(ngModel)]="item.userName" readonly />
+            </mat-form-field>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+            <table class="iconTable">
+                <tbody>
+                    <tr>
+                        <td class="action-btn-i centerAlign">
+                            <a *ngIf="action !== 'view' && !(this.dataSourceBrowse.data.length > 4)">
+                                <i
+                                    class="material-icons plus add"
+                                    title="Add"
+                                    *ngIf="
+                                        dataSourceBrowse &&
+                                        dataSourceBrowse.data &&
+                                        i == dataSourceBrowse.data.length - 1
+                                    "
+                                    (click)="addBrowse()"
+                                    aria-hidden="true"
+                                    >add</i
+                                >
+                            </a>
+                            <a>
+                                <i
+                                    class="material-icons plus view-icon"
+                                    title="View"
+                                    (click)="viewAttachment(item)"
+                                    [class.disable-delete-btn]="!item.documentId"
+                                    aria-hidden="true"
+                                    >remove_red_eye</i
+                                >
+                            </a>
+                            <a>
+                                <i
+                                    class="material-icons plus view-icon"
+                                    title="Download"
+                                    (click)="downloadAttachment(item)"
+                                    [class.disable-delete-btn]="!item.documentId"
+                                    aria-hidden="true"
+                                    >vertical_align_bottom</i
+                                >
+                            </a>
+                            <a *ngIf="action !== 'view'">
+                                <i
+                                    class="material-icons plus delete"
+                                    (click)="deleteUploadedAttachment(item, i)"
+                                    aria-hidden="true"
+                                    >delete
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns"></tr>
+</table>
+
+<input
+    #standingAttachment
+    type="file"
+    id="fileBrowse"
+    style="visibility: hidden;"
+    accept="application/pdf,image/jpeg,image/jpg,image/png"
+    (change)="onFileSelection($event)"
+/>
+<div class="legend noteSpaces">
+    1. Total File size should be under 2MB<br />
+    2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', 'JPG','JPEG', 'PNG', 'PDF'<br />
+</div>
+<div class="form-action-button">
+    <button *ngIf = '!dialogOpen' type="submit" mat-raised-button color="primary" (click)="uploadFiles()" [disabled]="!isUpload">
+        <i class="material-icons" aria-hidden="true" title="Save">
+            save
+        </i>
+        Upload
+    </button>
+    <button *ngIf="action != 'view'" mat-raised-button type="button" class="green" (click)="onSubmitActionTrigger()">
+        <i class="material-icons"> done </i> Approve
+    </button>
+    <button *ngIf = '!dialogOpen' type="button" mat-raised-button (click)="goToListing()" color="warn">
+        <!-- <button type="button" mat-raised-button color="warn" > -->
+        <i class="material-icons" aria-hidden="true" title="Listing">
+            list
+        </i>
+        Listing
+    </button>
+    <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+        <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+            close
+        </i>
+        Close
+    </button>
+</div>

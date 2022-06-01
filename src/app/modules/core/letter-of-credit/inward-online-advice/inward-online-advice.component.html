@@ -1,0 +1,437 @@
+<div class="container">
+  <div class="form-wrapper">
+
+    <!-- Screen Name, Reference No and Reference Date Header -->
+    <div class="heading-section ng-star-inserted">
+      <div>Inward Online Advice</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page"><a href="javascript:void(0)">LC</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Inward Online Advice</li>
+      </ol>
+    </nav>
+
+    
+    <div class="panel-group">
+      <!-- Form Starts -->
+      <form [formGroup]="lcInwardOnlineAdviceForm" >
+        <!-- Search Accordian Starts -->
+        <mat-accordion class="colapsedata">
+          <mat-expansion-panel [expanded]="true" class="nopadding">
+            <mat-expansion-panel-header>
+              <div class="heading-section">Search</div>
+            </mat-expansion-panel-header>
+            <div class="box-body">
+              <div class="row">
+
+                <!-- Input Field for Cardex Number -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput placeholder="Cardex No." formControlName="cardexNo" maxlength="4" numbersOnly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for DDO Number -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput placeholder="DDO No." formControlName="ddoNo" maxlength="4" numbersOnly>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Reference Number -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput placeholder="Reference No." formControlName="referenceNo">
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Advice Number -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput placeholder="Advice No." formControlName="adviceNumber"
+                      (keypress)="directiveObject.onlyNumberAndAlphabets($event)">
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Division Code -->
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="divisionCode" placeholder="Division Code">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="DivisionCodeCtrl"
+                          [placeholderLabel]="'Find Division Code...'"
+                          [noEntriesFoundLabel]="'No matching Division Code found'"
+                          (keypress)="directiveObject.onlyNumberAndAlphabets($event)">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option>-- None --</mat-option>
+                      <mat-option
+                        *ngFor="let divisionCodeName  of DivisionCodeList | filterSelectInput:DivisionCodeCtrl.value : 'divCode'"
+                        [value]="divisionCodeName">
+                        {{divisionCodeName.divCode}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Division Name -->
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="divisionName" placeholder="Division Name">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="DivisionNameCtrl"
+                          [placeholderLabel]="'Find Division Name...'"
+                          [noEntriesFoundLabel]="'No matching Division Name found'"
+                          (keypress)="directiveObject.onlyAlphabetsNumberSpaceSpecial($event)">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option>-- None --</mat-option>
+                      <mat-option
+                        *ngFor="let divisionName  of DivisionNameList | filterSelectInput:DivisionNameCtrl.value:'divName'"
+                        [value]="divisionName" matTooltip="{{divisionName.divName}}">
+                        {{divisionName.divName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                
+                <!-- Input Field for Circle Code -->
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="circleCode" placeholder="Circle Code">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="CircleCodeCtrl" [placeholderLabel]="'Find Circle Code...'"
+                          [noEntriesFoundLabel]="'No matching Circle Code found'"
+                          (keypress)="directiveObject.onlyNumberAndAlphabets($event)">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option>-- None --</mat-option>
+                      <mat-option
+                        *ngFor="let circleCodeName  of CircleCodeList | filterSelectInput:CircleCodeCtrl.value:'circleCode'"
+                        [value]="circleCodeName">
+                        {{circleCodeName.circleCode}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Circle Name -->
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="circleName" placeholder="Circle Name">
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="CircleNameCtrl" [placeholderLabel]="'Find Circle Name...'"
+                          [noEntriesFoundLabel]="'No matching Circle Name found'"
+                          (keypress)="directiveObject.onlyAlphabetsNumberSpaceAllSpecial($event)">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option>-- None --</mat-option>
+                      <mat-option *ngFor="let circleName  of CircleNameList | filterSelectInput:CircleNameCtrl.value:'circleName'"
+                        [value]="circleName">
+                        {{circleName.circleName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Advice From Date -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="adviceFromDate" [matDatepicker]="picker1"
+                     [max]="config.dates.to.max"
+                      placeholder="Advice From Date" (dateChange)="resetAdviceToDate()" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Advice To Date -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="adviceToDate" [matDatepicker]="picker3"
+                      placeholder="Advice To Date" readonly  [min]="config.dates.to.min" [max]="config.dates.to.max">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3 [disabled]="false"></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+
+
+                <!-- Input Field for Advice Gross From Amount -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput placeholder="Advice Gross From Amount" formControlName="adviceGrossAmount"
+                    maxlength="10"  (keypress)="directiveObject.onlyNumber($event)">
+                  </mat-form-field>
+                </div>
+
+                <!-- Input Field for Advice Gross To Amount -->
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput placeholder="Advice Gross To Amount" formControlName="adviceNetAmount" 
+                    maxlength="10"  (keypress)="directiveObject.onlyNumber($event)">
+                  </mat-form-field>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="form-action-button">
+                    <button type="submit" mat-raised-button color="primary" title="Search" (click)="searchList()">
+                      <i class="material-icons" aria-hidden="true">search</i> Search
+                    </button>
+                    <button type="reset" mat-raised-button color="accent" (click)="clearForm()">
+                      <i class="material-icons" aria-hidden="true">
+                        restore
+                      </i>
+                      Reset
+                    </button>
+                  </div>
+                </div>
+                <!-- Buttons for Search and Reset Ends -->
+
+              </div>
+
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <!-- Search Accordian Ends -->
+      </form>
+      <!-- Form Ends -->
+
+      <div class="mat-elevation-z8 mt-2">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 "
+          area-describedby="inward-online-advice">
+
+
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select" >
+            <th mat-header-cell *matHeaderCellDef scope="row" >
+              <mat-checkbox (change)="$event ? masterToggle() : null ;tokengenerationapi()" 
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-center" >
+              <div *ngIf="!row.virtualTokenDate && row.isEditable==1">
+              <mat-checkbox (click)="$event.stopPropagation()" 
+                (change)="$event ? selection.toggle(row) : null; ;tokengenerationapi()"
+                [checked]="selection.isSelected(row) "
+                [aria-label]="checkboxLabel(row)">
+              </mat-checkbox>
+            </div>
+              <div *ngIf="row.virtualTokenDate && row.isEditable==1">
+                <mat-checkbox
+                [checked]="true"
+                [class.mat-checkbox-disabled]="true"
+                disabled>
+            </mat-checkbox>
+                <!-- <mat-checkbox (click)="$event.stopPropagation()" 
+                  (change)="$event ? selection.toggle(row) : null; ;tokengenerationapi()"
+                  [checked]="selection.isSelected(row) "
+                  [aria-label]="checkboxLabel(row)">
+                </mat-checkbox> -->
+ 
+              </div>
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+
+          <!-- Serial Number Column -->
+          <ng-container matColumnDef="srno">
+            <th mat-header-cell *matHeaderCellDef scope="row">
+              Sr. No.
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+              {{i+1 + ((pageIndex * pageSize))}}
+            </td>
+            <td mat-footer-cell *matFooterCellDef [attr.colspan]="LcInwardOnlineAdviceDATAColumn.length" class="centerAlign">
+              <div *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+                No Records Found!
+              </div>
+            </td>
+
+          </ng-container>
+
+          <ng-container matColumnDef="referenceNo">
+            <th mat-header-cell *matHeaderCellDef scope="row">Reference No.</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.refNo}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="adviceNo">
+            <th mat-header-cell *matHeaderCellDef scope="row">Advice No.</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.adviceNo}}
+            </td>
+          </ng-container>
+
+          <!-- Advice Date Column -->
+          <ng-container matColumnDef="adviceDate">
+            <th mat-header-cell *matHeaderCellDef scope="row">Advice Date</th>
+            <td mat-cell *matCellDef="let element">
+              {{(element.adviceDate?(element.adviceDate | date: 'dd-MMM-yyyy hh:mm:ss a'):element.adviceDate)}}
+            </td>
+          </ng-container>
+
+          <!-- Division Code Column -->
+          <ng-container matColumnDef="divisionCode">
+            <th mat-header-cell *matHeaderCellDef scope="row">Division Code</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.divCode}}
+            </td>
+          </ng-container>
+
+          <!-- Division Name Column -->
+          <ng-container matColumnDef="divisionName">
+            <th mat-header-cell *matHeaderCellDef scope="row">Division Name</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.divName}}
+            </td>
+          </ng-container>
+
+          <!-- Cardex Number Column -->
+          <ng-container matColumnDef="cardexNo">
+            <th mat-header-cell *matHeaderCellDef scope="row">Cardex No.</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.cardexNo}}
+            </td>
+          </ng-container>
+
+          <!-- DDO Number Column -->
+          <ng-container matColumnDef="ddoNO">
+            <th mat-header-cell *matHeaderCellDef scope="row">DDO No.</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.ddoNo}}
+            </td>
+          </ng-container>
+
+          <!-- Virtual Token Number Column -->
+          <ng-container matColumnDef="virtualTokenNo">
+            <th mat-header-cell *matHeaderCellDef scope="row">Virtual Token No.</th>
+            <td mat-cell *matCellDef="let element">
+              <!-- <div *ngIf="directiveObject.selection.isSelected(element); else elseBlock"> -->
+                {{element.virtualTokenNo}}
+              <!-- </div>
+              <ng-template #elseBlock></ng-template> -->
+            </td>
+          </ng-container>
+
+
+               <!-- Party Name Column -->
+          <ng-container matColumnDef="partyName">
+            <th mat-header-cell *matHeaderCellDef scope="row">Party Name</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              <a (click)="partyDetails(element)"> {{element.partyName ? element.partyName : '-'}}</a>
+            </td>
+          </ng-container>
+
+          <!-- Advice Amount Column -->
+          <ng-container matColumnDef="adviceAmount">
+            <th mat-header-cell *matHeaderCellDef scope="row">Advice Gross Amount</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{element.grossAmt}}
+            </td>
+          </ng-container>
+
+          <!-- Total Deduction Column -->
+          <ng-container matColumnDef="totalDeduction">
+            <th mat-header-cell *matHeaderCellDef scope="row">Total Deduction</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{element.deductionAmt}}
+            </td>
+          </ng-container>
+
+          <!-- Advice Net Amount Column -->
+          <ng-container matColumnDef="adviceNetAmount">
+            <th mat-header-cell *matHeaderCellDef scope="row">Advice Net Amount</th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              {{element.netAmt}}
+            </td>
+          </ng-container>
+
+          <!-- Branch User Column -->
+          <ng-container matColumnDef="lcBranchUser">
+            <th mat-header-cell *matHeaderCellDef scope="row">LC Branch User</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-form-field class="full-width">
+                <mat-select [(ngModel)]="element.lcBranchUser">
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="LCBranchCtrl" [placeholderLabel]="'Find Branch User...'"
+                      [noEntriesFoundLabel]="'No matching Branch User found'"
+                      (keypress)="directiveObject.onlyAlphabetsAndSpace($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let branchName of LcBranchList | filterSelectInput:LCBranchCtrl.value"
+                    [value]="branchName.value">
+                    {{branchName.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Action View/Edit/Delete Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef scope="row" scope="row">Action</th>
+            <td mat-cell *matCellDef="let element" style="text-align: center;" class="action-btn-i centerAlign">
+              <a>
+                <i class="material-icons plus view-icon" aria-hidden="true" title="View"
+                  (click)="view(element)">remove_red_eye
+                </i>
+              </a>
+              <a>
+                <i class="material-icons plus" (click)="viewComments(element)" aria-hidden="true"
+                  title="History Detail">receipt</i>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="LcInwardOnlineAdviceDATAColumn"></tr>
+          <tr mat-row *matRowDef="let row; columns: LcInwardOnlineAdviceDATAColumn;"></tr>
+          <tr mat-footer-row [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+          *matFooterRowDef="['srno']"></tr>
+
+        </table>
+        <!-- Inward Online Advice Table Ends -->
+
+        <!-- Paginator -->
+        <mat-paginator #paginator [pageSize]="'25'" [pageSizeOptions]="[10,5,25]" (page)="onPaginateChange($event)"
+        [length]="totalRecords" showFirstLastButtons>
+      </mat-paginator>
+
+      </div>
+
+      <!-- Action Buttons Starts -->
+      <div class="form-action-button">
+        <button type="button" mat-raised-button color="primary" title="Receive" (click)="onReceive('Draft')">
+          <i class="material-icons" title="Receive" aria-hidden="true">
+            vertical_align_bottom
+          </i>
+          Receive
+        </button>
+        <button type="submit" mat-raised-button class="green" title="submit"
+        (click)="onReceive('Submit')">
+        <i class="material-icons" title="submit" aria-hidden="true">
+          done
+        </i>
+        Submit
+      </button>
+
+      <button type="button" mat-raised-button class="btnClose" title="Close"
+      (click)="directiveObject.goToDashboard()">
+    <i class="material-icons" title="Close" aria-hidden="true">
+            close
+          </i>
+          Close
+        </button>
+      </div>
+      <!-- Action Buttons Ends -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+.example-tree-invisible {
+    display: none;
+}
+.example-tree ul, .example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+}
+.example-tree ul {
+    padding-left: 0px;
+    border-top: 1px solid #e2e2e2;
+}
+.example-tree li {
+    border-bottom: 1px solid #e2e2e2;
+}
+.example-tree li a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.example-tree li a:hover, .example-tree li a:focus {
+    text-decoration: none;
+    color: #356a94;
+}
+button:focus {
+    outline: none;
+}
+.menu-search-section input {
+    padding: 5px 10px;
+}
+.mat-nested-tree-node li {
+    border-bottom: 1px solid #e2e2e2;
+}
+.example-tree ul li ul {
+    border-top: 0px;
+}
+.mat-tree-node li {
+    border-bottom: 0px;
+}
+::ng-deep /deep/ .mat-tree-node {
+    min-height: 30px !important;
+}
+.menu-search-section ::ng-deep /deep/ .mat-form-field-label-wrapper {
+    left: 10px !important;
+    top: -5px;
+}
+.main-menu ::ng-deep /deep/ .mat-icon-button, .sub-menu ::ng-deep /deep/ .mat-icon-button {
+    padding: 0;
+    min-width: 0;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    line-height: 30px;
+    border-radius: 50%;
+}
+.sub-sub-menu li {
+    padding-left: 15px;
+}
+.font-weight-bold {
+    font-size: 10px;
+}
+dd {
+    margin-bottom: .0rem;
+    margin-left: 0;
+}
+.workFlow {
+    display: block;
+    margin-left: 15px;
+}
+.menuRole {
+    display: contents;
+    font-size: 12px;
+}

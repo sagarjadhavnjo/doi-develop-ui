@@ -1,0 +1,38 @@
+.check-box-list-btn {
+    margin-right: 10px;
+}
+
+.cover-box {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    /* border-bottom: 1px solid #333333; */
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+.common-workflow-section .history-common-section {
+    display: unset; 
+}
+
+.mat-checkbox {
+    margin-right: 1%;
+}
+
+.mat-list-base .txt-checkbox{
+    width: 5%;
+}
+
+.check-box-contain-list {
+    width: 100%;
+}
+
+.mat-dialog-actions {
+    margin-bottom: unset;
+    width: 100%;
+    justify-content: center;
+}
+.comment-text{
+    padding-bottom: 7px;
+}

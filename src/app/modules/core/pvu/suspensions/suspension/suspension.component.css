@@ -1,0 +1,28 @@
+.textArea {
+    resize: none;
+    max-height: 60px !important;
+}
+
+.mat-table td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+    max-width: 100px !important;
+}
+
+.asterisk { 
+    color: red;
+}
+
+.reinsist {
+    display: flex;
+    justify-content: space-between;
+}
+
+::ng-deep .highlight .mat-form-field-wrapper .mat-form-field-underline {
+    border-bottom: 2px solid #ff0000 !important;
+}
+
+.highlight-plus {
+    color: #ff0000 !important;
+    border-color: #ff0000 !important;
+}

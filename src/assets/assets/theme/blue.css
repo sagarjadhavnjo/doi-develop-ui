@@ -1,0 +1,268 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+ 
+body {
+    background-color: #f9f9f9 !important;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+    border-color: #356a94;
+}
+
+/* for Radio button */
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element{
+    background-color:rgba(53, 106, 148, .26);
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #356a94;
+}
+
+/* for checkbox */
+.mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element{
+  background-color: rgba(53, 106, 148, .26);
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #356a94;
+}
+
+a{
+    color: #356a94 !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-ripple{
+    background-color: #5783a6;
+}
+
+.mat-tab-body-wrapper{
+  border:1px solid #e6e6e6;
+}
+
+.form-wrapper {
+    background: #fff;
+    box-shadow: 0px 0px 10px #e2e2e2;
+  }
+
+/* Container Header Start */
+
+.heading-section {
+    background: #f9f9f9;
+    color: #356a94; 
+  }
+
+  .font-heading{
+    color: black;
+  }
+
+  .font-heading{
+    color: black;
+  }
+  
+/* Container Header End */
+
+/* Breadcrumb Start */
+
+.breadcrumb{
+    background-color:transparent;
+}
+ 
+/* Breadcrumb End */
+.mat-table {
+  border: solid 1px rgba(0,0,0,0.12);
+}
+
+.mat-table th.mat-header-cell, table.mat-table th{
+    background: #5783a6;
+    color: #FFF ;
+    border-right: 1px solid rgb(80, 117, 146) !important;
+    border-bottom: 1px solid rgb(80, 117, 146);
+}
+
+.mat-table .mat-header-cell{
+  background: #5783a6;
+  color:#FFF;
+  border-right: 1px solid rgb(80, 117, 146);
+  border-bottom: 1px solid rgb(80, 117, 146);
+
+}
+
+.tblwithoutBg{
+  background: unset !important;
+  color: #5783a6 !important;
+  border-right: 1px solid rgb(224, 224, 224) !important;
+  border-bottom: 1px solid rgb(224, 224, 224) !important;
+}
+
+.mat-sort-header-arrow{
+  color: #FFF !important;
+}
+
+.mat-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.mat-table td.mat-cell{
+    border: unset;
+  }
+
+  ::ng-deep .mat-table .mat-header-row .mat-header-cell {
+    border-right: 1px solid #e0e0e0;
+  }
+  
+ .plus{
+    border:1px solid #5783a6;
+    color: #5783a6;
+  }
+  
+  .delete{
+    background: transparent;
+    border:1px solid #cccccc;
+    color: #d44747;
+  }
+
+.send-icon {
+    border:1px solid #cccccc;
+    background: transparent;
+    color: #61942f;
+}
+
+.view-icon{
+  background: transparent;  
+  border:1px solid #cccccc;
+  color: #3a698e;
+}
+
+.edit-icon{
+  background: transparent;
+  border:1px solid #cccccc;
+  color:#ea6940;
+}
+
+  .mat-fab.mat-primary, .mat-flat-button.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
+    background-color: #356a94;
+  }
+  
+.mat-datepicker-toggle{
+  color: #5783a6;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+  background-color: #356a94;
+}
+
+.mat-tab-group .mat-tab-header .mat-tab-label{
+  background: #f9f9f9;
+  border-top: 1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+}
+
+  .mat-tab-group .mat-tab-header .mat-tab-label-active{
+    background: #5783a6;
+    color: #FFF;
+    border-top: 1px solid #5783a6;
+    border-left: 1px solid #5783a6;
+    border-right: 1px solid #5783a6;
+  }
+
+.mat-table .mat-tab-header, .mat-tab-nav-bar{
+  border: unset;
+}
+
+table.mat-table .mat-form-field-appearance-legacy .mat-form-field-underline {
+  border-bottom: 1px dotted #CCC;
+  background-color: unset;
+}
+  
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  border-bottom: 1px dotted #CCC;
+}
+
+.square-box {
+  border: 1px solid #cccccc;
+}
+
+.square.completed {
+  background-color: #8FBC8F
+}
+
+.square.incomplete {
+  background-color: #F08080
+}
+
+.green{
+  background: green;
+  color: #fff;
+}
+
+.btnClose{
+  background: #a5a5a5;
+  color: #FFF;
+}
+
+.back-button{
+  background: #82786c !important;
+  color: black
+}
+
+.mat-autocomplete-panel .mat-option{
+  border-bottom: 1px dotted #e8e8e8;
+}
+
+.mat-table mat-row:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+.mat-form-field-hide-placeholder .mat-select-placeholder{
+  color: rgba(0,0,0,.42) !important;
+  -webkit-text-fill-color: rgba(0,0,0,.42) !important;
+}
+
+ .standing-tab-contain ul li{
+   background: black;
+ }
+
+ .dot{
+   background: red;
+ }
+
+
+
+.mat-form-field-required-marker{
+  color: red;
+}
+
+
+.mat-table .darken {
+  background: rgba(221, 236, 255, 0.4) !important;
+}
+
+.successObject {  background-color:beige; }
+
+.header-detail{
+  border: 1px solid #356a94;
+}
+
+.mat-expansion-panel .heading-section{
+  background: unset;
+}
+
+.mat-expansion-panel .mat-expansion-panel-header{
+  background: rgba(221, 236, 255, 0.4);
+}
+
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+  background: rgba(221, 236, 255, 0.4);
+}
+
+.mat-expansion-panel-header.mat-expanded:focus, .mat-expansion-panel-header.mat-expanded:hover{
+  background: rgba(221, 236, 255, 0.4) !important;
+}
+
+
+
+
+
+

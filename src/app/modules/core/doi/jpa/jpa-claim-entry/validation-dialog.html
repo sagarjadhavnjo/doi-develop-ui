@@ -1,0 +1,98 @@
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort aria-describedby="validationTable">
+
+        <!-- claim id -->
+        <ng-container matColumnDef="claimId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Claim ID</th>
+            <td mat-cell *matCellDef="let element;let i=index">
+                {{element.claimId}}
+            </td>
+        </ng-container>
+
+        <!-- deceased / disabled name -->
+        <ng-container matColumnDef="deceasedDisabledName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Deceased/ Disabled Name</th>
+            <td mat-cell *matCellDef="let element;let i=index">
+                {{element.deceasedDisabledName}}
+            </td>
+        </ng-container>
+
+        <!-- aadhar card no -->
+        <ng-container matColumnDef="adharNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Aadhar Card No. </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.adharNo}}
+            </td>
+        </ng-container>
+
+        <!-- date of accident -->
+        <ng-container matColumnDef="dateOfAccident">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Date of Accident</th>
+            <td mat-cell *matCellDef="let element;let i=index">
+                {{element.dateOfAccident | date: 'dd-MM-yyyy'}}
+            </td>
+        </ng-container>
+
+        <!-- date of death -->
+        <ng-container matColumnDef="dateOfDeath">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Date of Death</th>
+            <td mat-cell *matCellDef="let element;let i=index">
+                {{element.dateOfDeath | date: 'dd-MM-yyyy'}}
+            </td>
+        </ng-container>
+
+        <!-- applicant name -->
+        <ng-container matColumnDef="applicantName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Applicant Name</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.applicantName}}
+            </td>
+        </ng-container>
+
+        <!-- applicant adhar -->
+        <ng-container matColumnDef="applicantAdhar">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Applicant Aadhar</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.applicantAdhar}}
+            </td>
+        </ng-container>
+
+        <!-- scheme name -->
+        <ng-container matColumnDef="schemeName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Scheme Name</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.schemeName}}
+            </td>
+        </ng-container>
+
+        <!-- nodal district -->
+        <ng-container matColumnDef="nodalDistrict">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">Nodal District</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.nodalDistrict}}
+            </td>
+        </ng-container>
+
+        <!-- no data -->
+        <ng-container matColumnDef="noData">
+            <td mat-cell *matCellDef="let element" colspan="10" class="text-center">No Data Available</td>
+        </ng-container>
+
+        <!-- Header Section Of table -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+        <!-- Data Fetch From .TS File to table -->
+        <tr mat-row *matRowDef="let row; let i = index; columns:displayColumnArray.value"></tr>
+
+    </table>
+</div>
+
+
+<!-- action button start-->
+<div class="form-action-button centerAlign">
+
+    <button type="reset" mat-raised-button color="accent" (click)="onIgnore();">
+        Ignore
+    </button>
+
+</div>
+<!-- action button end-->

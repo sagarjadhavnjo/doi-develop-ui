@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="form-wrapper ddo-table">
+    <div class="table-responsive">
+
+      <div class="p-2" style="margin-left: 700px;"><strong>Directorate of Insurance<br>Govt.Insurance
+          Fund,<br>Vimla&LekhaBhavan,<br>3rd Floor,Bl.no.-17,<br>Old Sachivalaya,</strong></div>
+
+      <table>
+        <tr>
+          <td class="p-2">Gandhinagar-382010 <br><strong>Date :{{date}}</strong></td>
+        </tr>
+      </table>
+    </div>
+    <h5 class="centerAlign mt-3"><strong><u>MEMORANDUM</u></strong></h5>
+    <div class="table-responsive">
+      <!-- Report Starts -->
+      <table>
+        <tr>
+          <td class="p-2">
+            In exercise of the power delegated vide Government Resolution Finance Department No. VNM - 1483/2431/T-1,
+            dated 15th December, 1983 the undersigned following Co-Ins Claiminsured under <strong>FLORIDA
+              CERAMICS</strong> as shown below in Full and Final Payment of following Claimand sanction the payment of
+            <strong><u>Rs. 27170/-</u></strong>(
+            Rupees Twenty - seven Thousand One Hundered Seventy Only) to <strong>BAJAJ ALLIANZ GENERAL INSURANCE COMPANY
+              LIMITED</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2">
+            <!-- Report Table -->
+            <table class="table-bordered">
+              <tr *ngFor="let item of reportDetails">
+                <td class="leftAlign p-1"><strong>{{item.policyNo}}</strong></td>
+                <td class="leftAlign p-1"><strong>{{item.claimNo}}</strong></td>
+                <td class="leftAlign p-1"><strong>{{item.nameOfInsured}}</strong></td>
+                <td class="leftAlign p-1"><strong>{{item.coInsAmt}}</strong></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2">
+            The Expenditure on these accounts should be debited to D-19 the Head '3475' Other General
+            Economics Services 800-Other Expenditure (2) Payment of Insurance Claims and met from
+            the Sanctioned grant there under.
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 rightAlign">
+            <br><br><br>
+            Asst. Director of Insurance
+          </td>
+        </tr>
+        <tr>
+          <td class="doi-report pt-3 p-2">
+            <ol>
+              <li>The Payment and Accounts Officer, Gandhinagar</li>
+              <li></li>
+              <li>Copy of Bill Clerk,Kindly arrange to make payment through RTGS.Bank details of ITGL is attached. </li>
+              <li>O/C</li>
+              <li>M/F</li>
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 rightAlign">
+            <br><br><br>
+            Asst. Director of Insurance
+          </td>
+        </tr>
+      </table>
+      <!-- Report Starts -->
+    </div>
+  </div>
+</div>

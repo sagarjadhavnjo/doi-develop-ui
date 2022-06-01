@@ -1,0 +1,730 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Increment</div>
+            <div class="font-heading" *ngIf="transactionId"><strong>Reference No:</strong> {{transactionNo}}</div>
+            <div class="font-heading" *ngIf="transactionId"><strong>Reference Date:</strong>
+                {{ (transactionDate ? transactionDate : '') | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div class="panel-group">
+            <form [formGroup]="searchIncrementForm">
+                <div class="box box-primary">
+                    <div class="box-header">Increment</div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="DDO No" formControlName="ddoNo" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Cardex No" formControlName="cardexNo" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Office Name" formControlName="officeName" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="District" formControlName="district" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Calendar Year</mat-label>
+                                    <mat-select formControlName="financialYear" (selectionChange)="onFySelect($event)"
+                                        required>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="finYearCtrl"
+                                                [placeholderLabel]="'Find Calendar Year...'"
+                                                [noEntriesFoundLabel]="'No Matching Calendar Year found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option id="{{FY.fyStart}}"
+                                            *ngFor="let FY of financialYearList | filterSelectInput : finYearCtrl.value : 'fySecond'"
+                                            [value]="FY.financialYearId">
+                                            {{FY.fyStart}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <error-messages [errorMessages]="{'required': errorMessages.FINANCIAL_YEAR}"
+                                        [control]="searchIncrementForm.get('financialYear')"></error-messages>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Increment Order No." formControlName="eventOrderNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Increment For</mat-label>
+                                    <mat-select formControlName="incrementFor"
+                                        (selectionChange)="onPayCommissionChange($event)" required>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="payCommissionCtrl"
+                                                [placeholderLabel]="'Find Pay Commission...'"
+                                                [noEntriesFoundLabel]="'No Matching Pay Commission found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let PR of payCommissionList | filterSelectInput : payCommissionCtrl.value : 'lookupInfoName'"
+                                            [value]="PR.lookupInfoId">
+                                            {{PR.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <error-messages [errorMessages]="{'required': errorMessages.PAY_COMMISSION}"
+                                        [control]="searchIncrementForm.get('incrementFor')"></error-messages>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="incrementeffectiveDate"
+                                        [matDatepickerFilter]="seventhDateOfEffectiveFilter" [min]="minDate"
+                                        [max]="maxDate" (dateChange)="effectiveDateChange()"
+                                        placeholder="Increment Effective Date" formControlName="incrementEffDate"
+                                        readonly required>
+                                    <div class="error-wrapper"
+                                        *ngIf="searchIncrementForm.controls.incrementEffDate.touched && searchIncrementForm.controls.incrementEffDate.errors">
+                                        <mat-error
+                                            *ngIf="searchIncrementForm.controls.incrementEffDate.errors.required">
+                                            {{errorMessages.EFFECTIVE_DATE}}
+                                        </mat-error>
+                                        <mat-error *ngIf="showEffectiveValidationMsg7Pay">
+                                            {{errorMessages.EFFECTIVE_DATE_MSG_7PAY}}
+                                        </mat-error>
+                                        <mat-error *ngIf="showEffectiveValidationMsg6Pay">
+                                            {{errorMessages.EFFECTIVE_DATE_MSG_6PAY}}
+                                        </mat-error>
+                                        <mat-error *ngIf="showEffectiveValidationMsg5Pay">
+                                            {{errorMessages.EFFECTIVE_DATE_MSG_5PAY}}
+                                        </mat-error>
+                                    </div>
+                                    <mat-datepicker-toggle matSuffix [for]="incrementeffectiveDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #incrementeffectiveDate startView="year"></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="nextIncrementDate"
+                                        (dateChange)="nextIncrementDateChange($event)"
+                                        placeholder="Date of next Increment" formControlName="dateNextInc" readonly
+                                        required>
+                                    <error-messages [errorMessages]="{'required': errorMessages.DATE_OF_NEXT_INCREMENT}"
+                                        [control]="searchIncrementForm.get('dateNextInc')"></error-messages>
+                                    <mat-datepicker-toggle matSuffix [for]="nextIncrementDate" [disabled]="!isFifth"></mat-datepicker-toggle>
+                                    <mat-datepicker #nextIncrementDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Employee Pay Type</mat-label>
+                                    <mat-select formControlName="empPayType">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empPayTypeCtrl"
+                                                [placeholderLabel]="'Find Employee Pay Type'"
+                                                [noEntriesFoundLabel]="'No Matching Employee Pay Type found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let EPT of empPayTypeList | filterSelectInput : empPayTypeCtrl.value : 'lookupInfoName'"
+                                            [value]="EPT.lookupInfoId">
+                                            {{EPT.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <error-messages [errorMessages]="{'required': errorMessages.EMPLOYEE_TYPE}"
+                                        [control]="searchIncrementForm.get('empPayType')"></error-messages>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Class </mat-label>
+                                    <mat-select formControlName="classId">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="classCtrl"
+                                                [placeholderLabel]="'Find Class...'"
+                                                [noEntriesFoundLabel]="'No Matching Class found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let class of classList | filterSelectInput : classCtrl.value : 'lookupInfoName'"
+                                            [value]="class.lookupInfoId">
+                                            {{class.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Designation </mat-label>
+                                    <mat-select formControlName="designationId">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="designationCtrl"
+                                                [placeholderLabel]="'Find designation...'"
+                                                [noEntriesFoundLabel]="'No Matching designation found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let PR of designationList | filterSelectInput : designationCtrl.value : 'designationName'"
+                                            [value]="PR.designationId">
+                                            {{PR.designationName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>CPF/GPF/PPAN </mat-label>
+                                    <mat-select formControlName="cpfGpfPpan" (change)='onCpfGpfPpanSelect($event)'>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="cpfGpfPpanCtrl"
+                                                [placeholderLabel]="'Find Cpf/Gpf/Ppan...'"
+                                                [noEntriesFoundLabel]="'No Matching Cpf/Gpf/Ppan found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let PR of cpfGpfPpanList | filterSelectInput : cpfGpfPpanCtrl.value : 'lookupInfoName'"
+                                            [value]="PR.lookupInfoId">
+                                            {{PR.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-3" *ngIf="searchIncrementForm.get('cpfGpfPpan') &&
+                                                            searchIncrementForm.get('cpfGpfPpan').value">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput maxlength="15" numbersWithSpecialCharactersOnly
+                                        [placeholder]="searchIncrementForm.get('cpfGpfPpan').value == 1415 ? 'CPF / PPAN' : 'GPF'"
+                                        formControlName="gpf">
+                                    <div class="error-wrapper"
+                                        *ngIf="searchIncrementForm.controls.gpf.touched && searchIncrementForm.controls.gpf.errors">
+                                        <mat-error *ngIf="searchIncrementForm.controls.gpf.errors.maxlength">
+                                            {{errorMessages.CPF_GPF_PPAN_MAX}}</mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput numbersOnly minlength="10" maxlength="10"
+                                        placeholder="Employee Number" formControlName="empNo">
+                                    <div class="error-wrapper"
+                                        *ngIf="searchIncrementForm.controls.empNo.touched && searchIncrementForm.controls.empNo.errors">
+                                        <mat-error *ngIf="searchIncrementForm.controls.empNo.errors.minlength">
+                                            {{errorMessages.EMP_NO_MAX}}</mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="form-action-button" *ngIf="action !== 'view'">
+                            <button type="button" mat-raised-button [disabled]="isGetListVisible"
+                                (click)="showEmpList($event)" color="warn">
+                                <i class="material-icons" aria-hidden="true" title="Listing">
+                                    list
+                                </i>
+                                Get List
+                            </button>
+                            <button type="button" mat-raised-button color="accent" [disabled]="isResetVisible"
+                                (click)="resetForm()">
+                                <i class="material-icons" aria-hidden="true" title="restore">
+                                    restore
+                                </i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="box box-primary" *ngIf="showSummary">
+            <div class="box-header">Summary</div>
+            <div class="box-body">
+                <table mat-table [dataSource]="summaryDataSource" aria-describedby="summaryDataSource">
+                    <ng-container matColumnDef="class">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Class</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.className}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>Total</td>
+                    </ng-container>
+                    <ng-container matColumnDef="totalCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Total Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.total}}
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalTotalCount()}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="eligibleCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Eligible Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.eligible}}
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalEligibleCount() }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="nonEligibleCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Non Eligible Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.inEligible}}
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalInEligibleCount() }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="includeCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Include Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.included}}
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalIncludedCount()}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="excludeCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Exclude Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.excluded}}
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalExcludedCount()}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="successCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Success Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            <a [class.disable-icon]="this.statusId !== 1418 && this.statusId !== 267 && this.statusId !== 327" class="searchIcon"
+                                (click)="countDataList(element, 1)">
+                                {{element.processed ? element.processed : '0'}}
+                            </a>
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalSuccessCount()}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="failureCount">
+                        <th scope="row" mat-header-cell *matHeaderCellDef>Failure Count</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            <a [class.disable-icon]="this.statusId !== 1418 && this.statusId !== 267 && this.statusId !== 327" class="searchIcon"
+                                (click)="countDataList(element, 2)">
+                                {{element.failure ? element.failure : '0'}}
+                            </a>
+                        </td>
+                        <td mat-footer-cell class="rightAlign" *matFooterCellDef>{{totalFailureCount()}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedSummaryColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedSummaryColumns;let i= index;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="displayedSummaryColumns"></tr>
+                </table>
+                <div class="text-center" *ngIf="summaryDataSource.data.length === 0">
+                    No Data Found
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="showEmpListData">
+            <div class="box box-primary">
+                <div class="box-header">Employee Eligible for Increment</div>
+                <div class="box-body">
+                    <table mat-table [dataSource]="eligibleForIncrement" class="increment-table-responsive"
+                        aria-describedby="eligibleForIncrement" matSort>
+                        <ng-container matColumnDef="srno">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Sr. No
+                            </th>
+                            <td mat-cell *matCellDef="let element; let i = index;">
+                                {{ (pageSize * pageIndex) + i + 1 }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="empNo">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Employee
+                                Number</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.empNo}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="empName">
+                            <th mat-header-cell *matHeaderCellDef scope="row" mat-sort-header>Employee Name</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.empName}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="gpf">
+                            <th mat-header-cell *matHeaderCellDef scope="row" mat-sort-header>CPF/ GPF/ PPAN No.</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.gpf}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="incType">
+                            <th mat-header-cell *matHeaderCellDef scope="row" mat-sort-header>Increment Type</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.incrementType}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="className">
+                            <th mat-header-cell *matHeaderCellDef scope="row" mat-sort-header>Class</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.className}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="designationName">
+                            <th mat-header-cell *matHeaderCellDef scope="row" mat-sort-header>Designation</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.designationName}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="dateOfJoining">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Date of
+                                Joining</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.dateOfJoining | date: 'dd/MM/yyyy'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curPayLevelValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Pay Level</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curPayLevelValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curCellIdValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Cell Id</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curCellIdValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curPayBandRange">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Pay Band</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curPayBandRange}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curPayBandValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Pay Band Value</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curPayBandValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curGradePayValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Grade Pay</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curGradePayValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curScaleValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Scale</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curScaleValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curBasicPay">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Basic Pay</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curBasicPay}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="revEffDate">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Effective Date</th>
+                            <td mat-cell *matCellDef="let element;let i= index;" class="white-space">
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="effectivepicker" [min]="element.minEffectiveDateEol" [max]="element.maxEffectiveDateEol"
+                                    class="white-space" [disabled]="disableEffectiveDate"
+                                        [(ngModel)]="element.revEffDate"
+                                        (dateChange)="onEffectiveDateChange(element, $event, i)">
+                                    <mat-datepicker-toggle matSuffix [for]="effectivepicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #effectivepicker></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="revDateNexInc">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Date of Next Increment </th>
+                            <td mat-cell *matCellDef="let element;let i= index;" class="white-space">
+                                <mat-form-field>
+                                    <input matInput [matDatepicker]="dateNexIncPicker" class="white-space"
+                                        [min]="element.revDateNexIncMin" [disabled]="disableEligible"
+                                        [(ngModel)]="element.revDateNexInc"
+                                        (dateChange)="onNextIncrementDateChange(element, i, $event)">
+                                    <mat-datepicker-toggle matSuffix [for]="dateNexIncPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #dateNexIncPicker></mat-datepicker>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="checkBox">
+                            <th mat-header-cell *matHeaderCellDef scope="row">
+                                <mat-checkbox class="example-margin" [checked]="employeeIncrement" [disabled]="disableAllEligible" 
+                                    (change)="onAllCheckIncludeChange($event)"></mat-checkbox>
+                                &nbsp;Exclude ?
+                            </th>
+                            <td mat-cell *matCellDef="let element;let i= index;" class="text-center">
+                                <mat-checkbox class="example-margin" [checked]="element.includeExclude"
+                                    [disabled]="element.disableEligible || action == 'view'" (change)="onCheckboxChange($event, i, element)">
+                                </mat-checkbox>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.value?.length"
+                                class="centerAlign">
+                                <span
+                                    *ngIf="eligibleForIncrement && eligibleForIncrement.data && eligibleForIncrement.data.length == 0">
+                                    No Records Found!
+                                </span>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns.value"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns.value"></tr>
+                        <tr mat-footer-row
+                            [class.hide-table-footer]="eligibleForIncrement && eligibleForIncrement.data && eligibleForIncrement.data.length != 0"
+                            *matFooterRowDef="displayedColumnsFooter">
+                        </tr>
+                    </table>
+                    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="paginationArray"
+                        [pageIndex]="pageIndex" (page)="pageEvent = $event; onPaginateChange($event)"
+                        showFirstLastButtons></mat-paginator>
+                    <div>
+                        <div>
+                            <a style="text-decoration: underline; cursor: pointer;"
+                                (click)="downloadEmployeeData()">Download Employee Data</a>
+                        </div>
+                        <div>
+                            <a [class.disable-icon]="this.statusId !== 1418 && this.statusId !== 267 && this.statusId !== 327"
+                                style="text-decoration: underline; cursor: pointer;"
+                                (click)="downloadProcessedEmpData()">Processed Employee List</a>
+                        </div>
+                    </div>
+
+                    <div class="form-action-button" *ngIf="action !== 'view'">
+                        <button type="button" mat-raised-button color="accent" [disabled]="isExcludeBtnDisable"
+                            (click)="excludeReasonDialog()">
+                            <i class="material-icons" aria-hidden="true" title="done"> done</i>Exclude
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-primary">
+                <div class="box-header">Excluded Employees' List</div>
+                <div class="box-body">
+                    <table mat-table [dataSource]="excludedDataSource" aria-describedby="emplist"
+                        class="increment-table-responsive">
+
+                        <ng-container matColumnDef="srno" scope="row">
+                            <th mat-header-cell *matHeaderCellDef>Sr. No</th>
+                            <td mat-cell *matCellDef="let element; let i= index;">
+                                {{ (pageSizeExclude * pageIndexExclude) + i + 1 }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="empNo">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Employee Number</th>
+                            <td mat-cell *matCellDef="let element; let i= index;">
+                                {{element.empNo}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="empName">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Employee Name</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.empName}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gpf">
+                            <th mat-header-cell *matHeaderCellDef scope="row">CPF/ GPF/ PPAN No.</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.gpf}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="className">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Class</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.className}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="designationName">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Designation</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.designationName}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="dateOfJoining">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Date of Joining</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.dateOfJoining | date: 'dd/MM/yyyy'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curPayLevelValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Pay level</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curPayLevelValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curCellIdValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Cell Id</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curCellIdValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curPayBandRange">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Pay Band</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curPayBandRange}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curPayBandValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Pay Band Value</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curPayBandValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curGradePayValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Grade Pay</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curGradePayValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curScaleValue">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Scale</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curScaleValue}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="curBasicPay">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Basic Pay</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.curBasicPay}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="reasonForExclusion">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Reason for Exclusion</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                <span
+                                    *ngIf="element.reasonForExcludeValue && element.reasonForExcludeValue === 'Absent'">
+                                    {{element.reasonForExcludeValue}}
+                                </span>
+                                <span
+                                    *ngIf="element.reasonForExcludeValue && element.reasonForExcludeValue === 'Employee is on Extra Ordinary Leave'">
+                                    {{element.reasonForExcludeValue}}
+                                </span>
+                                <span
+                                    *ngIf="element.reasonForExcludeValue && element.reasonForExcludeValue !== 'Absent' && element.reasonForExcludeValue !== 'Employee is on Extra Ordinary Leave'">
+                                    Reason for Exclude : {{element.reasonForExcludeValue}}
+                                    <br> Stop Increment Type : {{element.reasonForExclusion && element.reasonForExclusion.resionForStopValue}}
+                                    <br> Order Date : {{element.reasonForExclusion && element.reasonForExclusion.stopIncOrderDate | date: 'dd-MM-yyyy'}}
+                                    <br> Order No. : {{element.reasonForExclusion && element.reasonForExclusion.stopIncOrderNo}}
+                                    <br> No. of Increment : {{element.reasonForExclusion && element.reasonForExclusion.stopIncNumberValue}}
+                                </span>
+                                <span
+                                    *ngIf="element.resionForStopValue && element.reasonForExclusion.resionForStopValue && element.reasonForExclusion.resionForStopValue === 'Without Future Effect'">
+                                    <br> Duration In : {{element.reasonForExclusion.stopIncrementDurationValue ? element.reasonForExclusion.stopIncrementDurationValue : '-'}}
+                                </span>
+                                <span
+                                    *ngIf="element.stopIncrementDurationValue && element.reasonForExclusion.stopIncrementDurationValue && element.reasonForExclusion.stopIncrementDurationValue === 'Month'">
+                                    <br> Duration in Month : {{element.reasonForExclusion.stopIncMonthValue ? element.reasonForExclusion.stopIncMonthValue : '-'}}
+                                </span>
+                                <span
+                                    *ngIf="element.stopIncrementDurationValue && element.reasonForExclusion.stopIncrementDurationValue && element.reasonForExclusion.stopIncrementDurationValue === 'Year'">
+                                    <br> Duration in Year : {{element.reasonForExclusion.stopIncYearValue ? element.reasonForExclusion.stopIncYearValue : '-'}}
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="remarks">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Remarks</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{element.remarks}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="userRemarks">
+                            <th mat-header-cell *matHeaderCellDef scope="row">User Remarks
+                            </th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                <mat-form-field class="example-full-width">
+                                    <textarea matInput [(ngModel)]="element.userRemarks" tabindex="{{i}}"
+                                        [disabled]="disableExclude"
+                                    ></textarea>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="checkBox">
+                            <th mat-header-cell *matHeaderCellDef scope="row">
+                                <mat-checkbox class="example-margin" [ngModel]="checkedExclude"
+                                    (change)="onAllCheckExcludeChange($event)" [disabled]="disableExclude">
+                                </mat-checkbox>
+                                &nbsp;Include ?
+                            </th>
+                            <td mat-cell *matCellDef="let element; let i= index;" class="text-center">
+                                <mat-checkbox [checked]="element.includeToExclude" [disabled]="disableExclude"
+                                    (change)="onCheckIncludeToExcludeChange($event, i, element)" class="example-margin">
+                                </mat-checkbox>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef [attr.colspan]="excludeDataColumns.value?.length"
+                                class="centerAlign">
+                                <span
+                                    *ngIf="excludedDataSource && excludedDataSource.data && excludedDataSource.data.length == 0">
+                                    No Records Found!
+                                </span>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="excludeDataColumns.value"></tr>
+                        <tr mat-row *matRowDef="let row; columns: excludeDataColumns.value;let i= index;"></tr>
+                        <tr mat-footer-row
+                            [class.hide-table-footer]="excludedDataSource && excludedDataSource.data && excludedDataSource.data.length != 0"
+                            *matFooterRowDef="displayedColumnsFooter">
+                        </tr>
+                    </table>
+                    <mat-paginator #paginatorExclude [pageSize]="pageSizeExclude" [pageIndex]="pageIndexExclude"
+                        [pageSizeOptions]="paginationArray" (page)="pageEvent = $event; onPaginateChangeExclude($event)"
+                        showFirstLastButtons></mat-paginator>
+                    <div class="form-action-button" *ngIf="action !== 'view'">
+                        <button mat-raised-button type="button" class="green" [disabled]="isIncludeBtnDisable"
+                            (click)="onIncludeToExcludeChange()">
+                            <i class="material-icons" aria-hidden="true" title="done">done</i> Include</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-action-button">
+            <button type="button" mat-raised-button color="accent" [disabled]="!showEmpListData"
+                (click)="inEmployeesEmpList()">
+                <i class="material-icons" aria-hidden="true" title="done"> done</i>InEligible Employees
+            </button>
+            <button type="submit" mat-raised-button color="primary" (click)="onSaveAsDraft()"
+                [disabled]="!showEmpListData" *ngIf="isSaveDraftVisible && action !== 'view'">
+                <i class="material-icons" title="Save" aria-hidden="true">
+                    save
+                </i>
+                Save as Draft
+            </button>
+            <button type="submit" mat-raised-button color="primary" (click)="onConfirmProcess()"
+                [disabled]="(statusId !== 205 && statusId !== 1418 && statusId !== 267 && statusId !== 327 && btnProcessedDisable)" *ngIf="action !== 'view'">
+                <i class="material-icons" title="Save" aria-hidden="true">
+                    save
+                </i>
+                Confirm and Process
+            </button>
+            <button mat-raised-button type="submit" [disabled]="!isSubmitBtnVisible" class="green" (click)="onSubmit()"
+                *ngIf="action !== 'view'">
+                <i class="material-icons" title="done" aria-hidden="true">
+                    done
+                </i>
+                Submit
+            </button>
+            <button type="reset" mat-raised-button color="accent" (click)="resetForm()" *ngIf="action !== 'view'">
+                <i class="material-icons" title="restore" aria-hidden="true">
+                    restore
+                </i>
+                Reset
+            </button>
+            <button type="button" mat-raised-button (click)="goToDashboard()" skipLocationChange class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="close">
+                    close
+                </i>
+                Close
+            </button>
+            <button type="button" mat-raised-button color="warn" (click)="goToListing()" *ngIf="!dialogOpen">
+                <i class="material-icons" aria-hidden="true" title="Listing">list</i>
+                Listing
+            </button>
+            <button type="button" mat-raised-button class="btnClose print-btn" (click)="onPrint()" *ngIf="!dialogOpen"
+            [disabled]="statusId !== 327">
+                <i class="material-icons" aria-hidden="true" title="print">
+                    print
+                </i>
+                Print
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,220 @@
+<div class="container">
+  <div class="form-wrapper">
+    <form [formGroup]="tBillInvestmentForm">
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header">T-Bill Investment</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <div *ngIf="popupFor==='for14Days' then is14ForBal else is91ForBal"></div>
+
+              <ng-template #is14ForBal>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="fourteenDayTBillBalance" placeholder="14-Day T-Bill Balance"
+                      numbersOnly required>
+                    <div class="error-wrapper"
+                      *ngIf="tBillInvestmentForm.controls.fourteenDayTBillBalance.touched && tBillInvestmentForm.controls.fourteenDayTBillBalance.errors">
+                      <mat-error *ngIf="tBillInvestmentForm.controls.fourteenDayTBillBalance.errors.required">
+                        {{errorMessages.FOURTEEN_DAY_T_BILL_BALANCE}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+              </ng-template>
+
+              <ng-template #is91ForBal>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="ninetyOneDayTBillBalance" placeholder="91-Day T-Bill Balance"
+                      numbersOnly required>
+                    <div class="error-wrapper"
+                      *ngIf="tBillInvestmentForm.controls.ninetyOneDayTBillBalance.touched && tBillInvestmentForm.controls.ninetyOneDayTBillBalance.errors">
+                      <mat-error *ngIf="tBillInvestmentForm.controls.ninetyOneDayTBillBalance.errors.required">
+                        {{errorMessages.NINETY_ONE_DAY_T_BILL_BALANCE}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+              </ng-template>
+
+            </div>
+
+            <br>
+
+            <!-- T-Bill Investment Table Starts -->
+            <div class="mat-elevation-z8 mt-2 overflow-x-auto">
+              <table mat-table [dataSource]="tBillInvestmentDataSource" aria-describedby="tBillInvestmentTable">
+
+                <!-- Date of Investment  -->
+                <ng-container matColumnDef="dateOfInvestment">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Date of Investment</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.dateOfInvestment" [matDatepicker]="dateOfInvestment"
+                        [ngModelOptions]="{standalone: true}" required>
+                      <mat-datepicker-toggle matSuffix [for]="dateOfInvestment">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #dateOfInvestment></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Date of Maturity  -->
+                <ng-container matColumnDef="dateOfMaturity">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Date of Maturity</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.dateOfMaturity" [matDatepicker]="dateOfMaturity"
+                        [ngModelOptions]="{standalone: true}" required>
+                      <mat-datepicker-toggle matSuffix [for]="dateOfMaturity">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #dateOfMaturity></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Intimation Date   -->
+                <ng-container matColumnDef="intimationDate">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Intimation Date *</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.intimationDate" [matDatepicker]="intimationDate"
+                        [ngModelOptions]="{standalone: true}" required>
+                      <mat-datepicker-toggle matSuffix [for]="intimationDate">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #intimationDate></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+
+                <!-- Face Value  -->
+                <ng-container matColumnDef="faceValue">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Face Value *</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.faceValue" [ngModelOptions]="{standalone: true}" numbersOnly>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Amount Intimated(Rs.) -->
+                <ng-container matColumnDef="amountIntimatedRs">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Amount Intimated(Rs.)*</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.amountIntimatedRs" [ngModelOptions]="{standalone: true}"
+                        numbersOnly>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Intimation No.  -->
+                <ng-container matColumnDef="intimationNo">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Intimation No. *</th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.intimationNo" [ngModelOptions]="{standalone: true}"
+                        numbersAlphabetsOnly>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Discount Value  -->
+                <ng-container matColumnDef="discountValue">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Discount Value </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.discountValue" [ngModelOptions]="{standalone: true}"
+                        numbersOnly>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Cost Value  -->
+                <ng-container matColumnDef="costValue">
+                  <th mat-header-cell *matHeaderCellDef scope="row">Cost Value </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.costValue" [ngModelOptions]="{standalone: true}" numbersOnly>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- % Yield  -->
+                <ng-container matColumnDef="yield">
+                  <th mat-header-cell *matHeaderCellDef scope="row">% Yield </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="element.yield" [ngModelOptions]="{standalone: true}" numbersOnly>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                <!-- Header column of Table -->
+                <tr mat-header-row *matHeaderRowDef="tBillInvestmentDisplayedColumns"></tr>
+                <!-- Data fetch from .TS File  -->
+                <tr mat-row *matRowDef="let row; let i = index;columns: tBillInvestmentDisplayedColumns;"></tr>
+              </table>
+            </div>
+            <!-- T-Bill Investment Table Ends -->
+
+            <br>
+
+            <div class="row">
+
+              <div *ngIf="popupFor==='for14Days' then is14 else is91"></div>
+
+              <ng-template #is14>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="fourteenDaysTBillClosingBalance"
+                      placeholder="14 Days T-Bill Closing Balance" numbersOnly required>
+                    <div class="error-wrapper"
+                      *ngIf="tBillInvestmentForm.controls.fourteenDaysTBillClosingBalance.touched && tBillInvestmentForm.controls.fourteenDaysTBillClosingBalance.errors">
+                      <mat-error *ngIf="tBillInvestmentForm.controls.fourteenDaysTBillClosingBalance.errors.required">
+                        {{errorMessages.FOURTEEN_DAYS_T_BILL_CLOSING_BALANCE}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+              </ng-template>
+
+              <ng-template #is91>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput formControlName="ninetyOneDaysTBillClosingBalance"
+                      placeholder="91 Days T-Bill Closing Balance" numbersOnly required>
+                    <div class="error-wrapper"
+                      *ngIf="tBillInvestmentForm.controls.ninetyOneDaysTBillClosingBalance.touched && tBillInvestmentForm.controls.ninetyOneDaysTBillClosingBalance.errors">
+                      <mat-error *ngIf="tBillInvestmentForm.controls.ninetyOneDaysTBillClosingBalance.errors.required">
+                        {{errorMessages.NINETY_ONE_DAYS_T_BILL_CLOSING_BALANCE}}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div>
+              </ng-template>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="form-action-button">
+        <button mat-raised-button type="button" class="green" title="Submit" (click)="onSubmit()">
+          <i class="material-icons" title="Submit" aria-hidden="true">done</i>
+          Submit
+        </button>
+        <button type="button" title="Close" mat-raised-button class="btnClose" (click)="onClose()">
+          <i class="material-icons " title="Close">close</i>
+          Close</button>
+      </div>
+      <!-- Action Button Ends -->
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+@import "../../edp_common_style.css";
+
+#fileBrowse {
+    visibility: hidden;
+}
+
+.browMainDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.browChildDiv {
+    display: inline-flex;
+}
+
+.info-container {
+    position: relative;
+    display: inline-flex;
+    height: 15px;
+}
+
+.info-container .info-tooltip {
+    font-size: 15px;
+    margin-left: 3px;
+    cursor: pointer;
+}
+
+.info-tooltip-content {
+    display: none;
+    position: absolute;
+    left: calc(100% + 10px);
+    padding: 5px;
+    top: -10px;
+    border: 1px solid #FFFFFF;
+    color: #000;
+    background-color: beige;
+    z-index: 10000;
+    width: 200px;
+    max-width: 200px;
+    font-weight: 300;
+    text-align: left
+}
+
+.info-tooltip-content:after {
+    content: ' ';
+    position: absolute;
+    top: 10px;
+    left: -14px;
+    border: 7px solid;
+    border-color: transparent #FFFFFF transparent transparent;
+}
+
+.info-tooltip:hover+.info-tooltip-content {
+    display: block;
+}
+
+::ng-deep .mat-tab-group .mat-tab-header .mat-tab-label {
+    margin: 0 4px 0 0 !important;
+}
+
+::ng-deep .breakFileNameAttach{
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+}
+.starSign{
+    color: #ff0000;
+}
+
+

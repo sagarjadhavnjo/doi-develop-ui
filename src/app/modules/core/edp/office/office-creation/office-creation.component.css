@@ -1,0 +1,34 @@
+.officeNameData {
+    display: flex;
+    align-items: center;
+}
+
+.officeNameBreak {
+    word-break: break-all;
+    width: 75%;
+}
+
+.subOffice {
+    margin-left: auto;
+}
+
+.phoneNo {
+    display: inline-flex;
+}
+
+.phoneNoPaddingZero {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.textarea-error {
+    position: absolute;
+    top: 34px;
+}
+
+::ng-deep .custom-tooltip-blue{
+    background-color: rgba(125, 177, 245, 0.582);
+    color: #356a94 !important;
+    font-size: 12px;
+    font-weight: bold;
+}

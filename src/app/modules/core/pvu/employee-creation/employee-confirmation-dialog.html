@@ -1,0 +1,19 @@
+<form class="pt-2 pb-2 max-auto">
+    <!-- <p class="text-center">Employee Number: <b>{{empNo}}</b> is generated successfully!</p>
+    <p class="text-center">Employee Name: <b>{{empName}}</b></p>
+    <p class="text-center">Employee Designation: <b>{{designation}}</b></p> -->
+    <p class="msg">
+		Employee Number generated successfully!!! 
+	</p>
+    <p class="empInfo">
+        Employee Number: <strong>{{empNo}}</strong> <br>
+        Employee Name: <strong>{{empName}}</strong> <br>
+        Employee Designation: <strong>{{designation}}</strong>
+	</p>
+    <div mat-dialog-actions class="form-action-button">
+        <button type="submit" mat-raised-button color="primary" (click)="onYesClick()" style="margin-bottom: unset;">
+            <i class="material-icons" title="yes" aria-hidden="true">done</i>
+            OK
+        </button>
+    </div>
+</form>

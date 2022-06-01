@@ -1,0 +1,24 @@
+<div class="col-sm-12">
+    <form class="example-form">
+        <h3 mat-dialog-title>Are you sure you want to proceed?</h3>
+        <div class="mat-typography">
+            <p>Please re-check selected Budget head combinations. Once you proceed, you won’t be able to edit the Budget
+                Head. Are you sure you want to proceed? </p>
+        </div>
+        <div mat-dialog-actions class="form-action-button">
+            <button type="submit" mat-raised-button color="primary" (click)="onyes()" cdkFocusInitial>
+                <i class="material-icons" aria-hidden="true" title="save">
+                    check
+                </i>
+                Yes
+            </button>
+            <button type="button" mat-raised-button (click)="onCancel()" class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                    close
+                </i>
+                No
+            </button>
+
+        </div>
+    </form>
+</div>

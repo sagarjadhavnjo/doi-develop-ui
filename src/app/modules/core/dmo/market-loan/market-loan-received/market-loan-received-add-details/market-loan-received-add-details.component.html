@@ -1,0 +1,402 @@
+<div class="container">
+  <div class="form-wrapper">
+
+    <!-- Screen Name -->
+    <div class="heading-section ng-star-inserted">
+      <div>Management of Market Loan</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/MML/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/dashboard/dmo']">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Management of Market Loan</li>
+      </ol>
+    </nav>
+
+    <!-- Form Starts -->
+    <form [formGroup]="marketLoanReceivedAddDetailsForm">
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header">Loan Basic Details</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <!-- Input Field for Financial Year -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="finanacialYear" placeholder="Financial Year">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="financialYearCtrl"
+                        [placeholderLabel]="'Find Financial Year...'"
+                        [noEntriesFoundLabel]="'No matching Financial Year found'" alphabetsSpaceOnly>
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let item  of finanacialYearList | filterSelectInput:financialYearCtrl.value"
+                      [value]="item.value">
+                      {{item.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.finanacialYear.touched && marketLoanReceivedAddDetailsForm.controls.finanacialYear.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.finanacialYear.errors.required">
+                      {{errorMessages.FINANCIAL_YEAR}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Total Amount Received -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Total Amount Received (Rs.)" [count]="20" formControlName="totalAmountReceived" appTwoDecimalNumberWithConfig>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.totalAmountReceived.touched && marketLoanReceivedAddDetailsForm.controls.totalAmountReceived.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.totalAmountReceived.errors.required">
+                      {{errorMessages.TOTAL_AMOUNT_RECEIVED}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Loan Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Loan Amount" [count]="20" formControlName="loanAmount" appTwoDecimalNumberWithConfig>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.loanAmount.touched && marketLoanReceivedAddDetailsForm.controls.loanAmount.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.loanAmount.errors.required">
+                      {{errorMessages.LOAN_AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Premium Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Premium Amount (Rs.)" formControlName="premiumAmount" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.premiumAmount.touched && marketLoanReceivedAddDetailsForm.controls.premiumAmount.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.premiumAmount.errors.required">
+                      {{errorMessages.PREMIUM_AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Notification Number -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Notification Number" [maxLength]="50" formControlName="notificationNumber" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.notificationNumber.touched && marketLoanReceivedAddDetailsForm.controls.notificationNumber.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.notificationNumber.errors.required">
+                      {{errorMessages.NOTIFICATION_NO}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Notification Date -->
+              <div class="col-sm-3">
+                <mat-form-field (click)="picker1.open()">
+                  <input matInput formControlName="notificationDate" [matDatepicker]="picker1"
+                    placeholder="Notification Date" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.notificationDate.touched && marketLoanReceivedAddDetailsForm.controls.notificationDate.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.notificationDate.errors.required">
+                      {{errorMessages.NOTIFICATION_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Loan Start Date -->
+              <div class="col-sm-3">
+                <mat-form-field (click)="picker2.open()">
+                  <input matInput formControlName="loanStartDate" [matDatepicker]="picker2"
+                    placeholder="Loan Start Date" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 [disabled]="false"></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.loanStartDate.touched && marketLoanReceivedAddDetailsForm.controls.loanStartDate.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.loanStartDate.errors.required">
+                      {{errorMessages.LOAN_START_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Way Of Floatation -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="wayOfFloatation" placeholder="Way Of Floatation">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="wayOfFloatationCtrl"
+                        [placeholderLabel]="'Find Way Of Floatation...'"
+                        [noEntriesFoundLabel]="'No matching Way Of Floatation found'" alphabetsSpaceOnly>
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let item  of wayOfFloatationList | filterSelectInput:wayOfFloatationCtrl.value"
+                      [value]="item.value">
+                      {{item.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.wayOfFloatation.touched && marketLoanReceivedAddDetailsForm.controls.wayOfFloatation.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.wayOfFloatation.errors.required">
+                      {{errorMessages.WAY_OF_FLOATATION}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Type of Loan -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="typeOfLoan" placeholder="Type of Loan">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="typeOfLoanCtrl" [placeholderLabel]="'Find Type of Loan...'"
+                        [noEntriesFoundLabel]="'No matching Type of Loan found'" alphabetsSpaceOnly>
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let item  of loanList | filterSelectInput:typeOfLoanCtrl.value"
+                      [value]="item.value">
+                      {{item.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.typeOfLoan.touched && marketLoanReceivedAddDetailsForm.controls.typeOfLoan.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.typeOfLoan.errors.required">
+                      {{errorMessages.TYPE_OF_LOAN}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Loan Description -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Loan Description" [maxLength]="50" formControlName="loanDescription">
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.loanDescription.touched && marketLoanReceivedAddDetailsForm.controls.loanDescription.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.loanDescription.errors.required">
+                      {{errorMessages.LOAN_DESCRIPTION}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Tranche -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Tranche" formControlName="tranche">
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.tranche.touched && marketLoanReceivedAddDetailsForm.controls.tranche.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.tranche.errors.required">
+                      {{errorMessages.TRANCHE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Loan Tenure -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Loan Tenure" [maxLength]="10" formControlName="loanTenure" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.loanTenure.touched && marketLoanReceivedAddDetailsForm.controls.loanTenure.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.loanTenure.errors.required">
+                      {{errorMessages.LOAN_TENURE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Interest Rate -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Interest Rate" [maxLength]="10" formControlName="interestRate" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.interestRate.touched && marketLoanReceivedAddDetailsForm.controls.interestRate.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.interestRate.errors.required">
+                      {{errorMessages.RATE_OF_INTEREST}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Number of Issue -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Number of Issue" [maxLength]="10" formControlName="numberOfIssue" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.numberOfIssue.touched && marketLoanReceivedAddDetailsForm.controls.numberOfIssue.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.numberOfIssue.errors.required">
+                      {{errorMessages.NUMBER_OF_ISSUE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="box box-primary">
+          <div class="box-header">Loan Repayment Schedule - Principal</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <!-- Input Field for Moratotium Period -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Moratotium Period" [maxLength]="10" formControlName="moratotiumPeriod" numbersOnly
+                    required>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.moratotiumPeriod.touched && marketLoanReceivedAddDetailsForm.controls.moratotiumPeriod.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.moratotiumPeriod.errors.required">
+                      {{errorMessages.MORATOTIUM_PERIOD}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for % of Principal under Moratoritum -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="% of Principal under Moratoritum" [maxLength]="10"
+                    formControlName="principalUnderMoratoritum" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.principalUnderMoratoritum.touched && marketLoanReceivedAddDetailsForm.controls.principalUnderMoratoritum.errors">
+                    <mat-error
+                      *ngIf="marketLoanReceivedAddDetailsForm.controls.principalUnderMoratoritum.errors.required">
+                      {{errorMessages.PRINCIPAL_UNDER_MORATORIUM}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Total Number of Repayment Installments -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Total Number of Repayment Installments" [maxLength]="10"
+                    formControlName="totalNumberOfRepaymentInstallments" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.totalNumberOfRepaymentInstallments.touched && marketLoanReceivedAddDetailsForm.controls.totalNumberOfRepaymentInstallments.errors">
+                    <mat-error
+                      *ngIf="marketLoanReceivedAddDetailsForm.controls.totalNumberOfRepaymentInstallments.errors.required">
+                      {{errorMessages.TOTAL_NUMBER_OF_REPAYMENT_INSTALLMENT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for Number of Repayment Installments Per Year -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder=" Number of Repayment Installments Per Year" [maxLength]="10"
+                    formControlName="numberOfRepaymentInstallmentsPerYear" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.numberOfRepaymentInstallmentsPerYear.touched && marketLoanReceivedAddDetailsForm.controls.numberOfRepaymentInstallmentsPerYear.errors">
+                    <mat-error
+                      *ngIf="marketLoanReceivedAddDetailsForm.controls.numberOfRepaymentInstallmentsPerYear.errors.required">
+                      {{errorMessages.NUMBER_OF_REPAYMENT_INSTALLMENTS_PER_YEAR}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for First Installment Date -->
+              <div class="col-sm-3">
+                <mat-form-field (click)="picker3.open()">
+                  <input matInput formControlName="firstInstallmentDate" [matDatepicker]="picker3"
+                    placeholder="First Installment Date" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                  <mat-datepicker #picker3 [disabled]="false"></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.firstInstallmentDate.touched && marketLoanReceivedAddDetailsForm.controls.firstInstallmentDate.errors">
+                    <mat-error *ngIf="marketLoanReceivedAddDetailsForm.controls.firstInstallmentDate.errors.required">
+                      {{errorMessages.FIRST_INSTALLMENT_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="box box-primary">
+          <div class="box-header">Loan Repayment Schedule - Interest</div>
+          <div class="box-body">
+
+            <div class="row">
+
+              <!-- Input Field for Number of Installments in a Year -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput placeholder="Number of Installments in a Year"
+                    formControlName="numberOfInstallmentsinaYear" numbersOnly>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.numberOfInstallmentsinaYear.touched && marketLoanReceivedAddDetailsForm.controls.numberOfInstallmentsinaYear.errors">
+                    <mat-error
+                      *ngIf="marketLoanReceivedAddDetailsForm.controls.numberOfInstallmentsinaYear.touched && marketLoanReceivedAddDetailsForm.controls.numberOfInstallmentsinaYear.errors.required">
+                      {{errorMessages.NUMBER_OF_INSTALLMENTS_IN_A_YEAR}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Input Field for First Installment Date -->
+              <div class="col-sm-3">
+                <mat-form-field (click)="picker4.open()">
+                  <input matInput formControlName="firstInstallmentDateInterest" [matDatepicker]="picker4"
+                    placeholder="First Installment Date" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                  <mat-datepicker #picker4 [disabled]="false"></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="marketLoanReceivedAddDetailsForm.controls.firstInstallmentDateInterest.touched && marketLoanReceivedAddDetailsForm.controls.firstInstallmentDateInterest.errors">
+                    <mat-error
+                      *ngIf="marketLoanReceivedAddDetailsForm.controls.firstInstallmentDateInterest.touched && marketLoanReceivedAddDetailsForm.controls.firstInstallmentDateInterest.errors.required">
+                      {{errorMessages.FIRST_INSTALLMENT_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!--action button Starts  -->
+        <div style="margin-top: 15px;">
+          <div class="form-action-button">
+            <button mat-raised-button type="button" color="primary" (click)="onSubmit()">
+              <i class="material-icons" aria-hidden="true" title="Save">save</i>Save</button>
+            <button type="button" mat-raised-button class="btnClose" (click)="onClose()">
+              <i class="material-icons" aria-hidden="true" title="Close">close</i>Close</button>
+          </div>
+        </div>
+        <!-- action button Ends -->
+
+      </div>
+    </form>
+    <!-- Form Ends -->
+
+  </div>
+</div>

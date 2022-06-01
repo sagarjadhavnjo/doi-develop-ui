@@ -1,0 +1,74 @@
+<div class="container common-workflow-section">
+    <div class="row">
+        <div class="heading-section ng-star-inserted">
+            <div>{{event}}</div>
+            <div class="font-heading" *ngIf="trnNo"><b>Reference No:</b> {{trnNo}}</div>
+            <div class="font-heading" *ngIf="trnNo"><b>Reference Date:</b>
+                {{ initiationDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div class="col-sm-12" *ngIf="headerJSON.length > 0">
+            <div class="row header-detail">
+                <div class="col-sm-4 colPadding" *ngFor="let item of headerJSON">
+                    <div class="labelCSS col-sm-4">{{item.label}}<span class="floatRight">:</span></div>
+                    <div class="paddingUnset col-sm-8 text-break">{{item.value}}</div>
+                </div>
+            </div>
+        </div>
+        <div mat-dialog-actions>
+            <button type="submit" mat-raised-button color="primary" (click)="onPrint()"><i class="material-icons" title="save">save</i>
+                Print</button>
+            <button type="button" mat-raised-button mat-dialog-close (click)="onNoClick()" class="btnClose"><i
+                    class="material-icons" title="PVU
+                                              dashboard">close</i>Close</button>
+        </div>
+
+        <div class="forward-module-container">
+
+
+            <div class="col-sm-12">
+                <div class="form-datatable-list
+                              history-common-section">
+                    <!-- <mat-checkbox [(ngModel)]="checkAll" [checked]="checkAll" (change)="selectAll($event)">
+                    </mat-checkbox> -->
+                    <b class="htry-hding-name">Remarks History:</b>
+                    <div class="category-deprt">
+                        <strong>{{remarksLabel}}</strong>
+                    </div>
+                    <div class="history-list-container">
+                        <mat-list *ngFor="let comments of
+                                      forwardDialog_history_list" class="column-box">
+                            <div class="histy-box">
+                                <!-- <mat-list-item class="txt-checkbox">
+                                    <mat-checkbox [checked]="comments.isChecked"
+                                        (change)="onCheckboxChange($event, i, comments)"></mat-checkbox>
+                                </mat-list-item> -->
+                                <mat-list-item class="txt-heading">
+                                    {{comments.userName}},{{comments.designationName}} ({{comments.wfRoleName}})
+                                </mat-list-item>
+                                <mat-list-item class="txt-heading comment-date">
+                                    {{ comments.createdDate | date: 'dd-MMM-yyyy hh:mm:ss a' : '+05:30'}}
+                                </mat-list-item>
+                            </div>
+                            <mat-list-item class="comment-text">
+                                <strong>Remarks:&nbsp;&nbsp;</strong>
+                                <span *ngIf="comments.remark.length>
+                                              250">{{comments.remark |
+                                              slice:0:249}}<a (click)="readMoreId=
+                                                  comments.trnId;" *ngIf="readMoreId !=
+                                                  comments.trnId">&nbsp;&nbsp;..read
+                                        more</a></span>
+                                <span *ngIf="readMoreId == comments.trnId">{{comments.remark
+                                              | slice:249}}<a (click)="readMoreId= undefined;" *ngIf="readMoreId ==
+                                                  comments.trnId">&nbsp;&nbsp;less</a></span>
+                                <span *ngIf="comments.remark.length
+                                          <250">{{comments.remark}}</span>
+                            </mat-list-item>
+                            <mat-list-item class="transaction-by">
+                                <div><strong>Transaction Status:&nbsp;&nbsp;</strong>{{comments.wfTrnStatus}}</div>
+                            </mat-list-item>
+                        </mat-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

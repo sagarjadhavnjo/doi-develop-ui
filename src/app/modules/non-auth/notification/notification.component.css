@@ -1,0 +1,24 @@
+
+  .notification-header{border-bottom:#e5e5e5 1px solid; color:#673ab7; padding:5px 0;}
+  .notification-header span{font-size: 12px;}
+  .notification-body{font-size:12px;  color: #545454; padding:5px 0;}
+  .float-right{float: right;}
+  ::ng-deep .mat-snack-bar-container {
+    position: absolute;
+    margin: 64px !important;
+    max-width: 24vw;
+    right: -38px !important;
+    background-color: #fff;
+    box-shadow: 0 1px 2px -1px rgba(0,0,0,.2), 0 1px 3px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);}
+
+
+    .close-icon{
+      position: absolute;
+      right:5px;
+      top: 5px;
+      cursor: pointer;
+    }
+
+    .close-icon i{
+      font-size: 12px;
+    }

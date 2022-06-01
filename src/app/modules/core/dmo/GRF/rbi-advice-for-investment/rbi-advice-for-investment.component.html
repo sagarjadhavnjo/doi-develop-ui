@@ -1,0 +1,208 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>DMO</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/RAFI/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page"> RBI Advice For Investment
+        </li>
+      </ol>
+    </nav>
+
+
+    <form [formGroup]="RBIAdviceForInvestmentForm">
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header"> RBI Advice For Investment</div>
+          <div class="box-body">
+            <div class="row">
+              <!-- Date Of Investment  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="dateOfInvestment" [matDatepicker]="dateOfInvestment"
+                    placeholder="Date Of Investment" required>
+                  <mat-datepicker-toggle matSuffix [for]="dateOfInvestment">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #dateOfInvestment></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="RBIAdviceForInvestmentForm.controls.dateOfInvestment.touched && RBIAdviceForInvestmentForm.controls.dateOfInvestment.errors">
+                    <mat-error *ngIf="RBIAdviceForInvestmentForm.controls.dateOfInvestment.errors.required">
+                      {{errorMessages.INVESTMENT_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Investment From  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-select formControlName="investmentFrom" placeholder="Investment From">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="investmentFromCtrl"
+                        [placeholderLabel]="'Select Investment From ...'"
+                        [noEntriesFoundLabel]="'no matching Investment From'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of investmentFromList | filterSelectInput:investmentFromCtrl.value"
+                      [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!-- Balance in CSF Current A/c(Rs.)   -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="balanceCSF" numbersOnly
+                    placeholder="Balance in CSF Current A/c(Rs.) ">
+
+                </mat-form-field>
+              </div>
+              <!-- RBI Advice No.  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="rbiAdviceno" numbersOnly placeholder="RBI Advice No.">
+                </mat-form-field>
+              </div>
+              <!-- RBI Advice Date-->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="RBIAdviceDate" [matDatepicker]="RBIAdviceDate"
+                    placeholder="RBI Advice Date" required>
+                  <mat-datepicker-toggle matSuffix [for]="RBIAdviceDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #RBIAdviceDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="RBIAdviceForInvestmentForm.controls.RBIAdviceDate.touched && RBIAdviceForInvestmentForm.controls.RBIAdviceDate.errors">
+                    <mat-error *ngIf="RBIAdviceForInvestmentForm.controls.RBIAdviceDate.errors.required">
+                      {{errorMessages.INVESTMENT_DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Name of Security   -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-select formControlName="nameOfSecurity" placeholder="Name of Security " required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="nameOfSecurityCtrl"
+                        [placeholderLabel]="'Select Name of Security ...'"
+                        [noEntriesFoundLabel]="'no matching Name of Security'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of nameOfSecurityList | filterSelectInput:nameOfSecurityCtrl.value"
+                      [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="RBIAdviceForInvestmentForm.controls.nameOfSecurity.touched && RBIAdviceForInvestmentForm.controls.nameOfSecurity.errors">
+                    <mat-error *ngIf="RBIAdviceForInvestmentForm.controls.nameOfSecurity.errors.required">
+                      {{errorMessages.NAME_OF_SECURITY}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Interest Rate  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="interestRate" numbersOnly placeholder="Interest Rate  ">
+                </mat-form-field>
+              </div>
+              <!-- Year of Maturity  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-select formControlName="yearOfMaturity" placeholder="Year of Maturity" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="yearOfMaturityCtrl"
+                        [placeholderLabel]="'Select Investment From ...'"
+                        [noEntriesFoundLabel]="'no matching Investment From'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of yearOfMaturityList | filterSelectInput:yearOfMaturityCtrl.value"
+                      [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="RBIAdviceForInvestmentForm.controls.yearOfMaturity.touched && RBIAdviceForInvestmentForm.controls.yearOfMaturity.errors">
+                    <mat-error *ngIf="RBIAdviceForInvestmentForm.controls.yearOfMaturity.errors.required">
+                      {{errorMessages.YEAR_OF_MATURITY}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Face Value of Investment(Rs.)  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="faceValue" numbersOnly placeholder="Face Value of Investment(Rs.) ">
+                </mat-form-field>
+              </div>
+              <!-- No. of Units  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="noOfUnits" numbersOnly placeholder="No. of Units ">
+                </mat-form-field>
+              </div>
+              <!-- Purchase Price(Rs.)  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="purchase" numbersOnly placeholder="Purchase Price(Rs.) ">
+                </mat-form-field>
+              </div>
+              <!-- Broken Days  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="brokenDays" numbersOnly placeholder="Broken Days">
+                </mat-form-field>
+              </div>
+              <!-- Interest Cost For Broken Period(Rs.)  -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="interestCost" numbersOnly
+                    placeholder="Interest Cost For Broken Period(Rs.) ">
+                </mat-form-field>
+              </div>
+              <!-- Total Amount Debited to Current A/c CSF(Rs.) -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="totalAmount" numbersOnly
+                    placeholder="Total Amount Debited to Current A/c CSF(Rs.) ">
+
+                </mat-form-field>
+              </div>
+            </div>
+            <!-- Common Button -->
+            <div class="form-action-button">
+              <button type="submit" mat-raised-button color="primary" (click)="saveDetails()">
+                <i class="material-icons" aria-hidden="true" title="Save">
+                  save
+                </i>
+                Save
+              </button>
+
+              <button type="reset" mat-raised-button color="accent" >
+                <i class="material-icons" aria-hidden="true">
+                  restore
+                </i>
+                Reset
+              </button>
+
+
+              <button type="button" mat-raised-button class="btnClose">
+                Cancel
+              </button>
+
+            </div>
+            <!-- ENd Common Button -->
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,500 @@
+<div class="container common-workflow-section">
+	<div class="row">
+		<div class="heading-section ng-star-inserted">
+			<div>{{data.headingName}}</div>
+			<div class="font-heading" *ngIf="data.refNo"><strong>Reference No:</strong> {{data.refNo}}</div>
+			<div class="font-heading" *ngIf="data.refDate"><strong>Reference Date:</strong>
+				{{ data.refDate | date: 'dd-MMM-yyyy hh:mm:ss a' : '+05:30'}}</div>
+		</div>
+		<mat-tab-group mat-stretch-tabs class="standing-est-tabing
+          mat-form-field" [selectedIndex]="selectedIndex">
+			<mat-tab>
+				<ng-template mat-tab-label>
+					<mat-icon class="example-tab-icon" *ngIf="doneHeader">check</mat-icon>
+					Comment
+				</ng-template>
+				<div class="row header-detail">
+					<div class="col-sm-4 colPadding" *ngFor="let item of data.headerJson">
+						<div class="labelCSS">{{item.label}}<span class="floatRight">:</span></div>
+						<div class="paddingUnset">{{item.value}}</div>
+					</div>
+				</div>
+
+				<div class="forward-module-container">
+					<div class="forward-dialog-left">
+						<div class="col-sm-12">
+							<div class="form-datatable-list history-common-section">
+								<div class="col-sm-12">
+									<div class="row">
+										<div class="htry-hding-name">
+											<strong>Comment History:</strong>
+										</div>
+										<div class="back-to-action" *ngIf="!showWorkFlowAction">
+											<a (click)="changeViewToWorkFlowAction()" class="cursorPointer">Back to
+												Action Form</a>
+										</div>
+									</div>
+								</div>
+								<div class="category-deprt"><strong>{{commentHistoryOfficeName}}</strong></div>
+								<div class="history-list-container" *ngIf="historyData && historyData.length > 0">
+									<mat-list *ngFor="let comments of historyData" class="column-box">
+										<div class="histy-box">
+											<mat-list-item class="txt-heading">
+												{{comments.userName}},{{comments.designationName}}
+												({{comments.wfRoleName}})
+											</mat-list-item>
+											<mat-list-item class="txt-heading">
+												{{comments.createdDate | date: 'dd-MMM-yyyy hh:mm:ss a' : '+05:30'}}
+											</mat-list-item>
+										</div>
+										<mat-list-item class="comment-text">
+											<span *ngIf="comments.remark.length > 250">
+												<span *ngIf="readMoreId != comments.trnId">
+													{{comments.remark | slice:0:249}}
+													<a (click)="readMoreId = comments.trnId;"
+														*ngIf="readMoreId != comments.trnId">&nbsp;&nbsp;..read more</a>
+												</span>
+												<span *ngIf="readMoreId == comments.trnId">
+													{{comments.remark}}
+													<a (click)="readMoreId= undefined;"
+														*ngIf="readMoreId == comments.trnId">&nbsp;&nbsp;less</a>
+												</span>
+											</span>
+											<span *ngIf="comments.remark.length < 250">
+												{{comments.remark}}
+											</span>
+										</mat-list-item>
+										<mat-list-item>
+											<div class="box-opener">
+												<p class="flexicon">
+													<ng-container *ngFor="let file of comments.attachmentCommonDtoList">
+														<a (click)="downLoadUploadedAttachment(file)"
+															class="attachmentType cursorPointer">
+															{{file.fileName}}
+														</a>
+														<i *ngIf="file.isView"
+															class="material-icons iconset cursorPointer"
+															(click)="viewUploadedAttachment(file,$event,true)"
+															title="View">
+															save_alt
+														</i>
+													</ng-container>
+												</p>
+											</div>
+										</mat-list-item>
+									</mat-list>
+								</div>
+								<div class="history-list-container" *ngIf="historyData?.length === 0">
+									No Comments Available
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-datatable-list action-common-section">
+						<form class="col-sm-12" [formGroup]="workflowForm" autocomplete="off">
+							<div *ngIf="!showWorkFlowAction">
+								<div class="open-file-box">
+									<img *ngIf="selectedFilePreviewImageBase64" src="{{selectedFilePreviewImageBase64}}"
+										alt="Attachment Preview">
+
+									<!-- <object *ngIf="selectedFilePreviewPdf"  [data]="selectedFilePreviewPdf | safe" type="application/pdf">
+										<embed [src]="selectedFilePreviewPdf | safe" type="application/pdf" />
+								</object> -->
+
+									<iframe *ngIf="selectedFilePreviewPdf" title="PDF file"
+										[src]="selectedFilePreviewPdf | safe" style="width: 100%; height: 500%;">
+										<p>It appears your web browser doesn't support iframes.</p>
+									</iframe>
+
+
+								</div>
+
+							</div>
+							<div *ngIf="showWorkFlowAction">
+								<div class="col-sm-12">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="workflowAction" placeholder="Action"
+												(selectionChange)="onActionChange()" required>
+												<mat-option>
+													<ngx-mat-select-search [formControl]="actionCtrl"
+														[placeholderLabel]="'Find Action...'"
+														[noEntriesFoundLabel]="'no matching Action found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let action of actionList | filterSelectInput : actionCtrl.value : 'wfActionName'"
+													[value]="action.workflowActionId">
+													{{action.wfActionName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.workflowAction.touched || (workflowForm.controls.workflowAction.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.workflowAction.errors && workflowForm.controls.workflowAction.errors.required">
+													{{errorMessages.ACTION}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isBranchVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="branch" placeholder="Branch" required
+												[disabled]="selectedAction?.isToBranchSelReq === -1">
+												<mat-option>
+													<ngx-mat-select-search [formControl]="branchCodeCtrl"
+														[placeholderLabel]="'Find Branch...'"
+														[noEntriesFoundLabel]="'no matching Branch found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let branch of branchList | filterSelectInput : branchCodeCtrl.value : 'branchName'"
+													[value]="branch.branchId">
+													{{branch.branchName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.branch.touched || (workflowForm.controls.branch.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.branch.errors && workflowForm.controls.branch.errors.required">
+													{{errorMessages.BRANCH}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isOfficeVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="office" placeholder="Office" required
+												[disabled]="selectedAction?.isToOfficeSelReq === -1"
+												(selectionChange)="officeSelectionChange()">
+												<mat-option>
+													<ngx-mat-select-search [formControl]="officeCodeCtrl"
+														[placeholderLabel]="'Find Office...'"
+														[noEntriesFoundLabel]="'no matching Office found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let office of officeList | filterSelectInput : officeCodeCtrl.value : 'officeName'"
+													[value]="office.officeId">
+													{{office.officeName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.office.touched || (workflowForm.controls.office.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.office.errors && workflowForm.controls.office.errors.required">
+													{{errorMessages.OFFICE}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isDepartmentVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="department" placeholder="Department"
+												(selectionChange)="onDepartmentChange()" required>
+												<mat-option>
+													<ngx-mat-select-search [formControl]="departmentCodeCtrl"
+														[placeholderLabel]="'Find Department...'"
+														[noEntriesFoundLabel]="'no matching Department found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let department of departmentList | filterSelectInput : departmentCodeCtrl.value : 'deptName'"
+													[value]="department.departmentId">
+													{{department.deptName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.department.touched || (workflowForm.controls.department.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.department.errors && workflowForm.controls.department.errors.required">
+													{{errorMessages.DEPATMENT}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isWorkflowRoleVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="workflowRole" placeholder="Send To"
+												(selectionChange)="onWorkflowRoleChange()" required>
+												<mat-option>
+													<ngx-mat-select-search [formControl]="workflowRoleCodeCtrl"
+														[placeholderLabel]="'Find Send To...'"
+														[noEntriesFoundLabel]="'no matching Send To found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let workflowRole of workflowRoleList | filterSelectInput : workflowRoleCodeCtrl.value : 'wfRoleName'"
+													[value]="workflowRole.wfRoleId">
+													{{workflowRole.wfRoleName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.workflowRole.touched || (workflowForm.controls.workflowRole.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.workflowRole.errors && workflowForm.controls.workflowRole.errors.required">
+													{{errorMessages.WORKFLOW_ROLE}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isHodVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="hod" placeholder="HOD"
+												(selectionChange)="onHodChange()" [required]="!isWorkflowRoleVisible">
+												<mat-option>
+													<ngx-mat-select-search [formControl]="hodCodeCtrl"
+														[placeholderLabel]="'Find HOD...'"
+														[noEntriesFoundLabel]="'no matching HOD found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let hod of hodList | filterSelectInput : hodCodeCtrl.value : 'officeName'"
+													[value]="hod.officeId">
+													{{hod.officeName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.hod.touched || (workflowForm.controls.hod.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.hod.errors && workflowForm.controls.hod.errors.required">
+													{{errorMessages.HOD}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isCoVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="co" placeholder="CO" (selectionChange)="onCoChange()" [required]="!isWorkflowRoleVisible">
+												<mat-option>
+													<ngx-mat-select-search [formControl]="coCodeCtrl"
+														[placeholderLabel]="'Find CO...'"
+														[noEntriesFoundLabel]="'no matching CO found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let co of coList | filterSelectInput : coCodeCtrl.value : 'officeName'"
+													[value]="co.officeId">
+													{{co.officeName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.co.touched || (workflowForm.controls.co.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.co.errors && workflowForm.controls.co.errors.required">
+													{{errorMessages.CO}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12" *ngIf="isUserVisible">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<mat-select formControlName="user" placeholder="User" required
+												[disabled]="selectedAction.isToUserSelReq === -1">
+												<mat-option>
+													<ngx-mat-select-search [formControl]="userCodeCtrl"
+														[placeholderLabel]="'Find User...'"
+														[noEntriesFoundLabel]="'no matching User found'">
+													</ngx-mat-select-search>
+												</mat-option>
+												<mat-option
+													*ngFor="let user of userList | filterSelectInput : userCodeCtrl.value : 'userName'"
+													[value]="user.userId">
+													{{user.userName}}
+												</mat-option>
+											</mat-select>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.user.touched || (workflowForm.controls.user.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.user.errors && workflowForm.controls.user.errors.required">
+													{{errorMessages.USER}}
+												</mat-error>
+											</div>
+										</mat-form-field>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="row">
+										<mat-form-field class="full-width">
+											<textarea #remarks matInput class="textarea wf-remarks" autocomplete="off"
+												name="remarks" [ngClass]="hasFocusSet == 1 ? 'hasfocus' : ''"
+												(focusout)="hasFocusSet=1;setEnglishOnFocusOut()"
+												formControlName="remarks" placeholder="Comment (ગુજરાતી)" noSpaceOnly
+												required (blur)="setRemarksOnBlur(remarks.value)"
+												maxlength="500"></textarea>
+											<div class="error-wrapper"
+												*ngIf="workflowForm.controls.remarks.touched || (workflowForm.controls.remarks.errors && isSubmitted)">
+												<mat-error
+													*ngIf="workflowForm.controls.remarks.errors && workflowForm.controls.remarks.errors.required">
+													{{errorMessages.REMARKS}}
+												</mat-error>
+												<!-- <mat-error *ngIf="workflowForm.controls.remarks.errors && !workflowForm.controls.remarks.errors.required && workflowForm.controls.remarks.errors.maxlength">
+													{{errorMessages.REMARKS_MAX}}
+												</mat-error> -->
+											</div>
+										</mat-form-field>
+									</div>
+									<div class="text-right row rightAlign">
+										<button mat-raised-button type="button" class="lang-btn"
+											(click)="toggleLanguage()">
+											{{currentLang.value == 'Eng' ? 'Guj' : 'Eng' }}
+										</button>
+									</div>
+								</div>
+
+								<div *ngIf="apiErrorMessageList && apiErrorMessageList.length > 0" class="pt-3">
+									<li *ngFor="let messageobj of apiErrorMessageList" class="text-danger">
+										{{messageobj.message}}
+									</li>
+								</div>
+
+								<div class="form-action-button">
+									<button type="button" title="Submit"
+										[disabled]="isSubmitted || apiErrorMessageList.length != 0 " mat-raised-button
+										class="green" cdkFocusInitial (click)="submitWorkflow()">
+										<i class="material-icons" title="Submit">done</i>
+										Submit
+									</button>
+									<button type="button" title="Cancel" mat-raised-button (click)="closeDialog()"
+										class="btnClose">
+										<i class="material-icons " title="Cancel dashboard">close</i>
+										Cancel
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Attachments" class="full-width" *ngIf="data?.isAttachmentTab">
+				<table mat-table [dataSource]="dataSourceBrowse" width="100%" id="browseTable">
+					<ng-container matColumnDef="attachmentTypeId">
+						<th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+						<td mat-cell *matCellDef="let item;let i= index;">
+							<mat-select [disabled]="item.documentId" placeholder="Attachment Type" required
+								[(ngModel)]="item.attachmentTypeId" (selectionChange)="onAttachmentTypeChange(item,i)">
+								<mat-option>
+									<ngx-mat-select-search [formControl]="attachmentTypeCodeCtrl"
+										[placeholderLabel]="'Find Attachment Type...'"
+										[noEntriesFoundLabel]="'no matching Attachment Type found'">
+									</ngx-mat-select-search>
+								</mat-option>
+
+								<mat-option
+									*ngFor="let AT of attachmentTypeList | filterSelectInput : attachmentTypeCodeCtrl.value : 'name'"
+									[value]="AT.id">
+									{{AT.name}}
+								</mat-option>
+							</mat-select>
+							<!-- {{item.attachmentTypeName}} -->
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="fileName">
+						<th mat-header-cell *matHeaderCellDef>File name</th>
+						<td mat-cell *matCellDef="let item">
+							<mat-form-field floatLabel="never">
+								<textarea [disabled]="item.documentId" matInput [value]="item.fileName"
+									[(ngModel)]="item.fileName"></textarea>
+							</mat-form-field>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="browse">
+						<th mat-header-cell *matHeaderCellDef>Browse File</th>
+						<td mat-cell *matCellDef="let item;let i= index" class="centerAlign">
+							<button [disabled]="item.documentId" type="button" (click)="openFileSelector(i)"
+								class="btn-browse">
+								Browse Files
+							</button>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="uploadedFileName">
+						<th mat-header-cell *matHeaderCellDef>Uploaded file name</th>
+						<td mat-cell *matCellDef="let item;let i = index">
+							<span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}</span>
+							<span>
+								<i *ngIf="item.uploadedFileName && !item.documentId" class="material-icons closesmall"
+									(click)="removeUploadUserFile(item, i)" title="Delete File"
+									aria-hidden="true">close</i>
+							</span>
+
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="action">
+						<th mat-header-cell *matHeaderCellDef>Action</th>
+						<td mat-cell *matCellDef="let item; let i= index">
+							<table class="iconTable">
+								<tbody>
+									<tr>
+
+										<td width="30">
+											<i class="material-icons plus
+											  delete" *ngIf="item &&
+                                              item.uploadedFileName && item.uploadedDate && item.attachmentId"
+												(click)="deleteUploadedAttachment(item, i)">
+												delete
+											</i>
+										</td>
+										<td width="25">
+											<i class="material-icons plus view-icon" title="Download" *ngIf="item &&
+											item.documentId" (click)="downLoadUploadedAttachment(item)">vertical_align_bottom
+											</i>
+										</td>
+										<td width="30">
+											<i class="material-icons plus view-icon" title="View" *ngIf="item &&
+											item.documentId && item.isView" (click)="viewUploadedAttachment(item,$event)">remove_red_eye</i>
+										</td>
+
+
+										<td width="30">
+											<i class="material-icons plus add" *ngIf="dataSourceBrowse &&
+                                              dataSourceBrowse.data && (i ==
+                                              dataSourceBrowse.data.length -
+                                              1) && dataSourceBrowse.data.length < maxAttachment"
+												(click)="addNewFileRow()">
+												add
+											</i>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns:
+                      displayedBrowseColumns;"></tr>
+				</table>
+				<input type="file" #attachment id="fileBrowse" style="visibility: hidden;"
+					(change)="onFileSelection($event)" />
+				<div class="form-action-button">
+					<button type="button" mat-raised-button color="primary" [disabled]="isUploadDisable"
+						(click)="saveAttachmentTab()">
+						<i class="material-icons" aria-hidden="true" title="Save">
+							save
+						</i>
+						Upload
+					</button>
+					<button type="button" mat-raised-button class="btnClose" (click)="closeDialog()">
+						<i class="material-icons" title="Grant dashboard">
+							close
+						</i>
+						Cancel
+					</button>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
+	</div>
+</div>

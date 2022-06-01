@@ -1,0 +1,374 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Guarantee Entry</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/GE/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Guarantee Entry</li>
+      </ol>
+    </nav>
+
+
+    <form [formGroup]="guaranteeEntryForm">
+      <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedIndex" (selectedIndexChange)="getTabIndex($event)">
+        <!-- Details Starts -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            Details
+          </ng-template>
+          <!-- Creditor starts -->
+          <div class="panel-group">
+            <div class="box box-primary">
+              <div class="box-header">Creditor</div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select formControlName="departmentNameCredit" placeholder="Department Name" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="departmentNameCreditCtrl"
+                            [placeholderLabel]="'Find Department Name...'"
+                            [noEntriesFoundLabel]="'no matching Department Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let item of departmentNameList | filterSelectInput: departmentNameCreditCtrl.value"
+                          [value]="item.value">{{ item.viewValue }}</mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.departmentNameCredit.touched && guaranteeEntryForm.controls.departmentNameCredit.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.departmentNameCredit.errors?.required">
+                          {{errorMessages.DEPARTMENT_NAME}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select formControlName="hodCredit" placeholder="HOD" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="hodCreditCtrl" [placeholderLabel]="'Find HOD...'"
+                            [noEntriesFoundLabel]="'no matching HOD found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of hodList | filterSelectInput: hodCreditCtrl.value"
+                          [value]="item.value">{{ item.viewValue }}</mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.hodCredit.touched && guaranteeEntryForm.controls.hodCredit.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.hodCredit.errors?.required">
+                          {{errorMessages.HOD}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="instituteNameCredit" placeholder="Institute Name" required>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.instituteNameCredit.touched && guaranteeEntryForm.controls.instituteNameCredit.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.instituteNameCredit.errors?.required">
+                          {{errorMessages.INSTITUTE_NAME}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- Creditor Ends -->
+
+          <!-- Debitor  starts -->
+          <div class="panel-group">
+            <div class="box box-primary">
+              <div class="box-header">Debitor </div>
+              <div class="box-body">
+
+                <div class="row">
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select formControlName="departmentNameDebit" placeholder="Department Name" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="departmentNameDebitCtrl"
+                            [placeholderLabel]="'Find Department Name...'"
+                            [noEntriesFoundLabel]="'no matching Department Name found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option
+                          *ngFor="let item of departmentNameList | filterSelectInput: departmentNameDebitCtrl.value"
+                          [value]="item.value">{{ item.viewValue }}</mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.departmentNameDebit.touched && guaranteeEntryForm.controls.departmentNameDebit.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.departmentNameDebit.errors?.required">
+                          {{errorMessages.DEPARTMENT_NAME}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <mat-select formControlName="hodDebit" placeholder="HOD" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="hodDebitCtrl" [placeholderLabel]="'Find HOD...'"
+                            [noEntriesFoundLabel]="'no matching HOD found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of hodList | filterSelectInput: hodDebitCtrl.value"
+                          [value]="item.value">{{ item.viewValue }}</mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.hodDebit.touched && guaranteeEntryForm.controls.hodDebit.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.hodDebit.errors?.required">
+                          {{errorMessages.HOD}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="instituteNameDebit" placeholder="Institute Name" required>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.instituteNameDebit.touched && guaranteeEntryForm.controls.instituteNameDebit.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.instituteNameDebit.errors?.required">
+                          {{errorMessages.INSTITUTE_NAME}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          <!-- Debitor  Ends -->
+
+          <!-- Guranatee Details starts -->
+          <div class="panel-group">
+            <div class="box box-primary">
+              <div class="box-header">Guranatee Details</div>
+              <div class="box-body">
+
+                <div class="row">
+
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="amount" placeholder="Amount" numbersOnly required>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.amount.touched && guaranteeEntryForm.controls.amount.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.amount.errors?.required">
+                          {{errorMessages.AMOUNT}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="tenure" placeholder="Tenure" numbersOnly required>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.tenure.touched && guaranteeEntryForm.controls.tenure.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.tenure.errors?.required">
+                          {{errorMessages.TENURE}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="guaranteeRate" placeholder="Guarantee Fee Rate (%)" numbersOnly
+                        required>
+                      <div class="error-wrapper"
+                        *ngIf="guaranteeEntryForm.controls.guaranteeRate.touched && guaranteeEntryForm.controls.guaranteeRate.errors">
+                        <mat-error *ngIf="guaranteeEntryForm.controls.guaranteeRate.errors?.required">
+                          {{errorMessages.GUARANTEE_RATE}}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          <!-- Action Button -->
+          <div class="form-action-button">
+            <button type="submit" mat-raised-button color="primary" (click)="onAdd()">
+              <i class="material-icons" title="Add" aria-hidden="true">add</i>Add</button>
+            <button type="button" title="Close" mat-raised-button class="btnClose">
+              <i class="material-icons " title="Close">close</i>Close</button>
+          </div>
+
+          <!-- Guranatee Details Ends -->
+
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            List
+          </ng-template>
+          <div class="panel-group">
+            <div class="row">
+              <div class="col-sm-12">
+                <!-- List Table -->
+                <table mat-table [dataSource]="dataSource" aria-describedby="guaranteeTable">
+
+                  <!-- Sr. No. -->
+                  <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="centerAlign">
+                      {{ i + 1 }} </td>
+                  </ng-container>
+
+
+                  <!--Creditor  Department Name-->
+                  <ng-container matColumnDef="creditorDepartmentName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Creditor Department Name</th>
+                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                      {{element.creditorDepartmentName}}
+                    </td>
+                  </ng-container>
+
+                  <!--Creditor  HOD Name -->
+                  <ng-container matColumnDef="creditorHodName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Creditor HOD Name</th>
+                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                      {{element.creditorHodName}}
+                    </td>
+                  </ng-container>
+
+                  <!--Creditor  Institution Name -->
+                  <ng-container matColumnDef="creditorInstitutionName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Creditor Institution Name</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.creditorInstitutionName}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Debitor Department Name-->
+                  <ng-container matColumnDef="debitorDepartmentName">
+                    <th mat-header-cell *matHeaderCellDef scope="row"> Debitor Department Name</th>
+                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                      {{element.debitorDepartmentName}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Debitor HOD Name -->
+                  <ng-container matColumnDef="debitorHodName">
+                    <th mat-header-cell *matHeaderCellDef scope="row"> Debitor HOD Name</th>
+                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                      {{element.debitorHodName}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Debitor Institution Name -->
+                  <ng-container matColumnDef="debitorInstitutionName">
+                    <th mat-header-cell *matHeaderCellDef scope="row"> Debitor Institution Name</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.debitorInstitutionName}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Amount -->
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Amount</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.amount}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Tenure -->
+                  <ng-container matColumnDef="tenure">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Tenure</th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.tenure}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Guarantee Rate (%) -->
+                  <ng-container matColumnDef="guaranteeRate">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Guarantee Fee Rate (%) </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{element.guaranteeRate}}
+                    </td>
+                  </ng-container>
+
+                  <!-- Action   -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Action</th>
+                    <td mat-cell *matCellDef="let element;let i=index" class="centerAlign">
+                      <table class="iconTable" aria-describedby="actionBtn">
+                        <tbody>
+                          <tr>
+                            <td width="30">
+                              <i class="material-icons plus edit-icon" aria-hidden="true" title="Edit"
+                                (click)="edit(element)">
+                                edit</i>
+                            </td>
+                            <td width="30">
+                              <i class="material-icons plus delete" aria-hidden="true" (click)="delete(i)"
+                                title="Delete">
+                                delete
+                              </i>
+                            </td>
+                            <td width="30">
+                              <i class="material-icons plus view-icon" title="View"
+                                (click)="view(element)">remove_red_eye
+                              </i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </ng-container>
+
+                  <!-- Header column of Table -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <!-- Data fetch from .TS File  -->
+                  <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns;"></tr>
+                </table>
+                <!-- Paginator -->
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="form-action-button">
+            <button type="submit" mat-raised-button color="primary" (click)="saveDetails()">
+              <i class="material-icons "   title="Save">save</i>
+              Save</button>
+            <button type="button" title="Cancel" mat-raised-button class="btnClose">
+              <i class="material-icons " title="cancel">close</i>Cancel</button>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,8 @@
+
+
+@media(max-width:1200px){
+    .lc-distribution-circle .mat-table td.mat-cell{
+        max-width: 140px;
+    }
+    
+}

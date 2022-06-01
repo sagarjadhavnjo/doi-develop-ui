@@ -1,0 +1,66 @@
+<div class="header-wrapper">
+    <div class="mr-auto logo">
+        <span class="hand-burger">
+            <i class="material-icons" aria-hidden="true" (click)="menuDisplay($event)">
+                menu
+            </i>
+        </span>
+        <a> <img src="assets/images/w-satyamevjayatey.png" alt="ifms-logo" /> Finance Department </a>
+    </div>
+    <div class="user-container ml-auto user-dropdown-list">
+        <p class="user-details">Welcome, {{ userName }},</p>
+        <br />
+        <p class="user-details">{{ designationName ? designationName : '-' }}, {{ officeName ? officeName : '-' }}</p>
+
+        <div class="notification-icon">
+            <span class="notification-number">{{ notificationCount }}</span>
+            <i class="material-icons" (click)="getNotificationList()">notifications</i>
+        </div>
+
+        <button mat-button [matMenuTriggerFor]="menu" class="user-icon">
+            <img *ngIf="imgsrc" class="imgSrc" [src]="imgsrc ? imgsrc : ''" alt="" />
+            <i *ngIf="!imgsrc" class="material-icons" aria-hidden="true">
+                person
+            </i>
+        </button>
+
+        <mat-menu #menu="matMenu">
+            <div class="user-detail">
+                <div class="setting-icon">
+                    <i class="material-icons">
+                        settings_applications
+                    </i>
+                </div>
+                <div class="user-pic">
+                    <img *ngIf="imgsrc" class="profileIcon" [src]="imgsrc ? imgsrc : ''" alt="" />
+                    <i *ngIf="!imgsrc" class="material-icons" aria-hidden="true">
+                        person
+                    </i>
+                </div>
+                <div class="user-name">
+                    <h6>
+                        <strong>{{ userName }}</strong>
+                    </h6>
+                    <p class="title"><b>Employee Number :</b> {{ employeeNumber ? employeeNumber : '-' }}</p>
+                    <p class="title"><b>Post Name :</b> {{ postName ? postName : '-' }}</p>
+                </div>
+                <div class="user-action">
+                    <div class="profile-btn">
+                        <button (click)="profileModel()">Profile</button>
+                    </div>
+                    <div class="switchRole-btn" *ngIf="isSwitchPostDisbled">
+                        <button (click)="switchRoleModel()">Switch Post</button>
+                    </div>
+                </div>
+                <div class="user-action">
+                    <div class="profile-btn">
+                        <button skipLocationChange [routerLink]="'/password/change-password'">Change Password</button>
+                    </div>
+                    <div class="switchRole-btn">
+                        <button (click)="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </mat-menu>
+    </div>
+</div>

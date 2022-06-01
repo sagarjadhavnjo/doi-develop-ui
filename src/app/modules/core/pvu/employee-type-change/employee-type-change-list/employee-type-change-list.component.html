@@ -1,0 +1,206 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>{{'PVU.EmpTypeChange.lblListScreenName' | l10n}}</div>
+        </div>
+        <div class="panel-group">
+            <div class="box-top">
+                <div class="box-header">{{'PVU.Common.searchEmp' | l10n}}</div>
+                <div class="box-body">
+
+                    <div class=" form-datatable-list">
+                        <form class="col-sm-12" [formGroup]="searchListForm">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <mat-form-field>
+                                        <input matInput formControlName="fromDate" [max]="today" readonly
+                                            [matDatepicker]="refrenceFrom" placeholder="{{'PVU.EmpTypeChange.referenceFromDate' | l10n}}">
+                                        <mat-datepicker-toggle matSuffix [for]="refrenceFrom">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #refrenceFrom></mat-datepicker>
+                                        <div class="error-wrapper"
+                                            *ngIf="searchListForm.controls.fromDate.touched && searchListForm.controls.fromDate.errors">
+                                            <mat-error
+                                                *ngIf="searchListForm.controls.fromDate.errors.matDatepickerMax">
+                                                Please
+                                                enter date lesser than {{today | date : 'dd-MMM-yyyy'}}
+                                            </mat-error>
+                                        </div>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field>
+                                        <input matInput formControlName="toDate" [max]="today"
+                                            [min]="searchListForm.controls.fromDate.value" readonly
+                                            [matDatepicker]="referenceTo" placeholder="{{'PVU.EmpTypeChange.referenceToDate' | l10n}}">
+                                        <mat-datepicker-toggle matSuffix [for]="referenceTo">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #referenceTo></mat-datepicker>
+                                        <div class="error-wrapper"
+                                            *ngIf="searchListForm.controls.toDate.touched && searchListForm.controls.toDate.errors">
+                                            <mat-error *ngIf="searchListForm.controls.toDate.errors.matDatepickerMax">
+                                                Please
+                                                enter date lesser than {{today | date : 'dd-MMM-yyyy'}}
+                                            </mat-error>
+                                            <mat-error *ngIf="searchListForm.controls.toDate.errors.matDatepickerMin">
+                                                Please
+                                                enter date greater than
+                                                {{searchListForm.controls.fromDate.value | date : 'dd-MMM-yyyy'}}
+                                            </mat-error>
+                                        </div>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3 ">
+                                    <mat-form-field class="full-width">
+                                        <input formControlName="transNo" matInput placeholder="{{'PVU.EmpTypeChange.referenceNo' | l10n}}" maxlength="24" alphaNumericWithSlashHyphenOnly>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 ">
+                                    <mat-form-field class="full-width">
+                                        <input matInput numbersOnly formControlName="empNo" placeholder="{{'PVU.EmpTypeChange.employeeNo' | l10n}}" minlength="10" maxlength="10">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 ">
+                                    <mat-form-field class="full-width">
+                                        <input matInput formControlName="empName" placeholder="{{'PVU.EmpTypeChange.employeeName' | l10n}}" alphabetInBtwSpaceOnly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field class="full-width">
+                                        <mat-select formControlName="designationId" placeholder="{{'PVU.EmpTypeChange.designation' | l10n}}">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="empDesignationCtrl" [placeholderLabel]="'Find Designation...'" [noEntriesFoundLabel]="'no matching Designation found'">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option *ngFor="let designationId of empDesignation_list | filterSelectInput: empDesignationCtrl.value : 'designationName'" [value]="designationId.designationId">
+                                                {{designationId.designationName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput readonly placeholder="{{'PVU.EmpTypeChange.lblOfficeName' | l10n}}" formControlName="officeName">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field class="full-width">
+                                        <mat-select formControlName="wfStatus" placeholder="{{'PVU.Common.status' | l10n}}" #singleSelect1>
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="workflowStatusCtrl" [placeholderLabel]="'Find Workflow Status...'" [noEntriesFoundLabel]="'no matching Workflow Status found'">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option *ngFor="let workflowStatus of workflowStatus_list | filterSelectInput: workflowStatusCtrl.value : 'name'" [value]="workflowStatus.id">
+                                                {{workflowStatus.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="form-action-button">
+                                <button type="submit" mat-raised-button color="primary" (click)="onSubmitSearch()"
+                                [disabled] = "!searchListForm.get('fromDate').value && !searchListForm.get('toDate').value  && !searchListForm.get('transNo').value
+                                        && !searchListForm.get('empNo').value  && !searchListForm.get('empName').value  && !searchListForm.get('designationId').value
+                                        && !searchListForm.get('wfStatus').value">
+                                  <i class="material-icons">search</i> {{'PVU.Common.search' | l10n}}</button>
+                                <button type="button" mat-raised-button color="accent" (click)="clearForm()">
+                                  <i class="material-icons">restore</i>Reset</button>
+                            </div>
+                        </form>
+                        <div class="mat-elevation-z8">
+                            <div class="heading-section ng-star-inserted row mx-auto mt-3 mb-3">
+
+                            </div>
+                            <table mat-table [dataSource]="dataSource" width="100%" matSort>
+
+                                <ng-container matColumnDef="srNo">
+                                    <th mat-header-cell *matHeaderCellDef>{{'PVU.Common.srno' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;">
+                                        {{(pageSize * pageIndex) + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="transNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.referenceNo' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;" class="white-space">
+                                        {{element.refNo}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="refDate">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.referenceDate' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;" class="white-space">
+                                        {{element.refDate | date : 'dd-MM-yyyy'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="empNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.employeeNo' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;" class="white-space">
+                                        {{element.empNo}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="empName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.employeeName' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;">
+                                        {{element.empName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="designation">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.designation' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;">
+                                        {{element.desigName}}
+                                    </td>
+                                </ng-container>
+                                 <ng-container matColumnDef="curEmpType">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.prevEmpPay' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;">
+                                        {{element.currentPayTypeName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="updatedEmpType">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.upEmpPay' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;" class="white-space">
+                                        {{element.updatedPayTypeName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="officeName" >
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'PVU.EmpTypeChange.lblOfficeName' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;">
+                                        {{element.officeName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef>{{'PVU.Common.status' | l10n}}</th>
+                                    <td mat-cell *matCellDef="let element;let i= index;">
+                                        {{element.status}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="noData">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="centerAlign">{{'PVU.Common.noData' | l10n}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>action</th>
+                                    <td mat-cell *matCellDef="let element;let i = index;" class="action-btn-i centerAlign">
+                                        <a (click)="onEdit(element.sdId)" *ngIf="element.statusId !== 327"><i class="material-icons plus edit-icon"
+                                                title="Edit"> edit </i></a>
+                                        <a (click)="onView(element.sdId)"><i class="material-icons plus view-icon"
+                                                title="View">remove_red_eye</i></a>
+                                        <a (click)="showConfirmationPopup(element)" *ngIf="element.statusId !== 327"
+                                        >
+                                            <i class="material-icons plus delete" title="Delete" aria-hidden="true">delete_forever</i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; let i = index;columns: variableClm.value;">
+                                </tr>
+                            </table>
+                            <mat-paginator #paginator [pageSize]="pageSize" (page)="pageEvent = $event; onPaginateChange($event)" [pageSizeOptions]="[5, 10, 25]" [length]="totalRecords" showFirstLastButtons></mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

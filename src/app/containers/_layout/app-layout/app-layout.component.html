@@ -1,0 +1,13 @@
+<app-header (menuToggle)="onMenuToggle($event)"></app-header>
+<div class="col-sm-12 contain-container" #toggleContainer>
+    <div class="row">
+        <div class="sidebar-wrapper">
+            <app-side-bar (menuToggle)="onMenuToggle($event)"></app-side-bar>
+                <!-- Menu Sidebar -->
+        </div>
+        <div class="inner-container">
+            <router-outlet></router-outlet>
+            <app-footer></app-footer>
+        </div>
+    </div>
+</div>

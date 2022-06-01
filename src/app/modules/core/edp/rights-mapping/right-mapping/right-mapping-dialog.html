@@ -1,0 +1,106 @@
+<div class="right-mapping-container-model">
+    <div class="form-wrappe userroleview">
+        <div class="heading-section">
+            <div>Menu/Workflow rights Mapping View</div>
+        </div>
+        <div class="row pb-1 pt-1">
+            <div class="col-sm-3 font-weight-bold">Menu: {{menuName}}</div>
+            <div class="col-sm-3 font-weight-bold"></div>
+            <!-- <div class="col-sm-3 font-weight-bold">Workflows Rights : N/A</div> -->
+        </div>
+        <table mat-table [dataSource]="assignedRights" width="100%" id="browseTable">
+            <ng-container matColumnDef="srNo">
+                <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Sr. No</th>
+                <td mat-cell *matCellDef="let element;let i = index;">
+                    <mat-label>{{i+1}}</mat-label>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="empNo">
+                <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Employee Number</th>
+                <td mat-cell *matCellDef="let element;let i = index;" [attr.rowspan]="element.empNo">
+                    <mat-label>{{element.employeeNumber}}</mat-label>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="empName">
+                <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Employee Name</th>
+                <td mat-cell *matCellDef="let element;let i = index;" [attr.rowspan]="element.empName">
+                    <mat-label>{{element.employeeName}}</mat-label>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="postName">
+                <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Post Name</th>
+                <td mat-cell *matCellDef="let element;let i = index;">
+                    <mat-label>{{element.postName}}</mat-label>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="postType">
+                <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Post Type</th>
+                <td mat-cell *matCellDef="let element;let i = index;">
+                    <span *ngIf="element.postType === 'Primary'"><mat-label>Primary</mat-label></span>
+                    <span *ngIf="element.postType !== 'Primary'"><mat-label>Secondary</mat-label></span>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="create">
+                <th mat-header-cell *matHeaderCellDef>Create</th>
+                <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                    <mat-checkbox disabled [checked]="element.rolePermName.create"></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="edit">
+                <th mat-header-cell *matHeaderCellDef>Edit</th>
+                <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                    <mat-checkbox disabled [checked]="element.rolePermName.edit"></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef>View</th>
+                <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                    <mat-checkbox disabled [checked]="element.rolePermName.view"></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef>Delete</th>
+                <td mat-cell *matCellDef="let element;let i = index;" class="centerAlign">
+                    <mat-checkbox disabled [checked]="element.rolePermName.delete"></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="wfRoleNames">
+                <th mat-header-cell *matHeaderCellDef rowspan="2" [ngStyle]="{ display: 'none' }">Workflow</th>
+                <td mat-cell *matCellDef="let element;let i = index;">
+                    <mat-label>{{element.wfRoleNames}}</mat-label>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="srNo1">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sr No</th>
+            </ng-container>
+            <ng-container matColumnDef="empNo1">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Employee No</th>
+            </ng-container>
+            <ng-container matColumnDef="empName1">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Employee Name</th>
+            </ng-container>
+            <ng-container matColumnDef="postName1">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Post Name</th>
+            </ng-container>
+            <ng-container matColumnDef="postType1">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Post Type</th>
+            </ng-container>
+            <ng-container matColumnDef="permission1">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">Permission</th>
+            </ng-container>
+            <ng-container matColumnDef="wfRoleNames1">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Workflow</th>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="
+            [ 'srNo1', 'empNo1', 'empName1', 'postName1', 'postType1', 'permission1', 'wfRoleNames1']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+        </table>
+        <div class="text-center" [attr.colspan]="7" *ngIf="assignedRights && assignedRights.data && assignedRights.data.length == 0">
+            No Data Found
+        </div>
+        <div mat-dialog-actions class="form-action-button">
+            <button type="button" mat-raised-button (click)="onNoClick()"><i class="material-icons"
+                        title="EDP Dashboard">close</i>Close</button>
+        </div>
+    </div>

@@ -1,0 +1,14 @@
+<form class="pt-2 pb-2 max-auto popupForm">
+    <p class="msg">
+        Transaction generated successfully!!!
+    </p>
+    <p class="empInfo">
+        Reference Number: <strong>{{transactionNo}}</strong>
+    </p>
+    <div mat-dialog-actions class="form-action-button">
+        <button type="submit" mat-raised-button color="primary" (click)="onYesClick()" style="margin-bottom: unset;">
+            <i class="material-icons" title="yes" aria-hidden="true">done</i>
+            OK
+        </button>
+    </div>
+</form>

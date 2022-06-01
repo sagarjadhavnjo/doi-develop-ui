@@ -1,0 +1,139 @@
+<div class="container common-workflow-section">
+    <div class="row">
+        <div class="heading-section ng-star-inserted">
+            <div>Employee Creation</div>
+            <!-- <div class="font-heading"><b>Reference No:</b> {{refenceNo}}</div> -->
+            <!-- <div class="font-heading"><b>Reference Date:</b> {{ date | date: 'dd-MMM-yyyy HH:mm:ss'}}</div> -->
+        </div>
+                <div class="col-sm-12">
+                    <div class="row header-detail">                        
+                            <div class="col-sm-4 colPadding" *ngFor="let item of headerJSON">
+                                <div class="labelCSS col-sm-4">{{item.label}}<span class="floatRight">:</span></div>
+                                <div class="paddingUnset col-sm-8 text-break">{{item.value}}</div>
+                            </div>                        
+                    </div>
+                </div>
+
+                <div class="forward-module-container">
+                    <div class="forward-dialog-left">
+                        <div class="col-sm-12">
+                            <div class="form-datatable-list
+                                history-common-section">
+                                <b class="htry-hding-name">Remarks History:</b>
+                                <div class="category-deprt">
+                                    <strong>DDO Office</strong>
+                                </div>
+                                <div class="history-list-container">
+                                    <mat-list *ngFor="let comments of
+                                        forwardDialog_history_list"
+                                        class="column-box">
+                                        <div class="histy-box">
+                                            <mat-list-item class="txt-heading">
+                                                {{comments.userName}},{{comments.designationName}}
+                                                ({{comments.wfRoleName}})
+                                            </mat-list-item>
+                                            <mat-list-item class="txt-heading comment-date">{{
+                                                comments.createdDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}
+                                            </mat-list-item>
+                                        </div>
+                                        <mat-list-item class="comment-text">
+                                            <span *ngIf="comments.remark && comments.remark.length>
+                                                250"><strong>Remarks: </strong>{{comments.remark |
+                                                slice:0:249}}<a
+                                                    (click)="readMoreId=
+                                                    comments.trnId;"
+                                                    *ngIf="readMoreId !=
+                                                    comments.trnId">&nbsp;&nbsp;..read
+                                                    more</a></span>
+                                            <span *ngIf="readMoreId == comments.trnId"><strong>Remarks: </strong>{{comments.remark
+                                                | slice:249}}<a
+                                                    (click)="readMoreId= undefined;"
+                                                    *ngIf="readMoreId ==
+                                                    comments.trnId">&nbsp;&nbsp;less</a></span>
+                                            <span *ngIf="comments.remark && comments.remark.length
+                                            <250"><strong>Remarks: </strong>{{comments.remark}}</span>
+                                        </mat-list-item>
+                                        <mat-list-item class="transaction-by">
+                                            <div><strong>Transaction Status:</strong>{{comments.wfTrnStatus}}</div>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-datatable-list action-common-section">
+                        <form class="col-sm-12" [formGroup]="workflowForm">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <mat-form-field class="full-width">
+                                            <mat-select
+                                                formControlName="workflowAction"
+                                                placeholder="Action"
+                                                (selectionChange)="getWorkflowUsers()"
+                                                required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search
+                                                        [formControl]="actionCtrl"
+                                                        [placeholderLabel]="'Find Action...'"
+                                                        [noEntriesFoundLabel]="'no matching Action found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option *ngFor="let action of action_list | filterSelectInput: actionCtrl.value: 'wfActionName'"
+                                                    [value]="action.wfActionId">
+                                                    {{action.wfActionName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <error-messages [errorMessages]="{'required': errorMessages.WF_ACTION}" [control]="workflowForm.get('workflowAction')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" *ngIf="isUserRequired">
+                                    <div class="row">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="user" placeholder="User" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search
+                                                        [formControl]="userCodeCtrl"
+                                                        [placeholderLabel]="'Find User...'"
+                                                        [noEntriesFoundLabel]="'no matching User found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+
+                                                <mat-option *ngFor="let user of user_list | filterSelectInput: userCodeCtrl.value: 'userName'"
+                                                    [value]="user.pouId">
+                                                    {{user.userName}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <error-messages [errorMessages]="{'required': errorMessages.WF_USER}" [control]="workflowForm.get('user')">
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <mat-form-field class="full-width">
+                                            <textarea matInput class="wf-remarks" placeholder="Remark" formControlName="remarks"  [required] = "this.workflowForm.get('remarks').validator !== null" maxlength="5000"></textarea>
+                                            <error-messages [errorMessages]="{'required': errorMessages.WF_REMARK, 'trimError': 'Only spaces not allowed!'}" [control]="workflowForm.get('remarks')"> -->
+                                            </error-messages>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div mat-dialog-actions
+                                    class="form-action-button">
+                                    <button type="submit" mat-raised-button [disabled]="isSubmitted"
+                                        class="green" (click)="submitWorkFlow()" cdkFocusInitial>
+                                        <i class="material-icons" title="save">save</i>
+                                        Submit
+                                    </button>
+                                    <button type="button" mat-raised-button mat-dialog-close
+                                        (click)="onNoClick()" class="btnClose">
+                                        <i class="material-icons" title="Close">close</i>
+                                        Cancel
+                                    </button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+    </div>

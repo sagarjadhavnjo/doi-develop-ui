@@ -1,0 +1,242 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>Cheque Register</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/CR/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI</li>
+        <li class="breadcrumb-item " aria-current="page">Co Insurance </li>
+        <li class="breadcrumb-item active" aria-current="page">Cheque Register</li>
+      </ol>
+    </nav>
+
+
+
+    <div class="panel-group">
+      <form [formGroup]="chequeRegisterForm">
+        <!-- Applicant Details -->
+        <div class="box box-primary">
+          <div class="box-header">Cheque Register</div>
+          <div class="box-body">
+            <div class="row">
+              <!-- Cheque Number -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="chequeNumber" maxlength="10" numbersOnly placeholder="Cheque Number"
+                    required>
+                  <div class="error-wrapper"
+                    *ngIf="chequeRegisterForm.controls.chequeNumber.touched && chequeRegisterForm.controls.chequeNumber.errors">
+                    <mat-error *ngIf="chequeRegisterForm.controls.chequeNumber.errors.required">
+                      {{ errorMessage.CHEQUENUMBER}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Cheque Type -->
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="chequeType" placeholder="Cheque Type" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="chequeTypeCtrl" [placeholderLabel]="'Find Cheque Type...'"
+                        [noEntriesFoundLabel]="'no matching Cheque Type found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of chequeType_list | filterSelectInput: riskTypeCtrl.value"
+                      [value]="item.value" [matTooltip]="item.viewValue">
+                      {{item.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="chequeRegisterForm.controls.chequeType.touched && chequeRegisterForm.controls.chequeType.errors">
+                    <mat-error *ngIf="chequeRegisterForm.controls.chequeType.errors.required">
+                      {{errorMessage.CHEQUE_TYPE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Cheque Date -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="chequeDate" formControlName="chequeDate" placeholder="Cheque Date"
+                    required>
+                  <mat-datepicker-toggle matSuffix [for]="chequeDate"></mat-datepicker-toggle>
+                  <mat-datepicker #chequeDate></mat-datepicker>
+                  <div class="error-wrapper"
+                    *ngIf="chequeRegisterForm.controls.chequeDate.touched && chequeRegisterForm.controls.chequeDate.errors">
+                    <mat-error *ngIf="chequeRegisterForm.controls.chequeDate.errors.required">
+                      {{ errorMessage.CHEQUEDATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <!-- Bank Name   -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <mat-select formControlName="banName" placeholder="Bank Name" (selectionChange)="selectBank()" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="bankCtrl" [placeholderLabel]="'Select  Bank Name...'"
+                        [noEntriesFoundLabel]="'no matching Bank Name found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let bl of bank_list | filterSelectInput : bankCtrl.value : 'viewValue'"
+                      [value]="bl.value" [matTooltip]="bl.viewValue">
+                      {{bl.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="chequeRegisterForm.controls.banName.touched && chequeRegisterForm.controls.banName.errors">
+                    <mat-error *ngIf="chequeRegisterForm.controls.banName.errors.required">
+                      {{ errorMessage.BANKNAME }}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-select formControlName="branchName" required placeholder="Branch Name">
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="branchNameCtrl"
+                        [placeholderLabel]="'Select Branch Name ...'"
+                        [noEntriesFoundLabel]="'no matching Branch Name found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option
+                      *ngFor="let item of branchNameList | filterSelectInput : branchNameCtrl.value : 'viewValue'"
+                      [value]="item.value" [matTooltip]="item.viewValue">
+                      {{item.viewValue}}
+                    </mat-option>
+                  </mat-select>
+
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="receivedFrom" numbersOnly placeholder=" Received From">
+                </mat-form-field>
+              </div>
+
+              <!-- Amount -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="amount" numbersOnly placeholder="Amount" required>
+                  <div class="error-wrapper"
+                    *ngIf="chequeRegisterForm.controls.amount.touched && chequeRegisterForm.controls.amount.errors">
+                    <mat-error *ngIf="chequeRegisterForm.controls.amount.errors.required">
+                      {{ errorMessage.AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Challan No -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="challanNo" numbersOnly placeholder="Challan Number">
+
+                </mat-form-field>
+              </div>
+              <!-- Challan Date -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="challanDate " formControlName="challanDate"
+                    placeholder="Challan Date  ">
+                  <mat-datepicker-toggle matSuffix [for]="challanDate"></mat-datepicker-toggle>
+                  <mat-datepicker #challanDate></mat-datepicker>
+
+                </mat-form-field>
+              </div>
+              <!-- DO/BO Place -->
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="placeDOBO" placeholder="DO/BO Place">
+
+                </mat-form-field>
+              </div>
+              <!-- Risk Type -->
+
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="riskType" placeholder="Risk Type" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="riskTypeCtrl" [placeholderLabel]="'Find Risk Type...'"
+                        [noEntriesFoundLabel]="'no matching Risk Type found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of riskType_list | filterSelectInput: riskTypeCtrl.value"
+                      [value]="item.id" [matTooltip]="item.name">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                  <div class="error-wrapper"
+                    *ngIf="chequeRegisterForm.controls.riskType.touched && chequeRegisterForm.controls.riskType.errors">
+                    <mat-error *ngIf="chequeRegisterForm.controls.riskType.errors.required">
+                      {{errorMessage.RISK_TYPE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+              <!-- Agent Commission -->
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="agentCommission" placeholder="Agent Commissionemarks  ">
+                </mat-form-field>
+              </div>
+
+            </div>
+            <!-- Common Button -->
+            <div class="form-action-button">
+              <button type="submit" mat-raised-button color="primary" (click)="saveData()">
+                <i class="material-icons" aria-hidden="true" title="Save">
+                  save
+                </i>
+                Save
+              </button>
+              <button mat-raised-button type="submit" class="green"><i class="material-icons">
+                  done
+                </i> Submit
+              </button>
+              <button type="reset" mat-raised-button color="accent">
+                <i class="material-icons" aria-hidden="true">
+                  restore
+                </i>
+                Reset
+              </button>
+              <button type="button" mat-raised-button color="warn">
+                Request for challan
+              </button>
+              <button type="button" mat-raised-button budget-list color="warn"
+                [routerLink]="'../co-insurance-cheque-register-listing'">
+                <i class="material-icons" aria-hidden="true" title="Listing">
+                  list
+                </i>
+                Listing
+              </button>
+              <button type="submit" mat-raised-button color="primary" class="btn-print">
+                <i class="material-icons" aria-hidden="true">print </i> Print
+              </button>
+
+
+              <button type="button" mat-raised-button class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Close">
+                  close
+                </i>
+                Close
+              </button>
+
+
+            </div>
+            <!-- ENd Common Button -->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

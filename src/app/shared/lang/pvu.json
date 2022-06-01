@@ -1,0 +1,75 @@
+{
+    "en-US":{
+        "Common": {
+            "saveAsDraft": "Save as Draft",
+            "approve": "Approve",
+            "listing": "Listing",
+            "reset": "Reset",
+            "close": "Close",
+            "comments": "View Comments",
+            "print": "Print",
+            "searchEmp": "Search Employee",
+            "status": "Status",
+            "search": "Search",
+            "srno": "Sr. No.",
+            "noData": "No Data Available"
+        },
+        "EmpTypeChange": {
+            "lblScreenName": "Adhoc/Probational Pay to Regular Pay",
+            "lblBoxHeader2": "Type Change Details",
+            "lblOfficeName": "Office Name",
+            "eventOrderNo": "Event Order Number",
+            "eventOrderDate": "Event Order Date",
+            "eventEffectiveDate": "Event Effective Date",
+            "lblEmpPayType": "Employee Pay Type",
+            "lblCondition": "Probational Increment Eligible",
+            "employeeDetails": "Employee Details",
+            "employeeNo": "Employee Number",
+            "employeeName": "Employee Name",
+            "class": "Class",
+            "designation": "Designation",
+            "empType": "Employee Type",
+            "doj": "Date of Joining",
+            "attachment": "Attachment",
+            "lblListScreenName": "Adhoc/Probational Pay to Regular Pay List",
+            "referenceFromDate": "Reference From Date",
+            "referenceToDate": "Reference To Date",
+            "referenceNo": "Reference Number",
+            "referenceDate": "Reference Date",
+            "prevEmpPay": "Previous Employee Pay Type",
+            "upEmpPay": "Updated Employee Pay Type"
+        },
+        "fixToRegular": {
+            "lblScreenName": "Fix Pay To Regular",
+            "lblBoxHeader1": "Employee Current Details",
+            "lblBoxHeader2": "Post Details"
+        },
+        "UserCreation": {
+            "lblScreenName": "Express Employee Creation",
+            "lblBoxHeader1": "Office Details",
+            "lblDistrict": "District",
+            "lblDdoNo": "DDO No",
+            "lblCardexNo": "Cardex No",
+            "lblOfficeName": "Office Name",
+            "lblBoxHeader2": "Employee Details",
+            "lblEmployeePayType": "Employee Pay Type",
+            "lblCaseNumber": "Case Number",
+            "lblSalutation": "Salutation",
+            "lblEmployeeFirstName": "Employee First Name",
+            "lblMiddleName": "Middle Name",
+            "lblLastName": "Last Name",
+            "lblDesignation": "Designation",
+            "lblDateOfBirth": "Date of Birth",
+            "lblPanNo": "Permanent Account Number (PAN)"
+        },
+        "UserCreationList": {
+            "lblScreenName": "Express Employee Creation List",
+            "lblBoxHeader1": "Employee Details",
+            "lblEmployeeName": "Employee Name",
+            "lblEmployeeNo": "Employee Number",
+            "lblPanNumber": "PAN No",
+            "lblStatus": "Status"
+        }
+    }
+}
+

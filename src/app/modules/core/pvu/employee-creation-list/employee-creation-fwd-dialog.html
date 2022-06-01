@@ -1,0 +1,19 @@
+<div class="col-sm-12">
+    <form class="example-form">
+        <mat-form-field class="example-full-width">
+            <input type="text" placeholder="Forward To" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <textarea matInput placeholder="Comment" [formControl]="additionalText"></textarea>
+        </mat-form-field>
+        <div mat-dialog-actions>
+            <button type="button" mat-raised-button (click)="onNoClick()"><i class="material-icons" title="Budget dashboard">close</i>Cancel</button>
+            <button type="submit" mat-raised-button color="primary" [mat-dialog-close]="data.animal" cdkFocusInitial><i class="material-icons" title="save">save</i> Submit</button>
+        </div>
+    </form>
+</div>

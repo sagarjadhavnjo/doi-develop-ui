@@ -1,0 +1,187 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>DMO</div>
+      <div class="font-heading"><strong>Reference Number:</strong> 19-20/DMO/RAMI/001</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}</div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">DMO</a></li>
+        <li class="breadcrumb-item active" aria-current="page">RBI Advice for Maturity/Accrued Interest</li>
+      </ol>
+    </nav>
+
+
+    <form [formGroup]="detailsForm">
+      <!-- RBI Advice for Maturity/Accrued Interest -->
+
+      <div class="panel-group">
+        <div class="box box-primary">
+          <div class="box-header">RBI Advice for Maturity/Accrued Interest</div>
+          <div class="box-body">
+
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="transType" placeholder="Type of Transaction" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="transTypeCtrl"
+                        [placeholderLabel]="'Find Type of Transaction ...'"
+                        [noEntriesFoundLabel]="'no Type of Transaction  found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let va of transType_List | filterSelectInput:transTypeCtrl.value"
+                      [value]="va.id">
+                      {{va.name}}
+                    </mat-option>
+                  </mat-select>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.transType.touched && (detailsForm.controls.transType.errors)">
+                    <mat-error *ngIf="detailsForm.controls.transType.errors.required">
+                      {{errorMessages.TRANS_TYPE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="balGrf"
+                    placeholder="Balance in GRF Current A/c(Rs.)" decimalLimitTwoOnly>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="rbiAdvNo" placeholder="RBI Advice No." required>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.rbiAdvNo.touched && (detailsForm.controls.rbiAdvNo.errors)">
+                    <mat-error *ngIf="detailsForm.controls.rbiAdvNo.errors.required">
+                      {{errorMessages.NUMBER_ENTER}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="rbiAdvDate" [matDatepicker]="rbiAdvDate"
+                    placeholder="RBI Advice Date" required>
+                  <mat-datepicker-toggle matSuffix [for]="rbiAdvDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #rbiAdvDate></mat-datepicker>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.rbiAdvDate.touched && (detailsForm.controls.rbiAdvDate.errors)">
+                    <mat-error *ngIf="detailsForm.controls.rbiAdvDate.errors.required">
+                      {{errorMessages.DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field class="full-width">
+                  <mat-select formControlName="secName" placeholder="Name of Security" required>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="secNameCtrl"
+                        [placeholderLabel]="'Find Name of Security ...'"
+                        [noEntriesFoundLabel]="'no Name of Security  found'">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let va of secName_List | filterSelectInput:secNameCtrl.value"
+                      [value]="va.id">
+                      {{va.name}}
+                    </mat-option>
+                  </mat-select>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.secName.touched && (detailsForm.controls.secName.errors)">
+                    <mat-error *ngIf="detailsForm.controls.secName.errors.required">
+                      {{errorMessages.NAME}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput formControlName="trensDate" [matDatepicker]="trensDate"
+                    placeholder="Date Of Transaction" required>
+                  <mat-datepicker-toggle matSuffix [for]="trensDate">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #trensDate></mat-datepicker>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.trensDate.touched && (detailsForm.controls.trensDate.errors)">
+                    <mat-error *ngIf="detailsForm.controls.trensDate.errors.required">
+                      {{errorMessages.DATE}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="intAmt" placeholder="Interest Amount(Rs.)"
+                    decimalLimitTwoOnly required>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.intAmt.touched && (detailsForm.controls.intAmt.errors)">
+                    <mat-error *ngIf="detailsForm.controls.intAmt.errors.required">
+                      {{errorMessages.AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="totAmt" placeholder="Total Amount(Rs.)"
+                    decimalLimitTwoOnly required>
+
+                  <div class="error-wrapper"
+                    *ngIf="detailsForm.controls.totAmt.touched && (detailsForm.controls.totAmt.errors)">
+                    <mat-error *ngIf="detailsForm.controls.totAmt.errors.required">
+                      {{errorMessages.AMOUNT}}
+                    </mat-error>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput class="rightAlign" formControlName="progBal"
+                    placeholder="Progressive Balance in GRF Current A/c(Rs.)" decimalLimitTwoOnly>
+                </mat-form-field>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Action Button -->
+    <div class="form-action-button">
+      <button type="button" mat-raised-button color="primary" (click)="saveDetails()">
+        <i class="material-icons" aria-hidden="true" title="save">
+          save
+        </i>
+        Save
+      </button>
+      <button type="button" title="Cancel" mat-raised-button class="btnClose">
+        <i class="material-icons " title="cancel">
+          close
+        </i>
+        Cancel
+      </button>
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<form class="pt-2 pb-2 max-auto" style="height: 92px;margin: 20px;">
+    <p class="text-center"><b>Are you sure Do you want Delete Record </b></p>
+    <div mat-dialog-actions>
+        <button type="submit" mat-raised-button color="primary" (click)="onYesClick()" cdkFocusInitial>
+            <i class="material-icons" aria-hidden="true" title="yes">right</i> 
+            Yes
+        </button>
+        <button type="button" mat-raised-button (click)="onNoClick()">
+            <i class="material-icons" aria-hidden="true" title="Budget dashboard">close</i>
+            Cancel
+        </button>
+    </div>
+</form>

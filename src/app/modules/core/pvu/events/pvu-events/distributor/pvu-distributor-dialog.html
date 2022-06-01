@@ -1,0 +1,68 @@
+<div class="col-sm-12">
+    <div class="form-datatable-list">
+        <form class="col-sm-12 " [formGroup]="actionForm" (ngSubmit)="submitWorkFlow()">
+            <div class="row">
+                <div class="col-sm-12 mt-3" *ngIf="isRange">
+                    <mat-form-field>
+                        <input matInput numbersOnly formControlName="srNoFrom" placeholder="Sr. No. From"
+                            (blur)="rangeCheck()" required>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-12 mt-2" *ngIf="isRange">
+                    <mat-form-field>
+                        <input matInput numbersOnly formControlName="srNoTo" placeholder="Sr. No. To"
+                            (blur)="rangeCheck()" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 mt-2">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="workflowAction" placeholder="Action" #singleSelect1 required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="actionCodeCtrl"
+                                    [placeholderLabel]="'Find Action...'"
+                                    [noEntriesFoundLabel]="'no matching Action found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option
+                                *ngFor="let user of actionList| filterSelectInput: actionCodeCtrl.value : 'wfActionName'"
+                                [value]="user.wfActionId">
+                                {{user.wfActionName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-12 mt-2 mb-2" *ngIf="isUserRequired">
+                    <mat-form-field class="full-width">
+                        <mat-select formControlName="user" placeholder="Auditor" required>
+                            <mat-option>
+                                <ngx-mat-select-search [formControl]="userCodeCtrl"
+                                    [placeholderLabel]="'Find Auditor...'"
+                                    [noEntriesFoundLabel]="'no matching Auditor found'">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option
+                                *ngFor="let user of userList | filterSelectInput: userCodeCtrl.value: 'userName'"
+                                [value]="user.userId">
+                                {{user.userName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div mat-dialog-actions class="dialog-action-buttons mt-2 mb-4">
+                <button type="button" mat-raised-button (click)="onNoClick()" class="btnClose">
+                    <i class="material-icons" title="Budget dashboard" aria-hidden="true">close
+                    </i>Cancel
+                </button>
+                <button type="submit" mat-raised-button color="primary" cdkFocusInitial><i class="material-icons"
+                        title="save" aria-hidden="true">save
+                    </i> Submit
+                </button>
+            </div>
+            <div class="mt-2 mb-2"></div>
+        </form>
+    </div>
+</div>

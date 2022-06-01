@@ -1,0 +1,904 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="heading-section ng-star-inserted">
+      <div>JPA Master For Policy </div>
+      <div class="font-heading"><strong>Reference Number:</strong> {{referneceNumber}}</div>
+      <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+      </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item " aria-current="page">DOI / JPA</li>
+        <li class="breadcrumb-item active" aria-current="page">JPA Master For Policy</li>
+      </ol>
+    </nav>
+    <div class="panel-group">
+      <!-- JPA Claim Listing  Form-->
+      <form [formGroup]="jpaClaimEntry">
+        <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [selectedIndex]="selectedIndex"
+          (selectedIndexChange)="getTabIndex($event)">
+          <mat-tab label="Master Policy Listing" [disabled]="true">
+            <div class="box box-primary">
+              <div class="box-header">Master Policy Listing </div>
+              <div class="box-body">
+                <div class="row">
+                  <!-- type of Policy -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="policyTypeL" placeholder="Policy Type">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="policyTypeCtrl"
+                            [placeholderLabel]="'Find Policy Type...'"
+                            [noEntriesFoundLabel]="'No matching Policy Type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of policyTypeList | filterSelectInput:policyTypeCtrl.value:'viewValue'"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ploicyNo" placeholder="Policy No.  ">
+
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Number Of Benificiaries -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="numberOfBenificiariesL" placeholder="Number Of Benificiaries ">
+
+                    </mat-form-field>
+                  </div>
+                  <!-- Scheme -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="schemeTypeL" placeholder="Scheme">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="schemeTypeCtrl" [placeholderLabel]="'Find Scheme ...'"
+                            [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let schemeType of schemeType_list | filterSelectInput: schemeTypeCtrl.value:'viewValue'"
+                          [value]="schemeType.value" [matTooltip]="schemeType.viewValue">
+                          {{schemeType.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select placeholder="Month" formControlName="month">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="typeMonthCtrl" [placeholderLabel]="'Find Month...'"
+                            [noEntriesFoundLabel]="'no matching Month found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="
+                          let year of month_list| filterSelectInput : typeMonthCtrl.value : 'viewValue'"
+                          [value]="year.value">
+                          {{ year.viewValue }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select placeholder="Year" formControlName="year">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="typeOfYearCtrl" [placeholderLabel]="'Find Year...'"
+                            [noEntriesFoundLabel]="'no matching Year found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="
+                          let year of year_list| filterSelectInput : typeOfYearCtrl.value : 'viewValue'"
+                          [value]="year.value">
+                          {{ year.viewValue }}
+                        </mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                  </div> -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="status" placeholder="Status">
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="StatusCtrl" [placeholderLabel]="'Find Status...'"
+                            [noEntriesFoundLabel]="'No matching Status found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let status  of StatusList | filterSelectInput:StatusCtrl.value:'viewValue'"
+                          [value]="status.value">
+                          {{status.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+
+                </div>
+                <!-- common button -->
+                <div class="form-action-button">
+
+                  <button type="button" mat-raised-button color="primary" (click)="onSearchClicked()">
+                    <i class="material-icons" aria-hidden="true">search</i>
+                    Search
+                  </button>
+                  <button mat-raised-button type="button" class="green" (click)="goToNext()"> + Add
+                  </button>
+
+                  <button type="reset" mat-raised-button color="accent">
+                    <i class="material-icons" aria-hidden="true" (click)="reset()">
+                      restore
+                    </i>
+                    Reset
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="mat-elevation-z8 row">
+              <!-- Top schedule Entry Table -->
+              <div class="col-sm-12 table-responsive overflow-x-auto">
+                <div class="mat-elevation-z8 table-responsive mt-2">
+                  <table mat-table [dataSource]="dataSource" width="100%" matSort
+                    aria-describedby="listinginwardscreen">
+
+                    <ng-container matColumnDef="srno">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Sr No.
+                      </th>
+                      <td mat-cell *matCellDef="let element; let i = index">
+                        {{ i + 1 }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="srno1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Sr No.
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="plocyNo">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row"
+                        style="width: 15%;">
+                        Policy Number
+                      </th>
+                      <td mat-cell *matCellDef="let element; let i = index">
+                        {{ element.policyNum }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="plocyNo1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row"
+                        style="width: 15%;">
+                        Policy Number
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="scheme">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Scheme
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.schemeName }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        status
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.activeStatus }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="scheme1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Scheme
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="startDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Start Date
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.policyStartDate}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Start Date
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        End Date
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.policyEndDate }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        End Date
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="numberofBenificiaries">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Number of Benificiaries
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.beneficiaryNum }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="numberofBenificiaries1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row"
+                        style="width: 5%;">
+                        Number of Benificiaries
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="premiumAmount">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Premium Amount
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.premiumAmount }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="premiumAmount1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Premium Amount
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="death">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                        Death
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.deathClaimAmt }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fiftyDiablity">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                        50% Disability
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.disable50ClaimAmt }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="hundredDisablity">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                        100% Disability
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.disable100ClaimAmt }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="claimAmount">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.colspan]="3" scope="row">
+                        Claim Amount
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="create1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowSpan]="2" scope="row">
+                        Created On
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="update1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowSpan]="2" scope="row">
+                        Modified on
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="status1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowSpan]="2" scope="row">
+                        status
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="createdOn">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Created On </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.createdDate }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="updatedOn">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Updated On </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.updatedDate }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'display': 'none'}">Action</th>
+                      <td mat-cell *matCellDef="let element; let i = index" class="action-btn-i centerAlign">
+                        <a><i class="material-icons plus edit-icon" aria-hidden="true" title="Edit"
+                            (click)="onEditClicked(element)"> edit </i></a>
+                        <a><i class="material-icons plus view-icon" title="Renewal"
+                            (click)="onRenewalClicked(element)">redo</i></a>
+                        <a><i class=" material-icons plus view-icon" aria-hidden="true" title="View Policy"
+                            (click)="onViewClicked(element)">remove_red_eye</i></a>
+
+
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action1">
+                      <th mat-header-cell *matHeaderCellDef scope="row" [attr.rowspan]="2">Action</th>
+                    </ng-container>
+                    <!-- custom Header -->
+                    <tr mat-header-row *matHeaderRowDef="['srno1','plocyNo1','scheme1',
+              'startDate1',
+              'endDate1',
+              'numberofBenificiaries1',
+              'premiumAmount1',              
+              'claimAmount',
+              'create1',
+              'update1',
+              'status1',
+              'action1']"></tr>
+                    <!-- Header Section Of table -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <!-- Data Fetch From .TS File to table -->
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
+                  </table>
+
+            <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="[pageSize]" (page)="onPaginateChange($event)"
+            [length]="totalRecords" showFirstLastButtons></mat-paginator>
+                  <!-- Common Button -->
+                  <!-- <div class="form-action-button">
+                    <button type="submit" mat-raised-button color="primary">
+                      <i class="material-icons" aria-hidden="true" title="Save">
+                        save
+                      </i>
+                      Save
+                    </button>
+                    <button type="button" mat-raised-button class="btnClose" title="Close">
+                      <i class="material-icons" title="Close" aria-hidden="true">
+                        close
+                      </i>
+                      Close
+                    </button>
+
+                  </div> -->
+                  <!-- End Common Button -->
+                </div>
+              </div>
+              <!-- End Top schedule Entry Table -->
+            </div>
+          </mat-tab>
+          <mat-tab label="Master Policy Form" [disabled]="true">
+            <!-- Details of Deceased/Disabled -->
+            <div class="box box-primary">
+              <div class="box-header">Master Policy Form </div>
+              <div class="box-body">
+                <div class="row">
+                  <!-- type of Policy -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="policyType" placeholder="Policy Type"
+                        (selectionChange)="ontoken($event)" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="policyTypeCtrl"
+                            [placeholderLabel]="'Find Policy Type...'"
+                            [noEntriesFoundLabel]="'No matching Policy Type found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let item of policyTypeList | filterSelectInput:policyTypeCtrl.value:'viewValue'"
+                          [value]="item.value" matTooltip="{{item.viewValue}}">
+                          {{item.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.policyType.touched && jpaClaimEntry.controls.policyType.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.policyType.errors.required">
+                          {{ errorMessage.POLICY_TYPE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- reference no -->
+                  <div class="col-sm-3" *ngIf="isTokentableone">
+                    <mat-form-field>
+                      <input matInput formControlName="referenceNo" placeholder="Reference No" required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.referenceNo.invalid && (jpaClaimEntry.controls.referenceNo.dirty || jpaClaimEntry.controls.referenceNo.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.referenceNo.errors.required">
+                          {{ errorMessage.BILL_REFERENCE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3" *ngIf="isTokentabletwo">
+                    <mat-form-field>
+                      <input matInput formControlName="ploicyNo" placeholder="Policy No.  " required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.ploicyNo.invalid && (jpaClaimEntry.controls.ploicyNo.dirty || jpaClaimEntry.controls.ploicyNo.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.ploicyNo.errors.required">
+                          {{ errorMessage.PLOCYNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Endorsement No -->
+                  <div class="col-md-3" *ngIf="isTokentable">
+                    <mat-form-field>
+                      <input matInput formControlName="endorsementSrNo" placeholder="Endorsement No"
+                        [matTooltip]="jpaClaimEntry.controls.endorsementSrNo.value" required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.endorsementSrNo.invalid && (jpaClaimEntry.controls.endorsementSrNo.dirty || jpaClaimEntry.controls.endorsementSrNo.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.endorsementSrNo.errors.required">
+                          {{ errorMessage.ENSNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-3" *ngIf="isTokentable">
+                    <mat-form-field>
+                      <input matInput formControlName="ploicyNo" placeholder="Policy No.  ">
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.ploicyNo.invalid && (jpaClaimEntry.controls.ploicyNo.dirty || jpaClaimEntry.controls.ploicyNo.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.ploicyNo.errors.required">
+                          {{ errorMessage.PLOCYNO }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Scheme -->
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select formControlName="schemeType" placeholder="Scheme" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="schemeTypeCtrl" [placeholderLabel]="'Find Scheme ...'"
+                            [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="let schemeType of schemeType_list | filterSelectInput: schemeTypeCtrl.value:'viewValue'"
+                          [value]="schemeType.value" [matTooltip]="schemeType.viewValue">
+                          {{schemeType.viewValue}}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.schemeType.touched && jpaClaimEntry.controls.schemeType.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.schemeType.errors.required">
+                          {{ errorMessage.SCHEME }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select placeholder="Month" formControlName="month" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="typeMonthCtrl" [placeholderLabel]="'Find Month...'"
+                            [noEntriesFoundLabel]="'no matching Month found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="
+                        let year of month_list| filterSelectInput : typeMonthCtrl.value : 'viewValue'"
+                          [value]="year.value">
+                          {{ year.viewValue }}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.month.touched && jpaClaimEntry.controls.month.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.month.errors.required">
+                          {{ errorMessage.MONTH }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <mat-form-field class="full-width">
+                      <mat-select placeholder="Year" formControlName="year" required>
+                        <mat-option>
+                          <ngx-mat-select-search [formControl]="typeOfYearCtrl" [placeholderLabel]="'Find Year...'"
+                            [noEntriesFoundLabel]="'no matching Year found'">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option>-- None --</mat-option>
+                        <mat-option *ngFor="
+                        let year of year_list| filterSelectInput : typeOfYearCtrl.value : 'viewValue'"
+                          [value]="year.value">
+                          {{ year.viewValue }}
+                        </mat-option>
+                      </mat-select>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.year.touched && jpaClaimEntry.controls.year.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.year.errors.required">
+                          {{ errorMessage.YEAR }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div> -->
+                  <!-- start Date -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="startDate" formControlName="startDate" placeholder="Start Date ">
+                      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                      <mat-datepicker #startDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.startDate.invalid && (jpaClaimEntry.controls.startDate.dirty || jpaClaimEntry.controls.startDate.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.startDate.errors.required">
+                          {{ errorMessage.START_DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- end Date -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput [matDatepicker]="endDate" formControlName="endDate" placeholder="End Date ">
+                      <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                      <mat-datepicker #endDate></mat-datepicker>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.endDate.invalid && (jpaClaimEntry.controls.endDate.dirty || jpaClaimEntry.controls.endDate.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.endDate.errors.required">
+                          {{ errorMessage.END_DATE }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Number Of Benificiaries -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="numberOfBenificiaries" placeholder="Number Of Benificiaries "
+                        required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.numberOfBenificiaries.invalid && (jpaClaimEntry.controls.numberOfBenificiaries.dirty || jpaClaimEntry.controls.numberOfBenificiaries.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.numberOfBenificiaries.errors.required">
+                          {{ errorMessage.BEN }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Premium Amount -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="premiumAmount" numbersOnly placeholder="Premium Amount "
+                        required>
+
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.premiumAmount.invalid && (jpaClaimEntry.controls.premiumAmount.dirty || jpaClaimEntry.controls.premiumAmount.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.premiumAmount.errors.required">
+                          {{ errorMessage.PREMIUM_AMOUNT }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Claim Amount on Death -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="ClaimAmountonDeath" numbersOnly
+                        placeholder="Claim Amount on Death " required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.ClaimAmountonDeath.invalid && (jpaClaimEntry.controls.ClaimAmountonDeath.dirty || jpaClaimEntry.controls.ClaimAmountonDeath.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.ClaimAmountonDeath.errors.required">
+                          {{ errorMessage.CLAIM_AMOUNT }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Claim Amount  50% Disability -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="fiftyDisablity" numbersOnly
+                        placeholder="Claim Amount  50% Disability " required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.fiftyDisablity.invalid && (jpaClaimEntry.controls.fiftyDisablity.dirty || jpaClaimEntry.controls.fiftyDisablity.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.fiftyDisablity.errors.required">
+                          {{ errorMessage.FIFTYDISABLITY }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Claim Amount  100% Disablity -->
+                  <div class="col-sm-3">
+                    <mat-form-field>
+                      <input matInput formControlName="hunDisablity" numbersOnly
+                        placeholder="Claim Amount  100% Disablity " required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.hunDisablity.invalid && (jpaClaimEntry.controls.hunDisablity.dirty || jpaClaimEntry.controls.hunDisablity.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.hunDisablity.errors.required">
+                          {{ errorMessage.HONDISABLITY }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="isTokentable"></div>
+                  <div class="col-md-3" *ngIf="isTokentable || isTokentableone">
+                    <mat-form-field class="full-width">
+                      <input type="text" matInput placeholder="Reason" formControlName='reason'
+                        (focus)="setGujaratiDefault()" (focusout)="hasFocusSet=1;setEnglishOnFocusOut($event)"
+                        [ngClass]="hasFocusSet == 1 ? 'hasfocus' : ''" required>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.reason.invalid && (jpaClaimEntry.controls.reason.dirty || jpaClaimEntry.controls.reason.touched)">
+                        <mat-error *ngIf="jpaClaimEntry.controls.reason.errors.required">
+                          {{ errorMessage.REASON }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div>
+                  <!-- Toggle for Eng/Guj -->
+                  <div class="text-left col-md-3" *ngIf="isTokentable || isTokentableone">
+                    <button mat-raised-button type="button" class="lang-btn"
+                      (click)="toggleLanguage()">{{currentLang.value == 'Eng' ? 'Guj' : 'Eng' }}</button>
+                  </div>
+                  <!-- <div class="col-md-3" *ngIf="isTokentableone">
+                    <mat-form-field class="full-width">
+                      <textarea matInput placeholder="Reason" formControlName='reason' required></textarea>
+                      <div class="error-wrapper"
+                        *ngIf="jpaClaimEntry.controls.reason.touched && jpaClaimEntry.controls.reason.errors">
+                        <mat-error *ngIf="jpaClaimEntry.controls.reason.errors.required">
+                          {{ errorMessage.REASON }}
+                        </mat-error>
+                      </div>
+                    </mat-form-field>
+                  </div> -->
+                </div>
+                <!-- common button -->
+                <div class="form-action-button">
+                  <button type="submit" mat-raised-button color="primary" (click)="addRecord()">
+                    <i class="material-icons" aria-hidden="true">add</i>
+                    Add
+                  </button>
+
+                  <button type="reset" mat-raised-button color="accent">
+                    <i class="material-icons" aria-hidden="true" (click)="reset()">
+                      restore
+                    </i>
+                    Reset
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="mat-elevation-z8 row">
+              <!-- Top schedule Entry Table -->
+              <div class="col-sm-12 table-responsive overflow-x-auto">
+                <div class="mat-elevation-z8 table-responsive mt-2">
+                  <table mat-table [dataSource]="newDataSource" width="100%" matSort
+                    aria-describedby="listinginwardscreen">
+
+                    <ng-container matColumnDef="srno">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Sr No.
+                      </th>
+                      <td mat-cell *matCellDef="let element; let i = index">
+                        {{ i + 1 }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="srno1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Sr No.
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="plocyNo">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Policy Number
+                      </th>
+                      <td mat-cell *matCellDef="let element; let i = index">
+                        {{ element.policyNum }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="plocyNo1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Policy Number
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="scheme">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Scheme
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.schemeName }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="scheme1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Scheme
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="startDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Start Date
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.policyStartDate}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Start Date
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        End Date
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.policyEndDate }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        End Date
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="numberofBenificiaries">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Number of Benificiaries
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.beneficiaryNum }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="numberofBenificiaries1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Number of <br /> Benificiaries
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="premiumAmount">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Premium Amount
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.premiumAmount }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="premiumAmount1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowspan]="2" scope="row">
+                        Premium Amount
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="death">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                        Death
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.deathClaimAmt }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fiftyDiablity">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                        50% Disability
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.disable50ClaimAmt }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="hundredDisablity">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header scope="row">
+                        100% Disability
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="rightAlign">
+                        {{ element.disable100ClaimAmt }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="claimAmount">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.colspan]="3" scope="row">
+                        Claim Amount
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        status
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.activeStatus }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="create1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowSpan]="2" scope="row">
+                        Created On
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="update1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowSpan]="2" scope="row">
+                        Modified on
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="status1">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [attr.rowSpan]="2" scope="row">
+                        status
+                      </th>
+                    </ng-container>
+                    <ng-container matColumnDef="createdOn">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Created On </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.createdDate }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="updatedOn">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': 'none'}" scope="row">
+                        Modified on </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.updatedDate }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'display': 'none'}">Action</th>
+                      <td mat-cell *matCellDef="let element; let i = index" class="action-btn-i centerAlign">
+                        <a (click)="onEditClicked(element)"><i class="material-icons plus edit-icon" aria-hidden="true"
+                            title="Edit"> edit </i></a>
+                        <!-- <a><i class="material-icons plus view-icon" title="Renewal">redo</i></a> -->
+                        <a class="delete-icon" (click)="onDeleteClicked(element)"><i class="material-icons plus delete"
+                            aria-hidden="true" title="delete">delete_forever</i></a>
+
+
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action1">
+                      <th mat-header-cell *matHeaderCellDef scope="row" [attr.rowspan]="2">Action</th>
+                    </ng-container>
+                    <!-- custom Header -->
+                    <tr mat-header-row *matHeaderRowDef="['srno1','plocyNo1','scheme1',
+              'startDate1',
+              'endDate1',
+              'numberofBenificiaries1',
+              'premiumAmount1',              
+              'claimAmount','action1']"></tr>
+                    <!-- Header Section Of table -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                    <!-- Data Fetch From .TS File to table -->
+                    <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns2"></tr>
+                  </table>
+
+                  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                  <!-- Common Button -->
+                  <div class="form-action-button">
+                    <button mat-raised-button type="submit" class="green" (click)="saveRecord()"><i
+                        class="material-icons">
+                        done
+                      </i> Submit
+                    </button>
+                    <button type="button" mat-raised-button color="warn" (click)="gePrevIndex()">
+                      <i class="material-icons" aria-hidden="true" title="Listing">
+                        list
+                      </i>
+                      Listing
+                    </button>
+                    <button type="button" mat-raised-button class="btnClose" title="Close" (click)="goToDashboard()">
+                      <i class="material-icons" title="Close" aria-hidden="true">
+                        close
+                      </i>
+                      Close
+                    </button>
+
+                  </div>
+                  <!-- End Common Button -->
+                </div>
+              </div>
+              <!-- End Top schedule Entry Table -->
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </form>
+    </div>
+  </div>
+</div>

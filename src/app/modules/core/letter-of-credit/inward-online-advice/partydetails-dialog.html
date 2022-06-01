@@ -1,0 +1,46 @@
+<div >
+    <div class="row">
+      <div class="heading-section ng-star-inserted">
+        <div>Party Details</div>
+      </div>
+    </div>
+    <div  class="mat-elevation-z8 mt-2">
+      <table mat-table [dataSource]="partydataSource" >
+        <ng-container matColumnDef="srno">
+          <th mat-header-cell *matHeaderCellDef> Sr No.</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="centerAlign">
+            {{i + 1}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="centerAlign">Total</td>
+        </ng-container>
+        <ng-container matColumnDef="label">
+          <th mat-header-cell *matHeaderCellDef> List Of Party Name</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ element.partyName}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="rightAlign">
+            {{ element.chqAmnt | number : '1.2-2'}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="rightAlign">
+            {{columnTotal() | number : '1.2-2'}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+  
+    </div>
+    <div class="form-action-button">
+      <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+        <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+          close
+        </i>
+        Close
+      </button>
+    </div>
+  
+  </div>

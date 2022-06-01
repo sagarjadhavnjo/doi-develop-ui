@@ -1,0 +1,9 @@
+.col-emp-no {
+    min-width: 90px;
+    width: 90px;
+}
+.col-mapped-branch,
+.col-added-branch {
+    max-width: 300px;
+    width: 300px;
+}

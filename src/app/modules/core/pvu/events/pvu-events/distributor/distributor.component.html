@@ -1,0 +1,337 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>PVU Distributor</div>
+        </div>
+        <mat-accordion class="search-accordian">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <div class="heading-section">
+                        Search Events
+                    </div>
+                </mat-expansion-panel-header>
+                <div class=" form-datatable-list">
+                    <form class="col-sm-12" [formGroup]="eventsForm">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="forwardFromDate" [matDatepicker]="forwardFromDate" placeholder="Forward From Date" [max]="dateNow" (dateChange)="onFwdFromSelect($event)" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="forwardFromDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #forwardFromDate></mat-datepicker>
+                                    <div class="error-wrapper" *ngIf="eventsForm.controls.forwardFromDate.touched && eventsForm.controls.forwardFromDate.errors">
+                                        <mat-error *ngIf="eventsForm.controls.forwardFromDate.errors.matDatepickerMax">
+                                            Please enter date lesser than {{dateNow | date : 'dd-MMM-yyyy'}}
+                                        </mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="forwardToDate" [matDatepicker]="forwardToDate" placeholder="Forward To Date" [min]="fwdToMin" [max]="dateNow" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="forwardToDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #forwardToDate></mat-datepicker>
+                                    <div class="error-wrapper" *ngIf="eventsForm.controls.forwardToDate.touched && eventsForm.controls.forwardToDate.errors">
+                                        <mat-error *ngIf="eventsForm.controls.forwardToDate.errors.matDatepickerMax">
+                                            Please enter date lesser than {{dateNow | date : 'dd-MMM-yyyy'}}
+                                        </mat-error>
+                                        <mat-error *ngIf="eventsForm.controls.forwardToDate.errors.matDatepickerMin">
+                                            Please enter date greater than {{fwdToMin | date : 'dd-MMM-yyyy'}}
+                                        </mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <!-- <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="eventName" placeholder="Event Name" #singleSelect1
+                                        required>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="eventsNameCtrl"
+                                                [placeholderLabel]="'Find Events Name...'"
+                                                [noEntriesFoundLabel]="'no matching Events Name found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let eventName of eventsNameList | filterSelectInput: eventsNameCtrl.value :'name'"
+                                            [value]="eventName.code">
+                                            {{eventName.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <div class="error-wrapper"
+                                        *ngIf="eventsForm.controls.eventName.touched && eventsForm.controls.eventName.errors">
+                                        <mat-error *ngIf="eventsForm.controls.eventName.errors.required">
+                                            Please select any event!</mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div> -->
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="eventCode" placeholder="Event" #singleSelect1 required>
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="eventsNameCtrl" [placeholderLabel]="'Find Event ...'" [noEntriesFoundLabel]="'no matching Event found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let type of eventsNameList | filterSelectInput: eventsNameCtrl.value : 'name'" [value]="type.code">
+                                            {{type.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <div class="error-wrapper" *ngIf="eventsForm.controls.eventCode.touched && eventsForm.controls.eventCode.errors">
+                                        <mat-error *ngIf="eventsForm.controls.eventCode.errors.required">
+                                            Please select any event!</mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput numbersOnly minlength="10" maxlength="10" placeholder="Employee Number" formControlName="empNo">
+                                    <div class="error-wrapper" *ngIf="eventsForm.controls.empNo.touched && eventsForm.controls.empNo.errors">
+                                        <mat-error *ngIf="eventsForm.controls.empNo.errors.minlength">
+                                            {{errorMessages.EMP_NO_MAX}}</mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" formControlName="empName" alphabetInBtwSpaceOnly maxlength="50" placeholder="Employee Name">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="designationId" placeholder="Designation">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="designationCtrl" [placeholderLabel]="'Find Designation...'" [noEntriesFoundLabel]="'No Matching Designation found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let DG of designationList | filterSelectInput:designationCtrl.value: 'name'" [value]="DG.id">
+                                            {{DG.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="PAN" maxlength="10" autocomplete="off" formControlName="panNo">
+                                    <div class="error-wrapper" *ngIf="eventsForm.controls.panNo.touched && eventsForm.controls.panNo.errors">
+                                        <mat-error *ngIf="eventsForm.controls.panNo.errors.invalidPanNo">
+                                            Please enter valid PAN no. !
+                                        </mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>District</mat-label>
+                                    <mat-select formControlName="districtId">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="districtCtrl" [placeholderLabel]="'Find District...'" [noEntriesFoundLabel]="'No Matching District found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let ET of districtList | filterSelectInput:districtCtrl.value:'name'" [value]="ET.id">
+                                            {{ET.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput numbersOnly maxlength="4" placeholder="Cardex Number" autocomplete="off" formControlName="cardexNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput numbersOnly maxlength="4" placeholder="DDO Number" autocomplete="off" formControlName="ddoCode">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput placeholder="Retirement Date" formControlName="retirementDate" [matDatepicker]="retirementDate" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="retirementDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #retirementDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" maxlength="14" numbersOnly placeholder="Case No." autocomplete="off" formControlName="caseNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-label>Class </mat-label>
+                                    <mat-select formControlName="classId">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="classCtrl" [placeholderLabel]="'Find Class...'" [noEntriesFoundLabel]="'No Matching Class found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let PR of classList | filterSelectInput: classCtrl.value : 'lookupInfoName'" [value]="PR.lookupInfoId">
+                                            {{PR.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="employeeTypeId" placeholder="Employee Type">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empTypeCtrl" [placeholderLabel]="'Find Class...'" [noEntriesFoundLabel]="'No Matching Class found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let ET of empTypeList | filterSelectInput:empTypeCtrl.value: 'lookupInfoName'" [value]="ET.lookupInfoId">
+                                            {{ET.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="inwardFromDate" [matDatepicker]="inwardFromDate" placeholder="Inward From Date" [max]="dateNow" (dateChange)="onInwardFromSelect($event)" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="inwardFromDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #inwardFromDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="inwardToDate" [matDatepicker]="inwardToDate" placeholder="Inward To Date" [min]="inwardToMin" [max]="dateNow" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="inwardToDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #inwardToDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Inward Number" formControlName="inwardNo"
+                                        alphaNumericWithSlashHyphenOnly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput placeholder="Reference No." maxlength="24" formControlName="transNo" alphaNumericWithSlashHyphenOnly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-action-button">
+                    <button mat-raised-button (click)="onSubmitSearch()" color="primary">
+                        <i class="material-icons" aria-hidden="true" title="search">search</i>
+                        Search
+                    </button>
+                    <button type="reset" mat-raised-button color="accent" (click)="clearForm();">
+                        <i class="material-icons" aria-hidden="true" title="restore">
+                            restore
+                        </i>
+                        Reset
+                    </button>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="mat-elevation-z8 table-responsive mt-2 table-setting-to-avoid-word-break">
+            <table mat-table [dataSource]="dataSource" width="100%" aria-describedby="pvuRegistry">
+                <ng-container matColumnDef="isSelected">
+                    <th mat-header-cell *matHeaderCellDef scope="row">
+                        <mat-checkbox [checked]="checked && isAllSelected()" [indeterminate]="intermediate && !isAllSelected() && !isNothingIsSelected()" (change)="selectAll($event)" title="Select All">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let item;let i = index;" class="centerAlign">
+                        <mat-checkbox [value]="item.isSelected" [checked]="item.isSelected" title="Select" (change)="checkboxValueChange($event, item)" *ngIf="item.status === 'Inwarded'">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index;" [class.oldCaseInward]="element.inwardCount > 1">
+                        {{ (iteratablePageIndex * pageSize) + i + 1 }}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="16" class="centerAlign">
+                        <span *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+                            No Records Found!
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="transNo">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Reference No.</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.transNo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="inwardDate">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Inward Date</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1">
+                        <span *ngIf="element.inwardDate && element.inwardDate != '-'">{{element.inwardDate | date : 'dd-MMM-yyyy hh:mm:ss a'}}</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="inwardNumber">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Inward Number</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1">
+                        {{element.inwardNumber}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="eventName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Event Name</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.eventName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="employeeNo">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Employee Number</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1">{{element.employeeNo}}</td>
+                </ng-container>
+                <ng-container matColumnDef="employeeName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Employee Name</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.employeeName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="designation">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Designation</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.designation}} </td>
+                </ng-container>
+                <ng-container matColumnDef="retirementDate">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Retirement Date</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.retirementDate | date : 'dd-MMM-yyyy'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="employeeType">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Employee Type</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.employeeType}} </td>
+                </ng-container>
+                <ng-container matColumnDef="forwardedDate">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Forward Date</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.forwardedDate | date : 'dd-MMM-yyyy hh:mm:ss a'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="officeName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Office Name</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.officeName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Status</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.status}} </td>
+                </ng-container>
+                <ng-container matColumnDef="wfStatus">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Workflow Status</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1"> {{element.wfStatus}} </td>
+                </ng-container>
+                <ng-container matColumnDef="caseType">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Type of Case</th>
+                    <td mat-cell *matCellDef="let element" [class.oldCaseInward]="element.inwardCount > 1">
+                        <span *ngIf="element.inwardCount > 1">Old Case</span>
+                        <span *ngIf="element.inwardCount === 1">New Case</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="noData">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="centerAlign">
+                        No Data Available </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns"></tr>
+                <tr mat-footer-row [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0" *matFooterRowDef="displayedColumnsFooter">
+                </tr>
+            </table>
+            <mat-paginator #paginator [pageSize]="'10'" (page)="pageEvent = $event; onPaginateChange($event)" [length]="totalRecords" showFirstLastButtons></mat-paginator>
+            <div class="form-action-button">
+
+                <button mat-raised-button type="submit" class="green" (click)="submitDistributor()">
+                    <i class="material-icons" title="save" aria-hidden="true" title="save">save</i> Submit</button>
+                <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                    <i class="material-icons" title="PVU dashboard" aria-hidden="true" title="close"> close</i>Close
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

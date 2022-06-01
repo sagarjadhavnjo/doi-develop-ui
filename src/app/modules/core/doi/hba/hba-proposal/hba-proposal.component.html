@@ -1,0 +1,970 @@
+<div class="container">
+    <div class="form-wrapper">
+      <div class="heading-section ng-star-inserted">
+        <div>HBA Proposal </div>
+        <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/HBA/HP/001</div>
+        <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+        </div>
+      </div>
+  
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item " aria-current="page">DOI / HBA</li>
+          <li class="breadcrumb-item active" aria-current="page">HBA Proposal </li>
+        </ol>
+      </nav>
+  
+  
+  
+      <div class="panel-group">
+        <!-- JPA Claim Entry  Form-->
+        <mat-tab-group mat-stretch-tabs class="standing-est-tabing">
+          <mat-tab label="HBA Proposal">
+            <form [formGroup]="hbaProposalEntry">
+              <div class="box box-primary">
+                <div class="box-header">Loan Detail</div>
+                <div class="box-body">
+                  <div class="row">
+                    <!-- District -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <mat-select formControlName="loanTakenFromDPPF" placeholder="Loan Taken From DPPF" required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="loanTakenFromDPPFCtrl"
+                              [placeholderLabel]="'Select Loan Taken From DPPF ...'"
+                              [noEntriesFoundLabel]="'no matching Loan Taken From DPPF found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let range of loanTakenFromDPPFList | filterSelectInput : loanTakenFromDPPFCtrl.value : 'viewValue'"
+                            [value]="range.value">
+                            {{range.viewValue}}
+                          </mat-option>
+                        </mat-select>
+  
+  
+                      </mat-form-field>
+                    </div>
+                    <!-- Loan dept id (acc no) -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="30" placeholder="Loan Account No (DPPF)" numbersOnly
+                          formControlName="loan" required>
+                        <mat-icon matSuffix class="searchIcon">search
+                        </mat-icon>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.loan.touched && hbaProposalEntry.controls.loan.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.loan.errors.required">
+                            {{ errorMessage.LOAN }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Loan amount -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="50" placeholder="Loan amount" numbersOnly
+                          formControlName="loanAmount" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.loanAmount.touched && hbaProposalEntry.controls.loanAmount.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.loanAmount.errors.required">
+                            {{ errorMessage.LOANAMOUNT }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                  </div>
+                </div>
+              </div>
+              <!-- HBA Proposal -->
+              <div class="box box-primary">
+                <div class="box-header">Employee Detail</div>
+                <div class="box-body">
+                  <div class="row">
+                    <!-- Employee No. -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="employeNo" placeholder="Employee No." maxlength="10" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.employeNo.touched && hbaProposalEntry.controls.employeNo.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.employeNo.errors.required">
+                            {{ errorMessage.EMPLOYENO}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Employee name -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Employee name" formControlName="employeeName" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.employeeName.touched && hbaProposalEntry.controls.employeeName.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.employeeName.errors.required">
+                            {{ errorMessage.EMPLOYENAME}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Employee Designation -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Designation" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.employeeDesignation.touched && hbaProposalEntry.controls.employeeDesignation.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.employeeDesignation.errors.required">
+                            {{ errorMessage.DESIGNATION}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Employee dept. name -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <input matInput type="text" placeholder="Office Name " formControlName="employeeDept" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.employeeDept.touched && hbaProposalEntry.controls.employeeDept.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.employeeDept.errors.required">
+                            {{ errorMessage.OFFICENAME}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Employee Address -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <textarea matInput rows="1" placeholder="Office Address " formControlName="empAdd"
+                          required></textarea>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.empAdd.touched && hbaProposalEntry.controls.empAdd.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.empAdd.errors.required">
+                            {{ errorMessage.OFFICEADD }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Employee Address -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <textarea matInput rows="1" placeholder="Insured House  Address " formControlName="empDepAdd"
+                          required></textarea>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.empDepAdd.touched && hbaProposalEntry.controls.empDepAdd.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.empDepAdd.errors.required">
+                            {{ errorMessage.INSUREDADD }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Home no of insured home -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Plot/House No. " formControlName="homeInsured" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.homeInsured.touched && hbaProposalEntry.controls.homeInsured.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.homeInsured.errors.required">
+                            {{ errorMessage.PLOTHOSE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Survey no of insured home -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Survey no " formControlName="surInsured" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.surInsured.touched && hbaProposalEntry.controls.surInsured.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.surInsured.errors.required">
+                            {{ errorMessage.SURVEYNO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- District -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="district" placeholder="District" required
+                          (selectionChange)="selectDistrict()">
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="districtCtrl" [placeholderLabel]="'Find District...'"
+                              [noEntriesFoundLabel]="'No matching District found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let item of districtList |
+            filterSelectInput:districtCtrl.value" [value]="item.value" matTooltip="{{item.viewValue}}">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.district.touched && hbaProposalEntry.controls.district.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.district.errors.required">
+                            {{ errorMessage.DISTRICT }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Taluka -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <mat-select name='taluka' formControlName='taluka' placeholder='Taluka' required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]='talukaCtrl' [placeholderLabel]="'Select Taluka ...'"
+                              [noEntriesFoundLabel]="'no matching Taluka found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let item of talukaNameList | filterSelectInput : talukaCtrl.value : 'viewValue'"
+                            [value]="item.value" matTooltip="{{item.viewValue}}">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.taluka.touched && hbaProposalEntry.controls.taluka.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.taluka.errors.required">
+                            {{ errorMessage.TALUKA }}
+                          </mat-error>
+                        </div>
+  
+                      </mat-form-field>
+                    </div>
+                    <!-- village -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="village" placeholder="Village" required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="villageCtrl" [placeholderLabel]="'Find Village...'"
+                              [noEntriesFoundLabel]="'No matching Village found'" alphabetsSpaceOnly>
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let item of villageList |
+                  filterSelectInput:villageCtrl.value" [value]="item.value" matTooltip="{{item.viewValue}}">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.village.touched && hbaProposalEntry.controls.village.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.village.errors.required">
+                            {{ errorMessage.village }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Pincode -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Pincode" numbersOnly formControlName="pincode" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.pincode.touched && hbaProposalEntry.controls.pincode.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.pincode.errors.required">
+                            {{ errorMessage.PINCODE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Aadhar Card No. -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input type="text" matInput formControlName="adharNo" numbersOnly
+                          placeholder="  Aadhar Card No.">
+                        <!-- <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.adharNo.touched && hbaProposalEntry.controls.adharNo.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.adharNo.errors.required">
+                            {{ errorMessage.AADHAR_NUMBER }}
+                          </mat-error>
+                        </div> -->
+                      </mat-form-field>
+                    </div>
+                    <!-- Mobile No.   -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input type="text" matInput formControlName="mobileNo" placeholder=" Mobile No." required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.mobileNo.touched && hbaProposalEntry.controls.mobileNo.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.mobileNo.errors.required">
+                            {{ errorMessage.MOBILENO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input type="text" matInput formControlName="emailId" placeholder="Email ID">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- House/Building Detail -->
+              <div class="box box-primary">
+                <div class="box-header">House/Building Detail</div>
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="typeofbuildingUse" required placeholder="Type of building Use ">
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="typeofbuildingUseCtrl"
+                              [placeholderLabel]="'Find Type of building Use ...'"
+                              [noEntriesFoundLabel]="'no matching Type of building Use Found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let typeofbuilding of typeofbuildingUse_List | filterSelectInput: typeofbuildingUseCtrl.value"
+                            [value]="typeofbuilding.value">
+                            {{typeofbuilding.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.typeofbuildingUse.touched && hbaProposalEntry.controls.typeofbuildingUse.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.typeofbuildingUse.errors.required">
+                            {{ errorMessage.TYPEOFUse }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Construction type -->
+              <div class="box box-primary">
+                <div class="box-header">Construction type</div>
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="wall" placeholder="Wall " required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="wallCtrl" required [placeholderLabel]="'Find wall...'"
+                              [noEntriesFoundLabel]="'no matching wall'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let wall of wall_List | filterSelectInput: wallCtrl.value"
+                            [value]="wall.value" [matTooltip]="wall.viewValue">
+                            {{wall.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.wall.touched && hbaProposalEntry.controls.wall.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.wall.errors.required">
+                            {{ errorMessage.WALL }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="cellinf" placeholder="Celling " required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="cellinfCtrl" [placeholderLabel]="'Find Celling ...'"
+                              [noEntriesFoundLabel]="'no matching Celling'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let Cellinf of Cellinf_List | filterSelectInput: cellinfCtrl.value"
+                            [value]="Cellinf.value" [matTooltip]="Cellinf.viewValue">
+                            {{Cellinf.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.cellinf.touched && hbaProposalEntry.controls.cellinf.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.cellinf.errors.required">
+                            {{ errorMessage.CEellinf }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Add-on Cover -->
+              <div class="box box-primary">
+                <div class="box-header">Add-on Cover</div>
+                <div class="box-body">
+                  <div class="row">
+                    <!-- Terrorism -->
+                    <div class="col-md-3">
+                      <mat-form-field>
+                        <mat-select formControlName="terrorism" required placeholder="Terrorism " #terrorism>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="terrorismCtrl"
+                              [placeholderLabel]="'Select Terrorism  ...'"
+                              [noEntriesFoundLabel]="'no matching Terrorism  found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let PM of terrorism_list | filterSelectInput : terrorismCtrl.value : 'viewValue'"
+                            [value]="PM.value" [matTooltip]="PM.viewValue">
+                            {{PM.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.terrorism.touched && hbaProposalEntry.controls.terrorism.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.terrorism.errors.required">
+                            {{ errorMessage.YES_NO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div class="col-sm-3" *ngIf="terrorism.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="50" placeholder="Sum Insured" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="sumInsuredTerror" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.sumInsuredTerror.touched && hbaProposalEntry.controls.sumInsuredTerror.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.sumInsuredTerror.errors.required">
+                            {{ errorMessage.SUMINSURED }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+  
+  
+                    <!-- Term (years) -->
+                    <div class="col-sm-3" *ngIf="terrorism.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="10" placeholder="Term of insurance (Year)" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="termTerror" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.termTerror.touched && hbaProposalEntry.controls.termTerror.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.termTerror.errors.required">
+                            {{ errorMessage.TERM }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3" *ngIf="terrorism.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Rate" formControlName="rateTerror" (keyup)="setFieldVal()"
+                         required decimalLimitTwoOnly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.rateTerror.touched && hbaProposalEntry.controls.rateTerror.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.rateTerror.errors.required">
+                            {{ errorMessages.RATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Insurance premium -->
+                    <div class="col-sm-3" *ngIf="terrorism.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Insurance premium" numbersOnly 
+                        [value]="(hbaProposalEntry.controls.insuranceTerror.value) | number : '1.2-2'"
+                          formControlName="insuranceTerror" required readonly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.insuranceTerror.touched && hbaProposalEntry.controls.insuranceTerror.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.insuranceTerror.errors.required">
+                            {{ errorMessage.INSURANCE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-md-9"></div>
+  
+                    <!-- EarthQuake -->
+                    <div class="col-md-3">
+                      <mat-form-field>
+                        <mat-select formControlName="eQuake" required placeholder="Earthquake " #eQuake>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="eQuakeCtrl"
+                              [placeholderLabel]="'Select Earthquake  ...'"
+                              [noEntriesFoundLabel]="'no matching Earthquake  found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let PM of eQuake_list | filterSelectInput : eQuakeCtrl.value : 'viewValue'"
+                            [value]="PM.value" [matTooltip]="PM.viewValue">
+                            {{PM.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.eQuake.touched && hbaProposalEntry.controls.eQuake.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.eQuake.errors.required">
+                            {{ errorMessage.YES_NO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    
+                    <div class="col-sm-3" *ngIf="eQuake.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="50" placeholder="Sum Insured" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="sumInsuredeQuake" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.sumInsuredeQuake.touched && hbaProposalEntry.controls.sumInsuredeQuake.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.sumInsuredeQuake.errors.required">
+                            {{ errorMessage.SUMINSURED }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+  
+  
+                    <!-- Term (years) -->
+                    <div class="col-sm-3" *ngIf="eQuake.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="10" placeholder="Term of insurance (Year)" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="termeQuake" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.termeQuake.touched && hbaProposalEntry.controls.termeQuake.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.termeQuake.errors.required">
+                            {{ errorMessage.TERM }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3" *ngIf="eQuake.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Rate" formControlName="rateeQuake" (keyup)="setFieldVal()"
+                         required decimalLimitTwoOnly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.rateeQuake.touched && hbaProposalEntry.controls.rateeQuake.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.rateeQuake.errors.required">
+                            {{ errorMessages.RATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Insurance premium -->
+                    <div class="col-sm-3" *ngIf="eQuake.value=='1'">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Insurance premium" numbersOnly
+                          formControlName="insuranceeQuake" required readonly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.insuranceeQuake.touched && hbaProposalEntry.controls.insuranceeQuake.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.insuranceeQuake.errors.required">
+                            {{ errorMessage.INSURANCE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-md-9"></div>
+                    
+                    <!-- Other -->
+                    <div class="col-md-3">
+                      <mat-form-field>
+                        <input matInput formControlName="other" placeholder="Other">
+                      </mat-form-field>
+                    </div>
+                    
+                    <div class="col-sm-3" *ngIf="hbaProposalEntry.controls.other.value != ''">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="50" placeholder="Sum Insured" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="sumInsuredOther" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.sumInsuredOther.touched && hbaProposalEntry.controls.sumInsuredOther.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.sumInsuredOther.errors.required">
+                            {{ errorMessage.SUMINSURED }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+  
+  
+                    <!-- Term (years) -->
+                    <div class="col-sm-3" *ngIf="hbaProposalEntry.controls.other.value != ''">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="10" placeholder="Term of insurance (Year)" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="termeOther" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.termeOther.touched && hbaProposalEntry.controls.termeOther.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.termeOther.errors.required">
+                            {{ errorMessage.TERM }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3" *ngIf="hbaProposalEntry.controls.other.value != ''">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Rate" formControlName="rateOther" (keyup)="setFieldVal()"
+                         required decimalLimitTwoOnly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.rateOther.touched && hbaProposalEntry.controls.rateOther.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.rateOther.errors.required">
+                            {{ errorMessages.RATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Insurance premium -->
+                    <div class="col-sm-3" *ngIf="hbaProposalEntry.controls.other.value != ''">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Insurance premium" numbersOnly
+                          formControlName="insuranceOther" required readonly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.insuranceOther.touched && hbaProposalEntry.controls.insuranceOther.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.insuranceOther.errors.required">
+                            {{ errorMessage.INSURANCE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Premium Detail -->
+              <div class="box box-primary">
+                <div class="box-header">Premium Detail</div>
+                <div class="box-body">
+                  <div class="row">
+                    <!-- Loan amount -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="50" placeholder="Sum Insured" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="sumInsured" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.sumInsured.touched && hbaProposalEntry.controls.sumInsured.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.sumInsured.errors.required">
+                            {{ errorMessage.SUMINSURED }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+  
+  
+                    <!-- Term (years) -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" maxlength="10" placeholder="Term of insurance (Year)" numbersOnly (keyup)="setFieldVal()"
+                          formControlName="term" required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.term.touched && hbaProposalEntry.controls.term.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.term.errors.required">
+                            {{ errorMessage.TERM }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Rate" formControlName="rate" (keyup)="setFieldVal()"
+                         required decimalLimitTwoOnly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.rate.touched && hbaProposalEntry.controls.rate.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.rate.errors.required">
+                            {{ errorMessage.RATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Insurance premium -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Insurance premium" maxlength="50" numbersOnly
+                          formControlName="insurance" required readonly>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.insurance.touched && hbaProposalEntry.controls.insurance.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.insurance.errors.required">
+                            {{ errorMessage.INSURANCE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="discpPerc" placeholder="Discount (%)" (keyup)="setFieldVal()"
+                         percentageOnly >
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="discAmt" placeholder="Discount Amount" readonly>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="loadAmt" placeholder="Loading Charge Amount" (keyup)="setFieldVal()"
+                         decimalLimitTwoOnly>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="totAddPre" placeholder="Total Add-on premium" readonly>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="totPre" placeholder="Total Premium" readonly numberDotOnly>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="gstPerc" placeholder="GST (%)" percentageOnly (keyup)="setFieldVal()">
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="gstAmt" placeholder="GST Amount" readonly>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="payPre" placeholder="Payable Premium" numberDotOnly readonly>
+                      </mat-form-field>
+                    </div>
+                    <!-- Payment Mode -->
+                    <div class="col-md-3">
+                      <mat-form-field>
+                        <mat-select name="paymentMode" (selectionChange)="ontoken($event)" formControlName="paymentMode"
+                          required placeholder="Payment Mode">
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="paymentModetrl"
+                              [placeholderLabel]="'Select Payment Mode ...'"
+                              [noEntriesFoundLabel]="'no matching Tange type found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let PM of paymentMode_list | filterSelectInput : paymentModetrl.value : 'viewValue'"
+                            [value]="PM.value" [matTooltip]="PM.viewValue">
+                            {{PM.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.paymentMode.touched && hbaProposalEntry.controls.paymentMode.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.paymentMode.errors.required">
+                            {{ errorMessage.PAYMENTMODE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-3" *ngIf="isTokentable">
+                      <mat-form-field>
+                        <mat-select formControlName="treasuryName" placeholder="Treasury Name">
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="treasuryNameCtrl"
+                              [placeholderLabel]="'Select Treasury Name ...'"
+                              [noEntriesFoundLabel]="'no matching Treasury Name found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option>-- None --</mat-option>
+                          <mat-option
+                            *ngFor="let item of treasuryName_list | filterSelectInput : treasuryNameCtrl.value : 'viewValue'"
+                            [value]="item.value" [matTooltip]="item.viewValue">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Date of DD/cheque -->
+                    <div class="col-sm-3" *ngIf="!isTokentable">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="dateCheque" formControlName="dateCheque"
+                          placeholder="Date of DD/cheque " required>
+                        <mat-datepicker-toggle matSuffix [for]="dateCheque"></mat-datepicker-toggle>
+                        <mat-datepicker #dateCheque></mat-datepicker>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.dateCheque.touched && hbaProposalEntry.controls.dateCheque.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.dateCheque.errors.required">
+                            {{ errorMessage.DATECHEQUE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Challan Number -->
+                    <div class="col-sm-3" *ngIf="!isTokentable">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="DD/Cheque No." maxlength="10" formControlName="ddZNo"
+                          required>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.dateCheque.touched && hbaProposalEntry.controls.dateCheque.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.dateCheque.errors.required">
+                            {{ errorMessage.DATECHEQUENO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Bank Name   -->
+                    <div class="col-sm-3" *ngIf="!isTokentable">
+                      <mat-form-field>
+                        <mat-select formControlName="banName" placeholder="Bank Name" required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="bankCtrl" [placeholderLabel]="'Select  Bank Name...'"
+                              [noEntriesFoundLabel]="'no matching Bank Name found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let bl of bank_list | filterSelectInput : bankCtrl.value : 'viewValue'"
+                            [value]="bl.value" [matTooltip]="bl.viewValue">
+                            {{bl.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.banName.touched && hbaProposalEntry.controls.banName.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.banName.errors.required">
+                            {{ errorMessage.BANKNAME }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Bank Branch   -->
+                    <div class="col-sm-3" *ngIf="!isTokentable">
+  
+                      <mat-form-field>
+                        <mat-select formControlName="bankBranch" placeholder="Bank Branch"
+                          (selectionChange)="onSelectBank($event)" required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="bankbranchCtrl"
+                              [placeholderLabel]="'Select  Bank Branch...'"
+                              [noEntriesFoundLabel]="'no matching Bank Branch found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let bl of bankbranch_list | filterSelectInput : bankbranchCtrl.value : 'viewValue'"
+                            [value]="bl.value" [matTooltip]="bl.viewValue">
+                            {{bl.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="hbaProposalEntry.controls.bankBranch.touched && hbaProposalEntry.controls.bankBranch.errors">
+                          <mat-error *ngIf="hbaProposalEntry.controls.bankBranch.errors.required">
+                            {{ errorMessage.BANKBRANCH }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Challan Number -->
+                    <div class="col-sm-3" *ngIf="isTokentableOPEN">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Receipt No.(BTR-5)" formControlName="receiptNo" readonly>
+                      </mat-form-field>
+                    </div>
+                    <!-- Challan Date -->
+                    <div class="col-sm-3" *ngIf="isTokentableOPEN">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="receiptDate" formControlName="receiptDate"
+                          placeholder=" Receipt Date (BTR-5) " readonly>
+                        <mat-datepicker-toggle matSuffix [for]="receiptDate"></mat-datepicker-toggle>
+                        <mat-datepicker #receiptDate></mat-datepicker>
+  
+                      </mat-form-field>
+                    </div>
+                    <!-- Challan Number -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput type="text" placeholder="Challan No" formControlName="challanNo" readonly>
+                      </mat-form-field>
+                    </div>
+                    <!-- Challan Date -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="challanDate" formControlName="challanDate"
+                          placeholder=" Challan Date " readonly>
+                        <mat-datepicker-toggle matSuffix [for]="challanDate"></mat-datepicker-toggle>
+                        <mat-datepicker #challanDate></mat-datepicker>
+  
+                      </mat-form-field>
+                    </div>
+                    <!-- Challan Amunt -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="challaAmount" placeholder="Challan Amount" readonly>
+                      </mat-form-field>
+                    </div>
+  
+                  </div>
+  
+                </div>
+              </div>
+  
+              <!-- End HBA Proposal -->
+  
+  
+              <div class="form-action-button">
+  
+                <button type="submit" mat-raised-button color="primary">
+                  <i class="material-icons" aria-hidden="true" title="Save">
+                    save
+                  </i>
+                  Save as Draft
+                </button>
+                <button mat-raised-button type="submit"  (click)="directiveObject.workflowDetails()" class="green">
+                  <i class="material-icons">
+                    done
+                  </i> Submit
+                </button>
+  
+                <button type="reset" mat-raised-button color="accent">
+                  <i class="material-icons" aria-hidden="true">
+                    restore
+                  </i>
+                  Reset
+                </button>
+  
+                <button mat-button mat-raised-button color="primary" class="back-button">
+                  <i class="material-icons" aria-hidden="true" title="Back">
+                    keyboard_return
+                  </i>
+                  Send Back
+                </button>
+  
+                <button type="button" mat-raised-button class="btnClose">
+                  <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                    close
+                  </i>
+                  Close
+                </button>
+                <button type="submit" mat-raised-button color="primary" class="btn-print">
+                  <i class="material-icons" aria-hidden="true">print </i> Print
+                </button>
+  
+                <button type="submit" mat-raised-button color="warn">
+  
+                  Generate Policy
+                </button>
+  
+              </div>
+            </form>
+          </mat-tab>
+  
+          <mat-tab label="Attachments">
+            <app-common-attachment [attachemntValue]="attachmentTypeCode"></app-common-attachment>
+            <div class="form-action-button">
+              <button type="submit" mat-raised-button color="primary">
+                <i class="material-icons" aria-hidden="true" title="Save">
+                  save
+                </i>
+                Upload
+              </button>
+              <button type="button" mat-raised-button budget-list color="warn">
+                <i class="material-icons" aria-hidden="true" title="Listing">
+                  list
+                </i>
+                Listing
+              </button>
+              <button type="button" mat-raised-button class="btnClose">
+                <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                  close
+                </i>
+                Close
+              </button>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <!-- End JPA Claim Entry  Form-->
+      </div>
+    </div>
+  </div>

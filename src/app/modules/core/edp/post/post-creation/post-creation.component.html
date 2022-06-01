@@ -1,0 +1,337 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Create New Post</div>
+            <div class="font-heading" *ngIf="transactionNo"><strong>Reference Number:</strong>
+                {{transactionNo}}
+            </div>
+            <div class="font-heading" *ngIf="transactionDate"><strong>Reference Date:</strong>
+                {{ transactionDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}
+            </div>
+        </div>
+        <div #parentGrids>
+            <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [selectedIndex]="selectedIndex">
+                <mat-tab label="Post Creation">
+                    <ng-template mat-tab-label>
+                        Post Creation
+                    </ng-template>
+                    <form [formGroup]="postForm" #postForms="ngForm" autocomplete="off">
+                        <div class="box box-primary">
+                            <div class="box-header">Office Detail</div>
+                            <div class="box-body">
+                                <div class="row" *ngIf="isDATUser">
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select name="district" formControlName="district"
+                                                placeholder="District" (selectionChange)="changeOfficeData()" required>
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="districtCtrl"
+                                                        [placeholderLabel]="'Search District...'"
+                                                        [noEntriesFoundLabel]="'no matching District found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let list of districtNameList | filterSelectInput : districtCtrl.value : 'name'"
+                                                    [value]="list.id">
+                                                    {{list.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="postForm.controls.district.touched && postForm.controls.district.errors">
+                                                <mat-error *ngIf="postForm.controls.district.errors.required">
+                                                    {{errorMessages.DDO_OFFICE.DISTRICT}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly formControlName="ddoNo" placeholder="DDO No"
+                                                maxlength="4" (blur)="onChangeNumber()" required>
+                                            <div class="error-wrapper"
+                                                *ngIf="postForm.controls.ddoNo.touched && postForm.controls.ddoNo.errors">
+                                                <mat-error *ngIf="postForm.controls.ddoNo.errors.required">
+                                                    {{errorMessages.DDO_OFFICE.DDO_NO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly formControlName="cardexNo"
+                                                placeholder="Cardex No" maxlength="4" (blur)="onChangeNumber()"
+                                                required>
+                                            <div class="error-wrapper"
+                                                *ngIf="postForm.controls.cardexNo.touched && postForm.controls.cardexNo.errors">
+                                                <mat-error *ngIf="postForm.controls.cardexNo.errors.required">
+                                                    {{errorMessages.DDO_OFFICE.CARDEX_NO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput formControlName="ddoOffice" placeholder="DDO Office"
+                                                [matTooltip]="postForm.get('ddoOffice').value" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="!isDATUser">
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput formControlName="district" placeholder="District" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly formControlName="ddoNo" placeholder="DDO No"
+                                                maxlength="4" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly formControlName="cardexNo"
+                                                placeholder="Cardex No" maxlength="4" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput formControlName="ddoOffice" placeholder="DDO Office"
+                                                [matTooltip]="postForm.get('ddoOffice').value" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label>
+                                            Available Vacant Post
+                                            <i (click)="availableVacantPostListDialog()"
+                                                class="material-icons plus view-icon" title="View">remove_red_eye</i>
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="isOfficeDetailSearch">
+                                        <label>
+                                            Search Office Details
+                                            <i (click)="searchOfficeDetails()" class="material-icons plus view-icon"
+                                                title="View">find_in_page</i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Designation Detail</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <mat-select formControlName="designationName" name="designationName"
+                                                placeholder="Designation Name" required
+                                                (selectionChange)="loadPostName()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="designationCtrl"
+                                                        [placeholderLabel]="'Search designation name.. '"
+                                                        [noEntriesFoundLabel]="'No matching found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option>
+                                                    {{matInputSelectNull}}
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let designationName of designationList | filterSelectInput : designationCtrl.value : 'name'"
+                                                    [value]="designationName.id">
+                                                    {{designationName.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper"
+                                                *ngIf="postForm.controls.designationName.touched && postForm.controls.designationName.errors">
+                                                <mat-error *ngIf="postForm.controls.designationName.errors.required">
+                                                    {{errorMessages.POST.Designation}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3" *ngIf="isDesignation">
+                                        <mat-form-field>
+                                            <textarea matInput name="postName" formControlName="postName"
+                                                placeholder="Post Name" readonly></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-primary" *ngIf="isObjectionRequired">
+                            <div class="box-header">Objection Detail</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-checkbox [(ngModel)]="objStatus" formControlName="objStatus"
+                                            (change)="objectionRemarks()">
+                                            Objection
+                                        </mat-checkbox>
+                                    </div>
+                                    <div class="col-sm-12" *ngIf="objStatus">
+                                        <mat-form-field>
+                                            <textarea matInput name="objRemark" formControlName="objRemark"
+                                                placeholder="Objection Remarks" maxlength="2000" required></textarea>
+                                            <div class="error-wrapper textarea-error"
+                                                *ngIf="postForm.controls.objRemark.touched && postForm.controls.objRemark.errors">
+                                                <mat-error *ngIf="postForm.controls.objRemark.errors.required">
+                                                    {{errorMessages.POST_TRANSFER.CREATE.OBJECTION_REMARKS}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-action-button">
+                            <button mat-raised-button color="primary" (click)="savePost('save')"
+                                [disabled]="!saveDraftEnable || postForm.invalid" *ngIf="action !== 'view'">
+                                <i class="material-icons" title="Save">save</i>
+                                Save as Draft
+                            </button>
+                            <button *ngIf="action === 'view'" type="button" mat-raised-button color="accent"
+                                (click)="viewComments()">
+                                <i class="material-icons " title="View">remove_red_eye</i>
+                                View Comments
+                            </button>
+                            <button mat-raised-button class="green" (click)="savePost('submit')"
+                                [disabled]="isSubmitDisable || postForm.invalid" *ngIf="action !== 'view'">
+                                <i class="material-icons">done</i>
+                                Submit
+                            </button>
+                            <button type="button" mat-raised-button color="accent" (click)="resetForm(postForms)"
+                                *ngIf="action !== 'view'">
+                                <i class="material-icons">restore</i>
+                                Reset
+                            </button>
+                            <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                                <i class="material-icons" title="Listing">list</i>
+                                Listing
+                            </button>
+                            <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                                <i class="material-icons" title="Budget dashboard">close</i>
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Attachment" [disabled]="!postId">
+                    <table mat-table [dataSource]="dataSourceBrowse" id="browseTable">
+                        <ng-container matColumnDef="attachmentType">
+                            <th mat-header-cell *matHeaderCellDef>Attachment Type</th>
+                            <td mat-cell *matCellDef="let item;let i = index;">
+                                {{item.attachmentName}}
+                                <span *ngIf="(hasWorkFlow || isWf) && i===0" class="starSign">*</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="fileName">
+                            <th mat-header-cell *matHeaderCellDef>File Name</th>
+                            <td mat-cell *matCellDef="let item">
+                                <mat-form-field floatLabel="never">
+                                    <input matInput [value]="item.fileName" [(ngModel)]="item.fileName"
+                                        [readonly]="action === 'view' || item.postAttachmentId" autocomplete="off">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="browse">
+                            <th mat-header-cell *matHeaderCellDef>Browse File</th>
+                            <td mat-cell *matCellDef="let item;let i = index">
+                                <button type="button" accept="image/png,application/pdf,image/jpeg,image/jpg"
+                                    (click)="openFileSelector(i)" id="fileBrowse{{i}}" class="btn-browse"
+                                    [disabled]="action === 'view' || item.postAttachmentId">
+                                    Browse Files
+                                </button>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="uploadedFileName">
+                            <th mat-header-cell *matHeaderCellDef>Uploaded File Name</th>
+                            <td mat-cell *matCellDef="let item; let i = index" class="breakFileNameAttach">
+                                <span *ngIf="item.uploadedFileName">{{item.uploadedFileName}}
+                                    <i *ngIf="!isObjectionRequired" class="material-icons closesmall"
+                                        (click)="removeFile(item, i)">close</i>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="uploadedBy">
+                            <th mat-header-cell *matHeaderCellDef>Uploaded By</th>
+                            <td mat-cell *matCellDef="let item">
+                                <mat-label>{{item.uploadedByName}}</mat-label>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>Action</th>
+                            <td mat-cell *matCellDef="let item; let i = index">
+                                <table class="iconTable">
+                                    <tbody>
+                                        <tr>
+                                            <td class="action-btn-i centerAlign">
+                                                <a *ngIf="action !== 'view' && !isObjectionRequired">
+                                                    <i class="material-icons plus add"
+                                                        *ngIf="dataSourceBrowse && dataSourceBrowse.data && (i == dataSourceBrowse.data.length - 1)"
+                                                        (click)="addBrowse()">add
+                                                    </i>
+                                                </a>
+                                                <a>
+                                                    <i class="material-icons plus view-icon" title="View"
+                                                        (click)="viewAttachment(item)"
+                                                        [class.disable-delete-btn]="!item.postAttachmentId">remove_red_eye
+                                                    </i>
+                                                </a>
+                                                <a>
+                                                    <i class="material-icons plus view-icon" title="Download"
+                                                        (click)="downloadAttachment(item)"
+                                                        [class.disable-delete-btn]="!item.postAttachmentId">vertical_align_bottom</i>
+                                                </a>
+                                                <a *ngIf="action !== 'view' && !isObjectionRequired">
+                                                    <i class="material-icons plus delete"
+                                                        *ngIf="dataSourceBrowse && dataSourceBrowse.data && dataSourceBrowse.data.length > 1"
+                                                        (click)="deleteBrowse(i)">delete
+                                                    </i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+                    </table>
+                    <input #postAttachment type="file" id="fileBrowse" class="fileBrowse"
+                        (change)="onFileSelection($event)" />
+                    <div class="legend">
+                        1. Total File size should be under 2MB<br>
+                        2. File type supported are: 'jpg', 'jpeg', 'png', 'pdf', 'JPG','JPEG', 'PNG', 'PDF'<br>
+                    </div>
+                    <div class="form-action-button">
+                        <button type="submit" mat-raised-button color="primary" (click)="uploadFiles()"
+                            [disabled]="!isUpload" *ngIf="action !== 'view'">
+                            <i class="material-icons" title="Save">cloud_upload</i>
+                            Upload
+                        </button>
+                        <button mat-raised-button class="green" (click)="savePost('submit')"
+                            [disabled]="isSubmitDisable" *ngIf="action !== 'view'">
+                            <i class="material-icons">done</i>
+                            Submit
+                        </button>
+                        <button type="button" mat-raised-button color="accent" (click)="resetAttachment()"
+                            *ngIf="action !== 'view'">
+                            <i class="material-icons">restore</i>
+                            Reset
+                        </button>
+                        <button type="button" mat-raised-button color="warn" (click)="goToListing()">
+                            <i class="material-icons" title="Listing">list</i>
+                            Listing
+                        </button>
+                        <button type="button" mat-raised-button class="btnClose" (click)="goToDashboard()">
+                            <i class="material-icons" title="Budget dashboard">close</i>
+                            Close
+                        </button>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

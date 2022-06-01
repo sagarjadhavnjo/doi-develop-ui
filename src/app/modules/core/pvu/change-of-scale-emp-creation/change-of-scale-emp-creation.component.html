@@ -1,0 +1,531 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Change of Scale</div>
+            <span><a [routerLink]="['../employee-creation', '5']">Employee Detail</a></span>
+        </div>
+        <div class="panel-group">
+            <mat-tab-group mat-stretch-tabs>
+                <mat-tab label="Change of Scale Details">
+                    <form [formGroup]="reversionForm" (ngSubmit)="saveEstimate(reversionForm.value)">
+                        <div class="box box-primary">
+                            <div class="box-header">Events</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Transaction No" value="Auto Populate" formControlName="transactionNo" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="picker1" placeholder="Initiation Date" [formControl]="date" readonly>
+                                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker1></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Office Name" value="Office 1" formControlName="officeName" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="promotionFor" placeholder="Pay Commission" #promotionForRef required (selectionChange)="promotionChange()">
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="promotionForCtrl" [placeholderLabel]="'Find Pay Commission...'" [noEntriesFoundLabel]="'no matching Pay Commission found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option *ngFor="let promotionFor of promotionFor_list | filterSelectInput: promotionForCtrl.value" [value]="promotionFor.value">
+                                                    {{promotionFor.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <div class="error-wrapper" *ngIf="reversionForm.controls.promotionFor.touched && reversionForm.controls.promotionFor.errors">
+                                                <mat-error *ngIf="reversionForm.controls.promotionFor.errors.required">
+                                                    {{errorMessages.PAY_COMMISSION}}</mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Event Order Number" formControlName="orderNumber" required>
+                                            <div class="error-wrapper" *ngIf="reversionForm.controls.orderNumber.touched && reversionForm.controls.orderNumber.errors">
+                                                <mat-error *ngIf="reversionForm.controls.orderNumber.errors.required">
+                                                    {{errorMessages.ORDER_NO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventOrderDate" placeholder="Event Order Date" required>
+                                            <mat-datepicker-toggle matSuffix [for]="eventOrderDate">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventOrderDate></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field>
+                                            <input matInput [matDatepicker]="eventEffectiveDate1" placeholder="Event Effective Date" formControlName="eventEffectiveDate" required>
+                                            <mat-datepicker-toggle matSuffix [for]="eventEffectiveDate1">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #eventEffectiveDate1></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="form-action-button">
+                                    <button type="add" mat-raised-button color="primary" (click)="add()">
+                                        <i class="material-icons" aria-hidden="true" title="add employee">add_circle_outline</i>Add Employee
+                                    </button>
+                                </div>
+
+                                <div class="accordionSection">
+                                    <div class="box-header">Employee Details</div>
+                                    <mat-accordion class="colapsedata" *ngFor="let container of containers" (click)="showEmployee()">
+                                        <mat-expansion-panel [expanded]="true" class="nopadding">
+                                            <mat-expansion-panel-header>
+                                                <!-- <mat-checkbox (click)="$event.stopPropagation()"></mat-checkbox> -->
+                                                <div *ngIf="showDataEmployee" class="hideData"><span class="space">Employee
+                                                        Id</span> <span class="space">Employee Name</span> <span class="space">Employee Type</span> <span class="space">Designation</span>
+                                                    <span class="space">Employee Type</span><span class="space">Employee
+                                                        Pay
+                                                        Type</span></div>
+                                                <i class="material-icons plus delete empDelete" (click)="deleteRow(i)" (click)="$event.stopPropagation()" (click)="modalboxPopup()" aria-hidden="true">delete_forever</i>
+                                            </mat-expansion-panel-header>
+                                            <div class="currentdetails">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <mat-form-field class="full-width">
+                                                            <mat-select formControlName="type" placeholder="Type" (selectionChange)="showCurrentDetails($event)" #higherGradeType>
+                                                                <mat-option>
+                                                                    <ngx-mat-select-search [formControl]="typeCtrl" [placeholderLabel]="'Find Type ...'" [noEntriesFoundLabel]="'no matching Type found'">
+                                                                    </ngx-mat-select-search>
+                                                                </mat-option>
+                                                                <mat-option *ngFor="let type of type_list | filterSelectInput: typeCtrl.value" [value]="type.value">
+                                                                    {{type.viewValue}}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <div class="error-wrapper" *ngIf="reversionForm.controls.type.touched && reversionForm.controls.type.errors">
+                                                                <mat-error *ngIf="reversionForm.controls.type.errors.required">
+                                                                    {{errorMessages.type}}</mat-error>
+                                                            </div>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <mat-form-field class="full-width">
+                                                            <input matInput type="text" placeholder="Employee Number" value="" formControlName="employeesNumber">
+                                                            <mat-icon matSuffix (click)="openDialogEmployeeNumber()">
+                                                                search
+                                                            </mat-icon>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <div class="box box-primary">
+                                                    <div class="box-header">Current Details</div>
+                                                    <div class="box-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Employee Name" value="" readonly formControlName="employeeName">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Class" value="" readonly formControlName="employeeClass">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Designation" value="" readonly formControlName="employeeDesignation">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="showSeventhPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Pay Level" value="" readonly formControlName="employeePayLevel">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="showSeventhPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Cell Id" value="" readonly formControlName="employeeCellId">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="showSixthPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Pay Band" value="" readonly formControlName="employeePayBand">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="showSixthPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Pay Band Value" value="" readonly formControlName="employeePayBandValue">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="showSixthPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Grade Pay" value="" readonly formControlName="employeeGradePay">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <!-- <div class="col-sm-3" *ngIf="showFifthPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Grade" value="" readonly formControlName="grade">
+                                                                </mat-form-field>
+                                                            </div> -->
+                                                            <div class="col-sm-3" *ngIf="showFifthPayCommField">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Scale" value="" readonly formControlName="scale">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Basic Pay" value="" readonly formControlName="employeeBasicPay">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field>
+                                                                    <input matInput placeholder="Date of Joining" value="" fomrControlName="employeeDoj" readonly>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field>
+                                                                    <input matInput placeholder="Date of Retirement" value="" fomrControlName="dateOfRetirement" readonly>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Office Name" readonly formControlName="employeeOfficeName">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field>
+                                                                    <input matInput placeholder="Date of Next Increment" value="" fomrControlName="dateOfNextIncrementFatch" readonly>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="higherGradeType.value == 2">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" formControlName="dateOf1stHps" placeholder="Date of 1st Higher Pay Scale" value="" readonly>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="row col-sm-6 no-padding no-margin" *ngIf="higherGradeType.value == 3">
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <input matInput type="text" formControlName="dateOf1stHps" placeholder="Date of 1st Higher Pay Scale" value="" readonly>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <input matInput type="text" formControlName="dateOf2ndHps" placeholder="Date of 2nd Higher Pay Scale" value="" readonly>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="box box-primary">
+                                                    <div class="box-header">Post Details</div>
+                                                    <div class="box-body">
+                                                        <div class="row">
+                                                            <div class="row col-sm-9 no-padding no-margin" *ngIf="showSixthPayCommField">
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <mat-select formControlName="payBand" placeholder="Pay Band" required>
+                                                                            <mat-option>
+                                                                                <ngx-mat-select-search [formControl]="payLevelCtrl" [placeholderLabel]="'Find Pay Band...'" [noEntriesFoundLabel]="'no matching Pay Band found'">
+                                                                                </ngx-mat-select-search>
+                                                                            </mat-option>
+                                                                            <mat-option *ngFor="let payBand of payBand_list | filterSelectInput:payBandCtrl.value" [value]="payBand.value">
+                                                                                {{payBand.viewValue}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                        <div class="error-wrapper" *ngIf="reversionForm.controls.payBand.touched && reversionForm.controls.payBand.errors">
+                                                                            <mat-error *ngIf="reversionForm.controls.payBand.errors.required">
+                                                                                {{errorMessages.PAY_BAND}}</mat-error>
+                                                                        </div>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <input matInput type="text" placeholder="Pay Band Value" value="" required formControlName="payBandValue">
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <mat-select formControlName="gradePay" placeholder="Grade Pay" required>
+                                                                            <mat-option>
+                                                                                <ngx-mat-select-search [formControl]="gradePayCtrl" [placeholderLabel]="'Find Grade Pay...'" [noEntriesFoundLabel]="'no matching Grade Pay found'">
+                                                                                </ngx-mat-select-search>
+                                                                            </mat-option>
+                                                                            <mat-option *ngFor="let gradePay of gradePay_list | filterSelectInput:gradePayCtrl.value" [value]="gradePay.value">
+                                                                                {{gradePay.viewValue}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                        <div class="error-wrapper" *ngIf="reversionForm.controls.gradePay.touched && reversionForm.controls.gradePay.errors">
+                                                                            <mat-error *ngIf="reversionForm.controls.gradePay.errors.required">
+                                                                                {{errorMessages.GRADE_PAY}}</mat-error>
+                                                                        </div>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row col-sm-6 no-padding no-margin" *ngIf="showSeventhPayCommField">
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <mat-select formControlName="payLevel" placeholder="Pay Level" required>
+                                                                            <mat-option>
+                                                                                <ngx-mat-select-search [formControl]="payLevelCtrl" [placeholderLabel]="'Find Pay Level...'" [noEntriesFoundLabel]="'no matching Pay Level found'">
+                                                                                </ngx-mat-select-search>
+                                                                            </mat-option>
+                                                                            <mat-option *ngFor="let payLevel of payLevel_list | filterSelectInput:payLevelCtrl.value" [value]="payLevel.value">
+                                                                                {{payLevel.viewValue}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                        <div class="error-wrapper" *ngIf="reversionForm.controls.payLevel.touched && reversionForm.controls.payLevel.errors">
+                                                                            <mat-error *ngIf="reversionForm.controls.payLevel.errors.required">
+                                                                                {{errorMessages.payLevel}}</mat-error>
+                                                                        </div>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <div class="col-sm">
+                                                                    <mat-form-field class="full-width">
+                                                                        <mat-select formControlName="cellId" placeholder="Cell Id" required>
+                                                                            <mat-option>
+                                                                                <ngx-mat-select-search [formControl]="cellIdCtrl" [placeholderLabel]="'Find Cell Id...'" [noEntriesFoundLabel]="'no matching Cell Id found'">
+                                                                                </ngx-mat-select-search>
+                                                                            </mat-option>
+                                                                            <mat-option *ngFor="let cellId of cellId_list | filterSelectInput:cellIdCtrl.value" [value]="cellId.value">
+                                                                                {{cellId.viewValue}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                        <div class="error-wrapper" *ngIf="reversionForm.controls.cellId.touched && reversionForm.controls.cellId.errors">
+                                                                            <mat-error *ngIf="reversionForm.controls.cellId.errors.required">
+                                                                                {{errorMessages.cellId}}</mat-error>
+                                                                        </div>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Basic Pay" value="Auto Calculated" formControlName="empBasicPay" readonly>
+                                                                </mat-form-field>
+                                                            </div>
+
+                                                            <div class="col-sm-3" *ngIf="higherGradeType.value == 1">
+                                                                <mat-form-field>
+                                                                    <input matInput [matDatepicker]="picker4" placeholder="Higher Grade 2nd Effective Date">
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker4">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker4></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3" *ngIf="higherGradeType.value == 2">
+                                                                <mat-form-field>
+                                                                    <input matInput [matDatepicker]="picker4" placeholder="Higher Grade 3rd Effective Date">
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker4">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker4></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field>
+                                                                    <input matInput [matDatepicker]="dateOfNextIncrement" placeholder="Date of Next Increment" required>
+                                                                    <mat-datepicker-toggle matSuffix [for]="dateOfNextIncrement">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #dateOfNextIncrement>
+                                                                    </mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="box box-primary">
+                                                    <div class="box-header">Notional Period</div>
+                                                    <div class="box-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field>
+                                                                    <input matInput [matDatepicker]="fromDate" placeholder="From Date">
+                                                                    <mat-datepicker-toggle matSuffix [for]="fromDate">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #fromDate></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field>
+                                                                    <input matInput [matDatepicker]="toDate" placeholder="To Date">
+                                                                    <mat-datepicker-toggle matSuffix [for]="toDate">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #toDate></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <mat-form-field class="full-width">
+                                                                    <input matInput type="text" placeholder="Duration" value="Auto Populate" readonly formControlName="duration">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="box box-primary">
+                                                    <div class="box-header">Remarks</div>
+                                                    <div class="box-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <mat-form-field class="example-full-width">
+                                                                    <textarea matInput placeholder="Remarks"></textarea>
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-action-button">
+                                                <button type="submit" mat-raised-button color="primary" (click)="submitDetails()">
+                                                    <i class="material-icons" aria-hidden="true" title="Save">
+                                                        save
+                                                    </i>
+                                                    Save as Draft
+                                                </button>
+                                                <button type="reset" mat-raised-button color="accent" (click)="resetForm()">
+                                                    <i class="material-icons" aria-hidden="true" title="resore">
+                                                        restore
+                                                    </i>
+                                                    Reset
+                                                </button>
+                                            </div>
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+                                </div>
+
+                                <div class="form-action-button">
+
+                                    <button mat-raised-button type="submit" class="green" (click)="submitDetails()">
+                                        <i class="material-icons" aria-hidden="true" title="done"> done</i> Submit</button>
+
+                                    <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                                        <i class="material-icons" aria-hidden="true" title="EDP dashboard">
+                                            close
+                                        </i>
+                                        Close
+                                    </button>
+                                    <button type="button" mat-raised-button (click)="goToDashboard()" class="print-btn">
+                                        <i class="material-icons" aria-hidden="true" title="print">
+                                            print
+                                        </i>
+                                        Print
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="Attachments">
+                    <table mat-table [dataSource]="dataSourceBrowse" aria-describedby="attachment" width="100%" id="browseTable">
+                        <ng-container matColumnDef="attachmentType">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Attachment Type</th>
+                            <td mat-cell *matCellDef="let item;let i = index;">
+                                <mat-select placeholder="Attachment Type" required [(ngModel)]="item.dropDown">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="attachmentTypeCtrl" [placeholderLabel]="'Find Attachment Type...'" [noEntriesFoundLabel]="'no matching Attachment Type found'">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let attachment of attachment_type_list | filterSelectInput: attachmentTypeCtrl.value" [value]="attachment.value">
+                                        {{attachment.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fileName">
+                            <th mat-header-cell *matHeaderCellDef scope="row">File name</th>
+                            <td mat-cell *matCellDef="let item">
+                                <mat-form-field floatLabel="never">
+                                    <textarea matInput rows="2" maxlength="200" [value]="item.name" [(ngModel)]="item.name"></textarea>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="browse">
+                            <th mat-header-cell *matHeaderCellDef scope="row">
+                                <div style="display: flex; align-items: center; justify-content: center">
+                                    <div style="display: inline-flex">Browse</div>
+                                    <div class="info-container">
+                                        <i class="material-icons info-tooltip" aria-hidden="true">
+                                            info
+                                        </i>
+                                        <span class="info-tooltip-content">
+                                            - File size should be less than 2MB<br>
+                                            - File type supported are: 'jpg', 'jpeg', 'png', 'docx', 'doc', 'pdf',
+                                            'xls', 'xlsx', 'JPG',
+                                            'JPEG', 'PNG', 'DOCX', 'DOC', 'PDF', 'XLS', 'XLSX'
+                                        </span>
+                                    </div>
+                                </div>
+                            </th>
+                            <td mat-cell *matCellDef="let i = index" class="centerAlign">
+                                <button type="button" (click)="openFileSelector(i)" class="btn-browse">Browse
+                                    Files</button>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="uploadedFileName">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Uploaded file name</th>
+                            <td mat-cell *matCellDef="let item">
+                                <span *ngIf="item.file && item.file.name">{{item.file.name}}
+                                    <i class="material-icons closesmall" aria-hidden="true">
+                                        close
+                                    </i>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="uploadedBy">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Uploaded By</th>
+                            <td mat-cell *matCellDef="let item">
+                                <mat-label>Mr. P Shah</mat-label>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef scope="row">Action</th>
+                            <td mat-cell *matCellDef="let item; let i = index">
+                                <table class="iconTable" aria-describedby="icon">
+                                    <tbody>
+                                        <tr>
+                                            <td width="30">
+                                                <i class="material-icons plus delete" aria-hidden="true" *ngIf="dataSourceBrowse && dataSourceBrowse.data && dataSourceBrowse.data.length > 1" (click)="deleteBrowse(i)">
+                                                    delete
+                                                </i>
+                                            </td>
+                                            <td width="30">
+                                                <i class="material-icons plus" aria-hidden="true" (click)="view()" title="view">
+                                                    visibility
+                                                </i>
+                                            </td>
+                                            <td width="30">
+                                                <i class="material-icons plus" aria-hidden="true" *ngIf="dataSourceBrowse && dataSourceBrowse.data && (i == dataSourceBrowse.data.length - 1)" (click)="addBrowse()">
+                                                    add
+                                                </i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedBrowseColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedBrowseColumns;"></tr>
+                    </table>
+
+                    <input type="file" id="fileBrowse" style="visibility: hidden;" (change)="onFileSelection($event)" />
+                    <div class="form-action-button">
+
+                        <button mat-raised-button type="submit" class="green"><i class="material-icons" aria-hidden="true" title="done">
+                                done
+                            </i> Submit</button>
+
+                        <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                            <i class="material-icons" aria-hidden="true" title="EDP dashboard">
+                                close
+                            </i>
+                            Close
+                        </button>
+                    </div>
+
+                </mat-tab>
+
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+<table mat-table [dataSource]="tableDataSource" width="100%" matSort class="mat-elevation-z8">
+    <ng-container  *ngFor="let tableHeaderDataKey of tableHeaderDataKeyMap; let mainInd = index;">
+
+        <ng-container [matColumnDef]="tableHeaderDataKey.dataKey">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header  [disabled]="tableHeaderDataKey.matSortDisable"
+             [ngStyle]="{'display': tableHeaderDataKey.rowSpan ?  'none' : '', 'width': tableHeaderDataKey.width ? tableHeaderDataKey.width : '' }">
+                {{tableHeaderDataKey.tableHeader}}
+            </th>
+            <!-- <th mat-header-cell *matHeaderCellDef mat-sort-header [ngStyle]="{'display': !tableHeaderDataKey.rowSpan ?  'none' : '' }">
+                {{tableHeaderDataKey.tableHeader}}
+            </th> -->
+            <td mat-cell *matCellDef="let element;let i = index;"
+                [ngClass]="[
+                    tableHeaderDataKey.dataKey === 'action' ? 'action-btn-i text-center': '',
+                    tableHeaderDataKey.className ? tableHeaderDataKey.className : ''
+                ]" [matTooltip] = "element[tableHeaderDataKey.matToolTipKeyName]">
+                <ng-container *ngIf="tableHeaderDataKey.dataKey === 'position'">
+                    {{(pageConfiguration.pageIndex * pageConfiguration.pageSize) + (i + 1) }}
+                </ng-container>
+                <ng-container *ngIf="tableHeaderDataKey.dataKey != 'action' && tableHeaderDataKey.dataKey != 'position'">
+                   <ng-container *ngIf="!tableHeaderDataKey.actionName">
+                        {{element[tableHeaderDataKey.dataKey] ? element[tableHeaderDataKey.dataKey] : '-'}}
+                   </ng-container> 
+                    <ng-container *ngIf="tableHeaderDataKey.actionName">
+                        <a [ngClass]="tableHeaderDataKey.actionName ? 'hyper-link' : ''" (click)="tableHeaderDataKey.actionName ? onActionClick(element, tableHeaderDataKey.actionName) : ''">
+                            {{element[tableHeaderDataKey.dataKey] ? element[tableHeaderDataKey.dataKey] : '-'}}
+                        </a>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="tableHeaderDataKey.dataKey === 'action'">
+                    <ng-container *ngIf="tableHeaderDataKey.configuration && tableHeaderDataKey.configuration.actions">
+                        <ng-container *ngFor="let action of tableHeaderDataKey.configuration.actions; let i = index">
+                            <a (click)="onActionClick(element, action.actionName)"
+                                *ngIf="!action.isVisible  || element[action.isVisible]"
+                                [class.disable-delete-btn]="element[action.isDisable]">
+                                <i [ngClass]="action.actionClass" [title]="action.title">{{action.iconName}}</i>
+                            </a>
+                        </ng-container>
+                    </ng-container>
+                    <!-- <a (click)="navigateToEdit(element)" *ngIf="element.isEditable === 1">
+                        <i class="material-icons plus edit-icon" title="Edit">edit</i>
+                    </a>
+                    <a (click)="navigateToView(element)">
+                        <i class="material-icons plus view-icon" title="View">remove_red_eye</i>
+                    </a>
+                    <a (click)="deleteElement(element)" *ngIf="element.status === 'Saved as Draft'">
+                        <i class="material-icons plus delete" title="Delete" aria-hidden="true">delete_forever</i>
+                    </a>
+                    <a (click)="viewWorkflowHistory(element)" *ngIf="element.status !== 'Saved as Draft'">
+                        <i class="material-icons plus history" title="View Comments" aria-hidden="true">history</i>
+                    </a> -->
+                </ng-container>
+            </td>
+            <td mat-footer-cell *matFooterCellDef [attr.colspan]="tableHeaderDataKeyMap.length"
+                class="centerAlign">
+                <span *ngIf="tableDataSource && tableDataSource.data && tableDataSource.data.length == 0">
+                    No Records Found!
+                </span>
+            </td>
+        </ng-container>
+        <ng-container [matColumnDef]="tableHeaderDataKey.dataKey + 'Row' + mainInd" *ngIf="tableHeaderDataKey.rowSpan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="tableHeaderDataKey.matSortDisable" [attr.rowspan]="tableHeaderDataKey.rowSpan"
+                [ngStyle]="{'width': tableHeaderDataKey.width ? tableHeaderDataKey.width : '' }">
+                {{tableHeaderDataKey.tableHeader}}
+            </th>
+        </ng-container>
+        <ng-container [matColumnDef]="tableHeaderDataKey.dataKey + 'Col' + mainInd" *ngIf="tableHeaderDataKey.colSpan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true" [attr.colspan]="tableHeaderDataKey.colSpan">
+                {{tableHeaderDataKey.dataColumnHeader}}
+            </th>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="tableHeadersKeyRowAndColSpan.length > 0"><tr mat-header-row *matHeaderRowDef="tableHeadersKeyRowAndColSpan"></tr></ng-container>
+    <tr mat-header-row *matHeaderRowDef="tableHeadersKey"></tr>
+    <tr mat-row *matRowDef="let i = index; let row; columns: tableHeadersKey;"></tr>
+    <tr mat-footer-row
+        [class.hide-table-footer]="tableDataSource && tableDataSource.data && tableDataSource.data.length !== 0"
+        *matFooterRowDef="displayedColumnsFooter">
+    </tr>
+</table>
+<div *ngIf="tableDataSource && tableDataSource.data && tableDataSource.data.length !== 0" class="container" style="padding: 20px 0 0 0;">
+    <div class="row justify-content-end">
+        <mat-form-field class="col-sm-2" *ngIf="showPaginationDropdown">
+            <mat-select placeholder="Page Number" [(ngModel)]="pageSelected"
+                (selectionChange)="onPageDropdownChange()">
+                <mat-option *ngFor="let page of totalPages" [value]="page">
+                    {{page}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-paginator  
+            #paginator style="padding: 0;" [pageSizeOptions]="pageConfiguration.pageSizeOptions"
+            [pageIndex]="pageConfiguration.pageIndex" [pageSize]="pageConfiguration.pageSize"
+            [length]="pageConfiguration.totalElements" [showFirstLastButtons]="showFirstLastButtons"
+            (page)="onPaginateChange($event)">
+        </mat-paginator>
+    </div>
+</div>

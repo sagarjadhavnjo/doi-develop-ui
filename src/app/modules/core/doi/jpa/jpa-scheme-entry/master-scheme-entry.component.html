@@ -1,0 +1,447 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div> Master for JPA Scheme</div>
+            <div class="font-heading"><strong>Reference Number:</strong> {{ referenceNumber }}</div>
+            <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+            </div>
+        </div>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item " aria-current="page">DOI / JPA</li>
+                <li class="breadcrumb-item active" aria-current="page"> Master for JPA Scheme </li>
+            </ol>
+        </nav>
+        <div class="panel-group">
+            <form [formGroup]="masterClaimEntry">
+                <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [selectedIndex]="selectedIndex"
+                    (selectedIndexChange)="getTabIndex($event)">
+                    <mat-tab label="Master for JPA Scheme Listing" [disabled]="true">
+                        <!-- JPA Claim Mater Entry  -->
+                        <div class="box box-primary">
+                            <div class="box-header"> Master for JPA Scheme </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="schemeNameList"
+                                                placeholder="Scheme Name">
+
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="schemeShortnameList"
+                                                placeholder="Scheme Short Name">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="nodalOfficeList"
+                                                placeholder="Nodal office">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <mat-select formControlName="statusList" placeholder="Status" [(value)]="selected" >
+                                                <mat-option>
+                                                    <ngx-mat-select-search [formControl]="StatusCtrl"
+                                                        [placeholderLabel]="'Find Status...'"
+                                                        [noEntriesFoundLabel]="'No matching Status found'">
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option [value]="0">-- None --</mat-option>
+                                                <mat-option
+                                                    *ngFor="let status  of StatusList | filterSelectInput:StatusCtrl.value:'viewValue'"
+                                                    [value]="status.value">
+                                                    {{status.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- Common Button -->
+                                    <div class="form-action-button">
+                                        <button type="submit" mat-raised-button color="primary"
+                                            (click)="onSearchCicked()">
+                                            <i class="material-icons" aria-hidden="true">search</i>
+                                            Search
+                                        </button>
+                                        <button mat-raised-button type="submit" class="green" (click)="goToNext()"> +
+                                            {{ addButtonNameListing }}
+                                        </button>
+                                        <button type="reset" mat-raised-button color="accent"
+                                            (click)="onSearchCicked()">
+                                            <i class="material-icons" aria-hidden="true">
+                                                restore
+                                            </i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                    <!-- End Common Button -->
+                                </div>
+                                <div class="mat-elevation-z8 mt-2">
+                                    <!-- Master ENtry Table -->
+                                    <table mat-table [dataSource]="dataSource" matSort
+                                        aria-describedby="masterClaimTable">
+                                        <ng-container matColumnDef="position">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+                                            <td mat-cell *matCellDef="let element; let i = index ;" class="centerAlign">
+                                                {{ i + 1 }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="schemeName">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Scheme Name </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.schemeName }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="schemeNameGuj">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Scheme Name (Gujarati)
+                                            </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.schemeNameGuj }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="schemeShortname">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Scheme Short Name </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.schemeShortname }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="nodalOffice">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Nodal office </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.nodalOffice }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="claimAmt">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Claim Amount </th>
+                                            <td mat-cell *matCellDef="let element" class="rightAlign">
+                                                {{ element.claimAmount }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="createdDate">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Created On </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.createdDate }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="updatedDate">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Updated On </th>
+                                            <td mat-cell *matCellDef="let element">
+                                                {{ element.updatedDate }}
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="status">
+                                            <th mat-header-cell *matHeaderCellDef scope="row">Status </th>
+                                            <td mat-cell *matCellDef="let element" class="text-center">
+                                                <mat-slide-toggle [checked]="getActiveStatus(element.status)"
+                                                    (change)="onToggleChange($event, element)"></mat-slide-toggle>
+                                                <span
+                                                    *ngIf="getActiveStatus(element.status); else elseBlock">Active</span>
+                                                <ng-template #elseBlock>In Active</ng-template>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="action">
+                                            <th mat-header-cell *matHeaderCellDef scope="row"> Action </th>
+                                            <td mat-cell *matCellDef="let element" class="text-center">
+
+                                                <a><i class="material-icons plus edit-icon mr-2"
+                                                        aria-hidden="true" title="Edit"
+                                                        (click)="onEditClickScheme(element)">
+                                                        edit </i></a>
+                                                <a class="delete-icon"><i
+                                                        class="material-icons plus delete mr-2" title="delete"
+                                                        aria-hidden="true"
+                                                        (click)="onDeleteClickScheme(element)">
+                                                        delete</i></a>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Header Section Of table -->
+                                        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+                                        <!-- Data Fetch From .TS File to table -->
+                                        <tr mat-row *matRowDef="let row; let i = index;columns:columns">
+                                        </tr>
+                                    </table>
+                                    <div *ngIf="dataSource.data.length === 0" class="centerAlign">No records found</div>
+                                    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="[pageSize]" (page)="onPaginateChange($event)"
+            [length]="totalRecords" showFirstLastButtons></mat-paginator>
+                                    <!-- End Master ENtry Table -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End JPA Claim Mater Entry  -->
+                    </mat-tab>
+                    <mat-tab label="Master for JPA Scheme" [disabled]="true">
+                        <!-- JPA Claim Mater Entry  -->
+                        <div class="box box-primary">
+                            <div class="box-header"> Master for JPA Scheme </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="schemeName"
+                                                placeholder="Scheme Name" required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.schemeName.invalid && (masterClaimEntry.controls.schemeName.dirty || masterClaimEntry.controls.schemeName.touched)">
+                                                <mat-error *ngIf="masterClaimEntry.controls.schemeName.errors?.required">
+                                                    {{errorMessage.SCHEME_NAME}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="schemeNameGuj"
+                                                placeholder="Scheme Name (Gujarati)" (focus)="setGujaratiDefaultFocus()"
+                                                (focusout)="setEnglishOnFocusOut($event, 'srtNameGuj')" required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.schemeNameGuj.invalid && (masterClaimEntry.controls.schemeNameGuj.dirty || masterClaimEntry.controls.schemeNameGuj.touched)">
+                                                <mat-error
+                                                    *ngIf="masterClaimEntry.controls.schemeNameGuj.errors?.required">
+                                                    {{errorMessage.SCHEME_NAME_GUJ}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="schemeShortname"
+                                                placeholder="Scheme Short Name" required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.schemeShortname.invalid && (masterClaimEntry.controls.schemeNameGuj.dirty || masterClaimEntry.controls.schemeShortname.touched)">
+                                                <mat-error
+                                                    *ngIf="masterClaimEntry.controls.schemeShortname.errors.required">
+                                                    {{errorMessage.SCHEME_SHORT_NAME}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="nodalOffice"
+                                                placeholder="Nodal office" required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.nodalOffice.invalid && (masterClaimEntry.controls.nodalOffice.dirty || masterClaimEntry.controls.nodalOffice.touched)">
+                                                <mat-error
+                                                    *ngIf="masterClaimEntry.controls.nodalOffice.errors.required">
+                                                    {{errorMessage.NODALOFFICER}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="maximumAgeRange"
+                                                placeholder="Maxumim Age Range" required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.maximumAgeRange.invalid && (masterClaimEntry.controls.maximumAgeRange.dirty || masterClaimEntry.controls.maximumAgeRange.touched)">
+                                                <mat-error
+                                                    *ngIf="masterClaimEntry.controls.maximumAgeRange.errors.required">
+                                                    {{errorMessage.MAX_AGE_RANGE}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="minimumAgeRange"
+                                                placeholder="Minimum Age Range" required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.minimumAgeRange.invalid && (masterClaimEntry.controls.minimumAgeRange.dirty || masterClaimEntry.controls.minimumAgeRange.touched)">
+                                                <mat-error
+                                                    *ngIf="masterClaimEntry.controls.minimumAgeRange.errors.required">
+                                                    {{errorMessage.MIN_AGE_RANGE}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="claimAmt"
+                                                placeholder="Claim Amount" decimalLimitTwoOnly required>
+                                            <div class="error-wrapper" *ngIf="masterClaimEntry.controls.claimAmt.invalid && (masterClaimEntry.controls.claimAmt.dirty || masterClaimEntry.controls.claimAmt.touched)">
+                                                <mat-error *ngIf="masterClaimEntry.controls.claimAmt.errors.required">
+                                                    {{errorMessage.CLAIM_AMOUNT}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                        <mat-select formControlName="status" placeholder="Status">
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="StatusCtrl"
+                                                    [placeholderLabel]="'Find Status...'"
+                                                    [noEntriesFoundLabel]="'No matching Status found'">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option [value]="0">-- None --</mat-option>
+                                            <mat-option
+                                                *ngFor="let status  of StatusList | filterSelectInput:StatusCtrl.value:'viewValue'"
+                                                [value]="status.value">
+                                                {{status.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <div class="error-wrapper" *ngIf="masterClaimEntry.controls.status.invalid && (masterClaimEntry.controls.status.dirty || masterClaimEntry.controls.status.touched)">
+                                            <mat-error *ngIf="masterClaimEntry.controls.status.errors?.required">
+                                                {{errorMessage.SCHEME_STATUS}}
+                                            </mat-error>
+                                        </div>
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <mat-form-field>
+                                            <input type="text" matInput formControlName="remarks" placeholder="Remarks"
+                                                (focus)="setGujaratiDefault()"
+                                                (focusout)="hasFocusSet=1;setEnglishOnFocusOut($event, 'remarks')"
+                                                [ngClass]="hasFocusSet == 1 ? 'hasfocus' : ''">
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- Toggle for Eng/Guj -->
+                                    <div class="text-left col-md-3">
+                                        <button mat-raised-button type="button" class="lang-btn"
+                                            (click)="toggleLanguage()">{{currentLang.value == 'Eng' ? 'Guj' : 'Eng'
+                                            }}</button>
+                                    </div>
+                                    <!-- Common Button -->
+                                    <div class="col-sm-12">
+                                        <div class="form-action-button">
+
+                                            <button type="submit" mat-raised-button color="primary"
+                                                (click)="addRecord()">
+                                                <i class="material-icons" aria-hidden="true">add</i>
+                                                {{addButtonNameMaster}}
+                                            </button>
+                                            <button type="reset" mat-raised-button color="accent"
+                                                (click)="clearForm();">
+                                                <i class="material-icons" aria-hidden="true">
+                                                    restore
+                                                </i>
+                                                Reset
+                                            </button>
+                                        </div>
+                                        <div class="mat-elevation-z8 mt-2">
+                                            <!-- Master ENtry Table -->
+                                            <table mat-table [dataSource]="newDataSource" matSort
+                                                aria-describedby="masterClaimTable">
+                                                <ng-container matColumnDef="position">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Sr. No.</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index ;"
+                                                        class="centerAlign">
+                                                        {{ i + 1 }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="schemeName">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Scheme Name </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{ element.schemeName }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="schemeNameGuj">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Scheme Name
+                                                        (Gujarati)
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{ element.schemeNameGuj }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="schemeShortname">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Scheme Short Name
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{ element.schemeShortname }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="nodalOffice">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Nodal office </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{ element.nodalOffice }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="claimAmt">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Claim Amount </th>
+                                                    <td mat-cell *matCellDef="let element" class="rightAlign">
+                                                        {{ element.claimAmount }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="createdDate">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Created On </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{ element.createdDate }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="updatedDate">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Updated On </th>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        {{ element.updatedDate }}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="status">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row">Status </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-center">
+                                                        <mat-slide-toggle [checked]="getActiveStatus(element.status)"
+                                                            (change)="onToggleChange($event, element)">
+                                                        </mat-slide-toggle>
+                                                        <span
+                                                            *ngIf="getActiveStatus(element.status); else elseBlock">Active</span>
+                                                        <ng-template #elseBlock>In Active</ng-template>
+                                                    </td>
+                                                </ng-container>
+                                                <!-- <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef scope="row"> Action </th>
+                                                    <td mat-cell *matCellDef="let element" class="text-center">
+
+                                                        <a><i class="material-icons plus edit-icon mr-2"
+                                                                aria-hidden="true" title="Edit"
+                                                                (click)="onEditClickScheme(element)">
+                                                                edit </i></a>
+                                                        <a class="delete-icon"><i
+                                                                class="material-icons plus delete mr-2" title="delete"
+                                                                aria-hidden="true"
+                                                                (click)="onDeleteClickScheme(element)">
+                                                                delete</i></a>
+                                                    </td>
+                                                </ng-container> -->
+                                                <!-- Header Section Of table -->
+                                                <tr mat-header-row *matHeaderRowDef="columnstwo"></tr>
+                                                <!-- Data Fetch From .TS File to table -->
+                                                <tr mat-row *matRowDef="let row; let i = index;columns:columnstwo">
+                                                </tr>
+                                            </table>
+                                            <div *ngIf="newDataSource.data.length === 0" class="centerAlign">No records
+                                                found</div>
+                                            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                                            </mat-paginator>
+                                            <!-- End Master ENtry Table -->
+                                            <!-- Common Button -->
+                                            <div class="form-action-button">
+                                                <button mat-raised-button type="submit" class="green"
+                                                    (click)="saveRecord()"><i class="material-icons">
+                                                        done
+                                                    </i> Submit
+                                                </button>
+                                                <button type="button" mat-raised-button color="warn" (click)="gePrevIndex()">
+                                                    <i class="material-icons" aria-hidden="true" title="Listing">
+                                                      list
+                                                    </i>
+                                                    Listing
+                                                  </button>
+                                                <button type="button" mat-raised-button class="btnClose" title="Close"
+                                                    (click)="goToDashboard()">
+                                                    <i class="material-icons" title="Close" aria-hidden="true">
+                                                        close
+                                                    </i>
+                                                    Close
+                                                </button>
+                                            </div>
+                                            <!-- End Common Button -->
+                                        </div>
+                                    </div>
+                                    <!-- End Common Button -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End JPA Claim Mater Entry  -->
+                    </mat-tab>
+                </mat-tab-group>
+            </form>
+        </div>
+    </div>

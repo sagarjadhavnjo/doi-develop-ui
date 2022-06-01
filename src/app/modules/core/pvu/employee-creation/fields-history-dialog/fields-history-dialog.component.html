@@ -1,0 +1,160 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="box box-primary">
+            <div class="box-header">{{data.heading}} <span *ngIf = '!isTable'>&nbsp; (Updated on : {{updatedDate | date: 'dd/MM/yyyy hh:mm:ss a'}})</span></div>
+            <div class="box-body" style="overflow-x: scroll;">
+                <table mat-table [dataSource]="dataSource" aria-describedby="eligibleForIncrement" style="width: 100%; "
+                    matSort>
+                    <!-- For Tabular type of data-------------------------------- -->
+                    <ng-container *ngIf = 'isTable'>
+                        <ng-container *ngFor="let colData of tabularData">
+                            <ng-container matColumnDef="{{colData.column}}">
+                                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" scope="row">
+                                    {{colData.headerName | titlecase}}</th>
+                                <td mat-cell *matCellDef="let element;let i= index;">
+                                    <span *ngIf = '!isAnyOtherField'>
+                                        {{element[colData.keyName]}}
+                                    </span>
+                                    <span *ngIf = 'isAnyOtherField'>
+                                        {{element[getFieldName(element, colData.keyName)]}}
+                                    </span>
+                                </td>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" scope="row">Action</th>
+                            <td mat-cell *matCellDef="let element;let i= index;">
+                                {{((element['changeType'] == '1' ) ? 'Updated' : 
+                            ((element['changeType'] == '2' ) ? 'Added' : 
+                            ((element['changeType'] == '3' ) ? 'Deleted' : 'No Change') ))}}
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <!-- --------------------------------------------------------- -->
+                    <!-- For Normal type of data-------------------------------- -->
+                    <ng-container matColumnDef="fieldName">
+                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" scope="row">Field Name</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.fieldName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="previousValue">
+                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" scope="row" mat-sort-header>Previous
+                            Value</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.previousValue}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="currentValue">
+                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" scope="row" mat-sort-header>Changed
+                            Value</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.currValue}}
+                        </td>
+                    </ng-container>
+                    <!-- ------------------------------------------------- -->
+                    <!-- Common------------------------------------------- -->
+                    <ng-container matColumnDef="updatedBy">
+                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="subNormalColumn.length" scope="row">
+                            Updated By</th>
+                        <td mat-cell [ngStyle]="{'display': 'none'}" *matCellDef="let element;let i= index;">
+                            {{element.updateByUserName}}
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef [attr.colspan]="subNormalColumn.length > dataColumn.value.length ? subNormalColumn.length : dataColumn.value.length"
+                            class="centerAlign">
+                            <span *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+                                No Records Found!
+                            </span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}" scope="row"
+                            mat-sort-header>Name</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.updateByUserName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="empNo">
+                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}" scope="row">Employee
+                            Number</th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.updateByUserCode}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="post">
+                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}" scope="row">Post
+                        </th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.updateByPostName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="office">
+                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}" scope="row">Office Name
+                        </th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{element.officeName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="dateTime">
+                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}" scope="row">Date & Time
+                        </th>
+                        <td mat-cell *matCellDef="let element;let i= index;">
+                            {{ element.updateByUpdateDate | date: 'dd/MM/yyyy hh:mm:ss a'}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name1">
+                        <th mat-header-cell *matHeaderCellDef scope="row" mat-sort-header>Name</th>
+
+                    </ng-container>
+                    <ng-container matColumnDef="empNo1">
+                        <th mat-header-cell *matHeaderCellDef scope="row">Employee Number</th>
+
+                    </ng-container>
+                    <ng-container matColumnDef="post1">
+                        <th mat-header-cell *matHeaderCellDef scope="row">Post</th>
+
+                    </ng-container>
+                    <ng-container matColumnDef="office1">
+                        <th mat-header-cell *matHeaderCellDef scope="row">Office Name</th>
+
+                    </ng-container>
+                    <ng-container matColumnDef="dateTime1">
+                        <th mat-header-cell *matHeaderCellDef scope="row">Date & Time</th>
+
+                    </ng-container>
+                    <!-- ----------------------------------------------------------------- -->
+
+                    <tr mat-header-row *matHeaderRowDef="dataColumn.value"></tr>
+                    <tr mat-header-row *matHeaderRowDef="['name1', 'empNo1', 'post1', 'office1', 'dateTime1']">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: dataColumn.value"></tr>
+                    <tr mat-footer-row
+                        [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+                        *matFooterRowDef="['updatedBy']">
+                    </tr>
+                </table>
+            </div>
+            <div class="box-body" *ngIf='!isTable'>
+                <div mat-dialog-actions class="form-action-button">
+                    <button type="button" mat-raised-button color="primary" (click) = 'onPrevious()' [disabled] = "index >= storedData.length - 1">
+                        <i class="material-icons" title="Next">chevron_left</i>
+                        Previous
+                    </button>
+                    <button type="button" mat-raised-button color="primary" (click) = 'onNext()' [disabled] = "index < 1">
+                        Next
+                        <i class="material-icons" title="Next">chevron_right</i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div mat-dialog-actions class="form-action-button">
+                    <button type="button" mat-raised-button mat-dialog-close class="btnClose">
+                        <i class="material-icons" title="Close">close</i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

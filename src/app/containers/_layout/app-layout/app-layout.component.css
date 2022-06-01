@@ -1,0 +1,33 @@
+.contain-container {
+    margin-top: 50px;
+}
+
+.toggle-bar .sidebar-wrapper {
+    padding: 0;
+}
+
+.sidebar-wrapper {
+    background: #ffffff;
+    height: calc(100vh - 50px);
+    box-shadow: 0px 3px 5px #e2e2e2;
+    position: fixed;
+    left: 0px;
+    width: 280px;
+    z-index: 99;
+    padding: 10px 0px;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s ease-in-out;
+    transition-timing-function: linear;
+    overflow-y: hidden;
+}
+
+.inner-container {
+    width: calc(100% - 280px);
+    display: flex;
+    margin-left: auto;
+    flex-direction: column;
+    transition: 0.3s ease-in-out;
+    transition-timing-function: linear;
+    /* height: calc(100vh - 50px);   */
+}

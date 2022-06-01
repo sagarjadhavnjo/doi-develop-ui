@@ -1,0 +1,118 @@
+<div class="container common-workflow-section">
+	<div class="row">
+		<div class="heading-section ng-star-inserted">
+			<div>{{data.headingName}}</div>
+			<div class="font-heading" *ngIf="data.refNo"><strong>Reference No:</strong> {{data.refNo}}</div>
+			<div class="font-heading" *ngIf="data.refDate"><strong>Reference Date:</strong> {{ data.refDate | date: 'dd-MMM-yyyy hh:mm:ss a' : '+05:30'}}</div>
+		</div>
+		
+				<div class="row header-detail w-100">
+					<div class="col-sm-4 colPadding" *ngFor="let item of data.headerJson">
+						<div class="labelCSS">{{item.label}}<span class="floatRight">:</span></div>
+						<div class="paddingUnset">{{item.value}}</div>
+					</div>
+				</div>
+
+				<div class="forward-module-container">
+					<div class="forward-dialog-left">
+						<div class="col-sm-12">
+							<div class="form-datatable-list history-common-section">
+								<div class="col-sm-12">
+									<div class="row">
+										<div class="htry-hding-name">
+											<strong>Comment History:</strong>
+										</div>
+										<div class="back-to-action" *ngIf="!showWorkFlowAction">
+											<a (click)="changeViewToWorkFlowAction()" class="cursorPointer">Back to Action Form</a>
+										</div>
+									</div>
+								</div>
+								<div class="category-deprt"><strong>{{commentHistoryOfficeName}}</strong></div>
+								<div class="history-list-container" *ngIf="historyData && historyData.length > 0">
+									<div *ngFor="let comments of historyData" class="column-box">
+										<div class="histy-box">
+											<mat-list-item class="txt-heading w-50">
+												{{comments.userName}},{{comments.designationName}}
+												({{comments.wfRoleName}})
+											</mat-list-item>
+											<mat-list-item class="txt-heading w-50 text-center">
+												{{comments.createdDate | date: 'dd-MMM-yyyy hh:mm:ss a' : '+05:30'}}
+											</mat-list-item>
+										</div>
+										<mat-list-item class="comment-text">
+											<span *ngIf="comments.remark.length > 250">
+												<span *ngIf="readMoreId != comments.trnId">
+													{{comments.remark | slice:0:249}}
+													<a (click)="readMoreId = comments.trnId;"
+														*ngIf="readMoreId != comments.trnId">&nbsp;&nbsp;..read more</a>
+												</span>
+												<span *ngIf="readMoreId == comments.trnId">
+													{{comments.remark}}
+													<a (click)="readMoreId= undefined;"
+													*ngIf="readMoreId == comments.trnId">&nbsp;&nbsp;less</a>		
+												</span>
+											</span>
+											<span *ngIf="comments.remark.length < 250">
+												{{comments.remark}}
+											</span>
+										</mat-list-item>
+										<mat-list-item>
+											<div class="box-opener">
+												<p class="flexicon">
+													<ng-container *ngFor="let file of comments.attachmentCommonDtoList">
+													<a  (click)="downLoadUploadedAttachment(file)" class="attachmentType cursorPointer">
+														{{file.fileName}}
+													</a>
+													<i *ngIf="file.isView" class="material-icons iconset cursorPointer" (click)="viewUploadedAttachment(file,$event,true)" title="View">
+														save_alt
+													</i>
+												</ng-container>
+												</p>
+											</div>
+										</mat-list-item>
+									</div>
+								</div>
+								<div class="history-list-container" *ngIf="historyData?.length === 0">
+									No Comments Available
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-datatable-list action-common-section">
+						<!-- <form class="col-sm-12" [formGroup]="workflowForm" autocomplete="off"> -->
+							<div *ngIf="!showWorkFlowAction">
+									<div class="open-file-box">
+										<img *ngIf="selectedFilePreviewImageBase64" src="{{selectedFilePreviewImageBase64}}"
+											alt="Attachment Preview">
+											
+									<!-- <object *ngIf="selectedFilePreviewPdf"  [data]="selectedFilePreviewPdf | safe" type="application/pdf">
+										<embed [src]="selectedFilePreviewPdf | safe" type="application/pdf" />
+								</object> -->
+								
+									<iframe *ngIf="selectedFilePreviewPdf" title="PDF file" [src]="selectedFilePreviewPdf | safe" 
+									style="width: 100%; height: 500%;">
+										 <p>It appears your web browser doesn't support iframes.</p>
+									</iframe>
+								
+
+									</div>
+
+							</div>
+						<!-- </form> -->
+					</div>
+				</div>
+			</div>
+			<div class="form-action-button">
+				<button *ngIf="data.showPrintBtn" type="button" mat-raised-button class="btnClose print-btn" (click)="printDocument()">
+              <i class="material-icons"  aria-hidden="true" title="print">
+                  print
+              </i>
+              Print
+          </button>
+				<button type="button" title="Cancel" mat-raised-button (click)="closeDialog()"
+					class="btnClose">
+					<i class="material-icons " title="Cancel dashboard">close</i>
+					Cancel
+				</button>
+			</div>
+</div>

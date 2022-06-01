@@ -1,0 +1,11 @@
+.history {
+    background: transparent;
+    color: #ee8800;
+    font-weight: 600;
+}
+
+::ng-deep.mat-table td.mat-cell.break-word {
+    word-break: break-word;
+    max-width: 150px;
+    white-space: break-spaces;
+}

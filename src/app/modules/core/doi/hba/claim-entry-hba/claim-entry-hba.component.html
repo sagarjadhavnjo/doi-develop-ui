@@ -1,0 +1,703 @@
+<div class="container">
+    <div class="form-wrapper">
+  
+      <div class="heading-section ng-star-inserted">
+        <div>Claim Entry </div>
+        <div class="font-heading"><strong>Reference Number:</strong> 19-20/DOI/HBA/CE/001</div>
+        <div class="font-heading"><strong>Reference Date:</strong> {{ todayDate | date: 'dd-MMM-yyyy HH:mm'}}
+        </div>
+      </div>
+  
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item " aria-current="page">DOI / HBA </li>
+          <li class="breadcrumb-item active" aria-current="page">Claim Entry </li>
+        </ol>
+      </nav>
+  
+  
+  
+      <div class="panel-group">
+  
+        <form [formGroup]="claimEntryForm">
+          <mat-tab-group mat-stretch-tabs class="standing-est-tabing" [selectedIndex]="selectedindex">
+            <mat-tab label="Claim Entry">
+              <!-- Claim Details -->
+              <div class="box box-primary">
+                <div class="box-header">Claim Details</div>
+                <div class="box-body">
+                  <div class="row">
+                      <!-- Claim ID -->
+                      <div class="col-sm-3">
+                        <mat-form-field>
+                          <input type="text" required matInput formControlName="clID"
+                            placeholder="Claim ID">
+        
+                        </mat-form-field>
+                      </div>
+                      <!-- Claim Date -->
+                      <div class="col-sm-3">
+                        <mat-form-field>
+                          <input matInput [matDatepicker]="clDate" formControlName="clDate"
+                            placeholder="Claim Date ">
+                          <mat-datepicker-toggle matSuffix [for]="clDate"></mat-datepicker-toggle>
+                          <mat-datepicker #clDate></mat-datepicker>
+                        </mat-form-field>
+        
+                      </div>
+  
+                    <!-- Claim Number -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="claimNo" placeholder="Claim No" readonly required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.claimNo.touched && claimEntryForm.controls.claimNo.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.claimNo.errors.required">
+                            {{ errorMessage.CLAIM_ID_ENTER }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Inward No. -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input type="text" matInput formControlName="inwardNo" placeholder=" Inward No.">
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.inwardNo.touched && claimEntryForm.controls.inwardNo.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.inwardNo.errors.required">
+                            {{ errorMessage.INWARDNO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- Claim Date -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="claimDate" formControlName="claimDate" placeholder="Inward Date "
+                          required>
+                        <mat-datepicker-toggle matSuffix [for]="claimDate"></mat-datepicker-toggle>
+                        <mat-datepicker #claimDate></mat-datepicker>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.claimDate.touched && claimEntryForm.controls.claimDate.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.claimDate.errors.required">
+                            {{ errorMessage.DATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Policy No -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="policyNo" placeholder="Policy No."
+                          (selectionChange)="onSelectingPolicyNo($event)" required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="policyNoCtrl" [placeholderLabel]="'Find Policy No....'"
+                              [noEntriesFoundLabel]="'No matching Policy No. found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let item of policyNoList | filterSelectInput:policyNoCtrl.value"
+                            [value]="item.value" matTooltip="{{item.viewValue}}">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.policyNo.touched && claimEntryForm.controls.policyNo.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.policyNo.errors.required">
+                            {{ errorMessage.POLICY_NO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Policy Period -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="policyStartDate" formControlName="policyStartDate"
+                          placeholder="Policy Start Date" required>
+                        <mat-datepicker-toggle matSuffix [for]="policyStartDate"></mat-datepicker-toggle>
+                        <mat-datepicker #policyStartDate></mat-datepicker>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.policyStartDate.touched && claimEntryForm.controls.policyStartDate.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.policyStartDate.errors.required">
+                            {{ errorMessage.DATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- Policy End Date -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="policyEndDate" formControlName="policyEndDate"
+                          placeholder="Policy End Date" required>
+                        <mat-datepicker-toggle matSuffix [for]="policyEndDate"></mat-datepicker-toggle>
+                        <mat-datepicker #policyEndDate></mat-datepicker>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.policyEndDate.touched && claimEntryForm.controls.policyEndDate.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.policyEndDate.errors.required">
+                            {{ errorMessage.DATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- sum insured  -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="sumInsured" placeholder="Sum Insured">
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.sumInsured.touched && claimEntryForm.controls.sumInsured.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.sumInsured.errors.required">
+                            {{ errorMessage.SUM_INSURED }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                  </div>
+                </div>
+              </div>
+              <!-- End Claim Details -->
+  
+              <!-- Insured Details -->
+              <div class="box box-primary">
+                <div class="box-header">Insured Details</div>
+                <div class="box-body">
+                  <div class="row">
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="insuredName" placeholder="Name" required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.insuredName.touched && claimEntryForm.controls.insuredName.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.insuredName.errors.required">
+                            {{ errorMessage.INSURED_NAME }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="address" placeholder="Address" required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.address.touched && claimEntryForm.controls.address.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.address.errors.required">
+                            {{ errorMessage.ADDRESS }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="aadharCardNo" placeholder="Aadhar Card No." required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.aadharCardNo.touched && claimEntryForm.controls.aadharCardNo.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.aadharCardNo.errors.required">
+                            {{ errorMessage.AADHAR_CARD_NO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="mobileNo" placeholder="Mobile No." required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.mobileNo.touched && claimEntryForm.controls.mobileNo.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.mobileNo.errors.required">
+                            {{ errorMessage.MOBILE_NO }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="emailId" placeholder="Email ID" required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.emailId.touched && claimEntryForm.controls.emailId.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.emailId.errors.required">
+                            {{ errorMessage.EMAIL_ID }}
+                          </mat-error>
+                          <mat-error *ngIf="claimEntryForm.controls.emailId.errors.email">
+                            {{ errorMessage.VALID_EMAIL_ID }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                  </div>
+                </div>
+              </div>
+              <!-- Insured Details End -->
+  
+              <!-- Insurance Details -->
+              <div class="box box-primary">
+                <div class="box-header">Insurance Details</div>
+                <div class="box-body">
+  
+                  <div class="row">
+  
+                    <!-- ri required -->
+                    <div class="col-sm-3">
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="anyOtherCompanyInsurance" placeholder="Any Other Company Insurance"
+                          required #anyOtherCompanyInsuranceValue>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="anyOtherCompanyInsuranceCtrl"
+                              [placeholderLabel]="'Find Any Other Company Insurance...'"
+                              [noEntriesFoundLabel]="'No matching Any Other Company Insurance found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option
+                            *ngFor="let item of anyOtherCompanyInsuranceList | filterSelectInput:anyOtherCompanyInsuranceCtrl.value"
+                            [value]="item.value">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.anyOtherCompanyInsurance.touched && claimEntryForm.controls.anyOtherCompanyInsurance.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.anyOtherCompanyInsurance.errors.required">
+                            {{ errorMessage.ANY_OTHER_COMPANY_INSURANCE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-12" *ngIf="anyOtherCompanyInsuranceValue.value == '1'">
+  
+                      <!-- table start -->
+                      <table mat-table [dataSource]="dataSource" width="100%" aria-describedby="riDetails">
+  
+                        <!-- company name -->
+                        <ng-container matColumnDef="companyName">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Company Name *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.companyName" [ngModelOptions]="{standalone: true}">
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+  
+                        <!-- policyNo -->
+                        <ng-container matColumnDef="policyNo">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Policy No *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.policyNo" [ngModelOptions]="{standalone: true}">
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- policy start date -->
+                        <ng-container matColumnDef="policyStartDate">
+                          <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Policy Period Start
+                            Date *
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field>
+                              <input matInput [matDatepicker]="policyStartDate" [(ngModel)]="element.policyStartDate"
+                                [ngModelOptions]="{standalone: true}">
+                              <mat-datepicker-toggle matSuffix [for]="policyStartDate"></mat-datepicker-toggle>
+                              <mat-datepicker #policyStartDate></mat-datepicker>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- policy end date -->
+                        <ng-container matColumnDef="policyEndDate">
+                          <th mat-header-cell *matHeaderCellDef scope="row" style="min-width: 100px;">Policy Period End
+                            Date *
+                          </th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field>
+                              <input matInput [matDatepicker]="policyEndDate" [(ngModel)]="element.policyEndDate"
+                                [ngModelOptions]="{standalone: true}">
+                              <mat-datepicker-toggle matSuffix [for]="policyEndDate"></mat-datepicker-toggle>
+                              <mat-datepicker #policyEndDate></mat-datepicker>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- sum insured -->
+                        <ng-container matColumnDef="sumInsured">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Sum Insured *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.sumInsured" [ngModelOptions]="{standalone: true}"
+                                numbersOnly>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- received claim amount -->
+                        <ng-container matColumnDef="receivedClaimAmount">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Received Claim Amount *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.receivedClaimAmount"
+                                [ngModelOptions]="{standalone: true}" numbersOnly>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- action -->
+                        <ng-container matColumnDef="action">
+                          <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'4%'}">
+                            Action</th>
+                          <td mat-cell *matCellDef="let  element; let i=index">
+                            <table class="iconTable" aria-describedby="actionBtn">
+                              <tbody>
+                                <tr>
+                                  <td width="30">
+                                    <i class="material-icons  plus add" aria-hidden="true"
+                                      *ngIf="(i  ==  dataSource.data.length -  1)" (click)="addColumn();">
+                                      add
+                                    </i>
+                                  </td>
+                                  <td width="30">
+                                    <i class="material-icons plus delete" aria-hidden="true"
+                                      *ngIf="(dataSource.data.length>  1)" (click)="deleteColumn(dataSource,i)">
+                                      delete
+                                    </i>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </ng-container>
+  
+  
+                        <!-- Header Section Of table -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                        <!-- Data Fetch From .TS File to table -->
+                        <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns1;"></tr>
+  
+                      </table>
+                      <!-- table end -->
+                    </div>
+  
+                  </div>
+  
+                </div>
+              </div>
+              <!-- Insurance Details End -->
+  
+  
+              <!-- Details of Loss Details -->
+              <div class="box box-primary">
+                <div class="box-header">Details of Loss</div>
+                <div class="box-body">
+  
+                  <div class="row">
+  
+                    <!-- date of loss -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="dateOfLoss" formControlName="dateOfLoss"
+                          placeholder="Date Of Loss" required>
+                        <mat-datepicker-toggle matSuffix [for]="dateOfLoss"></mat-datepicker-toggle>
+                        <mat-datepicker #dateOfLoss></mat-datepicker>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.dateOfLoss.touched && claimEntryForm.controls.dateOfLoss.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.dateOfLoss.errors.required">
+                            {{ errorMessage.DATE }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- time of loss -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="time" placeholder="Time (HH:MM)" maxlength="8" required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.time.touched && (claimEntryForm.controls.time.errors)">
+                          <mat-error *ngIf="claimEntryForm.controls.time.errors.required">
+                            {{errorMessage.TIME}}
+                          </mat-error>
+                          <mat-error *ngIf="claimEntryForm.controls.time.errors.pattern">
+                            {{errorMessage.VALID_TIME}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- cause of loss-->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="lossDamageCause" placeholder="Cause of Loss" required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.lossDamageCause.touched && (claimEntryForm.controls.lossDamageCause.errors)">
+                          <mat-error *ngIf="claimEntryForm.controls.lossDamageCause.errors.required">
+                            {{errorMessage.CAUSE_OF_LOSS}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <!-- extend of loss/ damage -->
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="lossExtend" placeholder="Extend of loss/damage" required>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.lossExtend.touched && (claimEntryForm.controls.lossExtend.errors)">
+                          <mat-error *ngIf="claimEntryForm.controls.lossExtend.errors.required">
+                            {{errorMessage.EXTEND_OF_LOSS}}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+  
+                    <div class="col-sm-12">
+  
+                      <!-- table start -->
+                      <table mat-table [dataSource]="dataSourceLossDetails" width="100%" aria-describedby="detailsOfLoss">
+  
+                        <!-- item no of policy -->
+                        <ng-container matColumnDef="itemNoOfPolicy">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Item No. of Policy *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.itemNoOfPolicy" [ngModelOptions]="{standalone: true}">
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+  
+                        <!-- item affected -->
+                        <ng-container matColumnDef="itemAffected">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Item Affected (Description) *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.itemAffected" [ngModelOptions]="{standalone: true}">
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- actual value -->
+                        <ng-container matColumnDef="actualValue">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Actual Value *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.actualValue" [ngModelOptions]="{standalone: true}"
+                                numbersOnly>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- value at the time of loss -->
+                        <ng-container matColumnDef="lossTimeValue">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Value at the time of Loss *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.lossTimeValue" [ngModelOptions]="{standalone: true}"
+                                numbersOnly>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- deduction for value of salvage -->
+                        <ng-container matColumnDef="salvageDeductionValue">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Deduction for Value of Salvage *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.salvageDeductionValue"
+                                [ngModelOptions]="{standalone: true}" numbersOnly>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- amount claim -->
+                        <ng-container matColumnDef="amountClaim">
+                          <th mat-header-cell *matHeaderCellDef scope="row">Amount Claim *</th>
+                          <td mat-cell *matCellDef="let element">
+                            <mat-form-field class="example-full-width">
+                              <input matInput [(ngModel)]="element.amountClaim" [ngModelOptions]="{standalone: true}"
+                                numbersOnly>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+  
+                        <!-- action -->
+                        <ng-container matColumnDef="action">
+                          <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'4%'}">
+                            Action</th>
+                          <td mat-cell *matCellDef="let  element; let i=index">
+                            <table class="iconTable" aria-describedby="actionBtn">
+                              <tbody>
+                                <tr>
+                                  <td width="30">
+                                    <i class="material-icons  plus add" aria-hidden="true"
+                                      *ngIf="(i  ==  dataSourceLossDetails.data.length -  1)"
+                                      (click)="addColumnLossDetails();">
+                                      add
+                                    </i>
+                                  </td>
+                                  <td width="30">
+                                    <i class="material-icons plus delete" aria-hidden="true"
+                                      *ngIf="(dataSourceLossDetails.data.length>  1)"
+                                      (click)="deleteColumn(dataSourceLossDetails,i)">
+                                      delete
+                                    </i>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </ng-container>
+  
+  
+                        <!-- Header Section Of table -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                        <!-- Data Fetch From .TS File to table -->
+                        <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns2;"></tr>
+  
+                      </table>
+                      <!-- table end -->
+                    </div>
+  
+                  </div>
+  
+                </div>
+              </div>
+              <!-- Details of Loss Details End -->
+  
+              <!-- recommendation -->
+              <div class="box box-primary">
+                <div class="box-header">Surveyor Details
+                </div>
+                <div class="box-body">
+  
+                  <div class="row">
+                    <!-- 
+                <div class="col-sm-3">
+                  <mat-form-field class="full-width">
+                    <mat-select formControlName="recomnded" placeholder="Recommended " #recommend required>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="recomndedCtrl" [placeholderLabel]="'Find Recommonded ...'"
+                          [noEntriesFoundLabel]="'no matching Scheme Typefound'">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let fa of recomnded_list | filterSelectInput: recomndedCtrl.value"
+                        [value]="fa.value" matTooltip="{{fa.viewValue}}">
+                        {{fa.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper"
+                      *ngIf="claimEntryForm.controls.recomnded.touched && claimEntryForm.controls.recomnded.errors">
+                      <mat-error *ngIf="claimEntryForm.controls.recomnded.errors.required">
+                        {{ errorMessage.RECOMMENDED }}
+                      </mat-error>
+                    </div>
+                  </mat-form-field>
+                </div> -->
+  
+                    <div class="col-sm-3">
+                      <!-- <div class="col-sm-3" *ngIf="recommend.value == '6'"> -->
+                      <mat-form-field class="full-width">
+                        <mat-select formControlName="surveyorName" placeholder="Surveyor Name" required>
+                          <mat-option>
+                            <ngx-mat-select-search [formControl]="surveyorNameCtrl"
+                              [placeholderLabel]="'Find Surveyor Name...'"
+                              [noEntriesFoundLabel]="'no matching Surveyor Name found'">
+                            </ngx-mat-select-search>
+                          </mat-option>
+                          <mat-option *ngFor="let item of surveyorNameList | filterSelectInput: surveyorNameCtrl.value"
+                            [value]="item.value" matTooltip="{{item.viewValue}}">
+                            {{item.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.surveyorName.touched && claimEntryForm.controls.surveyorName.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.surveyorName.errors.required">
+                            {{ errorMessage.SURVEYOR_NAME_SELECT }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                      <mat-form-field>
+                        <input matInput formControlName="appClAmt" placeholder="Approved Claim Amount" required decimalLimitTwoOnly>
+                        <div class="error-wrapper"
+                          *ngIf="claimEntryForm.controls.appClAmt.touched && claimEntryForm.controls.appClAmt.errors">
+                          <mat-error *ngIf="claimEntryForm.controls.appClAmt.errors.required">
+                            {{ errorMessage.AMMOUNT }}
+                          </mat-error>
+                        </div>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="col-sm-3">
+                  <button mat-raised-button type="button" color="primary" (click)="onSubmit();"
+                    [ngStyle]="{'cursor': !recommend.value ? 'no-drop' : 'pointer' }" [disabled]="!recommend.value">Select
+                  </button>
+                </div> -->
+  
+                  </div>
+                </div>
+              </div>
+              <!-- recommendation end -->
+  
+              <div class="form-action-button">
+                <button mat-raised-button type="submit" (click)="directiveObject.workflowDetails()" class="green">
+                  <i class="material-icons" aria-hidden="true">
+                    done
+                  </i> Submit</button>
+                <button type="reset" mat-raised-button color="accent">
+                  <i class="material-icons" aria-hidden="true">
+                    restore
+                  </i>
+                  Reset
+                </button>
+  
+                <button type="button" mat-raised-button color="warn">
+                  <i class="material-icons" aria-hidden="true" title="Listing" (click)="navigate()">
+                    list
+                  </i>
+                  Listing
+                </button>
+  
+                <button type="button" mat-raised-button class="btnClose">
+                  <i class="material-icons" aria-hidden="true" title="Close">
+                    close
+                  </i>
+                  Close
+                </button>
+              </div>
+            </mat-tab>
+            <mat-tab label="Attachments">
+              <app-common-attachment [attachemntValue]="attachmentTypeCode"></app-common-attachment>
+              <div class="form-action-button">
+                <button type="submit" mat-raised-button color="primary">
+                  <i class="material-icons" aria-hidden="true" title="Save">
+                    save
+                  </i>
+                  Upload
+                </button>
+                <button type="button" mat-raised-button budget-list color="warn">
+                  <i class="material-icons" aria-hidden="true" title="Listing">
+                    list
+                  </i>
+                  Listing
+                </button>
+                <button type="button" mat-raised-button class="btnClose">
+                  <i class="material-icons" aria-hidden="true" title="Budget dashboard">
+                    close
+                  </i>
+                  Close
+                </button>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </form>
+  
+      </div>
+  
+    </div>
+  </div>

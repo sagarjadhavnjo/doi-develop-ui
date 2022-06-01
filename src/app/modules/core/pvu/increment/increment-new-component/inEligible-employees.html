@@ -1,0 +1,120 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Event Status</div>
+        </div>
+        <div class="mat-elevation-z8 table-responsive table-setting-to-avoid-word-break">
+            <table mat-table [dataSource]="dataSource" width="100%" matSort>
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign">Sr. No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="centerAlign">
+                        {{ (this.iteratablePageIndex * this.pageSize) + i + 1 }} </td>
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="13" class="centerAlign">
+                        <span *ngIf="dataSource && dataSource.data && dataSource.data.length == 0">
+                            No Records Found!
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="employeeNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign">Employee No.</th>
+                    <td mat-cell *matCellDef="let element" class="centerAlign">
+                        {{element.empNo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="employeeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Name</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.empName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="className">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Class</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.className}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="designationName">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Designation</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.designationName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="dateOfJoining">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Date of Joining</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.dateOfJoining | date: 'dd/MM/yyyy'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curPayLevelValue">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Pay level</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curPayLevelValue}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curCellIdValue">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Cell Id</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curCellIdValue}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curPayBandRange">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Pay Band</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curPayBandRange}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curPayBandValue">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Pay Band Value</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curPayBandValue}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curGradePayValue">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Grade Pay</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curGradePayValue}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curScaleValue">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Scale</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curScaleValue}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="curBasicPay">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Basic Pay</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.curBasicPay}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="reasonIneligible">
+                    <th mat-header-cell *matHeaderCellDef scope="row">Reason for Ineligible</th>
+                    <td mat-cell *matCellDef="let element;let i= index;">
+                        {{element.reasonForExcludeValue}}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns.value"></tr>
+                <tr mat-row *matRowDef="let row; let i = index;columns: displayedColumns.value;">
+                </tr>
+                <tr mat-footer-row
+                    [class.hide-table-footer]="dataSource && dataSource.data && dataSource.data.length != 0"
+                    *matFooterRowDef="displayedColumnsFooter">
+                </tr>
+            </table>
+            <mat-paginator #paginator [pageSize]="pageSize" (page)="pageEvent = $event; onPaginateChange($event)"
+                [length]="totalRecords" showFirstLastButtons></mat-paginator>
+        </div>
+        <div class="form-action-button">
+            <button type="button" mat-raised-button mat-dialog-close mat-dialog-close="close" class="btnClose">
+                <i class="material-icons" title="Close">
+                    close
+                </i>
+                Close
+            </button>
+            <button type="button" mat-raised-button color="warn" (click)="onExcelPopup()"
+                [disabled]='this.dataSource && this.dataSource.data && !(dataSource.data.length > 0)'>
+                <i class="material-icons" aria-hidden="true" title="Export to Excel">print</i>
+                Export to Excel
+            </button>
+        </div>
+    </div>
+</div>

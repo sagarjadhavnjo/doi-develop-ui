@@ -1,0 +1,282 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>ROP Events</div>
+        </div>
+
+        <mat-accordion class="search-accordian">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <div class="heading-section">
+                        Search Events
+                    </div>
+                </mat-expansion-panel-header>
+                <div class=" form-datatable-list">
+                    <form class="col-sm-12" [formGroup]="ropListForm" autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="startDate" [max]="dateNow"
+                                        [matDatepicker]="startDate" placeholder="Created From Date"
+                                        (dateChange)="setMinStartDate($event)" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="startDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #startDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput formControlName="endDate" [max]="dateNow" [min]="minStartDate"
+                                        [matDatepicker]="endDate" placeholder="Created To Date" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="endDate">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #endDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="ropType" placeholder="Rop Type">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="eventsNameCtrl"
+                                                [placeholderLabel]="'Find Events Name...'"
+                                                [noEntriesFoundLabel]="'no matching Events Name found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let eventsName of eventsNameList | filterSelectInput: eventsNameCtrl.value : 'lookupInfoName'"
+                                            [value]="eventsName.lookupInfoId">
+                                            {{eventsName.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Reference Number" formControlName="transNo"
+                                        maxlength="24" alphaNumericWithSlashHyphenOnly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Employee Number" formControlName="empNo"
+                                        numbersOnly maxlength="10">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Employee Name" formControlName="empName"
+                                        maxlength="50" alphabetInBtwSpaceOnly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="designationId" placeholder="Designation">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="designationCtrl"
+                                                [placeholderLabel]="'Find Designation...'"
+                                                [noEntriesFoundLabel]="'No Matching Designation found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let DG of designationList | filterSelectInput:designationCtrl.value : 'name'"
+                                            [value]="DG.id">
+                                            {{DG.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" maxlength="15" numbersWithSpecialCharactersOnly placeholder="GPF No." autocomplete="off" formControlName="gpfNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="PPAN" autocomplete="off" formControlName="pPan" maxlength="16"
+                                        numbersOnly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <input matInput placeholder="Retirement Date" formControlName="retirementDate"
+                                        [matDatepicker]="picker2" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker2></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" maxlength="14" numbersOnly placeholder="Case No." autocomplete="off" formControlName="caseNo">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="classId" placeholder="Class">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="classCtrl"
+                                                [placeholderLabel]="'Find Class...'"
+                                                [noEntriesFoundLabel]="'No Matching Class found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let PR of classList | filterSelectInput:classCtrl.value : 'lookupInfoName'"
+                                            [value]="PR.lookupInfoId">
+                                            {{PR.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <input matInput type="text" placeholder="Office Name" formControlName="officeId"
+                                        readonly [title]="ropListForm.get('officeId').value">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field>
+                                    <mat-select formControlName="empType" placeholder="Employee Type">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="empTypeCtrl"
+                                                [placeholderLabel]="'Find Employee Type...'"
+                                                [noEntriesFoundLabel]="'No Matching Employee Type found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let ET of empTypeList | filterSelectInput:empTypeCtrl.value : 'lookupInfoName'"
+                                            [value]="ET.lookupInfoId">
+                                            {{ET.lookupInfoName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="full-width">
+                                    <mat-select formControlName="wfStatus" placeholder="Workflow Status">
+                                        <mat-option>
+                                            <ngx-mat-select-search [formControl]="workflowStatusCtrl"
+                                                [placeholderLabel]="'Find Workflow Status...'"
+                                                [noEntriesFoundLabel]="'no matching Workflow Status found'">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option
+                                            *ngFor="let workflowStatus of workflowStatusList | filterSelectInput: workflowStatusCtrl.value : 'name'"
+                                            [value]="workflowStatus.name">
+                                            {{workflowStatus.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row displayBlock">
+                    <div class="form-action-button">
+                        <button type="button" (click)="onSubmitSearch()" mat-raised-button color="primary">
+                            <i class="material-icons">search</i>
+                            Search
+                        </button>
+                        <button type="button" mat-raised-button color="accent" (click)="clearForm()">
+                            <i class="material-icons">restore</i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <br><br>
+
+
+        <div class="mat-elevation-z8 table-responsive table-setting-to-avoid-word-break">
+
+            <table mat-table [dataSource]="dataSource" width="100%" matSort>
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Sr. No.</th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+                        {{ (iteratablePageIndex * pageSize) + i + 1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="transNo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Reference Number
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.transNo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ropType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Rop Type</th>
+                    <td mat-cell *matCellDef="let element"> {{element.ropType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="employeeNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Number</th>
+                    <td mat-cell *matCellDef="let element"> {{element.employeeNumber}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="employeeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.employeeName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="designationName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Designation Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.designationName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="empType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee Type</th>
+                    <td mat-cell *matCellDef="let element"> {{element.empType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="officeName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Office Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.officeName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="wfStatus">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Workflow Status</th>
+                    <td mat-cell *matCellDef="let element"> {{element.wfStatus}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let element;let i = index;" class="action-btn-i centerAlign">
+                        <a *ngIf="element.isEditable === 1" (click)="onEdit(element.eventId)">
+                            <i class="material-icons plus edit-icon" title="Edit">edit</i>
+                        </a>
+                        <a (click)="onView(element.eventId)">
+                            <i class="material-icons plus view-icon" title="View">remove_red_eye</i>
+                        </a>
+                        <a (click)="showConfirmationPopup(element)" *ngIf="element.deleteFlag === 1">
+                            <i class="material-icons plus delete" title="Delete" aria-hidden="true">delete_forever</i>
+                        </a>
+                        <a (click)="viewWorkflowHistory(element)" *ngIf="element.deleteFlag !== 1">
+                            <i class="material-icons plus history" title="View Comments" aria-hidden="true">history</i>
+                        </a>
+                        <a (click)="info(element)"
+                            *ngIf="loggedUserObj.wfRoleCode === '1002' && element.wfStatus === 'Completed'">
+                            <i class="material-icons plus history" (click)="info(element)" title="View Comments"
+                                aria-hidden="true">info</i>
+                        </a>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="noData">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="centerAlign">
+                        No Data Available </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; let i = index;columns: variableClm.value;">
+                </tr>
+            </table>
+            <mat-paginator #paginator [pageSize]="'25'" (page)="pageEvent = $event; onPaginateChange($event)"
+                [length]="totalRecords" showFirstLastButtons></mat-paginator>
+        </div>
+
+    </div>
+</div>

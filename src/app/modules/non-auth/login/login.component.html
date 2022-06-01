@@ -1,0 +1,201 @@
+<div class="container-fluid login-body">
+    <div class="row">
+        <div class="col-sm-4">
+            <h2 class="heading1">Finance Department</h2>
+            <h3 class="heading2">Government of Gujarat</h3>
+            <img
+                src="assets/images/logo.png"
+                alt="Deptartment logo"
+                class="img-fluid"
+                style="max-width: 160px; margin: 1em 0; display: none"
+            />
+        </div>
+        <div class="col-sm-4 text-center">
+            <img
+                src="assets/images/satyamevjayatey.png"
+                alt="Satyamevjayatey Logo"
+                class="img-fluid"
+                style="max-width: 190px; margin: 1em 0"
+            />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- form start -->
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit($event)">
+                <div class="login-header"></div>
+                <div class="login">
+                    <h2>USER LOGIN</h2>
+                    <!-- user name -->
+                    <div *ngIf="errorMessage" class="invalid-error">
+                        {{ errorMessage }}
+                    </div>
+                    <div>
+                        <mat-form-field class="example-full-width">
+                            <input
+                                matInput
+                                numbersOnly
+                                id="userName"
+                                minlength="10"
+                                maxlength="10"
+                                placeholder="Employee Number"
+                                formControlName="userName"
+                                autocomplete="off"
+                            />
+                            <!-- user name validation -->
+                            <div
+                                class="error-wrapper"
+                                *ngIf="loginForm.controls.userName.touched && loginForm.controls.userName.errors"
+                            >
+                                <mat-error *ngIf="loginForm.controls.userName.errors.required">
+                                    {{ errorMessages.EMP_NUMBER }}
+                                </mat-error>
+                                <mat-error *ngIf="loginForm.controls.userName.errors.minlength">
+                                    {{ errorMessages.EMP_MIN_NUMBER }}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <!-- user name validation end -->
+                    <!-- user name end -->
+
+                    <!-- Password -->
+                    <div>
+                        <mat-form-field class="example-full-width">
+                            <input
+                                matInput
+                                type="password"
+                                minlength="8"
+                                maxlength="16"
+                                placeholder="Password"
+                                formControlName="password"
+                                (paste)="onPaste($event)"
+                            />
+                            <!-- Password validation -->
+                            <div
+                                class="error-wrapper"
+                                *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors"
+                            >
+                                <mat-error *ngIf="loginForm.controls.password.errors.required">
+                                    {{ errorMessages.PASSWORD_CODE }}
+                                </mat-error>
+                                <mat-error *ngIf="loginForm.controls.password.errors.minlength">
+                                    {{ errorMessages.PASSWORD_MIN_LENGTH }}
+                                </mat-error>
+                            </div>
+                        </mat-form-field>
+                        <!-- Password validation end -->
+                    </div>
+                    <!-- Password end -->
+                    <div class="text-left caps-lock" *ngIf="showCapsOn">Caps Lock is On.</div>
+
+                    <!-- captcha -->
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <canvas id="myCanvas" class="captcha-img" width="100%" height="40">
+                                    Your browser does not support the HTML5 canvas tag.</canvas
+                                >
+                            </div>
+                            <div class="col-sm-4 captcha-count">
+                                <div class="row">
+                                    <mat-form-field class="example-full-width">
+                                        <input
+                                            matInput
+                                            numbersOnly
+                                            type="text"
+                                            placeholder="Enter captcha"
+                                            formControlName="captchaCode"
+                                            [maxlength]="captchaLength"
+                                            autocomplete="off"
+                                        />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button
+                                    class="refresh-captcha"
+                                    type="button"
+                                    mat-mini-fab
+                                    (click)="loadCaptcha()"
+                                    title="Refresh Captcha"
+                                >
+                                    <!-- <i class="material-icons" title="Refresh Captcha">
+                                        refresh
+                                    </i> -->
+                                    <i _ngcontent-grx-c3="" class="material-icons" title="Refresh Captcha"> refresh </i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- captcha end -->
+                    <!-- Password -->
+                    <div class="col-sm-12 login-submit-btn">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
+                            SUBMIT
+                        </button>
+                    </div>
+
+                    <!-- Forgot Password -->
+                    <hr class="mt-2" />
+                    <a [routerLink]="'/password/forgot-password'" skipLocationChange>Forgot Password</a>
+                    <!-- Forgot Password End -->
+                </div>
+                <div class="login-footer">
+                    <a>Powered By - Wipro Ltd.</a>
+                </div>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+
+    <div class="history">
+        <!-- fixed arrow -->
+        <div class="arrow" (click)="isToggle()">
+            <i class="material-icons"> double_arrow </i>
+        </div>
+        <!-- arrow on click content -->
+        <div class="error-notification" *ngIf="toggleSection">
+            <div class="container-fluid">
+                <div class="row history-content">
+                    <div class="col-sm-6">
+                        <!-- EMD build Date and time 2.1.43 18-02-2021 07:00 PM -->
+                        <p>Build Version:{{ buildVersion }}</p>
+                        <p>Release Version:{{ releaseVersion }}</p>
+                        <p>Angular Migration Build Version:1.0.0</p>
+                        <h4>Instructions to Clear Browser History</h4>
+                        <p>
+                            <strong>Open Internet Explorer browser</strong>
+                        </p>
+                        <ul>
+                            <li>Open "Tools" Menu. And then click on "Internet Options" in that menu</li>
+                            <li>A new windows pane will open. In "General" Tab find the "Browsing History" section.</li>
+                            <li>Click on the "Delete" button in the "Browsing History" Section.</li>
+                            <li>If you are asked to delete all the files then click on "Delete all".</li>
+                            <li>
+                                After that open a new Internet Explorer Browser and open the link of IFMS in that
+                                browser window.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 text-center btn-h">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button mat-raised-button color="primary" class="history-btn">
+                                    Click here for Instructions to delete Temporary files
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button mat-raised-button color="primary" class="history-btn">
+                                    Click here for Instructions to delete Application Temporary Files
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

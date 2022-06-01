@@ -1,0 +1,8 @@
+.w-6 {
+    width: 6%;
+}
+
+.mat-table td.mat-cell {
+    max-width: inherit;
+    max-inline-size: fit-content;
+}

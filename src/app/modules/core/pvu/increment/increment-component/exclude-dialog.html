@@ -1,0 +1,86 @@
+<div class="dialogContainer">
+    <div class="mat-dialog-title" mat-dialog-title>
+        Reason for exclude
+    </div>
+    <form [formGroup]="excludeDialogForm" (ngSubmit)="excludeDialogFormSubmit(excludeDialogForm.value)">
+        <div class="row">
+            <div class="col-sm-6">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Reason for exclusion</mat-label>
+                    <mat-select formControlName="exclusionReasion" (selectionChange)="exclusionReasion()" required>
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="exclusionReasionCtrl" [placeholderLabel]="'Find Reason...'" [noEntriesFoundLabel]="'No Reason found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of reasonForExclusionList | filterSelectInput: exclusionReasionCtrl.value : 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.exclusionReasion.touched && excludeDialogForm.controls.exclusionReasion.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.exclusionReasion.errors.maxlength">
+                            {{errorMessages.EXCLUSION_REASON}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="showExclusionReasion">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Stop Increment</mat-label>
+                    <mat-select formControlName="resionForStop">
+                        <mat-option>
+                            <ngx-mat-select-search [formControl]="resionForStopCtrl" [placeholderLabel]="'Find Option...'" [noEntriesFoundLabel]="'No Option found'">
+                            </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option *ngFor="let PR of stopIncrementList | filterSelectInput:resionForStopCtrl.value: 'lookupInfoName'" [value]="PR.lookupInfoId">
+                            {{PR.lookupInfoName}}
+                        </mat-option>
+                    </mat-select>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.resionForStop.touched && excludeDialogForm.controls.resionForStop.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.resionForStop.errors.maxlength">
+                            {{errorMessages.REASON_FOR_STOP}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="showExclusionReasion">
+                <mat-form-field class="example-full-width">
+                    <input matInput [matDatepicker]="picker1" placeholder="From Date" formControlName="stopIncFromDate" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncFromDate.touched && excludeDialogForm.controls.stopIncFromDate.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncFromDate.errors.maxlength">
+                            {{errorMessages.FROM_DATE}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="showExclusionReasion">
+                <mat-form-field class="example-full-width">
+                    <input matInput [matDatepicker]="picker2" placeholder="To Date" formControlName="stopIncToDate" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.stopIncToDate.touched && excludeDialogForm.controls.stopIncToDate.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.stopIncToDate.errors.maxlength">
+                            {{errorMessages.TO_DATE}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6" *ngIf="showExclusionReasion">
+                <mat-form-field class="example-full-width">
+                    <input matInput [matDatepicker]="picker3" placeholder="Date of Next Increment" formControlName="dateNxtInc" readonly required>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                    <div class="error-wrapper" *ngIf="excludeDialogForm.controls.dateNxtInc.touched && excludeDialogForm.controls.dateNxtInc.errors">
+                        <mat-error *ngIf="excludeDialogForm.controls.dateNxtInc.errors.maxlength">
+                            {{errorMessages.INCREMENT_EFFECTIVE_DATE}}</mat-error>
+                    </div>
+                </mat-form-field>
+            </div>
+        </div>
+        <div mat-dialog-actions>
+            <button type="submit" mat-raised-button color="primary">
+                Exclude
+            </button>
+            <button type="button" mat-raised-button mat-dialog-close class="btnClose">
+                Close
+            </button>
+        </div>
+    </form>
+</div>

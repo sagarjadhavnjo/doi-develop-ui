@@ -1,0 +1,147 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Fix Pay To Regular List</div>
+        </div>
+        <div class="panel-group">
+            <div class="box-top">
+                <div class="box-header">Search Employee</div>
+                <div class="box-body">
+
+                    <div class=" form-datatable-list">
+                        <form class="col-sm-12" [formGroup]="searchListForm" (ngSubmit)="onSubmitSearch()">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <mat-form-field>
+                                        <input matInput [matDatepicker]="createdFromDatePicker"  [max]="createdFromDate"
+                                            placeholder="Created From Date" formControlName="createdFromDate"
+                                            (dateChange)="oncreatedFromDateChange($event.value)" readonly />
+                                        <mat-datepicker-toggle matSuffix [for]="createdFromDatePicker">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #createdFromDatePicker></mat-datepicker>
+                                        <div class="error-wrapper" *ngIf="
+                                                searchListForm.controls.createdFromDate.touched &&
+                                                searchListForm.controls.createdFromDate.errors
+                                            ">
+
+
+                                            <mat-error *ngIf="
+                                                searchListForm.controls.createdFromDate.errors.matDatepickerMax
+                                                ">
+                                                {{ errorMessages.DATE_MAX }}
+                                                &nbsp;{{ todayDate | date: 'dd-MMM-yyyy' }}
+                                            </mat-error>
+                                        </div>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <mat-form-field>
+                                        <input matInput [matDatepicker]="createdToDatePicker" [min]="createdToDate"
+                                            [max]="todayDate" placeholder="Created To Date"
+                                            formControlName="createdToDate"
+                                            (dateChange)="oncreatedToDateChange($event.value)" readonly />
+                                        <mat-datepicker-toggle matSuffix [for]="createdToDatePicker">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #createdToDatePicker></mat-datepicker>
+                                        <div class="error-wrapper" *ngIf="
+                                                searchListForm.controls.createdToDate.touched &&
+                                                searchListForm.controls.createdToDate.errors
+                                            ">
+
+
+                                            <mat-error *ngIf="
+                                                searchListForm.controls.createdToDate.errors.matDatepickerMax
+                                                ">
+                                                {{ errorMessages.DATE_MAX }}
+                                                &nbsp;{{ todayDate | date: 'dd-MMM-yyyy' }}
+                                            </mat-error>
+                                        </div>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 ">
+                                    <mat-form-field class="full-width">
+                                        <input formControlName="trNo"  autocomplete="off" matInput placeholder="Reference Number"
+                                            maxlength="20" alphaNumericWithSlashHyphenOnly>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 ">
+                                    <mat-form-field class="full-width">
+                                        <input matInput numbersOnly formControlName="empNo"  autocomplete="off"
+                                            placeholder="Employee Number" minlength="10" maxlength="10">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 ">
+                                    <mat-form-field class="full-width">
+                                        <input matInput formControlName="empName" placeholder="Employee Name"  autocomplete="off"
+                                            alphabetInBtwSpaceOnly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field class="full-width">
+                                        <mat-select formControlName="desigId" placeholder="Designation">
+                                            
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="empDesignationCtrl"
+                                                    [placeholderLabel]="'Find Designation...'"
+                                                    [noEntriesFoundLabel]="'no matching Designation found'">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option selected [value]="null">Select Designation</mat-option>
+                                            <mat-option
+                                                *ngFor="let designationId of empDesignation_list | filterSelectInput: empDesignationCtrl.value : 'designationName'"
+                                                [value]="designationId.designationId">
+                                                {{designationId.designationName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Office Name" readonly formControlName="offName"  autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field class="full-width">
+                                        <mat-select formControlName="statusId" placeholder="Status" #singleSelect1>
+                                            <mat-option>
+                                                <ngx-mat-select-search [formControl]="statusCtrl"
+                                                    [placeholderLabel]="'Find Status...'"
+                                                    [noEntriesFoundLabel]="'no matching  Status found'">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option
+                                                *ngFor="let status of statusList | filterSelectInput: statusCtrl.value : 'lookUpInfoName'"
+                                                [value]="status.lookUpInfoId">
+                                                {{status.lookUpInfoName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="form-action-button">
+                                <button type="submit" mat-raised-button color="primary">
+                                    <i class="material-icons">search</i> Search </button>
+                                <button type="button" mat-raised-button color="accent" (click)="clearForm()">
+                                    <i class="material-icons">restore</i>Reset</button>
+                            </div>
+                        </form>
+                        <div class="mat-elevation-z8 mt-2">
+                            <!-- Macro Outcome Listing Table Starts -->
+                            <app-common-table [tableData]="storedData"
+                                [tableHeaderDataKeyMap]="TABLE_HEADER_DATA_CONFIG" [showFirstLastButtons]="true"
+                                [pageConfiguration]="pageConfiguration" (pageChange)="pageChange($event)"
+                                (actionEvent)="actionEvent($event)" (sortChange)="sortChange($event)"
+                                [refreshData]="newSearch">
+                            </app-common-table>
+                            <!-- <mat-paginator #paginator [pageSize]="'25'" (page)="pageEvent = $event; onPaginateChange($event)" [pageSizeOptions]="[5, 10, 25]" [length]="totalRecords" showFirstLastButtons></mat-paginator> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

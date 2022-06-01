@@ -1,0 +1,87 @@
+<div class="form-wrapper">
+  <div class="mat-elevation-z8 mt-2">
+    <!-- MAP LC Advice Receipt ePayment Table Starts -->
+    <table mat-table [dataSource]="MapLcAdviceReceiptEPaymentDataSource" class="mat-elevation-z8 "
+      area-describedby="advice-receipt-e-payment">
+
+
+      <!-- Party Name Column -->
+      <ng-container matColumnDef="partyName">
+        <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'30%'}">Party Name</th>
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'width':'30%'}">
+          {{element.partyName}}
+        </td>
+        <td mat-footer-cell *matFooterCellDef scope="row">Total of all E-Payment Amount (in Rs.)</td>
+      </ng-container>
+
+      <!-- Bank Account Number Column -->
+      <ng-container matColumnDef="bankAccountNumber">
+        <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'20%'}">Bank Account Number</th>
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'width':'20%'}">
+          {{element.bankAccountNo}}
+        </td>
+        <td mat-footer-cell *matFooterCellDef scope="row"></td>
+      </ng-container>
+      
+
+      <!-- IFSC Code Column -->
+      <ng-container matColumnDef="IFSCCode">
+        <th mat-header-cell *matHeaderCellDef scope="row" [ngStyle]="{'width':'20%'}">IFSC Code</th>
+        <td mat-cell *matCellDef="let element" [ngStyle]="{'width':'20%'}">
+          {{element.ifsc}}
+        </td>
+        <td mat-footer-cell *matFooterCellDef scope="row"></td>
+      </ng-container>
+
+      <!-- ePayment Amount Column -->
+      <ng-container matColumnDef="epaymentAmount">
+        <th mat-header-cell *matHeaderCellDef scope="row"[ngStyle]="{'width':'7%'}">E-Payment Amount (in Rs.)</th>
+        <td mat-cell *matCellDef="let element" class="rightAlign" [ngStyle]="{'width':'7%'}">
+          <div *ngIf="mode!='view'">
+
+          <mat-form-field floatLabel="never" class="rightAlign" >
+            <input matInput [value]="element.partyAmt"
+              [(ngModel)]="element.partyAmt"
+              (blur)="decimalPoint(element,'partyAmt')"
+              (keypress)="decimalKeyPress($event)"
+              (ngModelChange)="ExpenditureAmtValidation('partyAmt')"
+              [ngClass]="{'highlight': element.stateWrongValue==true}"
+              >
+          </mat-form-field>
+          </div>
+          <div *ngIf="mode=='view'">
+            {{element.partyAmt}}
+            </div>
+
+         
+        </td>
+      
+      </ng-container>
+
+      <!-- Header and Footer Row Definition -->
+      <!-- <tr mat-header-row *matHeaderRowDef="['parent1']" class="example-second-header-row">
+      </tr> -->
+      <tr mat-header-row *matHeaderRowDef="MapLcAdviceReceiptEPaymentDATAColumn"></tr>
+      <tr mat-row *matRowDef="let row; columns: MapLcAdviceReceiptEPaymentDATAColumn;"></tr>
+      <!-- <tr mat-footer-row *matFooterRowDef="MapLcAdviceReceiptEPaymentDATAColumn"></tr> -->
+    </table>
+    <!-- MAP LC Advice Receipt ePayment Table Ends -->
+  </div>
+
+  
+  <!-- Action Buttons Starts -->
+  <div class="form-action-button">
+    <button mat-raised-button type="button" class="green" title="Map" (click)="onMapClick()"
+    *ngIf="mode!='view'">
+      <i class="material-icons" title="Map" aria-hidden="true">done</i> Update</button>
+  
+    <button type="button" mat-raised-button class="btnClose" title="Close" (click)="onNoClick()">
+      <i class="material-icons" title="Close" aria-hidden="true">
+        close
+      </i>
+      Close
+    </button>
+  </div>
+  <!-- Action Buttons Starts -->
+
+</div>

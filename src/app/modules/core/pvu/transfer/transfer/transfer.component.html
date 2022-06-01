@@ -1,0 +1,346 @@
+<div class="container">
+    <div class="form-wrapper">
+        <div class="heading-section ng-star-inserted">
+            <div>Transfer</div>
+            <div *ngIf = "trnNo" class="font-heading">
+                <strong>Reference No:</strong> {{trnNo}}</div>
+            <div *ngIf = "trnNo" class="font-heading">
+                <strong>Reference Date:</strong> {{ initiationDate | date: 'dd-MMM-yyyy hh:mm:ss a'}}</div>
+        </div>
+        <div class="panel-group">
+            <form autocomplete="off" [formGroup]="transferForm">
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput readonly [(ngModel)]="loginOffName"
+                                    [ngModelOptions]="{standalone: true}" placeholder="Office Name">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput formControlName="transferOrderNo" maxlength="100"
+                                        placeholder="Order Number" alphaNumericWithSlashHyphenOnly required>
+                                    <div class="error-wrapper"
+                                        *ngIf="transferForm.controls.transferOrderNo.touched && transferForm.controls.transferOrderNo.errors">
+                                        <mat-error *ngIf="transferForm.controls.transferOrderNo.errors.required">
+                                            {{errorMessages.ORDER_NO}}
+                                        </mat-error>
+                                    </div>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-3">
+                                <mat-form-field class="example-full-width">
+                                    <input matInput formControlName="transferOrderDate"
+                                        [matDatepicker]="transferOrderDate" placeholder="Order Date" 
+                                        [min]="doj" [max]="date" required readonly>
+                                    <div class="error-wrapper" *ngIf="transferForm.controls.transferOrderDate.touched &&
+                                        transferForm.controls.transferOrderDate.errors">
+                                        <mat-error *ngIf="transferForm.controls.transferOrderDate.errors.required">
+                                            {{errorMessages.ORDER_DATE}}
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="transferForm.controls.transferOrderDate.errors.matDatepickerMin">
+                                            {{errorMessages.EMP_JOINING }} {{ doj | date : 'dd/MM/yyyy'}}
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="transferForm.controls.transferOrderDate.errors.matDatepickerMax">
+                                            {{errorMessages.EMP_RETIREMNT }} {{ dor | date: 'dd/MM/yyyy'}}
+                                        </mat-error>
+                                    </div>
+                                    <mat-datepicker-toggle matSuffix [for]="transferOrderDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #transferOrderDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header">Employee Details</div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput numbersOnly class="employee-number-field"
+                                                placeholder="Employee Number" minlength="10" maxlength="10"
+                                                formControlName="employeeNo" (keypress)="onEmployeeKeyUp($event)"
+                                                (keydown.Tab)="onEmployeeKeyUp(null)">
+                                            <mat-icon matSuffix *ngIf="!isView && statusId !== 484"
+                                                (click)="openSearchEmployeeDialog()">search
+                                            </mat-icon>
+                                            <div class="error-wrapper"
+                                                *ngIf="transferForm.controls.employeeNo.touched && transferForm.controls.employeeNo.errors">
+                                                <mat-error *ngIf="transferForm.controls.employeeNo.errors.required">
+                                                    {{errorMessages.EMP_NO}}
+                                                </mat-error>
+                                                <mat-error *ngIf="transferForm.controls.employeeNo.errors.maxlength">
+                                                    {{errorMessages.EMP_NO}}
+                                                </mat-error>
+                                                <mat-error *ngIf="transferForm.controls.employeeNo.errors.minlength">
+                                                    {{errorMessages.EMP_NO}}
+                                                </mat-error>
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Employee Name " value=""
+                                                [(ngModel)]="empName" [ngModelOptions]="{standalone: true}" readonly>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <mat-form-field class="full-width">
+                                            <input matInput type="text" placeholder="Designation" value=""
+                                                [(ngModel)]="empDesignation" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="box box-primary">
+                                    <div class="box-header">Current Office Details</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="Cardex Number" value=""
+                                                        formControlName="curCardexNo" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="DDO Number" value=""
+                                                    formControlName="curDDONo" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="District" value=""
+                                                    [(ngModel)] = "curDistrictName"  [ngModelOptions]="{standalone: true}" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="Office Name" value=""
+                                                        [(ngModel)]="curOffName" [ngModelOptions]="{standalone: true}"
+                                                        readonly>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <input matInput type="text" placeholder="Sub Office Name" value=""
+                                                        [(ngModel)]="curSubOfficeName"
+                                                        [ngModelOptions]="{standalone: true}" readonly>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box box-primary">
+                                    <div class="box-header">Transfer Office Details</div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="districtId" placeholder="District"
+                                                        (selectionChange)="getCardexNoByDistrict($event.value)"
+                                                        required>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="districtCtrl"
+                                                                [placeholderLabel]="'Find District ...'"
+                                                                [noEntriesFoundLabel]="'no matching District found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let district of districtList
+                                                             | filterSelectInput: districtCtrl.value : 'name'"
+                                                            [value]="district.id">
+                                                            {{district.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="transferForm.controls.districtId.touched && transferForm.controls.districtId.errors">
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.districtId.errors.required">
+                                                            {{errorMessages.DISTRICT}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="cardexNo" placeholder="Cardex Number"
+                                                        required (selectionChange)="getDDONo($event.value)">
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="cardexCtrl"
+                                                                [placeholderLabel]="'Find  Cardex Number...'"
+                                                                [noEntriesFoundLabel]="'no matching Cardex Number found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let cardex of officeDetailCardex  | filterSelectInput: cardexCtrl.value : 'cardexNoString'"
+                                                            [value]="cardex.cardexno">
+                                                            {{cardex.cardexNoString}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="transferForm.controls.cardexNo.touched && transferForm.controls.cardexNo.errors">
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.cardexNo.errors.required">
+                                                            {{errorMessages.CARDEX_NO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="ddoCode"
+                                                        (selectionChange)="getOfficeName($event.value)"
+                                                        placeholder="DDO Number" required>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="ddoCtrl"
+                                                                [placeholderLabel]="'Find DDO Number...'"
+                                                                [noEntriesFoundLabel]="'no matching DDO Number found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let ddo of officeDetailDDO  | filterSelectInput: ddoCtrl.value : 'ddoNo'"
+                                                            [value]="ddo.ddoNo">
+                                                            {{ddo.ddoNo}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="transferForm.controls.ddoCode.touched && transferForm.controls.ddoCode.errors">
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.ddoCode.errors.required">
+                                                            {{errorMessages.DDO_NO}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput readonly formControlName="officeName"
+                                                        placeholder="Office Name">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="subOfficeId"
+                                                        placeholder="Sub Office Name">
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="subOfficeNameCtrl"
+                                                                [placeholderLabel]="'Find Sub Offie Name ...'"
+                                                                [noEntriesFoundLabel]="'no matching Sub Office Name found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let subOffice of subOfficeList | filterSelectInput: subOfficeNameCtrl.value : 'name'"
+                                                            [value]="subOffice.id">
+                                                            {{subOffice.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput formControlName="relievingDate"
+                                                        [matDatepicker]="relieveDate" placeholder="Relieving Date" [min] = "doj"
+                                                        [max] = "date" required readonly>
+                                                    <mat-datepicker-toggle matSuffix [for]="relieveDate">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #relieveDate></mat-datepicker>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="transferForm.controls.relievingDate.touched && transferForm.controls.relievingDate.errors">
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.relievingDate.errors.required">
+                                                            {{errorMessages.RELIEVE_DATE}}
+                                                        </mat-error>
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.relievingDate.errors.matDatepickerMin">
+                                                            {{errorMessages.EMP_JOINING }}
+                                                            {{ doj | date : 'dd/MM/yyyy'}}
+                                                        </mat-error>
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.relievingDate.errors.matDatepickerMax">
+                                                            {{errorMessages.EMP_RETIREMNT}}
+                                                            {{ dor | date: 'dd/MM/yyyy'}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="transferNoonType"
+                                                        placeholder="Fornoon/Afternoon">
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="forenoonAfternoonCtrl"
+                                                                [placeholderLabel]="'Find Forenoon/Afternoon ...'"
+                                                                [noEntriesFoundLabel]="'no matching Forenoon/Afternoon found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let noon of noonTypeList  | filterSelectInput: forenoonAfternoonCtrl.value : 'lookupInfoName'"
+                                                            [value]="noon.lookupInfoId">
+                                                            {{noon.lookupInfoName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <mat-form-field class="full-width">
+                                                    <mat-select formControlName="reasonForTransfer"
+                                                        placeholder="Reason for Transfer" 
+                                                        (selectionChange) = "reasonChange($event.value)" required>
+                                                        <mat-option>
+                                                            <ngx-mat-select-search [formControl]="reasonForTransferCtrl"
+                                                                [placeholderLabel]="'Find Reason for Transfer ...'"
+                                                                [noEntriesFoundLabel]="'no matching Reason for Transfer found'">
+                                                            </ngx-mat-select-search>
+                                                        </mat-option>
+                                                        <mat-option
+                                                            *ngFor="let reason of reasonList  | filterSelectInput: reasonForTransferCtrl.value : 'lookupInfoName'"
+                                                            [value]="reason.lookupInfoId">
+                                                            {{reason.lookupInfoName}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <div class="error-wrapper"
+                                                        *ngIf="transferForm.controls.reasonForTransfer.touched && transferForm.controls.reasonForTransfer.errors">
+                                                        <mat-error
+                                                            *ngIf="transferForm.controls.reasonForTransfer.errors.required">
+                                                            {{errorMessages.REASON}}
+                                                        </mat-error>
+                                                    </div>
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <div class="col-sm-3 remark">
+                                                <mat-form-field class="example-full-width">
+                                                    <textarea matInput placeholder="Remarks" rows="2" maxlength="200"
+                                                        formControlName="transferRemarks">
+                                                        </textarea>
+                                                </mat-form-field>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-action-button">
+                <button type="view" [disabled] = "!trnNo" mat-raised-button color="accent" (click)="viewComments()">
+                    <i class="material-icons " title="View">remove_red_eye</i> View Comments </button>
+                <button mat-raised-button *ngIf ="!isView" type="submit" class="green" (click)="submitTransferDetails()">
+                    <i class="material-icons"> done</i> Submit</button>
+                <button type="reset" *ngIf ="!isView" mat-raised-button color="accent" style="margin-left: 5px;" (click)="reset()">
+                    <i class="material-icons"> restore</i> Reset </button>
+                <button type="button" mat-raised-button (click)="goToListing()" color="warn">
+                    <i class="material-icons" title="Listing"> list </i> Listing </button>
+                <button type="button" mat-raised-button (click)="goToDashboard()" class="btnClose">
+                    <i class="material-icons" title="PVU dashboard"> close </i> Close </button>
+                <!-- <button type="button" mat-raised-button class="print-btn">
+                        <i class="material-icons"> print</i> Print </button> -->
+            </div>
+        </div>
+    </div>
+</div>
